@@ -5,9 +5,17 @@ from communication.hermes import Hermes
 from communication.serial_communication import SerialCommunication
 
 class CommunicationTest(unittest.TestCase):
-
+	
+	'''
 	def testStartBee(self):
 		self.assertEqual(Hermes.startBee("endereço_porta_usb",115200), True)
+	
+
+	def testIsTty(self):
+		self.assertEqual(Hermes.isTty("endereço_porta_usb_tty"), True)
+		self.assertEqual(Hermes.isTty("outro_endereço_porta_usb_tty"), True)
+		self.assertEqual(Hermes.isTty("não_endereço_porta_usb_tty"), True)
+	'''
 
 	def testCreateMessage(self):
 		self.assertEqual(Hermes.createMessage(1, 0.3, 0.8), "0.3;0.8")
