@@ -1,54 +1,55 @@
 import unittest
 import sys
 sys.path.append("../")
-import communication.hermes
-import communication.serial_communication
+from communication.hermes import Hermes
+from communication.serial_communication import SerialCommunication
 
 class CommunicationTest(unittest.TestCase):
-	def test_createMessage(self):
-		self.assertEqual(hermes.createMessage(1, 0.3, 0.8), "0.3;0.8")
+
+	def testStartBee(self):
+		self.assertEqual(Hermes.startBee("endereço_porta_usb",115200), True)
+
+	def testCreateMessage(self):
+		self.assertEqual(Hermes.createMessage(1, 0.3, 0.8), "0.3;0.8")
 		#self.assertEqual(hermes.createMessage(2, 0.1, 0.3), "0.1;0.3")
 		#self.assertEqual(hermes.createMessage(3, 0.5, 0.7), "0.5;0.7")
 		#self.assertEqual(hermes.createMessage(13, 0.3, 0.1), "invalid")
 
 
 	#unicast
-	def test_sendMessages(self):
-		self.assertEqual(hermes.sendMessages(1, "0.7;0.6"), true)
-		#self.assertEqual(hermes.sendMessages(2, "0.7;0.6"), true)
-		#self.assertEqual(hermes.sendMessages(3, "0.8;0.1"), true)
-		#self.assertEqual(hermes.sendMessages(4, "0.4, 0.2"), false)
+	def testSendMessage(self):
+		self.assertEqual(Hermes.sendMessage(1, "0.7;0.6"), True)
+		#self.assertEqual(hermes.sendMessage(2, "0.7;0.6"), True)
+		#self.assertEqual(hermes.sendMessage(3, "0.8;0.1"), True)
+		#self.assertEqual(hermes.sendMessage(4, "0.4, 0.2"), True)
+		#self.assertEqual(hermes.sendMessage(7, "0.4, 0.2"), False)
 	
 	#multicast
-'''
+	'''
 	def test_sendMessages(self):
-		self.assertEqual(hermes.sendMessages(1, "INF@R1@0.7;0.3"), true)
-		self.assertEqual(hermes.sendMessages(2, "INF@R2@0.7;0.3"), true)
-		self.assertEqual(hermes.sendMessages(3, "INF@R3@0.7;0.3"), true)
-		self.assertEqual(hermes.sendMessages(4, "INF@R4@0.7;0.3"), false)
-'''
-	
-	def test_startBee(self):
-		self.assertEqual(hermes.startBee("endereço_porta_usb",115200), true)
+		self.assertEqual(hermes.sendMessages(1, "INF@R1@0.7;0.3"), True)
+		self.assertEqual(hermes.sendMessages(2, "INF@R2@0.7;0.3"), True)
+		self.assertEqual(hermes.sendMessages(3, "INF@R3@0.7;0.3"), True)
+		self.assertEqual(hermes.sendMessages(4, "INF@R4@0.7;0.3"), False)
+	'''
 
-	def test_sendMessage(self):
-		self.assertEqual(serial_communication.sendMessage(-1, 1), -1)
-		#self.assertEqual(serial_communication.sendMessage(4, 4), 1)
-		#self.assertEqual(serial_communication.sendMessage(-3, 2), -1.5)
-		#self.assertEqual(serial_communication.sendMessage(6, 2), 3)
-		#self.assertEqual(serial_communication.sendMessage(6, 3), 2)
+	def testSendMessage(self):
+		self.assertEqual(SerialCommunication.sendMessage(1, "0.1;0.3"), True)
+		#self.assertEqual(SerialCommunication.sendMessage(2, "0.3;0.2"), True)
+		#self.assertEqual(SerialCommunication.sendMessage(3, "0.6;0.1"), True)
+		#self.assertEqual(SerialCommunication.sendMessage(4, "0.4, 0.2"), True)
+		#self.assertEqual(SerialCommunication.sendMessage(9, "0.3, 0.9"), False)
 
-
-	def test_newRobot(self):
-		self.assertEqual(serial_communication.sendMessage('A', 0x88a0), true)
-		#self.assertEqual(serial_communication.sendMessage('A', 0xb14c), false)
-		#self.assertEqual(serial_communication.sendMessage('B', 0xb24a), true)
-		#self.assertEqual(serial_communication.sendMessage('C', 0x215c), true)
-		#self.assertEqual(serial_communication.sendMessage('D', 0x35f6), true)
-		#self.assertEqual(serial_communication.sendMessage('E', 0x97e7), true)
-		#self.assertEqual(serial_communication.sendMessage('F', 0x6b0d), true)
-		#self.assertEqual(serial_communication.sendMessage('G', 0x56bc), true)
-		#self.assertEqual(serial_communication.sendMessage('H', 0x13da), false)
+	def testNewRobot(self):
+		self.assertEqual(SerialCommunication.newRobot('A', 0x88a0), True)
+		#self.assertEqual(SerialCommunication.newRobot('A', 0xb14c), False)
+		#self.assertEqual(SerialCommunication.newRobot('B', 0xb24a), True)
+		#self.assertEqual(SerialCommunication.newRobot('C', 0x215c), True)
+		#self.assertEqual(SerialCommunication.newRobot('D', 0x35f6), True)
+		#self.assertEqual(SerialCommunication.newRobot('E', 0x97e7), True)
+		#self.assertEqual(SerialCommunication.newRobot('F', 0x6b0d), True)
+		#self.assertEqual(SerialCommunication.newRobot('G', 0x56bc), True)
+		#self.assertEqual(SerialCommunication.newRobot('H', 0x13da), False)
 
 			
 '''
