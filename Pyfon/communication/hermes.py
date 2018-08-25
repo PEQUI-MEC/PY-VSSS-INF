@@ -10,4 +10,5 @@ class Hermes():
 	def createMessage(i, lw, rw):
 		return "0.3;0.8"
 
-
+	def isBee(port_path):
+		return True
