@@ -1,32 +1,46 @@
 import sys
 import unittest
-import cv2
 
 sys.path.append("../../")
 from Pyfon.hades import Hades
 
+
 class HadesTest(unittest.TestCase):
 
+
     def setUp(self):
-        pass
+        self.hades = Hades(0, "bbb")
 
-    def testRiseUpCapture(self):
-        self.assertTrue(Hades.riseUpCapture())
+    '''
+    Tests image provider
+    '''
+    def testCapture(self):
+        self.assertIsNotNone(self.hades.summonCapture())
+        self.assertIsNone(self.hades.killCapture())
 
-    def testRiseUpCommunication(self):
-        self.assertTrue(Hades.riseUpCommunication())
+    '''
+    Tests communication provider
+    '''
+    def testCommunication(self):
+        self.assertTrue(self.hades.summonCommunication())
 
+    '''
+    Tests idle loop
+    '''
     def testPuppetLoop(self):
-        self.assertTrue(Hades.puppetLoop())
+        self.assertTrue(self.hades.puppetLoop())
 
     def testUpdatePositions(self):
-        self.assertTrue(Hades.updateFormation())
+        self.assertTrue(self.hades.updateFormation())
 
     def testUpdateFormation(self):
-        self.assertTrue(Hades.updateFormation())
+        self.assertTrue(self.hades.updateFormation())
 
     def testCreateFormatio(self):
-        self.assertTrue(Hades.createFormation())
+        self.assertTrue(self.hades.createFormation())
+
+    def testRecordGame(self):
+        self.assertTrue(self.hades.recordGame())
 
 
 if __name__ == '__main__':
