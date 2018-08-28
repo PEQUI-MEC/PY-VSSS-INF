@@ -1,0 +1,10 @@
+_position = 0
+_target = 1
+_orientation = 2
+_targetOrientation = 3
+_transAngle = 4
+_cmdType = 5
+_vMax = 6
+_vLeft = 7
+_vRight = 8
+_actionsCommand = 9
