@@ -1,6 +1,17 @@
+from control.actions import Actions
+from control.translate import Translate
+
 class Zeus:
-    def robotRiseUp(self, robots):
+    robots = []
+
+    def setup(self):
         return True
 
-    def controlAll(self, robots):
+    def getRobots(self, robots):
+        pass
+
+    def generateJson(self):
+        pass
+
+    def controlRoutine(self):
         pass
