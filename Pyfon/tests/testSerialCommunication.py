@@ -1,7 +1,7 @@
 import unittest
 import sys
 sys.path.append("../")
-from communication.serial_communication import SerialCommunication
+from communication.serialCommunication import SerialCommunication
 
 class SerialCommunicationTest(unittest.TestCase):
 
