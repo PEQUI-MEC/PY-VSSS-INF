@@ -154,7 +154,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -216,7 +216,7 @@
          <string>Device</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="comboBoxCamptureDeviceInformation">
+       <widget class="QComboBox" name="comboBoxCaptureDeviceInformation">
         <property name="geometry">
          <rect>
           <x>70</x>

@@ -1,5 +1,5 @@
 #
-####### req-vision.txt #######
+####### req-interface.txt #######
 #
 # This file handles all required libraries to run this project
 #
@@ -16,5 +16,4 @@
 # To include another requirement.txt file inside a requirement.txt file, use:
 # -r other-requirement-file.txt
 
-opencv-python==3.4.2.16
-opencv-contrib-python==3.4.2.16
+PyQt>=5
