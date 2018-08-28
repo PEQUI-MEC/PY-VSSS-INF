@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-from digi.xbee.devices import
+# from digi.xbee.devices import
 
 '''
 Manager of all modules.
@@ -10,8 +10,8 @@ class Hades:
     def __init__(self, srcCam, srcBee):
         self.srcCamera = srcCam
         self.srcXbee = srcBee
-        self.cap = self.summonCapture()
-        self.comm = self.summonCommunication()
+        # self.cap = self.summonCapture()
+        # self.comm = self.summonCommunication()
 
     '''
     Set link between camera and software
@@ -41,6 +41,8 @@ class Hades:
     Cleanup capture flags and set again
     '''
     def refreshCapture(self):
+        self.killCapture()
+        self.summonCapture()
         return True
 
     def summonCommunication(self):
