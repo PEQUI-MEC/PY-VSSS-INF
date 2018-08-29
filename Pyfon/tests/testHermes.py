@@ -20,6 +20,9 @@ class HermesTest(unittest.TestCase):
 		#self.assertEqual(hermes.sendMessage(4, "0.4, 0.2"), True)
 		#self.assertEqual(hermes.sendMessage(7, "0.4, 0.2"), False)
 	
+	def testInit(self):
+		self.assertTrue("/dev/ttyUSB0", 115200)
+
 	#multicast
 	'''
 	def test_sendMessages(self):
