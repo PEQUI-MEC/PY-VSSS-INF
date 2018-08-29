@@ -2,10 +2,12 @@ import sys
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog
 from PyQt5 import QtCore, QtGui, QtWidgets
-import icons_rc
 import serial, glob
 import unittest
-import afrodite
+
+sys.path.append("../../")
+from interface import icons_rc
+from interface import afrodite
 
 app = QApplication(sys.argv)
 
@@ -52,5 +54,4 @@ class TestAfrodite(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    print("\n")
     unittest.main()
