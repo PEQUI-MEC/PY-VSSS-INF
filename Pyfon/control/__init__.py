@@ -1,5 +1,6 @@
-from control.actions import Actions
-from control.translate import Translate
+from .actions import Actions
+from .translate import Translate
+
 
 class Zeus:
     robots = []

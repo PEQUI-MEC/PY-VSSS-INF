@@ -1,6 +1,7 @@
 import unittest
 from control import Zeus
 
+
 class TestZeus(unittest.TestCase):
     zeus = Zeus()
 
