@@ -1,9 +1,9 @@
 import sys
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox
+from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui, QtWidgets
-import iconstoolbar
+import icons_rc
 import serial, glob
 
 
@@ -31,8 +31,8 @@ class mainWindow (QMainWindow):
 		#pushButtonVideoViewStart
 		self.pushButtonVideoViewStart.clicked.connect(self.pushButtonVideoViewStartCLicked)
 
-		self.update_serial_ports()
-		self.update_video_ports()
+		self.updateComboBoxCaptureDeviceInformation()
+		self.updateComboBoxControlSerialDevice()
 
 	#MenuBarArquivo
 	def actionLoadConfigsTriggered(self):
@@ -73,8 +73,9 @@ class mainWindow (QMainWindow):
 	def pushButtonVideoViewStartCLicked(self):
 		print("PushButton")
 
-	#DeviceInformation
-	def update_video_ports(self):
+	#Capture
+	##DeviceInformation
+	def updateComboBoxCaptureDeviceInformation(self):
 		if sys.platform.startswith('win'):
 			ports = ['COM%s' % (i+1) for i in range(256)]
 		elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
@@ -84,14 +85,14 @@ class mainWindow (QMainWindow):
 		else:
 			raise EnvironmentError('Unsuported plaftorm')
 
-		self.comboBoxCamptureDeviceInformation.clear()
+		self.comboBoxCaptureDeviceInformation.clear()
 
 		for port in ports:
-			self.comboBoxCamptureDeviceInformation.addItem(port)
+			self.comboBoxCaptureDeviceInformation.addItem(port)
 
-	#Video
-	#DeviceInformation
-	def update_serial_ports(self):
+	#Control
+	#Serial
+	def updateComboBoxControlSerialDevice(self):
 		if sys.platform.startswith('win'):
 			ports = ['COM%s' % (i+1) for i in range(256)]
 		elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
@@ -105,7 +106,6 @@ class mainWindow (QMainWindow):
 
 		for port in ports:
 			self.comboBoxControlSerialDevice.addItem(port)
-
 
 
 def main():
