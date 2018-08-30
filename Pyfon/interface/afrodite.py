@@ -1,16 +1,26 @@
-import sys
+import sys, os
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui, QtWidgets
-import icons_rc
+# import icons_rc
 import serial, glob
 
 class Afrodite(QMainWindow):
 	"""docstring for Afrodite """
 	def __init__(self):
 		super(Afrodite , self).__init__()
-		loadUi('mainwindow.ui', self)
+
+		'''
+		O grande problema da vida é fazer python entender onde que ficam os arquivos que você chama
+		eu basicamente setei um diretório padrão de leitura desse arquivo. dirname recebe o caminho até a pasta onde fica afrodite.py
+		em seguida eu disse que o arquivo mainwindow.ui fica dentro do dirname
+		
+		çapoha é doida...
+		'''
+		dirname = os.path.dirname(__file__)
+		filename = os.path.join(dirname, 'mainwindow.ui')
+		loadUi(filename, self)
 
 		##MenuBar
 		#MenuBarArquivo
