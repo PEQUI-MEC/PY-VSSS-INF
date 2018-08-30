@@ -55,5 +55,3 @@ modules.xml
 
 ### PYC ###
 *.pyc
-
-__pycache__
