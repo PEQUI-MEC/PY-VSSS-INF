@@ -5,7 +5,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import serial, glob
 import unittest
 
-sys.path.append("../../")
+'''
+voltei só mais um tiquinho xD
+'''
+sys.path.append("../..")
 from interface import icons_rc
 from interface import afrodite
 
