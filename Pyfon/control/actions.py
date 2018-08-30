@@ -49,3 +49,4 @@ class Actions:
         __class__.robot[constants._cmdType] = 'SPEED'
         __class__.robot[constants._vLeft] = -(__class__.robot[constants._vMax])
         __class__.robot[constants._vRight] = __class__.robot[constants._vMax]
+
