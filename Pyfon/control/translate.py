@@ -1,6 +1,29 @@
+from . import constants
+import math
+
+
 class Translate:
-    def mainTranslate(self, robots):
-        pass
+
+    robot = []
+
+    @staticmethod
+    def setup(robot):
+        translate = Translate()
+        translate.robot = robot
+
+        if robot[constants._cmdType] == 'UVF':
+            translate.uvfControl()
+        elif robot[constants._cmdType] == 'VECTOR':
+            translate.vectorControl()
+        elif robot[constants._cmdType] == 'POSITION':
+            translate.positionControl()
+        elif robot[constants._cmdType] == 'ORIENTATION':
+            translate.orientationControl()
+
+        elif robot[constants._cmdType] is None:
+            return None
+
+        return [robot[constants._vRight], robot[constants._vLeft]]
 
     def uvfControl(self):
         pass
@@ -12,4 +35,7 @@ class Translate:
         pass
 
     def orientationControl(self):
+        pass
+
+    def speedControl(self):
         pass

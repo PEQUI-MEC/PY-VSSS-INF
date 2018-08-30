@@ -6,7 +6,10 @@ from control import constants
 class TestActions(unittest.TestCase):
 
     def testSetup(self):
-        pass
+        actions = Actions()
+        robot = [[100, 200], [100, 300], 1.3, None, 0, "", 0.8, 0, 0, "stop"]
+        robot = actions.setup(robot)
+        self.assertIsNotNone(robot)
 
     def testStop(self):
         actions = Actions()
