@@ -10,37 +10,38 @@ class Zeus:
     robots = []
 
     def setup(self):
-        if Zeus().getRobots():
+        zeus = Zeus()
+        zeus.robots = zeus.getRobots()
 
-            if Zeus().controlRoutine():
-                return True
-            else:
-                return False
-        else:
-            return False
+        return zeus.controlRoutine()
 
-    def getRobots(self):
-        __class__.robots = []
+    @staticmethod
+    def getRobots():
+        robots = []
+
         with open(_robot_location, 'r') as file:
-            __class__.robots = json.loads(file.read())
+            robots = json.loads(file.read())
             file.close()
-        if len(__class__.robots) == 0:
-            return False
+        if len(robots) == 0:
+            return FileNotFoundError
         else:
-            return True
+            return robots
 
     def generateJson(self):
         pass
 
     def controlRoutine(self):
+        robotActions = Actions()
         counter = 0
-        for robot in __class__.robots:
+
+        for robot in self.robots:
             if robot[constants._actionsCommand] is not None:
-                robot = Actions().setup(robot)
+                robot = robotActions.setup(robot)
+
                 if robot:
                     counter = counter + 1
             # robot = Translate().mainTranslate(robot)
-        print(counter)
+
         if counter == 3:
             return True
         else:

@@ -4,57 +4,62 @@ import math
 
 class Actions:
 
-    def setup(self, robot):
-        self.robot = robot
+    robot = []
 
-        if self.robot[constants._actionsCommand] == 'stop':
-            Actions().stop(self.robot)
-            return True
-        elif self.robot[constants._actionsCommand] == 'kick':
-            Actions().kick(self.robot)
-            return True
-        elif self.robot[constants._actionsCommand] == 'lookAt':
-            Actions().lookAt(self.robot)
-            return True
-        elif self.robot[constants._actionsCommand] == 'spinClockwise':
-            Actions().spinClockwise(self.robot)
-            return True
-        elif self.robot[constants._actionsCommand] == 'spinCounterClockWise':
-            Actions().spinCounterClockWise(self.robot)
-            return True
+    @staticmethod
+    def setup(robot):
+        actions = Actions()
+        actions.robot = robot
+
+        if robot[constants._actionsCommand] == 'stop':
+            actions.stop()
+        elif robot[constants._actionsCommand] == 'kick':
+            actions.kick()
+        elif robot[constants._actionsCommand] == 'lookAt':
+            actions.lookAt()
+        elif robot[constants._actionsCommand] == 'spinClockwise':
+            actions.spinClockwise()
+        elif robot[constants._actionsCommand] == 'spinCounterClockWise':
+            actions.spinCounterClockWise()
         else:
             return False
 
-    def stop(self, robot):
-        self.robot = robot
+        return robot
+
+    def stop(self):
         self.robot[constants._cmdType] = 'SPEED'
         self.robot[constants._vMax] = 0
         self.robot[constants._vLeft] = 0
         self.robot[constants._vRight] = 0
         self.robot[constants._target] = [-1, -1]
 
-    def lookAt(self, robot):
-        self.robot = robot
-        x = self.robot[constants._target][0] - self.robot[constants._position][0]
-        y = self.robot[constants._target][1] - self.robot[constants._position][1]
-        self.robot[constants._cmdType] = 'ORIENTATION'
-        self.robot[constants._targetOrientation] = math.atan2(x, -y)
+    def lookAt(self):
 
-    def kick(self, robot):
-        self.robot = robot
+        if self.robot[constants._orientation] is None and self.robot[constants._targetOrientation] is not None:
+            x = self.robot[constants._target][0] - self.robot[constants._position][0]
+            y = self.robot[constants._target][1] - self.robot[constants._position][1]
+            self.robot[constants._cmdType] = 'ORIENTATION'
+            self.robot[constants._targetOrientation] = math.atan2(-y, -x)
+
+        elif self.robot[constants._targetOrientation] is None and self.robot[constants._orientation] is not None:
+            self.robot[constants._cmdType] = 'ORIENTATION'
+            self.robot[constants._targetOrientation] = self.robot[constants._orientation]
+
+        else:
+            pass
+
+    def kick(self):
         x = self.robot[constants._target][0] - self.robot[constants._position][0]
         y = self.robot[constants._target][1] - self.robot[constants._position][1]
         self.robot[constants._cmdType] = 'VECTOR'
-        self.robot[constants._transAngle] = -math.atan2(x, y)
+        self.robot[constants._transAngle] = -math.atan2(-y, x)
 
-    def spinClockwise(self, robot):
-        self.robot = robot
+    def spinClockwise(self):
         self.robot[constants._cmdType] = 'SPEED'
         self.robot[constants._vLeft] = self.robot[constants._vMax]
         self.robot[constants._vRight] = -(self.robot[constants._vMax])
 
-    def spinCounterClockWise(self, robot):
-        self.robot = robot
+    def spinCounterClockWise(self):
         self.robot[constants._cmdType] = 'SPEED'
         self.robot[constants._vLeft] = -(self.robot[constants._vMax])
         self.robot[constants._vRight] = self.robot[constants._vMax]
