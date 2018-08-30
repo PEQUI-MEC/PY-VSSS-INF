@@ -1,8 +1,5 @@
-import sys
 import unittest
-
-sys.path.append("../")
-from Pyfon.hades import Hades
+from hades import Hades
 
 
 class HadesTest(unittest.TestCase):
@@ -17,7 +14,7 @@ class HadesTest(unittest.TestCase):
     def testCapture(self):
         self.assertIsNotNone(self.hades.summonCapture())
         self.assertIsNone(self.hades.killCapture())
-        self.assertIsNone(self.hades.refreshCapture())
+        self.assertIsNotNone(self.hades.refreshCapture())
 
     '''
     Tests communication provider
