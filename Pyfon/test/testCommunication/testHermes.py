@@ -1,6 +1,6 @@
 import unittest
-import sys
-sys.path.append("../")
+# import sys
+# sys.path.append("../")
 from communication.hermes import Hermes
 
 class HermesTest(unittest.TestCase):
