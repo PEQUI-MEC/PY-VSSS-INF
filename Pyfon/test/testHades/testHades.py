@@ -34,7 +34,7 @@ class HadesTest(unittest.TestCase):
     def testUpdateFormation(self):
         self.assertTrue(self.hades.updateFormation())
 
-    def testCreateFormatio(self):
+    def testCreateFormation(self):
         self.assertTrue(self.hades.createFormation())
 
     def testRecordGame(self):
