@@ -40,7 +40,7 @@ class Zeus:
                 if robot:
                     counter = counter + 1
             # robot = Translate().mainTranslate(robot)
-
+        print(counter)
         if counter == 3:
             return True
         else:
