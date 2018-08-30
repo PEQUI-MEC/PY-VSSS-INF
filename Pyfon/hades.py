@@ -10,7 +10,7 @@ class Hades:
     def __init__(self, srcCam, srcBee):
         self.srcCamera = srcCam
         self.srcXbee = srcBee
-        # self.cap = self.summonCapture()
+        self.cap = self.summonCapture()
         # self.comm = self.summonCommunication()
 
     '''
