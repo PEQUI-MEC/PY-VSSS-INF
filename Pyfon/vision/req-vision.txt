@@ -6,10 +6,10 @@
 ###### How to use: ######
 # If required lib needs specific version, use:
 # > lib==version
-# 
+#
 # If required lib needs minimum or maximum version, use:
 # > lib>version     or
-# > lib>=version    or  
+# > lib>=version    or
 # > lib<version     or
 # > lib<=version
 #

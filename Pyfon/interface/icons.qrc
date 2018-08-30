@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="Icons">
+    <file>Imgs/devil_cry.png</file>
+    <file>Imgs/devil_laught.png</file>
+    <file>Imgs/devil_love.png</file>
+    <file>Imgs/devil_mad.png</file>
+    <file>Imgs/devil_sad.png</file>
+    <file>Imgs/devil_smile.png</file>
+    <file>Imgs/devil.png</file>
+    <file>Imgs/exit.png</file>
+    <file>Imgs/icontexto-webdev-about.png</file>
+    <file>Imgs/open-file.png</file>
+    <file>Imgs/Play.png</file>
+    <file>Imgs/Save-as.png</file>
+    <file>Imgs/Save.png</file>
+  </qresource>
+</RCC>
