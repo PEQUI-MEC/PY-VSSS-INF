@@ -44,10 +44,13 @@ class Apolo:
 				
 		return imagem
 		
-	def findRobots(self, labelledImage, areaMin):
-		robotList = list()
+	'''
+	Econtra os robos em uma imagem onde o threshold foi aplicado
+	'''
+	def findRobots(self, thresholdedImage, areaMin):
+		robotPositionList = list()
 		
-		_, contours, hierarchy = cv2.findContours(labelledImage, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+		_, contours, hierarchy = cv2.findContours(thresholdedImage, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 		
 		for i in contours:
 			M = cv2.moments(i)
@@ -55,9 +58,11 @@ class Apolo:
 			if (M['m00'] > areaMin):
 				cx = int(M['m01']/M['m00'])
 				cy = int(M['m10']/M['m00'])
-				robotList.extend([(cx,cy)])
+				robotPositionList.extend([(cx,cy)])
 		
-		return robotList
+			if (len(robotPositionList) == 3): break
+		
+		return robotPositionList
 		
 	def findAdvRobots(self, labelledImage):
 		return ("ADV1:",103,103),("ADV2:",203,213),("ADV3:",253,303)
