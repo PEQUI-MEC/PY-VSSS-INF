@@ -15,18 +15,18 @@ def getLabelledImage():
 	imgLab = np.zeros((WIDTH, HEIGHT), dtype = "uint8")
 	imgThresh = np.zeros((WIDTH, HEIGHT), dtype = "uint8")
 	
-	for x in range(100,106,1):
-		for y in range(100,106,1):
+	for x in range(100,107,1):
+		for y in range(100,107,1):
 			imgLab[x][y] = 1
 			imgThresh[x][y] = 255
 				
-	for x in range(200,206,1):
-		for y in range(210,216,1):
+	for x in range(200,207,1):
+		for y in range(210,217,1):
 			imgLab[x][y] = 2
 			imgThresh[x][y] = 255
 			
-	for x in range(250,256,1):
-		for y in range(300,306,1):
+	for x in range(250,257,1):
+		for y in range(300,307,1):
 			imgLab[x][y] = 3
 			imgThresh[x][y] = 255
 
@@ -71,7 +71,7 @@ class TestSearchMethods(unittest.TestCase):
 					
 
 		#Ta invertido X com Y --- TODO: ARRUMAR
-		self.assertEqual((310,215),apolo.findBall(imagem,50))
+		self.assertEqual((215,310),apolo.findBall(imagem,50))
 	
 	#Testa a função de Label, dada uma imagem com três objetos
 	def testLabelImage(self):
@@ -79,16 +79,16 @@ class TestSearchMethods(unittest.TestCase):
 		
 		labelledImage,_ = getLabelledImage()
 		
-		for x in range(100,106,1):
-			for y in range(100,106,1):
+		for x in range(100,107,1):
+			for y in range(100,107,1):
 				thresholdedImage[x][y] = 255
 					
-		for x in range(200,206,1):
-			for y in range(210,216,1):
+		for x in range(200,207,1):
+			for y in range(210,217,1):
 				thresholdedImage[x][y] = 255
 				
-		for x in range(250,256,1):
-			for y in range(300,306,1):
+		for x in range(250,257,1):
+			for y in range(300,307,1):
 				thresholdedImage[x][y] = 255
 			
 		self.assertTrue((labelledImage == apolo.labelImage(thresholdedImage)).all())
@@ -96,9 +96,9 @@ class TestSearchMethods(unittest.TestCase):
 	#Testa a função de encontrar os robos, dada uma imagem onde o Label já ocorreu
 	def testFindRobots(self):		
 		labelledImage, threshImage = getLabelledImage()
-				
+		robotList = [(253,303),(203,213),(103,103)]
 		#self.assertEqual(((103,103),(203,213),(253,303)),apolo.findRobots(labelledImage))
-		self.assertEqual(((103,103),(203,213),(253,303)),apolo.findRobots(threshImage,20))
+		self.assertEqual(robotList,apolo.findRobots(threshImage,20))
 	
 	#Testa a função de encontrar os adversarios, dada uma imagem onde o Label ja ocorreu
 	def testFindAdvRobots(self):

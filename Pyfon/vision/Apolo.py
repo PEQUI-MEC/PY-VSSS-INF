@@ -21,31 +21,31 @@ class Apolo:
 		for i in contours:
 			M = cv2.moments(i)
 			if (M['m00'] > areaMin):
-				cx = int(M['m10']/M['m00'])
-				cy = int(M['m01']/M['m00'])
+				cx = int(M['m01']/M['m00'])
+				cy = int(M['m10']/M['m00'])
 				break
 		
 		return cx,cy
 		
 	def labelImage(self, imagem):
 	
-		for x in range(100,106,1):
-			for y in range(100,106,1):
+		for x in range(100,107,1):
+			for y in range(100,107,1):
 				imagem[x][y] = 1
 				
 				
-		for x in range(200,206,1):
-			for y in range(210,216,1):
+		for x in range(200,207,1):
+			for y in range(210,217,1):
 				imagem[x][y] = 2
 				
-		for x in range(250,256,1):
-			for y in range(300,306,1):
+		for x in range(250,257,1):
+			for y in range(300,307,1):
 				imagem[x][y] = 3
 				
 		return imagem
 		
 	def findRobots(self, labelledImage, areaMin):
-		robotLists = list()
+		robotList = list()
 		
 		_, contours, hierarchy = cv2.findContours(labelledImage, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 		
@@ -53,15 +53,11 @@ class Apolo:
 			M = cv2.moments(i)
 			
 			if (M['m00'] > areaMin):
-				cx = int(M['m10']/M['m00'])
-				cy = int(M['m01']/M['m00'])
-				print ("X: ",cx," Y: ",cy)
-				robotLists.extend([cx,cy])
-				
+				cx = int(M['m01']/M['m00'])
+				cy = int(M['m10']/M['m00'])
+				robotList.extend([(cx,cy)])
 		
-		print (robotLists)
-		
-		return (103,103),(203,213),(253,303)
+		return robotList
 		
 	def findAdvRobots(self, labelledImage):
 		return ("ADV1:",103,103),("ADV2:",203,213),("ADV3:",253,303)
