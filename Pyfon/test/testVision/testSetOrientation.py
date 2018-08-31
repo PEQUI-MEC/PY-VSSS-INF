@@ -1,9 +1,9 @@
 import unittest
 import numpy as np
 import sys
-from vision import Apolo
+from vision import Apolo as Vision
 
-apolo = Apolo()
+apolo = Vision.Apolo()
 
 WIDTH = 640 #X-axys
 HEIGHT = 480 #Y-axys
