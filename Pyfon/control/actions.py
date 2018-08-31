@@ -35,15 +35,15 @@ class Actions:
 
     def lookAt(self):
 
+        if self.robot[constants._orientation] is not None:
+            self.robot[constants._cmdType] = 'ORIENTATION'
+            self.robot[constants._targetOrientation] = self.robot[constants._orientation]
+
         if self.robot[constants._orientation] is None and self.robot[constants._targetOrientation] is not None:
             x = self.robot[constants._target][0] - self.robot[constants._position][0]
             y = self.robot[constants._target][1] - self.robot[constants._position][1]
             self.robot[constants._cmdType] = 'ORIENTATION'
-            self.robot[constants._targetOrientation] = math.atan2(-y, -x)
-
-        elif self.robot[constants._targetOrientation] is None and self.robot[constants._orientation] is not None:
-            self.robot[constants._cmdType] = 'ORIENTATION'
-            self.robot[constants._targetOrientation] = self.robot[constants._orientation]
+            self.robot[constants._targetOrientation] = math.atan2(y, -x)
 
         else:
             pass
