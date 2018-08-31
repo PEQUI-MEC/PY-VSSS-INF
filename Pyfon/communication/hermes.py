@@ -1,7 +1,9 @@
+from serialCommunication import SerialCommunication
 
 class Hermes():
 
 	def __init__(self, port, baud=115200):
+		xbee = SerialCommunication.startBee(port, baud)
 		pass
 
 	def startBee(port, baud):
