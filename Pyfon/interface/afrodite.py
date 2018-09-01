@@ -1,10 +1,9 @@
 import sys, os
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog,QGroupBox
+from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui, QtWidgets
-from datetime import datetime
-import icons_rc
+# import icons_rc
 import serial, glob
 
 class Afrodite(QMainWindow):
@@ -12,6 +11,13 @@ class Afrodite(QMainWindow):
 	def __init__(self):
 		super(Afrodite , self).__init__()
 
+		'''
+		O grande problema da vida é fazer python entender onde que ficam os arquivos que você chama
+		eu basicamente setei um diretório padrão de leitura desse arquivo. dirname recebe o caminho até a pasta onde fica afrodite.py
+		em seguida eu disse que o arquivo mainwindow.ui fica dentro do dirname
+		
+		çapoha é doida...
+		'''
 		dirname = os.path.dirname(__file__)
 		filename = os.path.join(dirname, 'mainwindow.ui')
 		loadUi(filename, self)
@@ -32,78 +38,19 @@ class Afrodite(QMainWindow):
 		self.checkBoxVideoViewDisableDrawing.clicked.connect(self.getStateCheckBoxVideoViewDisableDrawing)
 
 		#pushButtonVideoViewStart
-		self.pushButtonVideoViewStart.clicked.connect(self.getPushButtonVideoViewStartCLicked)
+		self.pushButtonVideoViewStart.clicked.connect(self.pushButtonVideoViewStartCLicked)
 
-		#Capture
-		##DeviceInformation
-		self.updateComboBoxCaptureDeviceInformation()
-		self.getComboBoxCaptureDeviceInformation()
-
-		##Warp
-		self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
-		self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
-		self.pushButtonCaptureWarpAdjust.clicked.connect(self.getpushButtonCaptureWarpAdjust)
-
-		#Control
-		##Serial
-		self.updateComboBoxControlSerialDevice()
-
-		#Robot
-		##RobotFunctions
-		self.pushButtonRobotRobotFunctionsEdit.clicked.connect(self.getPushButtonRobotRobotFunctionsEdit)
-		self.pushButtonRobotRobotFunctionsDone.clicked.connect(self.getPushButtonRobotRobotFunctionsDone)
-
-		##Speed
-		self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
-		self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
-
-		##ID
-		self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
-		self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
-
-		#Vision
 		##Capture
-		self.pushButtonVisionVideoCapturePictureNameSave.clicked.connect(self.getPushButtonVisionVideoCapturePictureNameSave)
-		self.pushButtonVisionVideoCaptureVideoNameSave.clicked.connect(self.getPushButtonVisionVideoCaptureVideoNameSave)
+		#DeviceInformation
+		self.updateComboBoxCaptureDeviceInformation()
 
-		#ModeView
-
-		#HSVCalibration
-		self.pushButtonVisionHSVCalibrationSwap.clicked.connect(self.getPushButtonVisionHSVCalibrationSwap)
-		self.pushButtonVisionHSVCalibrationEdit.clicked.connect(self.getPushButtonVisionHSVCalibrationEdit)
-		self.pushButtonVisionHSVCalibrationPrev.clicked.connect(self.getPushButtonVisionHSVCalibrationPrev)
-		self.pushButtonVisionHSVCalibrationNext.clicked.connect(self.getPushButtonVisionHSVCalibrationNext)
-
-		#Control
-		##Serial
-		self.pushButtonControlSerialDeviceStart.clicked.connect(self.getPushButtonControlSerialDeviceStart)
-		self.pushButtonControlSerialDeviceRefresh.clicked.connect(self.getPushButtonControlSerialDeviceRefresh)
-		self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
-		self.pushButtonControlSerialSendCommand.clicked.connect(self.getPushButtonControlSerialSendCommand)
-		self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
-
-		##RobotStatus
-		self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
-
-		##RobotFunctions
-		self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
-
-		#Strategy
-		##Formation
-		self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormationLoad)
-		self.pushButtonStrategyFormationDelete.clicked.connect(self.getPushButtonStrategyFormationDelete)
-		self.pushButtonStrategyFormationCreate.clicked.connect(self.getPushButtonStrategyFormationCreate)
-		self.pushButtonStrategyFormationSave.clicked.connect(self.getPushButtonStrategyFormationSave)
-
-		##Transitions
-		self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(self.getStrategyTransitionsEnableTransistions)
+		##Control
+		#Serial
+		self.updateComboBoxControlSerialDevice()
 
 	'''def mouseReleaseEvent(self, QMouseEvent):
    		print('(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')')
-
-   		
 	'''
-
 
 	##MenuBar
 	#MenuBarArquivo
@@ -146,11 +93,11 @@ class Afrodite(QMainWindow):
 		return self.checkBoxVideoViewDisableDrawing.isTristate()
 
 	#FPS
-	def setLabelVideoViewFPS(self,fps):
+	def uptadeLabelVideoViewFPS(self,fps):
 		self.labelVideoViewFPS.setText("FPS: " + str(fps))
 
 	#StartButton
-	def getPushButtonVideoViewStartCLicked(self):
+	def pushButtonVideoViewStartCLicked(self):
 		print("clicked")
 		return True
 
@@ -171,260 +118,273 @@ class Afrodite(QMainWindow):
 		for port in ports:
 			self.comboBoxCaptureDeviceInformation.addItem(port)
 
-	def getComboBoxCaptureDeviceInformation(self):
-		return self.comboBoxCaptureDeviceInformation.currentText()
-
 	def getPushButtonCaptureDeviceInformationStart():
-		return self.getComboBoxCaptureDeviceInformation()
+		pass
 
-	def setlabelCaptureDeviceInformation(self, device, driver, card, bus):
-		self.labelCaptureDeviceInformationDevice.setText(device)
-		self.labelCaptureDeviceInformationDriver.setText(driver)
-		self.labelCaptureDeviceInformationCard.setText(card)
-		self.labelCaptureDeviceInformationBus.setText(bus)
+	def updatelabelCaptureDeviceInformation(self, device, driver, card, bus):
+		pass
 
 	##DeviceProperties
 	###Properties
-	def getCaptureDevicePropertiesInput(self):
-		return self.comboBoxCaptureDevicePropertiesInput.currentText()
+	def getCaptureDevicePropertiesInput():
+		pass
 
-	def getCaptureDevicePropertiesFormat(self):
-		return self.comboBoxCaptureDevicePropertiesFormat.currentText()
+	def getCaptureDevicePropertiesFormat():
+		pass
 
-	def getCaptureDevicePropertiesIntervals(self):
-		return self.comboBoxCaptureDevicePropertiesIntervals.currentText()
+	def getCaptureDevicePropertiesIntervals():
+		pass
 
-	def getCaptureDevicePropertiesStandard(self):
-		return self.comboBoxCaptureDevicePropertiesStandard.currentText()
+	def getCaptureDevicePropertiesStandard():
+		pass
 
-	def getCaptureDevicePropertiesFrameSize(self):
-		return self.comboBoxCaptureDevicePropertiesFrameSize.currentText()
+	def getCaptureDevicePropertiesFrameSize():
+		pass
 
 	###CamConfig
-	def getCaptureDevicePropertiesBrightness(self):
-		return self.spinBoxCaptureDevicePropertiesBrightness.value()
+	def getCaptureDevicePropertiesBrightness():
+		pass
 
-	def getCaptureDevicePropertiesSaturation(self):
-		return self.spinBoxCaptureDevicePropertiesSaturation.value()
+	def getCaptureDevicePropertiesSaturation():
+		pass
 
-	def getCaptureDevicePropertiesGain(self):
-		return self.spinBoxCaptureDevicePropertiesGain.value()
+	def getCaptureDevicePropertiesGain():
+		pass
 
-	def getCaptureDevicePropertiesFrequency(self):
-		return self.comboBoxCaptureDevicePropertiesFrequency.currentText()
+	def getCaptureDevicePropertiesFrequency():
+		pass
 
-	def getCaptureDevicePropertiesContrast(self):
-		return self.spinBoxCaptureDevicePropertiesContrast.value()
+	def getCaptureDevicePropertiesContrast():
+		pass
 
-	def getCaptureDevicePropertiesHue(self):
-		return self.spinBoxCaptureDevicePropertiesHue.value()
+	def getCaptureDevicePropertiesHue():
+		pass
 
-	def getCaptureDevicePropertiesGamma(self):
-		return self.spinBoxCaptureDevicePropertiesGamma.value()
+	def getCaptureDevicePropertiesGamma():
+		pass
 
-	def getCaptureDevicePropertiesWhiteBalanceCheckBox(self):
-		return self.checkBoxCaptureDevicePropertiesWhiteBalance.isTristate()
+	def getCaptureDevicePropertiesWhiteBalanceCheckBox():
+		pass
 
-	def getCaptureDevicePropertiesWhiteBalance(self):
-		return self.spinBoxCaptureDevicePropertiesWhiteBalance.value()
+	def getCaptureDevicePropertiesWhiteBalance():
+		pass
 
-	def getCaptureDevicePropertiesBacklight(self):
-		return self.spinBoxCaptureDevicePropertiesBacklight.value()
+	def getCaptureDevicePropertiesBacklight():
+		pass
 
-	def getCaptureDevicePropertiesEsposure(self):
-		return self.spinBoxCaptureDevicePropertiesEsposure.value()
+	def getCaptureDevicePropertiesEsposure():
+		pass
 
-	def getCaptureDevicePropertiesSharpness(self):
-		return self.spinBoxCaptureDevicePropertiesSharpness.value()
+	def getCaptureDevicePropertiesSharpness():
+		pass
 
-	#ToDo
 	###Warp
-	def getPushButtonCaptureWarpWarp(self):
+	def getPushButtonCaptureWarpWarp():
 		pass
 
-	def getPushButtonCaptureWarpReset(self):
+	def getPushButtonCaptureWarpReset():
 		pass
 
-	def getCaptureWarpOffsetLeft(self):
+	def getCaptureWarpOffsetLeft():
 		pass
 
-	def getCaptureWarpOffsetRight(self):
+	def getCaptureWarpOffsetRight():
 		pass
 
 	#Robot
 	##RobotFunctions
-	def getPushButtonRobotRobotFunctionsEdit(self):
-		self.pushButtonRobotRobotFunctionsEdit.setEnabled(False)
-		self.pushButtonRobotRobotFunctionsDone.setEnabled(True)
-		self.comboBoxRobotRobotFunctionsRobot1.setEnabled(True)
-		self.comboBoxRobotRobotFunctionsRobot2.setEnabled(True)
-		self.comboBoxRobotRobotFunctionsRobot3.setEnabled(True)
+	def getPushButtonRobotRobotFunctionsEdit():
+		pass
 
-	def getPushButtonRobotRobotFunctionsDone(self):
-		self.pushButtonRobotRobotFunctionsEdit.setEnabled(True)
-		self.pushButtonRobotRobotFunctionsDone.setEnabled(False)
-		self.comboBoxRobotRobotFunctionsRobot1.setEnabled(False)
-		self.comboBoxRobotRobotFunctionsRobot2.setEnabled(False)
-		self.comboBoxRobotRobotFunctionsRobot3.setEnabled(False)
+	def getPushButtonRobotRobotFunctionsDone():
+		pass
 
-		return self.comboBoxRobotRobotFunctionsRobot1.currentText(), self.comboBoxRobotRobotFunctionsRobot2.currentText(), self.comboBoxRobotRobotFunctionsRobot3.currentText()	
+	def getRobotRobotFunctionsRobot():
+		pass
 
 	##Speed
-	def getPushButtonRobotSpeedEdit(self):
-		self.pushButtonRobotSpeedEdit.setEnabled(False)
-		self.pushButtonRobotSpeedDone.setEnabled(True)
-		self.spinBoxRobotSpeedAttack.setEnabled(True)
-		self.horizontalSliderRobotSpeedAttack.setEnabled(True)
-		self.spinBoxRobotSpeedDefense.setEnabled(True)
-		self.horizontalSliderRobotSpeedDefense.setEnabled(True)
-		self.spinBoxRobotSpeedGoalkeeper.setEnabled(True)
-		self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(True)
+	def getPushButtonRobotSpeedEdit():
+		pass
 
-	def getPushButtonRobotSpeedDone(self):
-		self.pushButtonRobotSpeedEdit.setEnabled(True)
-		self.pushButtonRobotSpeedDone.setEnabled(False)
-		self.spinBoxRobotSpeedAttack.setEnabled(False)
-		self.horizontalSliderRobotSpeedAttack.setEnabled(False)
-		self.spinBoxRobotSpeedDefense.setEnabled(False)
-		self.horizontalSliderRobotSpeedDefense.setEnabled(False)
-		self.spinBoxRobotSpeedGoalkeeper.setEnabled(False)
-		self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(False)
+	def getPushButtonRobotSpeedDone():
+		pass
 
-		return self.spinBoxRobotSpeedAttack.value(), self.spinBoxRobotSpeedDefense.value(), self.spinBoxRobotSpeedGoalkeeper.value()
+	def getRobotSpeedAttack():
+		pass
 
-	def setRobotSpeedAttackCurrent(self, speed):
-		self.progressBarRobotSpeedAttack.setValue(speed)
+	def setRobotSpeedAttackCurrent(speed):
+		pass
 
-	def setRobotSpeedDefenseCurrent(self, speed):
-		self.progressBarRobotSpeedDefense.setValue(speed)
+	def getRobotSpeedDefense():
+		pass
 
-	def setRobotSpeedGoalkeeperCurrent(self, speed):
-		self.progressBarRobotSpeedGoalkeeper.setValue(speed)
+	def setRobotSpeedDefenseCurrent(speed):
+		pass
 
-	def setRobotSpeeds(self, speedAtack, speedDefense, speedGoalKeeper):
-		self.setRobotSpeedAttackCurrent(self.speedAtack)
-		self.setRobotSpeedDefenseCurrent(self.speedDefense)
-		self.setRobotSpeedGoalkeeperCurrent(self.speedGoalKeeper)
+	def getRobotSpeedGoalkeeper():
+		pass
+
+	def setRobotSpeedGoalkeeperCurrent(speed):
+		pass
 
 	##ID
-	def getPushButtonRobotIDEdit(self):
-		self.pushButtonRobotIDEdit.setEnabled(False)
-		self.pushButtonRobotIDDone.setEnabled(True)
-		self.lineEditRobotIDRobot1.setEnabled(True)
-		self.lineEditRobotIDRobot2.setEnabled(True)
-		self.lineEditRobotIDRobot3.setEnabled(True)
+	def getPushButtonRobotIDEdit():
+		pass
+	
+	def getPushButtonRobotIDDone():
+		pass
 
-	def getPushButtonRobotIDDone(self):
-		self.pushButtonRobotIDEdit.setEnabled(True)
-		self.pushButtonRobotIDDone.setEnabled(False)
-		self.lineEditRobotIDRobot1.setEnabled(False)
-		self.lineEditRobotIDRobot2.setEnabled(False)
-		self.lineEditRobotIDRobot3.setEnabled(False)
+	def setRobotIDRobot1():
+		pass
 
-		return self.lineEditRobotIDRobot1.text(), self.lineEditRobotIDRobot2.text(), self.lineEditRobotIDRobot3.text()
+	def setRobotIDRobot2():
+		pass
+
+	def setRobotIDRobot3():
+		pass
 
 	#Vision
 	##Capture
-	def getVisionVideoCapturePictureName(self):
-		return self.lineEditVisionVideoCapturePictureName.text()
-
-	def getVisionVideoCaptureVideoName(self):
-		return self.lineEditVisionVideoCaptureVideoName.text()
-
-	def getPushButtonVisionVideoCapturePictureNameSave(self):
+	def getVisionVideoCapturePictureName():
 		pass
 
-	def getPushButtonVisionVideoCaptureVideoNameSave(self):
+	def getVisionVideoCaptureVideoName():
+		pass
+
+	def getPushButtonVisionVideoCapturePictureNameSave():
+		pass
+
+	def getPushButtonVisionVideoCaptureVideoNameSave():
 		pass
 
 	##ModeView
-	def getVisionModeViewSelectMode(self):
-		if(self.radioButtonVisionModeViewOriginal.isChecked()):
-			return "Original"
-		else:
-			return "Split"
+	def getVisionModeViewSelectMode():
+		pass
 
 	##HSVCalibration
-	def getPushButtonVisionHSVCalibrationSwap(self):
-		self.StringAux = self.labelVisionHSVCalibrationSwap.text()
-		self.labelVisionHSVCalibrationSwap.setText(self.pushButtonVisionHSVCalibrationSwap.text())
-		self.pushButtonVisionHSVCalibrationSwap.setText(self.StringAux)
+	def getPushButtonVisionHSVCalibrationAdversary():
+		pass
 
-		return self.pushButtonVisionHSVCalibrationSwap.text()
+	def getPushButtonVisionHSVCalibrationEdit():
+		pass
 
-	def getPushButtonVisionHSVCalibrationEdit(self):
-		if(self.stackedWidgetVisionHSVCalibration.isEnabled()):
-			self.stackedWidgetVisionHSVCalibration.setEnabled(False)
-		else:
-			self.stackedWidgetVisionHSVCalibration.setEnabled(True)
+	def getPushButtonVisionHSVCalibrationNext():
+		pass
 
-	def getPushButtonVisionHSVCalibrationNext(self):
-		if self.stackedWidgetVisionHSVCalibration.currentIndex() < 3:
-			self.stackedWidgetVisionHSVCalibration.setCurrentIndex(self.stackedWidgetVisionHSVCalibration.currentIndex() + 1)
-
-	def getPushButtonVisionHSVCalibrationPrev(self):
-		if self.stackedWidgetVisionHSVCalibration.currentIndex() > 0:
-			self.stackedWidgetVisionHSVCalibration.setCurrentIndex(self.stackedWidgetVisionHSVCalibration.currentIndex() - 1)
+	def getPushButtonVisionHSVCalibrationPrev():
+		pass
 
 	###Main
-	def getVisionHSVCalibrationMain(self):
-		Hmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
-		Smin = self.spinBoxVisionHSVCalibrationMainSmin.value()
-		Vmin = self.spinBoxVisionHSVCalibrationMainVmin.value()
-		Erode = self.spinBoxVisionHSVCalibrationMainErode.value()
-		Blur = self.spinBoxVisionHSVCalibrationMainBlur.value()
-		Hmax = self.spinBoxVisionHSVCalibrationMainHmax.value()
-		Smax = self.spinBoxVisionHSVCalibrationMainSmax.value()
-		Vmax = self.spinBoxVisionHSVCalibrationMainVmax.value()
-		Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
-		Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
+	def getVisionHSVCalibrationMainHmin():
+		pass
 
-		return Hmin, Smin, Vmin, Erode, Blur, Hmax, Smax, Vmax, Dilate, Amin
+	def getVisionHSVCalibrationMainSmin():
+		pass
+
+	def getVisionHSVCalibrationMainVmin():
+		pass
+
+	def getVisionHSVCalibrationMainErode():
+		pass
+
+	def getVisionHSVCalibrationMainBlur():
+		pass
+
+	def getVisionHSVCalibrationMainSmax():
+		pass
+
+	def getVisionHSVCalibrationMainVmax():
+		pass
+		
+	def getVisionHSVCalibrationMainDilate():
+		pass
+
+	def getVisionHSVCalibrationMainAmin():
+		pass
 
 	###Ball
-	def getVisionHSVCalibrationBall(self):
-		pHmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
-		Smin = self.spinBoxVisionHSVCalibrationBallnSmin.value()
-		Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
-		Erode = self.spinBoxVisionHSVCalibrationBallErode.value()
-		Blur = self.spinBoxVisionHSVCalibrationBallBlur.value()
-		Hmax = self.spinBoxVisionHSVCalibrationBallHmax.value()
-		Smax = self.spinBoxVisionHSVCalibrationBallSmax.value()
-		Vmax = self.spinBoxVisionHSVCalibrationBallVmax.value()
-		Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
-		Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
+	def getVisionHSVCalibrationBallHmin():
+		pass
 
-		return Hmin, Smin, Vmin, Erode, Blur, Hmax, Smax, Vmax, Dilate, Amin
+	def getVisionHSVCalibrationBallSmin():
+		pass
+
+	def getVisionHSVCalibrationBallVmin():
+		pass
+
+	def getVisionHSVCalibrationBallErode():
+		pass
+
+	def getVisionHSVCalibrationBallBlur():
+		pass
+
+	def getVisionHSVCalibrationBallSmax():
+		pass
+
+	def getVisionHSVCalibrationBallVmax():
+		pass
+		
+	def getVisionHSVCalibrationBallDilate():
+		pass
+
+	def getVisionHSVCalibrationBallAmin():
+		pass
 
 	###Opponent
-	def getVisionHSVCalibrationOpponent(self):
-		pHmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
-		Smin = self.spinBoxVisionHSVCalibrationOpponentnSmin.value()
-		Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
-		Erode = self.spinBoxVisionHSVCalibrationOpponentErode.value()
-		Blur = self.spinBoxVisionHSVCalibrationOpponentBlur.value()
-		Hmax = self.spinBoxVisionHSVCalibrationOpponentHmax.value()
-		Smax = self.spinBoxVisionHSVCalibrationOpponentSmax.value()
-		Vmax = self.spinBoxVisionHSVCalibrationOpponentVmax.value()
-		Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
-		Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
+	def getVisionHSVCalibrationOpponentHmin():
+		pass
 
-		return Hmin, Smin, Vmin, Erode, Blur, Hmax, Smax, Vmax, Dilate, Amin
+	def getVisionHSVCalibrationOpponetSmin():
+		pass
+
+	def getVisionHSVCalibrationOpponetVmin():
+		pass
+
+	def getVisionHSVCalibrationOpponentErode():
+		pass
+
+	def getVisionHSVCalibrationOpponentBlur():
+		pass
+
+	def getVisionHSVCalibrationOpponentSmax():
+		pass
+
+	def getVisionHSVCalibrationOpponentVmax():
+		pass
 		
-	###Green
-	def getVisionHSVCalibrationGreen(self):
-		pHmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
-		Smin = self.spinBoxVisionHSVCalibrationGreennSmin.value()
-		Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
-		Erode = self.spinBoxVisionHSVCalibrationGreenErode.value()
-		Blur = self.spinBoxVisionHSVCalibrationGreenBlur.value()
-		Hmax = self.spinBoxVisionHSVCalibrationGreenHmax.value()
-		Smax = self.spinBoxVisionHSVCalibrationGreenSmax.value()
-		Vmax = self.spinBoxVisionHSVCalibrationGreenVmax.value()
-		Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
-		Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
+	def getVisionHSVCalibrationOpponentDilate():
+		pass
 
-		return Hmin, Smin, Vmin, Erode, Blur, Hmax, Smax, Vmax, Dilate, Amin
+	def getVisionHSVCalibrationOpponentAmin():
+		pass
+
+	###Green
+	def getVisionHSVCalibrationGreenHmin():
+		pass
+
+	def getVisionHSVCalibrationGreenSmin():
+		pass
+
+	def getVisionHSVCalibrationGreenVmin():
+		pass
+
+	def getVisionHSVCalibrationGreenErode():
+		pass
+
+	def getVisionHSVCalibrationGreenBlur():
+		pass
+
+	def getVisionHSVCalibrationGreenSmax():
+		pass
+
+	def getVisionHSVCalibrationGreenVmax():
+		pass
+		
+	def getVisionHSVCalibrationGreenDilate():
+		pass
+
+	def getVisionHSVCalibrationGreenAmin():
+		pass
 	
 	#Control
 	##Serial
@@ -442,130 +402,110 @@ class Afrodite(QMainWindow):
 
 		for port in ports:
 			self.comboBoxControlSerialDevice.addItem(port)
-
-	def getComboBoxControlSerialDevice(self):
-		return self.comboBoxControlSerialDevice.currentText()
 	
-	def getPushButtonControlSerialDeviceStart(self):
-		return True
-
-	def getPushButtonControlSerialDeviceRefresh(self):
-		self.updateComboBoxControlSerialDevice()
-
-	def getControlSerialRobots(self):
+	def getPushButtonControlSerialDeviceStart():
 		pass
 
-	def getControlSerialSpeedLeft(self):
+	def getPushButtonControlSerialDeviceRefresh():
 		pass
 
-	def getControlSerialSpeedRight(self):
+	def getControlSerialRobots():
 		pass
 
-	def getPushButtonControlSerialSend(self):
+	def getControlSerialSpeedLeft():
 		pass
 
-	def getControlSerialSendCommand(self):
+	def getControlSerialSpeedRight():
 		pass
 
-	def getPushButtonControlSerialSendCommand(self):
+	def getControlSerialSendCommand():
 		pass
 
-	def getControlSerialSetSkippedFrames(self):
+	def getPushButtonControlSerialSendCommand():
 		pass
 
-	def getPushButtonControlSerialSetSkippedFrames(self):
+	def getControlSerialSetSkippedFrames():
+		pass
+
+	def getPushButtonControlSerialSetSkippedFrames():
 		pass
 
 	def setLabelControlSerialDelay(self, delay):
 		pass
 
 	##Robot
-	def getPushButtonControlRobotStatusRobotUpdate(self):
-		self.setLabelControlRobotStatusLastUpdate()
+	def getPushButtonControlRobotStatusRobotUpdate():
+		pass
 
+	def setLabelControlRobotStatusLastUpdate():
+		pass
 
-	def setLabelControlRobotStatusLastUpdate(self):
-		now = datetime.now()
-		self.labelControlRobotStatusLastUpdate.setText("Last Update: " + str(now.hour) + ":" + str(now.minute) + ":" + str(now.second))
+	def setControlRobotStatusRobotA():
+		pass
 
-	def setControlRobotStatusRobotA(self, status):
-		self.progressBarControlRobotStatusRobotA.setValue(status)
+	def setControlRobotStatusRobotB():
+		pass
 
-	def setControlRobotStatusRobotB(self, status):
-		self.progressBarControlRobotStatusRobotB.setValue(status)
+	def setControlRobotStatusRobotC():
+		pass
 
-	def setControlRobotStatusRobotC(self, status):
-		self.progressBarControlRobotStatusRobotC.setValue(status)
+	def setControlRobotStatusRobotD():
+		pass
 
-	def setControlRobotStatusRobotD(self, status):
-		self.progressBarControlRobotStatusRobotD.setValue(status)
+	def setControlRobotStatusRobotF():
+		pass
 
-	def setControlRobotStatusRobotF(self, status):
-		self.progressBarControlRobotStatusRobotF.setValue(status)
-
-	def setControlRobotStatusRobotG(self, status):
-		self.progressBarControlRobotStatusRobotG.setValue(status)
-
-	def setContolRobotStatus(self, statusA, statusB, statusC, statusD, statusF, statusG):
-		self.setControlRobotStatusRobotA(statusA)
-		self.setControlRobotStatusRobotB(statusB)
-		self.setControlRobotStatusRobotC(statusC)
-		self.setControlRobotStatusRobotD(statusD)
-		self.setControlRobotStatusRobotF(statusF)
-		self.setControlRobotStatusRobotG(statusG)
+	def setControlRobotStatusRobotG():
+		pass
 
 	##RobotFunctions
-	def getPushButtonControlRobotFunctionsPIDTest(self):
-		return True
+	def getPushButtonControlRobotFunctionsPIDTest():
+		pass
 
 	#Strategy
 	##Formation
-	def updateComboBoxStrategyFormationLoadStrategy(self, strategys):
-		self.comboBoxStrategyFormationLoadStrategy.clear()
-		for strategy in strategys:
-			self.comboBoxStrategyFormationLoadStrategy.addItem(strategy)
-
-	def getStrategyFormationLoadStrategy(self):
+	def getStrategyFormationLoadStrategy():
 		pass
 
-	def getPushButtonStrategyFormationLoad(self):
+	def getPushButtonStrategyFormationLoad():
 		pass
 
-	def getPushButtonStrategyFormationDelete(self):
+	def getPushButtonStrategyFormationDelete():
 		pass
 
-	def getStrategyFormationNewStrategy(self):
+	def getStrategyFormationNewStrategy():
 		pass
 
-	def getPushButtonStrategyFormationCreate(self):
+	def getPushButtonStrategyFormationCreate():
 		pass
 
-	def getPushButtonStrategyFormationSave(self):
+	def getPushButtonStrategyFormationSave():
 		pass
 
 	##Transitions
-	def getStrategyTransitionsEnableTransistions(self):
-		return self.checkBoxStrategyTransitionsEnableTransistions.isTristate()
-		
+	def getStrategyTransitionsEnableTransistions():
+		pass
 
 	##TestParameters
-	def getStrategyTestParameters(self):
-		return self.getStrategyTestParametersGoalieLine(), self.getStrategyTestParametersGoalieOffset(), self.getStrategyTestParametersName3(), self.getStrategyTestParametersName4(), self.getStrategyTestParametersName5()
+	def getStrategyTestParametersGoalieLine():
+		pass
 
-	def getStrategyTestParametersGoalieLine(self):
-		return self.spinBoxStrategyTestParametersGoalieLine.value()
+	def getStrategyTestParametersGoalieOffset():
+		pass
 
-	def getStrategyTestParametersGoalieOffset(self):
-		return self.spinBoxStrategyTestParametersGoalieLine.value()
+	def getStrategyTestParametersName3():
+		pass
 
-	def getStrategyTestParametersName3(self):
-		return self.spinBoxStrategyTestParametersGoalieLine.value()
+	def getStrategyTestParametersName4():
+		pass
 
-	def getStrategyTestParametersName4(self):
-		return self.spinBoxStrategyTestParametersGoalieLine.value()
+	def getStrategyTestParametersName5():
+		pass
 
-	def getStrategyTestParametersName5(self):
-		return self.spinBoxStrategyTestParametersGoalieLine.value()
+	def vaiPassar(self):
+		pass
+
+
 
 def main():
 	app=QApplication(sys.argv)

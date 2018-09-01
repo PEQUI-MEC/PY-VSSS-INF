@@ -154,7 +154,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>4</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -1800,7 +1800,7 @@
           <x>130</x>
           <y>20</y>
           <width>191</width>
-          <height>41</height>
+          <height>32</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayoutCaptureWarpButtons">
@@ -1813,6 +1813,25 @@
          <property name="verticalSpacing">
           <number>0</number>
          </property>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="pushButtonCaptureWarpWarp">
+           <property name="minimumSize">
+            <size>
+             <width>50</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>50</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Warp</string>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="1">
           <widget class="QPushButton" name="pushButtonCaptureWarpReset">
            <property name="minimumSize">
@@ -1851,790 +1870,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="pushButtonCaptureWarpWarp">
-           <property name="minimumSize">
-            <size>
-             <width>50</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>50</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Warp</string>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
         </layout>
-       </widget>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="tabControl">
-      <attribute name="icon">
-       <iconset resource="icons.qrc">
-        <normaloff>:/Icons/Imgs/devil_smile.png</normaloff>:/Icons/Imgs/devil_smile.png</iconset>
-      </attribute>
-      <attribute name="title">
-       <string>Control</string>
-      </attribute>
-      <widget class="QGroupBox" name="groupControlSerial">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>481</width>
-         <height>161</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Serial</string>
-       </property>
-       <widget class="QLabel" name="labelControlSerialDevice">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>50</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Device</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBoxControlSerialDevice">
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>30</y>
-          <width>200</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>25</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonControlSerialDeviceRefresh">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>30</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Refresh</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBoxControlSerialRobots">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>60</y>
-          <width>180</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>180</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>170</width>
-          <height>25</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEditControlSerialSpeedLeft">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>60</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEditControlSerialSpeedRight">
-        <property name="geometry">
-         <rect>
-          <x>280</x>
-          <y>60</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonControlSerialSend">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>60</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Send</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEditControlSerialSendCommand">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>90</y>
-          <width>180</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>180</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>180</width>
-          <height>16777215</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonControlSerialSendCommand">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>90</y>
-          <width>150</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Send Command</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonControlSerialSetSkippedFrames">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>120</y>
-          <width>150</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Set Skipped Frames</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEditControlSerialSetSkippedFrames">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>120</y>
-          <width>180</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>180</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>180</width>
-          <height>16777215</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonControlSerialDeviceStart">
-        <property name="geometry">
-         <rect>
-          <x>280</x>
-          <y>30</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Start</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlSerialDelayFixed">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>91</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Delay</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlSerialDelay">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>120</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>125 ms</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupBoxControlRobotStatus">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>180</y>
-         <width>481</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Robot Status</string>
-       </property>
-       <widget class="QPushButton" name="pushButtonControlRobotStatusRobotUpdate">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Update</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlRobotStatusLastUpdate">
-        <property name="geometry">
-         <rect>
-          <x>100</x>
-          <y>30</y>
-          <width>150</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>150</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Last Update: - </string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlRobotStatusRobotA">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>70</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot A</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotA">
-        <property name="geometry">
-         <rect>
-          <x>100</x>
-          <y>70</y>
-          <width>130</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="value">
-         <number>24</number>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlRobotStatusRobotB">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>100</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot B</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotB">
-        <property name="geometry">
-         <rect>
-          <x>100</x>
-          <y>100</y>
-          <width>130</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="value">
-         <number>24</number>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlRobotStatusRobotC">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>130</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot C</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotC">
-        <property name="geometry">
-         <rect>
-          <x>100</x>
-          <y>130</y>
-          <width>130</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="value">
-         <number>24</number>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlRobotStatusRobotD">
-        <property name="geometry">
-         <rect>
-          <x>250</x>
-          <y>70</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot D</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotD">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>70</y>
-          <width>130</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="value">
-         <number>24</number>
-        </property>
-       </widget>
-       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotG">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>130</y>
-          <width>130</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="value">
-         <number>24</number>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlRobotStatusRobotG">
-        <property name="geometry">
-         <rect>
-          <x>250</x>
-          <y>130</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot G</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelControlRobotStatusRobotF">
-        <property name="geometry">
-         <rect>
-          <x>250</x>
-          <y>100</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot F</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotF">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>100</y>
-          <width>130</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="value">
-         <number>24</number>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupControlRobotFunctions">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>360</y>
-         <width>481</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Robot Functions</string>
-       </property>
-       <widget class="QPushButton" name="pushButtonControlRobotFunctionsPIDTest">
-        <property name="geometry">
-         <rect>
-          <x>160</x>
-          <y>40</y>
-          <width>150</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>PID Test on Click </string>
-        </property>
        </widget>
       </widget>
      </widget>
@@ -2684,9 +1920,6 @@
         </property>
        </widget>
        <widget class="QComboBox" name="comboBoxRobotRobotFunctionsRobot1">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="geometry">
          <rect>
           <x>70</x>
@@ -2713,9 +1946,6 @@
         <property name="duplicatesEnabled">
          <bool>true</bool>
         </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
         <item>
          <property name="text">
           <string>Attack</string>
@@ -2733,9 +1963,6 @@
         </item>
        </widget>
        <widget class="QPushButton" name="pushButtonRobotRobotFunctionsDone">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="geometry">
          <rect>
           <x>330</x>
@@ -2786,9 +2013,6 @@
         </property>
        </widget>
        <widget class="QComboBox" name="comboBoxRobotRobotFunctionsRobot2">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="geometry">
          <rect>
           <x>70</x>
@@ -2808,12 +2032,6 @@
           <width>100</width>
           <height>25</height>
          </size>
-        </property>
-        <property name="editable">
-         <bool>false</bool>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
         </property>
         <item>
          <property name="text">
@@ -2857,9 +2075,6 @@
         </property>
        </widget>
        <widget class="QComboBox" name="comboBoxRobotRobotFunctionsRobot3">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="geometry">
          <rect>
           <x>70</x>
@@ -2880,12 +2095,6 @@
           <height>25</height>
          </size>
         </property>
-        <property name="editable">
-         <bool>false</bool>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
         <item>
          <property name="text">
           <string>Attack</string>
@@ -2903,9 +2112,6 @@
         </item>
        </widget>
        <widget class="QPushButton" name="pushButtonRobotRobotFunctionsEdit">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
         <property name="geometry">
          <rect>
           <x>240</x>
@@ -2969,9 +2175,6 @@
         </property>
        </widget>
        <widget class="QPushButton" name="pushButtonRobotSpeedDone">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="geometry">
          <rect>
           <x>240</x>
@@ -3035,9 +2238,6 @@
            </item>
            <item row="1" column="0">
             <widget class="QSpinBox" name="spinBoxRobotSpeedAttack">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>50</width>
@@ -3066,9 +2266,6 @@
            </item>
            <item row="1" column="1">
             <widget class="QSlider" name="horizontalSliderRobotSpeedAttack">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -3154,9 +2351,6 @@
            </item>
            <item row="1" column="0">
             <widget class="QSpinBox" name="spinBoxRobotSpeedDefense">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>50</width>
@@ -3185,9 +2379,6 @@
            </item>
            <item row="1" column="1">
             <widget class="QSlider" name="horizontalSliderRobotSpeedDefense">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -3273,9 +2464,6 @@
            </item>
            <item row="1" column="0">
             <widget class="QSpinBox" name="spinBoxRobotSpeedGoalkeeper">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>50</width>
@@ -3304,9 +2492,6 @@
            </item>
            <item row="1" column="1">
             <widget class="QSlider" name="horizontalSliderRobotSpeedGoalkeeper">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -3404,9 +2589,6 @@
         </property>
        </widget>
        <widget class="QPushButton" name="pushButtonRobotIDDone">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="geometry">
          <rect>
           <x>240</x>
@@ -3467,9 +2649,6 @@
            </item>
            <item>
             <widget class="QLineEdit" name="lineEditRobotIDRobot1">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>140</width>
@@ -3515,9 +2694,6 @@
            </item>
            <item>
             <widget class="QLineEdit" name="lineEditRobotIDRobot2">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>140</width>
@@ -3563,9 +2739,6 @@
            </item>
            <item>
             <widget class="QLineEdit" name="lineEditRobotIDRobot3">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="minimumSize">
               <size>
                <width>140</width>
@@ -3868,9 +3041,59 @@
        <property name="title">
         <string>HSV Calibration</string>
        </property>
+       <widget class="QPushButton" name="pushButtonVisionHSVCalibrationAdversary">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Adversary</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonVisionHSVCalibrationEdit">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>20</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Edit</string>
+        </property>
+       </widget>
        <widget class="QStackedWidget" name="stackedWidgetVisionHSVCalibration">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="geometry">
          <rect>
@@ -3897,12 +3120,6 @@
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationMain">
-           <property name="horizontalSpacing">
-            <number>6</number>
-           </property>
-           <property name="verticalSpacing">
-            <number>0</number>
-           </property>
            <item row="0" column="0">
             <layout class="QGridLayout" name="gridLayouVisionHSVCalibrationMain">
              <item row="0" column="0">
@@ -7213,106 +6430,813 @@
          </widget>
         </widget>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QPushButton" name="pushButtonVisionHSVCalibrationPrev">
+        <property name="geometry">
+         <rect>
+          <x>390</x>
+          <y>20</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Prev</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonVisionHSVCalibrationNext">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>20</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Next</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tabControl">
+      <attribute name="icon">
+       <iconset resource="icons.qrc">
+        <normaloff>:/Icons/Imgs/devil_smile.png</normaloff>:/Icons/Imgs/devil_smile.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Control</string>
+      </attribute>
+      <widget class="QGroupBox" name="groupControlSerial">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>481</width>
+         <height>161</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Serial</string>
+       </property>
+       <widget class="QLabel" name="labelControlSerialDevice">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>20</y>
-          <width>461</width>
-          <height>41</height>
+          <y>30</y>
+          <width>50</width>
+          <height>25</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QPushButton" name="pushButtonVisionHSVCalibrationSwap">
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Adversary</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButtonVisionHSVCalibrationEdit">
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Edit</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="labelVisionHSVCalibrationSwap">
-           <property name="lineWidth">
-            <number>0</number>
-           </property>
-           <property name="text">
-            <string>Main</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButtonVisionHSVCalibrationPrev">
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Prev</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButtonVisionHSVCalibrationNext">
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Next</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Device</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxControlSerialDevice">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>30</y>
+          <width>200</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonControlSerialDeviceRefresh">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>30</y>
+          <width>70</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Refresh</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxControlSerialRobots">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>180</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEditControlSerialSpeedLeft">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>60</y>
+          <width>70</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEditControlSerialSpeedRight">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>60</y>
+          <width>70</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonControlSerialSend">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>60</y>
+          <width>70</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Send</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEditControlSerialSendCommand">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>90</y>
+          <width>180</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>180</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonControlSerialSendCommand">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>90</y>
+          <width>150</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Send Command</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonControlSerialSetSkippedFrames">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>120</y>
+          <width>150</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Set Skipped Frames</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEditControlSerialSetSkippedFrames">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>120</y>
+          <width>180</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>180</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonControlSerialDeviceStart">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>30</y>
+          <width>70</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlSerialDelayFixed">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>91</y>
+          <width>70</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Delay</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlSerialDelay">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>120</y>
+          <width>70</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>125 ms</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBoxControlRobotStatus">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>180</y>
+         <width>481</width>
+         <height>171</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Robot Status</string>
+       </property>
+       <widget class="QPushButton" name="pushButtonControlRobotStatusRobotUpdate">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Update</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlRobotStatusLastUpdate">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>30</y>
+          <width>150</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Last Update: - </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlRobotStatusRobotA">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>70</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Robot A</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotA">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>70</y>
+          <width>130</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlRobotStatusRobotB">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>100</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Robot B</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotB">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>100</y>
+          <width>130</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlRobotStatusRobotC">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>130</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Robot C</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotC">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>130</y>
+          <width>130</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlRobotStatusRobotD">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>70</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Robot D</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotD">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>70</y>
+          <width>130</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotG">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>130</y>
+          <width>130</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlRobotStatusRobotG">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>130</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Robot G</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelControlRobotStatusRobotF">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>100</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Robot F</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QProgressBar" name="progressBarControlRobotStatusRobotF">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>100</y>
+          <width>130</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupControlRobotFunctions">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>360</y>
+         <width>481</width>
+         <height>101</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Robot Functions</string>
+       </property>
+       <widget class="QPushButton" name="pushButtonControlRobotFunctionsPIDTest">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>40</y>
+          <width>150</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>PID Test on Click </string>
+        </property>
        </widget>
       </widget>
      </widget>
@@ -8989,12 +8913,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1029</x>
-     <y>517</y>
+     <x>1025</x>
+     <y>490</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1325</x>
-     <y>517</y>
+     <x>1056</x>
+     <y>490</y>
     </hint>
    </hints>
   </connection>
@@ -9005,12 +8929,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1325</x>
-     <y>517</y>
+     <x>1042</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1029</x>
-     <y>517</y>
+     <x>1011</x>
+     <y>473</y>
     </hint>
    </hints>
   </connection>
@@ -9037,12 +8961,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1325</x>
-     <y>481</y>
+     <x>1037</x>
+     <y>448</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1029</x>
-     <y>481</y>
+     <x>1010</x>
+     <y>448</y>
     </hint>
    </hints>
   </connection>
@@ -9069,12 +8993,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1325</x>
-     <y>445</y>
+     <x>1047</x>
+     <y>415</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1029</x>
-     <y>445</y>
+     <x>1013</x>
+     <y>414</y>
     </hint>
    </hints>
   </connection>
@@ -9133,8 +9057,8 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1325</x>
-     <y>409</y>
+     <x>1045</x>
+     <y>384</y>
     </hint>
     <hint type="destinationlabel">
      <x>1010</x>
@@ -9473,8 +9397,8 @@
      <y>550</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1315</x>
-     <y>552</y>
+     <x>1245</x>
+     <y>554</y>
     </hint>
    </hints>
   </connection>
@@ -9697,8 +9621,8 @@
      <y>484</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1093</x>
-     <y>490</y>
+     <x>1038</x>
+     <y>492</y>
     </hint>
    </hints>
   </connection>
@@ -9857,8 +9781,8 @@
      <y>484</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1315</x>
-     <y>490</y>
+     <x>1272</x>
+     <y>491</y>
     </hint>
    </hints>
   </connection>
@@ -9889,8 +9813,8 @@
      <y>459</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1315</x>
-     <y>459</y>
+     <x>1251</x>
+     <y>461</y>
     </hint>
    </hints>
   </connection>
@@ -10077,8 +10001,8 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>981</x>
-     <y>428</y>
+     <x>968</x>
+     <y>429</y>
     </hint>
     <hint type="destinationlabel">
      <x>1026</x>
