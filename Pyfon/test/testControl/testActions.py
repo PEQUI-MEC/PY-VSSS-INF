@@ -8,13 +8,13 @@ class TestActions(unittest.TestCase):
 
     def testSetup(self):
         actions = Actions()
-        robot = [[100, 200], [100, 300], 1.3, None, 0, "", 0.8, 0, 0, "stop"]
+        robot = [[100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "stop"]
         robot = actions.setup(robot)
         self.assertIsNotNone(robot)
 
     def testStop(self):
         actions = Actions()
-        robot = [[100, 200], [100, 300], 1.3, None, 0, "", 0.8, 0, 0, "stop"]
+        robot = [[100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "stop"]
 
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], "SPEED")
@@ -25,7 +25,7 @@ class TestActions(unittest.TestCase):
 
     def testKick(self):
         actions = Actions()
-        robot = [[100, 200], [100, 200], 1.3, None, 0, "", 0.8, 0, 0, "kick"]
+        robot = [[100, 200], [100, 200], 1.3, None, 0, None, 0.8, 0, 0, "kick"]
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], "VECTOR")
         self.assertEqual(robot[constants._transAngle], 0)
@@ -34,7 +34,7 @@ class TestActions(unittest.TestCase):
         actions = Actions()
 
         ''' Case 1: when the robot needs to turn in some given orientation '''
-        robot = [[100, 200], [100, 200], 1.3, None, 0, "", 0.8, 0, 0, "lookAt"]
+        robot = [[100, 200], [100, 200], 1.3, None, 0, None, 0.8, 0, 0, "lookAt"]
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], "ORIENTATION")
         self.assertEqual(robot[constants._targetOrientation], 1.3)
@@ -47,29 +47,29 @@ class TestActions(unittest.TestCase):
         And if the target is down, the function is equal to -Pi/2
         
         '''
-        robot = [[100, 200], [300, 200], None, 0, 0, "", 0.8, 0, 0, "lookAt"]
+        robot = [[100, 200], [300, 200], None, 0, 0, None, 0.8, 0, 0, "lookAt"]
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], 'ORIENTATION')
         self.assertEqual(robot[constants._targetOrientation], math.pi)
 
-        robot = [[300, 200], [100, 200], None, 0, 0, "", 0.8, 0, 0, "lookAt"]
+        robot = [[300, 200], [100, 200], None, 0, 0, None, 0.8, 0, 0, "lookAt"]
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], 'ORIENTATION')
         self.assertEqual(robot[constants._targetOrientation], 0)
 
-        robot = [[100, 100], [100, 300], None, 0, 0, "", 0.8, 0, 0, "lookAt"]
+        robot = [[100, 100], [100, 300], None, 0, 0, None, 0.8, 0, 0, "lookAt"]
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], 'ORIENTATION')
         self.assertEqual(robot[constants._targetOrientation], math.pi/2)
 
-        robot = [[100, 300], [100, 100], None, 0, 0, "", 0.8, 0, 0, "lookAt"]
+        robot = [[100, 300], [100, 100], None, 0, 0, None, 0.8, 0, 0, "lookAt"]
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], 'ORIENTATION')
         self.assertEqual(robot[constants._targetOrientation], -(math.pi/2))
 
     def testSpinClockwise(self):
         actions = Actions()
-        robot = [[100, 200], [100, 300], 1.3, None, 0, "", 0.8, 0, 0, "spinClockwise"]
+        robot = [[100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "spinClockwise"]
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], "SPEED")
         self.assertEqual(robot[constants._vLeft], 0.8)
@@ -77,7 +77,7 @@ class TestActions(unittest.TestCase):
 
     def testSpinCounterClockwise(self):
         actions = Actions()
-        robot = [[100, 200], [100, 300], 1.3, None, 0, "", 0.8, 0, 0, "spinCounterClockWise"]
+        robot = [[100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "spinCounterClockWise"]
         robot = actions.setup(robot)
         self.assertEqual(robot[constants._cmdType], "SPEED")
         self.assertEqual(robot[constants._vLeft], -0.8)
