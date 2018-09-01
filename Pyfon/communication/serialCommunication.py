@@ -1,13 +1,36 @@
+import time
 from digi.xbee.devices import XBeeDevice
 
 class SerialCommunication():
-	
-	def startBee(port_path, baud_rate):
-		xbee = XBeeDevice(port, baud_rate)
+	xbee = 0
+
+	def __init__(self):
+		pass
+
+	def startBee(self, port, baud):
+		xbee = XBeeDevice(port, baud)
 		xbee.open()
+		self.xbee = xbee
 		return xbee
 
-	def sendMessage(id, message):
+	def sendMessage(self, robotId, message):
+		xbee_network = self.xbee.get_network()
+		remote_device = xbee_network.discover_device(robotId)
+		
+		if remote_device is None:
+			return False
+		
+		print("Sending data to %s-[%s] >> %s..." % (robotId, remote_device.get_64bit_addr(), message))
+		
+		self.xbee.set_sync_ops_timeout(15)
+		
+		#start_time = time.time()
+		
+		self.xbee.send_data(remote_device, message)
+		
+		#elapsed_time = time.time() - start_time
+		#print(elapsed_time)	
+
 		return True
 
 	def newRobot(letter, address):
