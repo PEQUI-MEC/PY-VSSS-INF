@@ -2,7 +2,7 @@ import time
 from digi.xbee.devices import XBeeDevice
 
 class SerialCommunication():
-	xbee = 0
+	xbee = "not initialized"
 
 	def __init__(self):
 		pass
@@ -12,6 +12,9 @@ class SerialCommunication():
 		xbee.open()
 		self.xbee = xbee
 		return xbee
+
+	def killBee(self):
+		pass
 
 	def sendMessage(self, robotId, message):
 		xbee_network = self.xbee.get_network()
