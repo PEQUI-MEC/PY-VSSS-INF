@@ -6,7 +6,7 @@ from communication.serialCommunication import SerialCommunication
 class SerialCommunicationTest(unittest.TestCase):
 
 	def testSendMessage(self):
-		self.assertEqual(SerialCommunication.sendMessage(1, "0.1;0.3"), True)
+		self.assertEqual(SerialCommunication.sendMessage("HERCULES", "0.1;0.3"), True)
 		#self.assertEqual(SerialCommunication.sendMessage(2, "0.3;0.2"), True)
 		#self.assertEqual(SerialCommunication.sendMessage(3, "0.6;0.1"), True)
 		#self.assertEqual(SerialCommunication.sendMessage(4, "0.4, 0.2"), True)

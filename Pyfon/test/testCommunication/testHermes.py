@@ -14,7 +14,7 @@ class HermesTest(unittest.TestCase):
 
 	#unicast
 	def testSendMessage(self):
-		self.assertEqual(Hermes.sendMessage(1, "0.7;0.6"), True)
+		self.assertEqual(Hermes.sendMessage("HERCULES", "0.7;0.6"), True)
 		#self.assertEqual(hermes.sendMessage(2, "0.7;0.6"), True)
 		#self.assertEqual(hermes.sendMessage(3, "0.8;0.1"), True)
 		#self.assertEqual(hermes.sendMessage(4, "0.4, 0.2"), True)

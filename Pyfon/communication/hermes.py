@@ -2,15 +2,17 @@ from serialCommunication import SerialCommunication
 
 class Hermes():
 
+	serialCom = SerialCommunication()
+
 	def __init__(self, port, baud=115200):
-		xbee = SerialCommunication.startBee(port, baud)
+		self.xbee = self.serialCom.startBee(port, baud)
 		pass
 
 	def startBee(port, baud):
 		return True
 
-	def sendMessage(id, message):
-		return True
+	def sendMessage(self, robotId, message):
+		return self.serialCom.sendMessage(robotId, message)
 
 	def createMessage(i, lw, rw):
 		return "0.3;0.8"
