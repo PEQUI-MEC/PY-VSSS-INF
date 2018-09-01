@@ -1,6 +1,9 @@
 
 class Hermes():
 
+	def __init__(self, port, baud=115200):
+		pass
+
 	def startBee(port, baud):
 		return True
 
