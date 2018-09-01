@@ -42,7 +42,7 @@ class Afrodite(QMainWindow):
 		##Warp
 		self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
 		self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
-		self.pushButtonCaptureWarpAdjust.clicked.connect(self.getpushButtonCaptureWarpAdjust)
+		self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
 
 		#Control
 		##Serial
@@ -243,6 +243,9 @@ class Afrodite(QMainWindow):
 		pass
 
 	def getPushButtonCaptureWarpReset(self):
+		pass
+
+	def getPushButtonCaptureWarpAdjust(self):
 		pass
 
 	def getCaptureWarpOffsetLeft(self):
