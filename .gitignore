@@ -1,5 +1,4 @@
 *.pyc
-*/rm __pycache__/
 .idea/
 
 ## File-based project format:
