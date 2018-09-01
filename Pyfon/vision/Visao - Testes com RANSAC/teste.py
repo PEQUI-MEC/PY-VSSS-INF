@@ -12,14 +12,16 @@ flann=cv2.FlannBasedMatcher(flannParam,{})
 trainImg=cv2.imread("box.png",0)
 trainKP,trainDesc=detector.detectAndCompute(trainImg,None)
 
-QueryImg = cv2.imread("box_in_scene.png",0)
+QueryImg = cv2.imread("boxCena.png",0)
 queryKP,queryDesc = detector.detectAndCompute(QueryImg,None)
 matches=flann.knnMatch(queryDesc,trainDesc,k=2)
 
 goodMatch=[]
+
 for m,n in matches:
 	if(m.distance < 0.75*n.distance):
 		goodMatch.append(m)
+		
 if(len(goodMatch) > MIN_MATCH_COUNT):
 	tp=[]
 	qp=[]

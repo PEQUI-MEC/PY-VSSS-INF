@@ -11,26 +11,22 @@ WIDTH = 640 #X-axys
 HEIGHT = 480 #Y-axys
 
 #Simula o Labelling (retorna uma imagem como se tivesse feito o Labelling)
-def getLabelledImage():
-	imgLab = np.zeros((WIDTH, HEIGHT), dtype = "uint8")
+def getMultipleObjectsThresholdedImage():
 	imgThresh = np.zeros((WIDTH, HEIGHT), dtype = "uint8")
 	
 	for x in range(100,107,1):
 		for y in range(100,107,1):
-			imgLab[x][y] = 1
 			imgThresh[x][y] = 255
 				
 	for x in range(200,207,1):
 		for y in range(210,217,1):
-			imgLab[x][y] = 2
 			imgThresh[x][y] = 255
 			
 	for x in range(250,257,1):
 		for y in range(300,307,1):
-			imgLab[x][y] = 3
 			imgThresh[x][y] = 255
 
-	return imgLab, imgThresh
+	return imgThresh
 	
 #Simula o threshold(retorna uma imagem como se houvesse ocorrido um threshold nela)
 def getThresholdedImage():
@@ -72,45 +68,25 @@ class TestSearchMethods(unittest.TestCase):
 
 		#Ta invertido X com Y --- TODO: ARRUMAR
 		self.assertEqual((215,310),apolo.findBall(imagem,50))
-	
-	#Testa a função de Label, dada uma imagem com três objetos
-	def testLabelImage(self):
-		thresholdedImage = np.zeros((WIDTH, HEIGHT), dtype = "uint8")
-		
-		labelledImage,_ = getLabelledImage()
-		
-		for x in range(100,107,1):
-			for y in range(100,107,1):
-				thresholdedImage[x][y] = 255
-					
-		for x in range(200,207,1):
-			for y in range(210,217,1):
-				thresholdedImage[x][y] = 255
-				
-		for x in range(250,257,1):
-			for y in range(300,307,1):
-				thresholdedImage[x][y] = 255
-			
-		self.assertTrue((labelledImage == apolo.labelImage(thresholdedImage)).all())
 		
 	#Testa a função de encontrar os robos, dada uma imagem onde o Label já ocorreu
 	def testFindRobots(self):		
-		labelledImage, threshImage = getLabelledImage()
+		threshImage = getMultipleObjectsThresholdedImage()
 		robotList = [(253,303),(203,213),(103,103)]
-		#self.assertEqual(((103,103),(203,213),(253,303)),apolo.findRobots(labelledImage))
+		
 		self.assertEqual(robotList,apolo.findRobots(threshImage,20))
 	
 	#Testa a função de encontrar os adversarios, dada uma imagem onde o Label ja ocorreu
 	def testFindAdvRobots(self):
-		labelledImage,_ = getLabelledImage()
+		threshImage = getMultipleObjectsThresholdedImage()
 				
-		self.assertEqual((("ADV1:",103,103),("ADV2:",203,213),("ADV3:",253,303)),apolo.findAdvRobots(labelledImage))
+		self.assertEqual((("ADV1:",103,103),("ADV2:",203,213),("ADV3:",253,303)),apolo.findAdvRobots(threshImage))
 
 	#Testa a função de identificar qual robo está em que posição, dada uma imagem com o threshold das tags secundarias feito
 	def testSetRobots(self):
-		labelledImage = getLabelledImage() #Para simular as tags secundarias, utilizei uma imagem com o Label feito
+		threshImage = getMultipleObjectsThresholdedImage() #Para simular as tags secundarias, utilizei uma imagem com o Label feito
 				
-		self.assertEqual((("R1:",103,103),("R2:",203,213),("R3:",253,303)),apolo.setRobots(labelledImage))
+		self.assertEqual((("R1:",103,103),("R2:",203,213),("R3:",253,303)),apolo.setRobots(threshImage))
 	
 if __name__ == '__main__':
     unittest.main()
