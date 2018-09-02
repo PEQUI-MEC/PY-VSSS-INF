@@ -1,36 +1,50 @@
 # import numpy as np
 import cv2
-# from Pyfon.interface.afrodite import Afrodite
-# from Pyfon.communication.hermes import Hermes
+import sys
+from observer import Publisher, Subscriber
+from interface.afrodite import Afrodite
+from control import Zeus
+# importar estratégia
+from communication.hermes import Hermes
 
-from observer import Subscriber, Publisher
+from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog
 
 class Hades:
+    def __init__(self, srcCam=None, srcBee=None):
 
-    channels = ['vision', 'control', 'communication']
-    srcCamera = None
+        self.channels = ['vision', 'strategy', 'control', 'communication']
+        self.srcCamera = srcCam
+        self.srcXbee = srcBee
+        
+        # initializing all publishers
+        self.hadesPub = Publisher(self.channels)
+        self.apoloPub = Publisher(self.channels[0:1])
+        self.athenasPub = Publisher(self.channels[1:2])
+        self.zeusPub = Publisher(self.channels[2:3])
+        self.hermesPub = Publisher(self.channels[3:4])
 
-    hadesPub = None
-    hadesSub = None
-    hermesPub = None
-    hermesSub = None
+        # initializing all subscribers
+        self.hadesSub = Subscriber('hades')   # manager
+        self.apoloSub = Subscriber('apolo')   # visão
+        self.athenaSub = Subscriber('athena') # strategy
+        self.zeusSub = Subscriber('zeus')     # control
+        self.hermesSub = Subscriber('hermes') # communication
 
+        # registering subscribers
+        self.apoloPub.register(self.channels[0], self.hadesSub)
+        self.apoloPub.register(self.channels[0], self.athenaSub)
+        self.athenasPub.register(self.channels[1], self.hadesSub)
+        self.athenasPub.register(self.channels[1], self.zeusSub)
+        self.zeusPub.register(self.channels[2], self.hadesSub)
+        self.zeusPub.register(self.channels[2], self.hermesSub)
+        self.hermesPub.register(self.channels[3], self.hadesSub)
+        
+        self.apoloPub.dispatch("vision", "raduken")
 
-    # def __init__(self, srcCam=None):
-    #     self.srcCamera = srcCam
-    #     # self.srcXbee = srcBee
-    #     self.pub = Publisher(Hades.states)
-    #     self.xbeeSub = Subscriber('xbee')
+        # setting things up
 
     def setup(self):
-        hades = Hades()
-        hades.srcCamera = '/dev/ttyUSB0'
-
-        hades.hadesPub = Publisher(hades.channels)
-
-        # registering Hermes
-        hades.hermesSub = Subscriber('hermes')
-        hades.hadesPub.register("communication", hades.hermesSub)
+        pass
 
     # Set link between camera and software
     # def summonCapture(self):
@@ -76,9 +90,13 @@ class Hades:
     def recordGame(self):
         return True
 
+def main():
+    hades = Hades()
 
-if __name__ == "__main__":
-    h = Hades()
-    h.setup()
+    # app=QApplication(sys.argv)
+    # window=Afrodite()
+    # window.show()
+    # sys.exit(app.exec_())
 
-    h.hadesPub.
+if __name__ == '__main__':
+    main()
