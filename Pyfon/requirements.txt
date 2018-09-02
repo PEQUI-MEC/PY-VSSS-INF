@@ -21,4 +21,5 @@
 -r strategy/req-strategy.txt
 -r test/req-tests.txt
 -r vision/req-vision.txt
+-r interface/req-interface.txt
 
