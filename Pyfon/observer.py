@@ -6,7 +6,6 @@ class Subscriber:
         print('{} recebeu "{}"'.format(self.name, action))
 
 
-
 class Publisher:
     def __init__(self, events):
         self.subscribers = {

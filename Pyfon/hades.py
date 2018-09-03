@@ -19,7 +19,7 @@ class Hades:
         # initializing all publishers
         self.hadesPub = Publisher(self.channels)
         self.apoloPub = Publisher(self.channels[0:1])
-        self.athenasPub = Publisher(self.channels[1:2])
+        self.athenaPub = Publisher(self.channels[1:2])
         self.zeusPub = Publisher(self.channels[2:3])
         self.hermesPub = Publisher(self.channels[3:4])
 
@@ -33,13 +33,13 @@ class Hades:
         # registering subscribers
         self.apoloPub.register(self.channels[0], self.hadesSub)
         self.apoloPub.register(self.channels[0], self.athenaSub)
-        self.athenasPub.register(self.channels[1], self.hadesSub)
-        self.athenasPub.register(self.channels[1], self.zeusSub)
+        self.athenaPub.register(self.channels[1], self.hadesSub)
+        self.athenaPub.register(self.channels[1], self.zeusSub)
         self.zeusPub.register(self.channels[2], self.hadesSub)
         self.zeusPub.register(self.channels[2], self.hermesSub)
         self.hermesPub.register(self.channels[3], self.hadesSub)
         
-        self.apoloPub.dispatch("vision", "raduken")
+        self.apoloPub.dispatch("vision", "STARRRRRT")
 
         # setting things up
 
