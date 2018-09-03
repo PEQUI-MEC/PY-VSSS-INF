@@ -1,54 +1,51 @@
-from . import constants as r
 import math
+from .robot import Robot
 
 
 class Translate:
 
-    robot = []
     velAcc = 0
     previouslyBackwards = False
 
-    @staticmethod
-    def setup(robot):
+    def setup(self, robot):
         translate = Translate()
-        translate.robot = robot
 
-        if robot[r._cmdType] is None:
+        if robot.get('cmdType') is None:
             return None
 
-        if robot[r._cmdType] == 'UVF':
-            translate.uvfControl()
-        elif robot[r._cmdType] == 'VECTOR':
-            translate.vectorControl()
-        elif robot[r._cmdType] == 'POSITION':
-            translate.positionControl()
-        elif robot[r._cmdType] == 'ORIENTATION':
-            translate.orientationControl()
+        if robot.get('cmdType') == 'UVF':
+            return translate.uvfControl(robot)
+        elif robot.get('cmdType') == 'VECTOR':
+            return translate.vectorControl(robot)
+        elif robot.get('cmdType') == 'POSITION':
+            return translate.positionControl(robot)
+        elif robot.get('cmdType') == 'ORIENTATION':
+            return translate.orientationControl(robot)
 
-        return [robot[r._vRight], robot[r._vLeft]]
 
-    def uvfControl(self):
+
+    def uvfControl(self, robot):
         pass
 
-    def vectorControl(self):
+    def vectorControl(self, robot):
         pass
 
-    def positionControl(self):
+    def positionControl(self, robot):
         T = Translate()
-        positionError = math.sqrt(math.pow(self.robot[r._position][0] - self.robot[r._target][0], 2) +
-                                  math.pow(self.robot[r._position][1] - self.robot[r._target][1], 2))
+        positionError = math.sqrt(math.pow(self.robot[0].position - self.robot[0].target, 2) +
+                                  math.pow(self.robot[1].position - self.robot[1].target, 2))
 
-        if self.robot[r._vMax] == 0 or positionError < 1:
-            self.robot[r._vRight] = 0
-            self.robot[r._vLeft] = 0
+        if self.robot.vMax == 0 or positionError < 1:
+            self.robot.vRight = 0
+            self.robot.vLeft = 0
 
         if self.velAcc < 0.3:
             self.velAcc = 0.3
 
-        targetTheta = math.atan2(self.robot[r._target][1] - self.robot[r._position][1],
-                                 self.robot[r._target][0] - self.robot[r._position][0])
-        theta = self.robot[r._orientation]
-        moveBackwards = bool(T.roundAngle(targetTheta - self.robot[r._orientation]) < 0)
+        targetTheta = math.atan2(self.robot[1].target - self.robot[1].position,
+                                 self.robot[0].target - self.robot[0].position)
+        theta = self.robot.orientation
+        moveBackwards = bool(T.roundAngle(targetTheta - self.robot.orientation) < 0)
 
         if moveBackwards is not self.previouslyBackwards:
             self.velAcc = 0.3
@@ -56,15 +53,15 @@ class Translate:
         self.previouslyBackwards = moveBackwards
 
         if moveBackwards:
-            theta = T.roundAngle(self.robot[r._orientation] + math.pi)
+            theta = T.roundAngle(self.robot.orientation + math.pi)
 
         thetaError = T.roundAngle(targetTheta - theta)
 
         # To be continue...
 
-    def orientationControl(self):
+    def orientationControl(self, robot):
         T = Translate()
-        theta = self.robot[r._orientation]
+        theta = robot.get('orientation')
 
         # !TODO É necessário girar se o robô estiver com a "traseira de frente pro alvo? (Se não, usar o if abaixo)
         '''
@@ -72,15 +69,15 @@ class Translate:
            theta = T.roundAngle(orientation + math.pi)
         '''
 
-        thetaError = T.roundAngle(self.robot[r._targetOrientation] - theta)
+        thetaError = T.roundAngle(robot.get('targetOrientation') - theta)
 
         if math.fabs(thetaError) < 2*math.pi/180:
-            self.robot[r._vRight] = 0
-            self.robot[r._vLeft] = 0
-            self.robot[r._vMax] = 0
+            robot.set('vRight', 0)
+            robot.set('vLeft', 0)
+            robot.set('vMax', 0)
 
-        self.robot[r._vRight] = T.saturate(0.8 * thetaError)
-        self.robot[r._vLeft] = T.saturate(-0.8 * thetaError)
+        robot.set('vRight', T.saturate(0.8 * thetaError))
+        robot.set('vLeft', T.saturate(-0.8 * thetaError))
 
     @staticmethod
     def roundAngle(angle):

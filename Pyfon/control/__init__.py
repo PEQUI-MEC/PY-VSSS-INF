@@ -1,44 +1,28 @@
 from .actions import Actions
 from .translate import Translate
-from . import constants
-import json
-
-_robot_location = "database/robots.json"
+from .robot import Robot
 
 
 class Zeus:
-    robots = []
+    # robots = []
 
-    def setup(self):
-        zeus = Zeus()
-        zeus.robots = zeus.getRobots()
+    def setup(self, robots):
+        # self.robots = robots
+        # print(len(self.robots))
+        return Zeus().controlRoutine(robots)
 
-        return zeus.controlRoutine()
-
-    @staticmethod
-    def getRobots():
-        robots = []
-
-        with open(_robot_location, 'r') as file:
-            robots = json.loads(file.read())
-            file.close()
-        if len(robots) == 0:
-            return FileNotFoundError
-        else:
-            return robots
-
-    def generateJson(self):
+    def generateOutput(self):
         pass
 
-    def controlRoutine(self):
-        robotActions = Actions()
+    def controlRoutine(self, robots):
+        actions = Actions()
         counter = 0
 
-        for robot in self.robots:
-            if robot[constants._actionsCommand] is not None:
-                robot = robotActions.setup(robot)
-
-                if robot:
+        for id in range(0, 3):
+            robot = robots[id]
+            if robot.get('actions') is not None:
+                r = actions.setup(robots[id])
+                if r:
                     counter = counter + 1
             # robot = Translate().mainTranslate(robot)
 
