@@ -1,9 +1,18 @@
 from hermes import Hermes
+import time
 
-hermes = Hermes("COM3")
-hermes.sendMessage("HERCULES", "0.3;0.8")
+hermes = Hermes("/dev/ttyUSB0")
 
-for x in range(1,2):
-	message = input('Enter your input:')
-	hermes.sendMessage("HERCULES", message)
-	
+
+for x in range(1,7):
+
+	if x%2==0:
+		message = "0."+str(x) +";"+ "-0." + str(x)
+	else:
+		message = "-0."+str(x) +";"+ "-0." + str(x) 
+	hermes.sendMessage(1, message)
+	hermes.sendMessage(2, message)
+	hermes.sendMessage(3, message)
+	time.sleep(1)
+
+hermes.killBee()

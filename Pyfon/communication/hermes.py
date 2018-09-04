@@ -11,6 +11,9 @@ class Hermes():
 	def startBee(port, baud):
 		return True
 
+	def killBee():
+		serialCom.killBee()
+
 	def sendMessage(self, robotId, message):
 		return self.serialCom.sendMessage(robotId, message)
 

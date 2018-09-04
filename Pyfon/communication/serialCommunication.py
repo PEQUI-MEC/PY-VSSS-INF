@@ -13,36 +13,28 @@ class SerialCommunication():
 	def startBee(self, port, baud):
 		#xbee = XBeeDevice(port, baud)
 		#xbee.open() 
-		ser = Serial(port, baud)
+		self.ser = Serial(port, baud)
 		self.xbee2 = XBee(self.ser)
 		#self.xbee = xbee
 		
 		return self.xbee2
 
 	def killBee(self):
-
-		pass
+		self.ser.close()
 
 	def sendMessage(self, robotId, message):
-		#xbee_network = self.xbee.get_network()
-		#remote_device = xbee_network.discover_device(robotId)
-		
-		#if remote_device is None:
-		#	return False
-		
-		#print("Sending data to %s-[%s] >> %s..." % (robotId, remote_device.get_64bit_addr(), message))
-		
-
-
-		#self.xbee.set_sync_ops_timeout(15)
-		
 		start_time = time.time()
-		self.xbee2.tx(frame = 'A',command='MY',dest_addr="6B0D",data=message, parameter=None)
-		#self.xbee.send_data(remote_device, message)
-		print(xbee2.wait_read_frame())		
+
+		if robotId==1:
+			self.xbee2.tx(frame = 'A',command='MY',dest_addr='\x6B\x0D',data=message)
+		elif robotId==2:
+			self.xbee2.tx(frame = 'A',command='MY',dest_addr='\x56\xBC',data=message)
+		else:
+			self.xbee2.tx(frame = 'A',command='MY',dest_addr='\x21\x5C',data=message)
+
 		elapsed_time = time.time() - start_time
-		print(elapsed_time)	
-		self.ser.close()
+
+		print(str(robotId) + " " + str(elapsed_time))
 
 		return True
 
