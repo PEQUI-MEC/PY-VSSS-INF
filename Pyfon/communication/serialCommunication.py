@@ -4,39 +4,37 @@ from serial import Serial
 from digi.xbee.devices import XBeeDevice
 
 class SerialCommunication():
-	xbee = "not initialized"
-	xbee2 = ""
-	ser = ""
+
 	def __init__(self):
-		pass
+		self.xbee = None
+		self.serial = None
+		self.messages = {}
 
 	def startBee(self, port, baud):
-		#xbee = XBeeDevice(port, baud)
-		#xbee.open() 
-		self.ser = Serial(port, baud)
-		self.xbee2 = XBee(self.ser)
-		#self.xbee = xbee
-		
-		return self.xbee2
+		self.serial = Serial(port, baud)
+		self.xbee = XBee(self.serial)
+		return self.xbee
 
 	def killBee(self):
-		self.ser.close()
+		self.serial.close()
 
 	def sendMessage(self, robotId, message):
 		start_time = time.time()
 
 		if robotId==1:
-			self.xbee2.tx(frame = 'A',command='MY',dest_addr='\x6B\x0D',data=message)
+			self.xbee.send("tx", frame = 'A',command='MY',dest_addr='\x56\x0D',data=message)
 		elif robotId==2:
-			self.xbee2.tx(frame = 'A',command='MY',dest_addr='\x56\xBC',data=message)
+			self.xbee.send("tx",frame = 'A',command='MY',dest_addr='\x6B\x0D',data=message)
+		elif robotId==3:
+			self.xbee.send("tx", frame = 'A',command='MY',dest_addr='\x21\x5C',data=message)
 		else:
-			self.xbee2.tx(frame = 'A',command='MY',dest_addr='\x21\x5C',data=message)
+			raise ValueError("Robot ID not found")
 
 		elapsed_time = time.time() - start_time
 
 		print(str(robotId) + " " + str(elapsed_time))
 
-		return True
+		#return True
 
 	def newRobot(letter, address):
 		return True
