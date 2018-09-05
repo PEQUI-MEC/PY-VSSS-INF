@@ -9,8 +9,8 @@ class Hermes():
 		self.messages = {}
 	
 	def fly(self, velocities):
-		self.createMessage(velocities)
-		self.sendMessage(messages)
+		self.createMessages(velocities)
+		self.sendMessages(messages)
 		return
 
 	def startBee(port, baud):
@@ -19,11 +19,21 @@ class Hermes():
 	def killBee(self):
 		self.serialCom.killBee()
 
+	def sendMessages(self):
+		# rodar um for para enviar todas as mensagens, chamando o método sendMessage(self, robotId, message)
 	def sendMessage(self, robotId, message):
 		return self.serialCom.sendMessage(robotId, message)
 
-	def createMessage(i, lw, rw):
-		return "0.3;0.8"
+	def createMessages(velocities):
+		for robotId in range(0,3):
+			if velocities[robotId] == None :
+				continue
+
+			createMessage(robotId, velocities[robotId].left_wheel, velocities[robotId].right_wheel)
+
+	def createMessage(robotId, left_wheel, right_wheel):
+		messages[i] = left_wheel + ";" + right_wheel
+		return messages[robotId]
 
 	def isBee(port_path):
 		return True
