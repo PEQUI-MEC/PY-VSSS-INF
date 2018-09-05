@@ -12,6 +12,7 @@ HEIGHT = 480 #Y-axys
 
 #Simula o Labelling (retorna uma imagem como se tivesse feito o Labelling)
 def getLabelledImage():
+	
 	imgLab = np.zeros((WIDTH, HEIGHT), dtype = "uint8")
 	imgThresh = np.zeros((WIDTH, HEIGHT), dtype = "uint8")
 	
@@ -63,7 +64,7 @@ class TestSearchMethods(unittest.TestCase):
 			for y in range(321,480,1):
 				img[x][y] = random.randrange(201,256,1)
 				
-		self.assertTrue((thresholdedImage == apolo.apllyThreshold(img,100,200)).all())
+		self.assertTrue((thresholdedImage == apolo.applyThreshold(img,100,200)).all())
 		
 	#Testa a função de encontrar a bola dado uma imagem com apenas um elemento
 	def testFindBall(self):
