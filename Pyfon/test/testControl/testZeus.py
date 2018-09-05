@@ -4,27 +4,36 @@ import unittest
 
 
 class TestZeus(unittest.TestCase):
-    @staticmethod
-    def getRobots():
-        robots = []
-        robots.append(Robot([400, 100], [100, 300], None, 0.5, 0, None, 0.8, 0, 0, "lookAt"))
-        robots.append(Robot([10, 24], [100, 300], None, 0.5, 0, None, 0.8, 0, 0, "lookAt"))
-        robots.append(Robot([100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "lookAt"))
-
-        if len(robots) == 0:
-            return False
-        else:
-            return robots
+    info = [
+        {
+            "action": "lookAt",
+            "orientation": 1.0
+        },
+        {
+            "action": "lookAt",
+            "position": [300, 200],
+            "target": [100, 200]
+        },
+        {
+            "action": "stop",
+        }
+    ]
 
     def testSetup(self):
-        self.assertTrue(Zeus().setup(TestZeus().getRobots()))
+        pass
+
+    def testGetRobots(self):
+        robots = Zeus().getRobots(self.info)
+        self.assertEqual(len(robots), 3)
+        self.assertEqual(str(type(robots[0])), "<class 'control.robot.Robot'>")
+        self.assertEqual(str(type(robots[1])), "<class 'control.robot.Robot'>")
+        self.assertEqual(str(type(robots[2])), "<class 'control.robot.Robot'>")
 
     def testGenerateOutput(self):
-        Zeus().generateOutput()
+        pass
 
     def testControlRoutine(self):
-        Zeus().controlRoutine(TestZeus().getRobots())
-
+        pass
 
 if __name__ == '__main__':
     unittest.main()
