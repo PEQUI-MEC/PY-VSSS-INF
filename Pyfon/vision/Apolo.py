@@ -60,23 +60,6 @@ class Apolo:
 		
 		return cx,cy
 		
-	def labelImage(self, imagem):
-	
-		for x in range(100,107,1):
-			for y in range(100,107,1):
-				imagem[x][y] = 1
-				
-				
-		for x in range(200,207,1):
-			for y in range(210,217,1):
-				imagem[x][y] = 2
-				
-		for x in range(250,257,1):
-			for y in range(300,307,1):
-				imagem[x][y] = 3
-				
-		return imagem
-		
 	'''
 	Econtra os robos em uma imagem onde o threshold foi aplicado
 	'''
@@ -110,11 +93,16 @@ class Apolo:
 	def findAdvRobots(self, labelledImage):
 		return ("ADV1:",103,103),("ADV2:",203,213),("ADV3:",253,303)
 		
-	def setRobots(self, labelledImage):
+	def setRobots(self, secondaryTagsImage):
+	
 		return ("R1:",103,103),("R2:",203,213),("R3:",253,303)
 		
-	def findRobotOrientation(self,secondaryTagsImage):
-		pass
+	def findRobotOrientation(self, lastPosition, newPosition):
+	
+		x = newPosition[0] - lastPosition[0]
+		y = (newPosition[1] - lastPosition[1]) * -1
+				
+		return np.arctan2(x,y) * 180 / np.pi
 		
 	def findAdvOrientation(self,previousAdvPosition, currentAdvPosition):
 		pass
