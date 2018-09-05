@@ -4,11 +4,7 @@ from .robot import Robot
 
 
 class Zeus:
-    # robots = []
-
     def setup(self, robots):
-        # self.robots = robots
-        # print(len(self.robots))
         return Zeus().controlRoutine(robots)
 
     def generateOutput(self):

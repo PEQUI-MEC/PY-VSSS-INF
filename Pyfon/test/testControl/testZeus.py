@@ -1,11 +1,6 @@
 from control import Zeus
 from control.robot import Robot
-from collections import namedtuple
-
 import unittest
-import json
-
-_robot_location = "database/robots.json"
 
 
 class TestZeus(unittest.TestCase):
