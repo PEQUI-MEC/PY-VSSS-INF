@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
-from vision import Ciclope as Camera
+import sys
+sys.path.append("../")
+from vision import Camera
 
 WIDTH = 640
 HEIGHT = 480
