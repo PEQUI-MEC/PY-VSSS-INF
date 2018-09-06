@@ -25,15 +25,15 @@ class Hermes():
 		return self.serialCom.sendMessage(robotId, message)
 
 	def createMessages(velocities):
-		for robotId in range(0,3):
-			if velocities[robotId] == None :
-				continue
-
-			createMessage(robotId, velocities[robotId].left_wheel, velocities[robotId].right_wheel)
+		for robot in velocities:
+			createMessage(robot.id, velocity.left_wheel, robot.right_wheel)
 
 	def createMessage(robotId, left_wheel, right_wheel):
-		messages[i] = left_wheel + ";" + right_wheel
-		return messages[robotId]
+		message = left_wheel + ";" + right_wheel
+		messages.append(robotId, message)
+		return message
 
+	def clearMessages():
+		messages = {}
 	def isBee(port_path):
 		return True
