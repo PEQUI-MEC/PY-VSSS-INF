@@ -6,17 +6,20 @@ import math
 
 class TestActions(unittest.TestCase):
 
+    robot = Robot()
+
     def testSetup(self):
         actions = Actions()
-        robot = Robot([100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "stop")
-        robot = actions.setup(robot)
+        self.robot.action = "stop"
+        robot = actions.setup(self.robot)
+
         self.assertIsNotNone(robot)
 
     def testStop(self):
         actions = Actions()
-        robot = Robot([100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "stop")
+        self.robot.action = "stop"
+        robot = actions.setup(self.robot)
 
-        robot = actions.setup(robot)
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vMax, 0)
         self.assertEqual(robot.vLeft, 0)
@@ -25,8 +28,11 @@ class TestActions(unittest.TestCase):
 
     def testKick(self):
         actions = Actions()
-        robot = Robot([100, 200], [100, 200], 1.3, None, 0, None, 0.8, 0, 0, "kick")
-        robot = actions.setup(robot)
+        self.robot.action = "kick"
+        self.robot.position = [100, 200]
+        self.robot.target = [100, 200]
+        robot = actions.setup(self.robot)
+
         self.assertEqual(robot.cmdType, "VECTOR")
         self.assertEqual(robot.transAngle, 0)
 
@@ -34,51 +40,71 @@ class TestActions(unittest.TestCase):
         actions = Actions()
 
         ''' Case 1: when the robot needs to turn in some given orientation '''
-        robot = Robot([100, 200], [100, 200], 1.3, None, 0, None, 0.8, 0, 0, "lookAt")
-        robot = actions.setup(robot)
-        self.assertEqual(robot.cmdType, "ORIENTATION")
-        self.assertEqual(robot.targetOrientation, 1.3)
+        self.robot.action = "lookAt"
+        self.robot.orientation = 0
+        self.robot.targetOrientation = math.pi
+        robot = actions.setup(self.robot)
 
-        '''
-        Other cases: when the robot needs to look at some given target(a point) 
-        If the target is in front of him, the function is equal to PI
-        If the target is behind, the function is equal to zero
-        If the target is up, the function is equal to PI/2
-        And if the target is down, the function is equal to -Pi/2
+        self.assertEqual(robot.cmdType, "ORIENTATION")
+
+        ''' Other cases: when the robot needs to look at some given target(a point) '''
         
-        '''
-        robot = Robot([100, 200], [300, 200], None, 0, 0, None, 0.8, 0, 0, "lookAt")
-        robot = actions.setup(robot)
+        ''' If the target is in front of him, the function is equal to PI '''
+        self.robot.targetOrientation = None
+        self.robot.cmdType = None
+        self.robot.position = [100, 200]
+        self.robot.target = [300, 200]
+        robot = actions.setup(self.robot)
+
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, math.pi)
 
-        robot = Robot([300, 200], [100, 200], None, 0, 0, None, 0.8, 0, 0, "lookAt")
-        robot = actions.setup(robot)
+        ''' If the target is in front of him, the function is equal to 0 '''
+        self.robot.targetOrientation = None
+        self.robot.cmdType = None
+        self.robot.position = [300, 200]
+        self.robot.target = [100, 200]
+        robot = actions.setup(self.robot)
+
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, 0)
 
-        robot = Robot([100, 100], [100, 300], None, 0, 0, None, 0.8, 0, 0, "lookAt")
-        robot = actions.setup(robot)
+        ''' If the target is up, the function is equal to PI/2 '''
+        self.robot.targetOrientation = None
+        self.robot.cmdType = None
+        self.robot.position = [100, 100]
+        self.robot.target = [100, 300]
+        robot = actions.setup(self.robot)
+
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, math.pi/2)
 
-        robot = Robot([100, 300], [100, 100], None, 0, 0, None, 0.8, 0, 0, "lookAt")
-        robot = actions.setup(robot)
+        ''' And if the target is down, the function is equal to -Pi/2 '''
+        self.robot.targetOrientation = None
+        self.robot.cmdType = None
+        self.robot.position = [100, 300]
+        self.robot.target = [100, 100]
+        robot = actions.setup(self.robot)
+
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, -(math.pi/2))
 
     def testSpinClockwise(self):
         actions = Actions()
-        robot = Robot([100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "spinClockwise")
-        robot = actions.setup(robot)
+        self.robot.action = "spinClockwise"
+        self.robot.vMax = 0.8
+        robot = actions.setup(self.robot)
+
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vLeft, 0.8)
         self.assertEqual(robot.vRight, -0.8)
 
     def testSpinCounterClockwise(self):
         actions = Actions()
-        robot = Robot([100, 200], [100, 300], 1.3, None, 0, None, 0.8, 0, 0, "spinCounterClockWise")
-        robot = actions.setup(robot)
+        self.robot.action = "spinCounterClockwise"
+        self.robot.vMax = 0.8
+        robot = actions.setup(self.robot)
+
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vLeft, -0.8)
         self.assertEqual(robot.vRight, 0.8)

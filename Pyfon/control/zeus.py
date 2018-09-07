@@ -8,8 +8,7 @@ class Zeus:
         robots = Zeus().getRobots(strategyInfo)
         robotsVelocity = Zeus().controlRoutine(robots)
         output = Zeus().generateOutput(robotsVelocity)
-
-        return output
+        print(robotsVelocity)
 
     def getRobots(self, strategyInfo):
         robots = []
@@ -22,7 +21,22 @@ class Zeus:
         return robots
 
     def generateOutput(self, velocitys):
-        pass
+        output = [
+            {
+                "vLeft": velocitys[0][0],
+                "vRight": velocitys[0][1]
+            },
+            {
+                "vLeft": velocitys[1][0],
+                "vRight": velocitys[1][1]
+            },
+            {
+                "vLeft": velocitys[2][0],
+                "vRight": velocitys[2][1]
+            }
+        ]
+
+        return output
 
     def controlRoutine(self, robots):
         actions = Actions()

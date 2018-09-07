@@ -5,41 +5,39 @@ from .robot import Robot
 class Actions:
 
     def setup(self, robot):
-        actions = Actions()
+        action = Actions()
 
-        if robot.get('actions') == 'stop':
-            return actions.stop(robot)
-        elif robot.get('actions') == 'kick':
-            return actions.kick(robot)
-        elif robot.get('actions') == 'lookAt':
-            return actions.lookAt(robot)
-        elif robot.get('actions') == 'spinClockwise':
-            return actions.spinClockwise(robot)
-        elif robot.get('actions') == 'spinCounterClockWise':
-            return actions.spinCounterClockWise(robot)
+        if robot.action == 'stop':
+            return action.stop(robot)
+        elif robot.action == 'kick':
+            return action.kick(robot)
+        elif robot.action == 'lookAt':
+            return action.lookAt(robot)
+        elif robot.action == 'spinClockwise':
+            return action.spinClockwise(robot)
+        elif robot.action == 'spinCounterClockwise':
+            return action.spinCounterClockWise(robot)
         else:
             return False
 
-
     def stop(self, robot):
-        robot.set('cmdType', 'SPEED')
-        robot.set('vMax', 0)
-        robot.set('vLeft', 0)
-        robot.set('vRight', 0)
-        robot.set('target', [-1, -1])
+        robot.cmdType = 'SPEED'
+        robot.vMax = 0
+        robot.vLeft = 0
+        robot.vRight = 0
+        robot.target = [-1, -1]
 
         return robot
 
     def lookAt(self, robot):
-        if robot.get('orientation') is not None:
-            robot.set('cmdType', 'ORIENTATION')
-            robot.set('targetOrientation', robot.get('orientation'))
+        if robot.targetOrientation is not None:
+            robot.cmdType = 'ORIENTATION'
 
-        if robot.get('orientation') is None and robot.get('targetOrientation') is not None:
-            x = robot.get('target')[0] - robot.get('position')[0]
-            y = robot.get('target')[1] - robot.get('position')[1]
-            robot.set('cmdType', 'ORIENTATION')
-            robot.set('targetOrientation', math.atan2(y, -x))
+        elif robot.targetOrientation is None:
+            x = robot.target[0] - robot.position[0]
+            y = robot.target[1] - robot.position[1]
+            robot.cmdType = 'ORIENTATION'
+            robot.targetOrientation = math.atan2(y, -x)
 
         else:
             pass
@@ -47,23 +45,23 @@ class Actions:
         return robot
 
     def kick(self, robot):
-        x = robot.get('target')[0] - robot.get('position')[0]
-        y = robot.get('target')[1] - robot.get('position')[1]
-        robot.set('cmdType', 'VECTOR')
-        robot.set('transAngle', -math.atan2(-y, x))
+        x = robot.target[0] - robot.position[0]
+        y = robot.target[1] - robot.position[1]
+        robot.cmdType = 'VECTOR'
+        robot.transAngle = -math.atan2(-y, x)
 
         return robot
 
     def spinClockwise(self, robot):
-        robot.set('cmdType', 'SPEED')
-        robot.set('vLeft', robot.get('vMax'))
-        robot.set('vRight', -robot.get('vMax'))
+        robot.cmdType = 'SPEED'
+        robot.vLeft = robot.vMax
+        robot.vRight = -robot.vMax
 
         return robot
 
     def spinCounterClockWise(self, robot):
-        robot.set('cmdType', 'SPEED')
-        robot.set('vLeft', -robot.get('vMax'))
-        robot.set('vRight', robot.get('vMax'))
+        robot.cmdType = 'SPEED'
+        robot.vLeft = -robot.vMax
+        robot.vRight = robot.vMax
 
         return robot
