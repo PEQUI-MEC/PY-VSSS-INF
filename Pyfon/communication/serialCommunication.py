@@ -8,12 +8,11 @@ class SerialCommunication():
 	def __init__(self):
 		self.xbee = None
 		self.serial = None
-		self.messages = {}
 
 	def startBee(self, port, baud):
 		self.serial = Serial(port, baud)
 		self.xbee = XBee(self.serial)
-		return self.xbee
+		#return self.xbee
 
 	def killBee(self):
 		self.serial.close()
