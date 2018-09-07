@@ -4,11 +4,17 @@ from .robot import Robot
 
 
 class Zeus:
+    def __init__(self, callback=None):
+        print("Zeus summoned")
+        self.callback = callback
+
     def setup(self, strategyInfo):
         robots = Zeus().getRobots(strategyInfo)
         robotsVelocity = Zeus().controlRoutine(robots)
         output = Zeus().generateOutput(robotsVelocity)
         print(robotsVelocity)
+
+        # self.callback(output)
 
     def getRobots(self, strategyInfo):
         robots = []
@@ -20,19 +26,19 @@ class Zeus:
 
         return robots
 
-    def generateOutput(self, velocitys):
+    def generateOutput(self, velocities):
         output = [
             {
-                "vLeft": velocitys[0][0],
-                "vRight": velocitys[0][1]
+                "vLeft": velocities[0][0],
+                "vRight": velocities[0][1]
             },
             {
-                "vLeft": velocitys[1][0],
-                "vRight": velocitys[1][1]
+                "vLeft": velocities[1][0],
+                "vRight": velocities[1][1]
             },
             {
-                "vLeft": velocitys[2][0],
-                "vRight": velocitys[2][1]
+                "vLeft": velocities[2][0],
+                "vRight": velocities[2][1]
             }
         ]
 

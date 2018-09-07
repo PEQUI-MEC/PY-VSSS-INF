@@ -3,6 +3,7 @@ from control.robot import Robot
 import unittest
 import math
 
+
 class TestZeus(unittest.TestCase):
     info = [
         {
@@ -40,12 +41,12 @@ class TestZeus(unittest.TestCase):
 
     def testControlRoutine(self):
         robots = Zeus().getRobots(self.info)
-        velocitys = Zeus().controlRoutine(robots)
+        velocities = Zeus().controlRoutine(robots)
 
-        self.assertEqual(len(velocitys), 3)
-        self.assertEqual(type(velocitys[0]), list)
-        self.assertEqual(type(velocitys[1]), list)
-        self.assertEqual(type(velocitys[2]), list)
+        self.assertEqual(len(velocities), 3)
+        self.assertEqual(type(velocities[0]), list)
+        self.assertEqual(type(velocities[1]), list)
+        self.assertEqual(type(velocities[2]), list)
 
 
 if __name__ == '__main__':
