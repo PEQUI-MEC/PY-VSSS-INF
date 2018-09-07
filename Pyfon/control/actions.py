@@ -5,18 +5,17 @@ from .robot import Robot
 class Actions:
 
     def setup(self, robot):
-        action = Actions()
 
         if robot.action == 'stop':
-            return action.stop(robot)
+            return self.stop(robot)
         elif robot.action == 'kick':
-            return action.kick(robot)
+            return self.kick(robot)
         elif robot.action == 'lookAt':
-            return action.lookAt(robot)
+            return self.lookAt(robot)
         elif robot.action == 'spinClockwise':
-            return action.spinClockwise(robot)
+            return self.spinClockwise(robot)
         elif robot.action == 'spinCounterClockwise':
-            return action.spinCounterClockWise(robot)
+            return self.spinCounterClockWise(robot)
         else:
             return False
 

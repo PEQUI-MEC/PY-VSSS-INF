@@ -6,13 +6,13 @@ import math
 
 class TestTranslate(unittest.TestCase):
     robot = Robot()
+    translate = Translate()
 
     def testSetup(self):
-        translate = Translate()
         self.robot.cmdType = "SPEED"
         self.robot.vMax = 0.8
 
-        robot = translate.setup(self.robot)
+        robot = self.translate.setup(self.robot)
         self.assertIsNotNone(robot)
 
     def testUvfControl(self):
@@ -31,18 +31,17 @@ class TestTranslate(unittest.TestCase):
         pass
 
     def testOrientationControl(self):
-        translate = Translate()
         self.robot.cmdType = "ORIENTATION"
         self.robot.orientation = 0
         self.robot.targetOrientation = math.pi
-        robot = translate.setup(self.robot)
+        robot = self.translate.setup(self.robot)
 
         self.assertEqual([robot[0], robot[1]], [-1, 1])
 
         self.robot.cmdType = "ORIENTATION"
         self.robot.orientation = math.pi
         self.robot.targetOrientation = math.pi
-        robot = translate.setup(self.robot)
+        robot = self.translate.setup(self.robot)
 
         self.assertEqual([robot[0], robot[1]], [0, 0])
 

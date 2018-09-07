@@ -9,12 +9,13 @@ class Zeus:
         self.callback = callback
 
     def setup(self, strategyInfo):
-        robots = Zeus().getRobots(strategyInfo)
-        robotsVelocity = Zeus().controlRoutine(robots)
-        output = Zeus().generateOutput(robotsVelocity)
-        print(robotsVelocity)
+        robots = self.getRobots(strategyInfo)
+        robotsVelocity = self.controlRoutine(robots)
+        output = self.generateOutput(robotsVelocity)
+        # print(robotsVelocity)
 
         # self.callback(output)
+        return output
 
     def getRobots(self, strategyInfo):
         robots = []
@@ -46,11 +47,13 @@ class Zeus:
 
     def controlRoutine(self, robots):
         actions = Actions()
+        translate = Translate()
+
         robotVelocity = []
 
         for robot in robots:
             if robot.action is not None:
                 robotAction = actions.setup(robot)
-            robotVelocity.append(Translate().setup(robotAction))
+            robotVelocity.append(translate.setup(robotAction))
 
         return robotVelocity

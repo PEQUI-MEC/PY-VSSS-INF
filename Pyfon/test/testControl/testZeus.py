@@ -5,6 +5,8 @@ import math
 
 
 class TestZeus(unittest.TestCase):
+    zeus = Zeus()
+
     info = [
         {
             "action": "lookAt",
@@ -23,10 +25,14 @@ class TestZeus(unittest.TestCase):
     ]
 
     def testSetup(self):
-        Zeus().setup(self.info)
+        outPuts = self.zeus.setup(self.info)
+
+        self.assertEqual(outPuts[0], {'vLeft': -1.0, 'vRight': 1.0})
+        self.assertEqual(outPuts[1], {'vLeft': 0.8, 'vRight': -0.8})
+        self.assertEqual(outPuts[2], {'vLeft': 0.0, 'vRight': 0.0})
 
     def testGetRobots(self):
-        robots = Zeus().getRobots(self.info)
+        robots = self.zeus.getRobots(self.info)
 
         self.assertEqual(len(robots), 3)
         self.assertEqual(type(robots[0]), type(Robot()))
@@ -40,8 +46,8 @@ class TestZeus(unittest.TestCase):
         pass
 
     def testControlRoutine(self):
-        robots = Zeus().getRobots(self.info)
-        velocities = Zeus().controlRoutine(robots)
+        robots = self.zeus.getRobots(self.info)
+        velocities = self.zeus.controlRoutine(robots)
 
         self.assertEqual(len(velocities), 3)
         self.assertEqual(type(velocities[0]), list)
