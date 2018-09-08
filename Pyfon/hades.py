@@ -29,23 +29,32 @@ def timeToFinish(method):
 class Hades:
     def __init__(self, srcCam=None, srcBee=None):
 
+        ### setting things up
+
+        # sources
         self.srcCamera = srcCam
         self.srcXbee = srcBee
 
-        self.apolo = Apolo(self.apoloReady)
+        # gods
+        self.apolo = None
+        self.athena = None
+        self.zeus = None
+        self.hermes = None
+
+    def setup(self):
+        # aguardando luiz ter retorno do método run
+        # deve settar o callback
+        # self.apolo = Apolo(self.apoloReady)
+
         self.athena = Athena(self.athenaReady)
         self.zeus = Zeus(self.zeusReady)
         # self.hermes = Hermes("port")
         # invocar fly do hermes como finalização
         # persephane  deusa do submundo
 
-        self.apolo.run()
-
-        # setting things up
-
     def apoloReady(self, positions):
         print("\t\tchamar estratégia")
-        self.athena.run(positions)
+        self.athena.getTargets(positions)
 
     def athenaReady(self, positions):
         print("\t\tchamar controle")
@@ -57,9 +66,7 @@ class Hades:
 
     def hermesReady(self, botinhasQueVoam):
         pass
-
-    def setup(self):
-        pass
+        
 
     # Set link between camera and software
     # def summonCapture(self):
@@ -93,6 +100,7 @@ class Hades:
     def puppetLoop(self):
         # inicia o fluxo de eventos
         # verifica se nenhum erro aconteceu
+        self.apolo.run
         
         return True
 
@@ -111,10 +119,12 @@ class Hades:
 def main():
     hades = Hades()
 
-    # app=QApplication(sys.argv)
-    # window=Afrodite()
-    # window.show()
-    # sys.exit(app.exec_())
+    app=QApplication(sys.argv)
+    window=Afrodite()
+    window.show()
+    sys.exit(app.exec_())
+
+    self.setup()
 
 if __name__ == '__main__':
     main()

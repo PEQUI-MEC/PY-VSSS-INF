@@ -1,8 +1,7 @@
 import cv2
 import numpy as np
 import sys
-sys.path.append("../")
-from vision import Camera
+import Camera
 
 WIDTH = 640
 HEIGHT = 480

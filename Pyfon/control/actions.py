@@ -4,7 +4,7 @@ from .robot import Robot
 
 class Actions:
 
-    def setup(self, robot):
+    def run(self, robot):
 
         if robot.action == 'stop':
             return self.stop(robot)

@@ -7,7 +7,7 @@ class Translate:
     velAcc = 0
     previouslyBackwards = False
 
-    def setup(self, robot):
+    def run(self, robot):
 
         if robot.cmdType is None:
             return None
@@ -24,12 +24,13 @@ class Translate:
             return self.speedControl(robot)
 
     def uvfControl(self, robot):
-        pass
+        return [0.0, 0.0]
 
     def vectorControl(self, robot):
-        pass
+        return [0.0, 0.0]
 
     def positionControl(self, robot):
+        '''
         positionError = math.sqrt(math.pow(robot.position[0] - robot.target[0], 2) +
                                   math.pow(robot.position[1] - robot.target[1], 2))
 
@@ -56,7 +57,8 @@ class Translate:
         thetaError = self.roundAngle(targetTheta - theta)
 
         # To be continue...
-        pass
+        '''
+        return [0.0, 0.0]
 
     def orientationControl(self, robot):
         theta = robot.orientation

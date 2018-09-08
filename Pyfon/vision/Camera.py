@@ -12,4 +12,4 @@ class Ciclope:
 		self.camera.release()
 		
 	def isOpened(self):
-return self.camera.isOpened()
+		return self.camera.isOpened()

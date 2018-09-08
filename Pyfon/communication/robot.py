@@ -5,4 +5,4 @@ class Robot():
 			"\x56\x0D",
 			"\x6B\x0D",
 			"\x21\x5C"
-]
+		]

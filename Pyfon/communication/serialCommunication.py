@@ -31,4 +31,4 @@ class SerialCommunication():
 		#return True
 
 	def newRobot(letter, address):
-return True
+		return True
