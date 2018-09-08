@@ -32,12 +32,11 @@ class Hermes():
 			],
 		]
 	'''
-	
+
 	def fly(self, velocities):
 		self.createMessages(velocities)
 		self.sendMessages(messages)
 		self.clearMessages()
-		return
 
 	def startBee(self, port, baud):
 		if self.isSerial(port):
@@ -77,5 +76,4 @@ class Hermes():
 		elif sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
 			if 'COM' in port:	
 				return True
-
 		return False
