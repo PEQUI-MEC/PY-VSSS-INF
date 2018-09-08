@@ -11,9 +11,7 @@ for x in range(0,9):
 	else:
 		message = "-0."+str(x) +";"+ "-0." + str(x) 
 	hermes.sendMessage(1, message)
-	#time.sleep(1)
 	hermes.sendMessage(2, message)
-	#time.sleep(1)
 	hermes.sendMessage(3, message)
 	time.sleep(0.1)
 
