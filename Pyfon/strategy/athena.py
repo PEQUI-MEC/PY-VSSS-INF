@@ -1,20 +1,13 @@
 # coding=utf-8
-from .endless import Endless
-from .warrior import Warrior
+from endless import Endless
+from warrior import Warrior
 
 class Athena:
-    def __init__(self, callback):
+    def __init__(self):
         self.endless = None
         self.warriors = []
         self.theirWarriors = []
         print("Athena summoned.")
-
-        self.callback = callback
-    
-    def run(self, positions):
-        print("\tAthena working on " + positions)
-        commands = "commands"
-        self.callback(commands)
 
     def setup(self, numRobots, width, height):
         self.endless = Endless(width, height)
