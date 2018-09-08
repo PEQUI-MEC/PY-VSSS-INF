@@ -9,15 +9,15 @@ class TestActions(unittest.TestCase):
     robot = Robot()
     actions = Actions()
 
-    def testSetup(self):
+    def testRun(self):
         self.robot.action = "stop"
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertIsNotNone(robot)
 
     def testStop(self):
         self.robot.action = "stop"
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vMax, 0)
@@ -29,7 +29,7 @@ class TestActions(unittest.TestCase):
         self.robot.action = "kick"
         self.robot.position = [100, 200]
         self.robot.target = [100, 200]
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, "VECTOR")
         self.assertEqual(robot.transAngle, 0)
@@ -39,7 +39,7 @@ class TestActions(unittest.TestCase):
         self.robot.action = "lookAt"
         self.robot.orientation = 0
         self.robot.targetOrientation = math.pi
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, "ORIENTATION")
 
@@ -49,7 +49,7 @@ class TestActions(unittest.TestCase):
         self.robot.cmdType = None
         self.robot.position = [100, 200]
         self.robot.target = [300, 200]
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, math.pi)
@@ -59,7 +59,7 @@ class TestActions(unittest.TestCase):
         self.robot.cmdType = None
         self.robot.position = [300, 200]
         self.robot.target = [100, 200]
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, 0)
@@ -69,7 +69,7 @@ class TestActions(unittest.TestCase):
         self.robot.cmdType = None
         self.robot.position = [100, 100]
         self.robot.target = [100, 300]
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, math.pi/2)
@@ -79,7 +79,7 @@ class TestActions(unittest.TestCase):
         self.robot.cmdType = None
         self.robot.position = [100, 300]
         self.robot.target = [100, 100]
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, -(math.pi/2))
@@ -87,7 +87,7 @@ class TestActions(unittest.TestCase):
     def testSpinClockwise(self):
         self.robot.action = "spinClockwise"
         self.robot.vMax = 0.8
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vLeft, 0.8)
@@ -96,7 +96,7 @@ class TestActions(unittest.TestCase):
     def testSpinCounterClockwise(self):
         self.robot.action = "spinCounterClockwise"
         self.robot.vMax = 0.8
-        robot = self.actions.setup(self.robot)
+        robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vLeft, -0.8)
