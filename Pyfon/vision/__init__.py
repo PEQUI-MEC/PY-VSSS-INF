@@ -5,6 +5,15 @@ WIDTH = 640
 HEIGHT = 480
 
 class Apolo:
+	def __init__(self, callback):
+		print("Apolo summoned")
+		self.callback = callback
+
+	def run(self):
+		print("\tApolo working")
+		positions = "posicoes"
+		self.callback(positions)
+
 	def apllyThreshold(self, imagem, threshMin, threshMax):
 		img = np.zeros((WIDTH, HEIGHT), dtype = "uint8")
 	

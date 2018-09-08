@@ -3,7 +3,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui, QtWidgets
-# import icons_rc
+import icons_rc
 import serial, glob
 
 class Afrodite(QMainWindow):

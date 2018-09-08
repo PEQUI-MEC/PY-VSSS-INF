@@ -1,47 +1,62 @@
 # import numpy as np
+import sys, time
 import cv2
-import sys
 from observer import Publisher, Subscriber
-from interface.afrodite import Afrodite
+from vision import Apolo
 from control import Zeus
-# importar estratégia
+from strategy.athena import Athena
 from communication.hermes import Hermes
 
 from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog
+sys.path.append("interface/")
+from afrodite import Afrodite
+
+# This decorator returns time elapsed on execution of a method
+##### HOW TO USE #####
+# Before the method, place @timeToFinish
+# In the terminal will be printed the time elapsed on method execution
+
+def timeToFinish(method):
+    def timed(*args, **kwargs):
+        tStart = time.time()
+        result = method(*args, **kwargs)
+        tEnd = time.time()
+
+        print("{:.3f} sec".format(tEnd-tStart))
+        return result
+    return timed
 
 class Hades:
     def __init__(self, srcCam=None, srcBee=None):
 
-        self.channels = ['vision', 'strategy', 'control', 'communication']
         self.srcCamera = srcCam
         self.srcXbee = srcBee
-        
-        # initializing all publishers
-        self.hadesPub = Publisher(self.channels)
-        self.apoloPub = Publisher(self.channels[0:1])
-        self.athenaPub = Publisher(self.channels[1:2])
-        self.zeusPub = Publisher(self.channels[2:3])
-        self.hermesPub = Publisher(self.channels[3:4])
 
-        # initializing all subscribers
-        self.hadesSub = Subscriber('hades')   # manager
-        self.apoloSub = Subscriber('apolo')   # visão
-        self.athenaSub = Subscriber('athena') # strategy
-        self.zeusSub = Subscriber('zeus')     # control
-        self.hermesSub = Subscriber('hermes') # communication
+        self.apolo = Apolo(self.apoloReady)
+        self.athena = Athena(self.athenaReady)
+        self.zeus = Zeus(self.zeusReady)
+        # self.hermes = Hermes("port")
+        # invocar fly do hermes como finalização
+        # persephane  deusa do submundo
 
-        # registering subscribers
-        self.apoloPub.register(self.channels[0], self.hadesSub)
-        self.apoloPub.register(self.channels[0], self.athenaSub)
-        self.athenaPub.register(self.channels[1], self.hadesSub)
-        self.athenaPub.register(self.channels[1], self.zeusSub)
-        self.zeusPub.register(self.channels[2], self.hadesSub)
-        self.zeusPub.register(self.channels[2], self.hermesSub)
-        self.hermesPub.register(self.channels[3], self.hadesSub)
-        
-        self.apoloPub.dispatch("vision", "STARRRRRT")
+        self.apolo.run()
 
         # setting things up
+
+    def apoloReady(self, positions):
+        print("\t\tchamar estratégia")
+        self.athena.run(positions)
+
+    def athenaReady(self, positions):
+        print("\t\tchamar controle")
+        self.zeus.run(positions)
+        print("chamar interface")
+        
+    def zeusReady(self, rainhos):
+        print("\t\tchoque do trovão")
+
+    def hermesReady(self, botinhasQueVoam):
+        pass
 
     def setup(self):
         pass
