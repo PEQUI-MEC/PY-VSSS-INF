@@ -91,6 +91,9 @@ class Hades:
         return True
 
     def puppetLoop(self):
+        # inicia o fluxo de eventos
+        # verifica se nenhum erro aconteceu
+        
         return True
 
     def updatePositions(self):
