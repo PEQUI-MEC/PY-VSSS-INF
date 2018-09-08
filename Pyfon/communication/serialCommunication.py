@@ -1,4 +1,5 @@
 import time
+from robot import Robot
 from xbee import XBee
 from serial import Serial
 from digi.xbee.devices import XBeeDevice
@@ -8,6 +9,7 @@ class SerialCommunication():
 	def __init__(self):
 		self.xbee = None
 		self.serial = None
+		self.robots = Robot().robots
 
 	def startBee(self, port, baud):
 		self.serial = Serial(port, baud)
@@ -20,15 +22,8 @@ class SerialCommunication():
 	def sendMessage(self, robotId, message):
 		start_time = time.time()
 
-		if robotId==1:
-			self.xbee.send("tx", frame = 'A',command='MY',dest_addr='\x56\x0D',data=message)
-		elif robotId==2:
-			self.xbee.send("tx",frame = 'A',command='MY',dest_addr='\x6B\x0D',data=message)
-		elif robotId==3:
-			self.xbee.send("tx", frame = 'A',command='MY',dest_addr='\x21\x5C',data=message)
-		else:
-			raise ValueError("Robot ID not found")
-
+		self.xbee.send("tx", frame = 'A',command='MY',dest_addr=self.robots[robotId],data=message)
+		
 		elapsed_time = time.time() - start_time
 
 		print(str(robotId) + " " + str(elapsed_time))
