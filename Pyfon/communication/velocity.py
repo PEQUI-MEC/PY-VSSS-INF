@@ -4,7 +4,6 @@ class Velocity:
         self.left_wheel = 0
         self.right_wheel= 0
         
-
     def setup(self, id, left_wheel, right_wheel):
         self.id = id
         self.left_wheel = left_wheel
