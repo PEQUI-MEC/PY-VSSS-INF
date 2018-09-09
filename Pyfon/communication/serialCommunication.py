@@ -25,9 +25,7 @@ class SerialCommunication():
 		
 		elapsed_time = time.time() - start_time
 
-		print(str(robotId) + " " + str(elapsed_time))
-
-		#return True
+		#print(str(robotId) + " " + str(elapsed_time))
 
 	def newRobot(letter, address):
 		return True
