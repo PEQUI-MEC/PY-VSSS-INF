@@ -12,6 +12,8 @@ class Afrodite(QMainWindow):
 	def __init__(self, parent=None):
 		super(Afrodite , self).__init__(parent)
 
+		self.startWarpCallback = None
+
 		dirname = os.path.dirname(__file__)
 		filename = os.path.join(dirname, 'mainwindow.ui')
 		loadUi(filename, self)
@@ -240,7 +242,10 @@ class Afrodite(QMainWindow):
 	#ToDo
 	###Warp
 	def getPushButtonCaptureWarpWarp(self):
-		pass
+		self.startWarpCallback()
+
+	def setStartWarpCallback(self, callback):
+		self.startWarpCallback = callback
 
 	def getPushButtonCaptureWarpReset(self):
 		pass

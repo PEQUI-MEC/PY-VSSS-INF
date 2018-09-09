@@ -162,11 +162,15 @@ class Hades():
     def recordGame(self):
         return True
 
+    def startWarp(self):
+        print("Hades started warping")
+
 def main():
     hades = Hades()
 
-    app=QApplication(sys.argv)
-    window=Afrodite()
+    app = QApplication(sys.argv)
+    window = Afrodite()
+    window.setStartWarpCallback(hades.startWarp)
     window.show()
     sys.exit(app.exec_())
 
