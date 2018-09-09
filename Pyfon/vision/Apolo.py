@@ -54,6 +54,8 @@ class Apolo:
 				self.seeThroughMyEyes("Original",frame)
 				self.seeThroughMyEyes("Thresh",threshFrame)
 				
+				return robotList
+				
 			self.camera.killYourself()
 			
 			return True
