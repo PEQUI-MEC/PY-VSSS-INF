@@ -4,6 +4,10 @@ from scipy.spatial import distance
 from endless import Endless
 from warrior import Warrior
 
+#só pra testes
+import pprint
+
+
 class Athena:
 
     '''
@@ -126,9 +130,47 @@ class Athena:
     def generateResponse(self, warriors):
         response = []
         for warrior in warriors:
-            response.append({
-                "command": warrior.command
-            })
+            command = {}
+            if warrior.command["type"] == "goTo":
+                command["command"] = "goTo"
+                command["data"] = {}
+                command["data"]["pose"] = {
+                    "position": warrior.position,
+                    "orientation": warrior.orientation
+                }
+                command["data"]["target"] = {}
+                command["data"]["target"]["position"] = warrior.command["target"]
+
+                if warrior.command["targetOrientation"] is not None:
+                    command["data"]["target"]["orientation"] = warrior.command["target"]
+
+                if warrior.command["targetVelocity"] is not None:
+                    command["data"]["velocity"] = warrior.command["targetVelocity"]
+
+                if warrior.command["before"] is not None:
+                    command["data"]["before"] = warrior.command["before"]
+
+            elif warrior.command["type"] == "lookAt":
+                command["command"] = "lookAt"
+                command["data"] = {}
+
+                if warrior.command["targetOrientation"] is not None:
+                    command["data"]["target"] = warrior.command["targetOrientation"]
+
+                elif warrior.command["target"] is not None:
+                    command["data"]["pose"] = {
+                        "position": warrior.position,
+                        "orientation": warrior.orientation
+                    }
+                    command["data"]["target"] = warrior.command["target"]
+
+            else:  # spin
+                command["command"] = "spin"
+                command["data"] = {}
+                command["data"]["velocity"] = warrior.command["targetVelocity"]
+                command["data"]["direction"] = warrior.command["spinDirection"]
+
+            response.append(command)
 
         return response
 
@@ -291,7 +333,9 @@ class Athena:
     '''
     Seleciona ações de baixo nível baseado na tática
     Ações que podem ser escolhidas:
-    - "goTo": {
+    - {
+        "command": "goTo",
+        "data": {
             "pose": {
                 "position": (x, y),
                 "orientation": θ radianos
@@ -303,21 +347,32 @@ class Athena:
             "velocity": X m/s,  # opcional - se passado, sem before, é a velocidade constante / com before é velocidade padrão
             "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
         }
-    - "spin": {
+    }
+    - {
+        "command": "spin",
+        "data": {
             "velocity": X m/s,
             "direction": "clockwise" | "counter"
         }
-    - "lookAt": {
+    }
+    - {
+        "command": "lookAt",
+        "data": {
             "pose": {
-                "position": (x, y),
+                "position": (x, y),  # opcional - é passado se o target for um ponto
                 "orientation": θ radianos
-            }, # opcional - é passado se o target for um ponto
+            },
             "target": θ radianos | (x, y)
         }
+    }
     '''
     def selectActions(self):
         for warrior in self.warriors:
-            warrior.command = "atack"
+            warrior.command["type"] = "goTo"
+            warrior.command["target"] = (100, 200)
+            warrior.command["targetOrientation"] = self.endless.goal
+            warrior.command["targetVelocity"] = 0.8
+            warrior.command["before"] = 2
 
         return self.warriors
 
@@ -367,7 +422,9 @@ def main():
     ]
     athena = Athena()
     athena.setup(3, 100, 100)
-    print(athena.getTargets(fictionalPositions))
+
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(athena.getTargets(fictionalPositions))
 
 
 if __name__ == "__main__":

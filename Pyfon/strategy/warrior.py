@@ -5,7 +5,8 @@ class Warrior:
         self.name = ""
         self.position = (0, 0)
         self.orientation = 0
-        self.command = ""
+
+        self.command = {}
 
     def setup(self, position, orientation = 0, name = "pericles"):
         self.name = name
