@@ -10,7 +10,7 @@ class Translate:
     def run(self, robot):
 
         if robot.cmdType is None:
-            pass
+            return None
 
         if robot.cmdType == 'UVF':
             return self.uvfControl(robot)
@@ -30,21 +30,24 @@ class Translate:
         return [0.0, 0.0]
 
     def positionControl(self, robot):
+        # Stops after arriving at destination
         positionError = math.sqrt(math.pow(robot.position[0] - robot.target[0], 2) +
                                   math.pow(robot.position[1] - robot.target[1], 2))
-
-        if robot.vMax == 0 or positionError < 1:
-            robot.vRight = 0
+        if positionError < 1:
             robot.vLeft = 0
+            robot.vRight = 0
+            return [robot.vLeft, robot.Right]
 
         if self.velAcc < 0.3:
             self.velAcc = 0.3
 
+        # targetTheta in direction of [target.x, target.y]
         targetTheta = math.atan2(robot.target[1] - robot.position[1],
                                  robot.target[0] - robot.position[0])
         theta = robot.orientation
-        moveBackwards = bool(self.roundAngle(targetTheta - robot.orientation) < 0)
 
+        # Activates backward movement if thetaError > PI/2
+        moveBackwards = bool(self.roundAngle(targetTheta - robot.orientation + math.pi/2) < 0)
         if moveBackwards is not self.previouslyBackwards:
             self.velAcc = 0.3
 
