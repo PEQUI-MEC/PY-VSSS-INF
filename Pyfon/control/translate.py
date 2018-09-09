@@ -10,7 +10,7 @@ class Translate:
     def run(self, robot):
 
         if robot.cmdType is None:
-            return None
+            pass
 
         if robot.cmdType == 'UVF':
             return self.uvfControl(robot)
@@ -30,7 +30,6 @@ class Translate:
         return [0.0, 0.0]
 
     def positionControl(self, robot):
-        '''
         positionError = math.sqrt(math.pow(robot.position[0] - robot.target[0], 2) +
                                   math.pow(robot.position[1] - robot.target[1], 2))
 
@@ -57,7 +56,6 @@ class Translate:
         thetaError = self.roundAngle(targetTheta - theta)
 
         # To be continue...
-        '''
         return [0.0, 0.0]
 
     def orientationControl(self, robot):

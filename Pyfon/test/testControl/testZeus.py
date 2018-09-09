@@ -6,6 +6,7 @@ import math
 
 class TestZeus(unittest.TestCase):
     zeus = Zeus()
+    zeus.setup()
 
     info = [
         {
@@ -25,22 +26,19 @@ class TestZeus(unittest.TestCase):
     ]
 
     def testRun(self):
-        '''
         outPuts = self.zeus.run(self.info)
 
         self.assertEqual(outPuts[0], {'vLeft': -1.0, 'vRight': 1.0})
         self.assertEqual(outPuts[1], {'vLeft': 0.8, 'vRight': -0.8})
         self.assertEqual(outPuts[2], {'vLeft': 0.0, 'vRight': 0.0})
-        '''
+
         pass
 
     def testGetRobots(self):
         robots = self.zeus.getRobots(self.info)
 
         self.assertEqual(len(robots), 3)
-        self.assertEqual(type(robots[0]), type(Robot()))
-        self.assertEqual(type(robots[1]), type(Robot()))
-        self.assertEqual(type(robots[2]), type(Robot()))
+
         self.assertEqual(robots[0].action, "lookAt")
         self.assertEqual(robots[1].action, "lookAt")
         self.assertEqual(robots[2].action, "stop")
@@ -49,13 +47,13 @@ class TestZeus(unittest.TestCase):
         pass
 
     def testControlRoutine(self):
-        robots = self.zeus.getRobots(self.info)
-        velocities = self.zeus.controlRoutine(robots)
+        self.zeus.getRobots(self.info)
+        velocities = self.zeus.controlRoutine()
 
         self.assertEqual(len(velocities), 3)
-        self.assertEqual(type(velocities[0]), list)
-        self.assertEqual(type(velocities[1]), list)
-        self.assertEqual(type(velocities[2]), list)
+        self.assertEqual(velocities[0], [-1.0, 1.0])
+        self.assertEqual(velocities[1], [0.8, -0.8])
+        self.assertEqual(velocities[2], [0.0, 0.0])
 
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@ class Actions:
         elif robot.action == 'spinCounterClockwise':
             return self.spinCounterClockWise(robot)
         else:
-            return False
+            pass
 
     def stop(self, robot):
         robot.cmdType = 'SPEED'

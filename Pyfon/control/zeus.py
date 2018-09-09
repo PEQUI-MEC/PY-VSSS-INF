@@ -4,28 +4,43 @@ from .robot import Robot
 
 
 class Zeus:
+
     def __init__(self, callback=None):
+        self.robots = []
+        self.actions = None
+        self.translate = None
         print("Zeus summoned")
+
         self.callback = callback
 
+    def setup(self):
+        self.actions = Actions()
+        self.translate = Translate()
+
+        for i in range(0, 3):
+            self.robots.append(Robot())
+
+        print("Zeus is set up")
+        return self
+
     def run(self, strategyInfo):
-        robots = self.getRobots(strategyInfo)
-        robotsVelocity = self.controlRoutine(robots)
-        output = self.generateOutput(robotsVelocity)
-        # return output
+        self.getRobots(strategyInfo)
+        velocities = self.controlRoutine()
+        output = self.generateOutput(velocities)
+
+        for robot in self.robots:
+            robot.targetOrientation = None
 
         if self.callback is not None:
             self.callback(output)
+        else:
+            return output
 
     def getRobots(self, strategyInfo):
-        robots = []
-
         for r in range(0, len(strategyInfo)):
-            robots.append(Robot())
             for key, value in strategyInfo[r].items():
-                robots[r].set(key, value)
-
-        return robots
+                self.robots[r].set(key, value)
+        return self.robots
 
     def generateOutput(self, velocities):
         output = [
@@ -45,15 +60,12 @@ class Zeus:
 
         return output
 
-    def controlRoutine(self, robots):
-        actions = Actions()
-        translate = Translate()
+    def controlRoutine(self):
+        velocities = []
 
-        robotVelocity = []
-
-        for robot in robots:
+        for robot in self.robots:
             if robot.action is not None:
-                robotAction = actions.run(robot)
-            robotVelocity.append(translate.run(robotAction))
+                robotAction = self.actions.run(robot)
+                velocities.append(self.translate.run(robotAction))
 
-        return robotVelocity
+        return velocities

@@ -27,8 +27,8 @@ class TestActions(unittest.TestCase):
 
     def testKick(self):
         self.robot.action = "kick"
-        self.robot.position = [100, 200]
-        self.robot.target = [100, 200]
+        self.robot.position = (100, 200)
+        self.robot.target = (100, 200)
         robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, "VECTOR")
@@ -47,8 +47,8 @@ class TestActions(unittest.TestCase):
         # If the target is in front of him, the function is equal to PI
         self.robot.targetOrientation = None
         self.robot.cmdType = None
-        self.robot.position = [100, 200]
-        self.robot.target = [300, 200]
+        self.robot.position = (100, 200)
+        self.robot.target = (300, 200)
         robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, 'ORIENTATION')
@@ -57,8 +57,8 @@ class TestActions(unittest.TestCase):
         # If the target is in front of him, the function is equal to 0
         self.robot.targetOrientation = None
         self.robot.cmdType = None
-        self.robot.position = [300, 200]
-        self.robot.target = [100, 200]
+        self.robot.position = (300, 200)
+        self.robot.target = (100, 200)
         robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, 'ORIENTATION')
@@ -67,8 +67,8 @@ class TestActions(unittest.TestCase):
         # If the target is up, the function is equal to PI/2
         self.robot.targetOrientation = None
         self.robot.cmdType = None
-        self.robot.position = [100, 100]
-        self.robot.target = [100, 300]
+        self.robot.position = (100, 100)
+        self.robot.target = (100, 300)
         robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, 'ORIENTATION')
@@ -77,8 +77,8 @@ class TestActions(unittest.TestCase):
         # And if the target is down, the function is equal to -Pi/2
         self.robot.targetOrientation = None
         self.robot.cmdType = None
-        self.robot.position = [100, 300]
-        self.robot.target = [100, 100]
+        self.robot.position = (100, 300)
+        self.robot.target = (100, 100)
         robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, 'ORIENTATION')
