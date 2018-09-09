@@ -1,15 +1,34 @@
 import cv2
 import numpy as np
 import sys
-import Camera
+# sys.path.append("../")
+# from vision import Camera
+from .Camera import Ciclope
 
 WIDTH = 640
 HEIGHT = 480
 
 class Apolo:
 	def __init__(self):
-		self.camera = Camera.Ciclope()
-	
+		self.camera = Ciclope()
+		
+		#Por default seta esses valores, deve ser modificado quando der o quickSave
+		self.setHueThresh(120,250)
+		self.setSaturationThresh(0,250)
+		self.setValueThresh(0,250)
+		
+	def setHueThresh(self,hMin,hMax):
+		self.hThresh = (hMin,hMax)
+		
+	def setSaturationThresh(self,sMin,sMax):
+		self.sThresh = (sMin,sMax)	
+		
+	def setValueThresh(self,vMin,vMax):
+		self.vThresh = (vMin,vMax)
+		
+	def getThreshValues(self):
+		return (self.hThresh,self.sThresh,self.vThresh)
+		
 	def run(self):
 		if self.camera.isOpened():
 			while True: #Colocar condição de parada
@@ -23,7 +42,7 @@ class Apolo:
 				Pegar os valores de HSV da interface
 				'''
 				
-				threshFrame = self.applyThreshold(frameHSV,120,250,0,250,0,250)
+				threshFrame = self.applyThreshold(frameHSV)
 				
 				'''
 				Assinatura -> applyThreshold(thresholdedFrame, areaMinimaDaTag)
@@ -43,8 +62,11 @@ class Apolo:
 			print ("Nao há câmeras ou o dispositivo está ocupado")
 			return False	
 		
-	def applyThreshold(self, src, HMin, HMax, SMin, SMax, VMin, VMax):		
-		maskHSV = cv2.inRange(src,(HMin,SMin,VMin),(HMax,SMax,VMax))
+	def applyThreshold(self, src):
+		threshMin = (self.hThresh[0], self.sThresh[0], self.vThresh[0])
+		threshMax = (self.hThresh[1],self.sThresh[1],self.vThresh[1])
+		
+		maskHSV = cv2.inRange(src,threshMin, threshMax)
 				
 		return maskHSV
 	
@@ -76,10 +98,7 @@ class Apolo:
 		
 		_, contours, hierarchy = cv2.findContours(thresholdedImage, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 		
-		j = 0
-		
 		for i in contours:
-			j += 1
 			M = cv2.moments(i)
 			
 			if (M['m00'] > areaMin):

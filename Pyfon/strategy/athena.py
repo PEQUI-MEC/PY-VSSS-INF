@@ -1,12 +1,14 @@
 # coding=utf-8
-from endless import Endless
-from warrior import Warrior
+from .endless import Endless
+from .warrior import Warrior
 
 class Athena:
-    def __init__(self):
+    def __init__(self, callback=None):
         self.endless = None
         self.warriors = []
         self.theirWarriors = []
+
+        self.callback = callback
         print("Athena summoned.")
 
     def setup(self, numRobots, width, height):
@@ -63,7 +65,9 @@ class Athena:
         self.setRoles()
         self.selectTactics()
         self.selectActions()
-        return self.generateResponse(self.warriors)
+        # return self.generateResponse(self.warriors)
+        strategyInfo = self.generateResponse(self.warriors)
+        self.callback(strategyInfo)
 
     # TODO fazer mais verificações
     def parsePositions(self, positions):

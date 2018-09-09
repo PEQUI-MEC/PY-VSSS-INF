@@ -1,7 +1,7 @@
 import sys
-from velocityInfo import VelocityInfo
-from messageInfo import MessageInfo
-from serialCommunication import SerialCommunication
+# from velocityInfo import VelocityInfo
+# from messageInfo import MessageInfo
+from .serialCommunication import SerialCommunication
 
 class Hermes():
 

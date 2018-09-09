@@ -9,8 +9,8 @@ import serial, glob
 
 class Afrodite(QMainWindow):
 	"""docstring for Afrodite """
-	def __init__(self):
-		super(Afrodite , self).__init__()
+	def __init__(self, parent=None):
+		super(Afrodite , self).__init__(parent)
 
 		dirname = os.path.dirname(__file__)
 		filename = os.path.join(dirname, 'mainwindow.ui')
@@ -162,7 +162,7 @@ class Afrodite(QMainWindow):
 		elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
 			ports = glob.glob('/dev/video[0-9]*')
 		elif sys.platform.startswith('darwin'):
-			ports = glob.glob('/dev/.*')
+			ports = glob.glob('/dev/*')
 		else:
 			raise EnvironmentError('Unsuported plaftorm')
 

@@ -26,7 +26,7 @@ def timeToFinish(method):
         return result
     return timed
 
-class Hades:
+class Hades():
     def __init__(self, srcCam=None, srcBee=None):
 
         ### setting things up
@@ -36,63 +36,93 @@ class Hades:
         self.srcXbee = srcBee
 
         # gods
+        self.afrodite = None
         self.apolo = None
         self.athena = None
         self.zeus = None
         self.hermes = None
 
+        # variables
+        self.startButton = False
+
     def setup(self):
+        # self.afrodite = Afrodite(self)
         # aguardando luiz ter retorno do método run
         # deve settar o callback
         # self.apolo = Apolo(self.apoloReady)
-
         self.athena = Athena(self.athenaReady)
         self.zeus = Zeus(self.zeusReady)
-        # self.hermes = Hermes("port")
+        self.hermes = Hermes(self.srcXbee)
         # invocar fly do hermes como finalização
-        # persephane  deusa do submundo
+        # persephane deusa do submundo
+
+    def printTest(self):
+        print("test")
 
     def apoloReady(self, positions):
-        print("\t\tchamar estratégia")
+        print("\t\tApolo ready")
         self.athena.getTargets(positions)
 
-    def athenaReady(self, positions):
-        print("\t\tchamar controle")
-        self.zeus.run(positions)
-        print("chamar interface")
+    def athenaReady(self, strategyInfo):
+        print("\t\tAthena ready")
+        self.zeus.run(strategyInfo)
         
-    def zeusReady(self, rainhos):
-        print("\t\tchoque do trovão")
+    def zeusReady(self, velocities):
+        robots = [
+            #robot 1
+			[
+				0,
+				velocities[0]['vLeft'],
+				velocities[0]['vRight']
+	    	],
+	    	#robot 2
+			[
+				1,
+				velocities[1]['vLeft'],
+				velocities[1]['vRight']
+			],
+			#robot 3
+			[
+				2,
+				velocities[2]['vLeft'],
+				velocities[2]['vRight']
+			],
+        ]
+        self.hermes.fly(robots)
 
-    def hermesReady(self, botinhasQueVoam):
+    def hermesReady(self, allDoneFlag):
+        # faltando retorno do hermes de finalização
         pass
-        
 
     # Set link between camera and software
-    # def summonCapture(self):
-    #     try:
-    #         cap = cv2.VideoCapture(self.srcCamera)
-    #     except cv2.error:
-    #         return None
-    #     else:
-    #         return cap
-    #
-    # # Unlink camera and software
-    # def killCapture(self):
-    #     try:
-    #         self.cap.release()
-    #         cv2.destroyAllWindows()
-    #     except cv2.error:
-    #         print("Sorry =( I cannot stop your capture connection.\n")
-    #         return self.cap
-    #     else:
-    #         return None
-    #
-    # # Cleanup capture flags and set again
-    # def refreshCapture(self):
-    #     self.killCapture()
-    #     self.summonCapture()
-    #     return True
+    def summonCapture(self):
+        # try:
+        #     cap = cv2.VideoCapture(self.srcCamera)
+        # except cv2.error:
+        #     return None
+        # else:
+        #     return cap
+        
+        pass
+    
+    # Unlink camera and software
+    def killCapture(self):
+        # try:
+        #     self.cap.release()
+        #     cv2.destroyAllWindows()
+        # except cv2.error:
+        #     print("Sorry =( I cannot stop your capture connection.\n")
+        #     return self.cap
+        # else:
+        #     return None
+        pass
+    
+    # Cleanup capture flags and set again
+    def refreshCapture(self):
+        # self.killCapture()
+        # self.summonCapture()
+        # return True
+        pass
 
     def summonCommunication(self):
         return True
@@ -100,9 +130,25 @@ class Hades:
     def puppetLoop(self):
         # inicia o fluxo de eventos
         # verifica se nenhum erro aconteceu
-        self.apolo.run
+        '''
+        Interface (start button)
+                |
+                V
+              apolo
+                |
+                V
+              athena
+                |
+                V
+               zeus
+                |
+                V
+              hermes
+        '''
         
-        return True
+        # loops while startButton flag is True
+        while self.startButton is True:
+            self.apolo.run()
 
     def updatePositions(self):
         return True
