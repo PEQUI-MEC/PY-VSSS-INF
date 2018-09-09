@@ -15,3 +15,4 @@
 #
 # To include another requirement.txt file inside a requirement.txt file, use:
 # -r other-requirement-file.txt
+scipy
