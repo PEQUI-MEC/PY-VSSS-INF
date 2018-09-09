@@ -3,7 +3,6 @@ from scipy.spatial import distance
 
 from endless import Endless
 from warrior import Warrior
-import slave
 
 class Athena:
 
