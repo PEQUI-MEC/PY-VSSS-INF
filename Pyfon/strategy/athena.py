@@ -141,23 +141,32 @@ class Athena:
                 command["data"]["target"] = {}
                 command["data"]["target"]["position"] = warrior.command["target"]
 
-                if warrior.command["targetOrientation"] is not None:
+                if "targetOrientation" in warrior.command:
                     command["data"]["target"]["orientation"] = warrior.command["target"]
 
-                if warrior.command["targetVelocity"] is not None:
+                if "targetVelocity" in warrior.command:
                     command["data"]["velocity"] = warrior.command["targetVelocity"]
 
-                if warrior.command["before"] is not None:
+                if "before" in warrior.command:
                     command["data"]["before"] = warrior.command["before"]
+
+                if "avoidObstacles" in warrior.command:
+                    command["data"]["obstacles"] = []
+                    for obstacle in self.warriors:
+                        command["data"]["obstacles"].append(obstacle.position)
+                    for obstacle in self.theirWarriors:
+                        command["data"]["obstacles"].append(obstacle.position)
+                    if "avoidBall" in warrior.command:
+                        command["data"]["obstacles"].append(self.ball["position"])
 
             elif warrior.command["type"] == "lookAt":
                 command["command"] = "lookAt"
                 command["data"] = {}
 
-                if warrior.command["targetOrientation"] is not None:
+                if "targetOrientation" in warrior.command:
                     command["data"]["target"] = warrior.command["targetOrientation"]
 
-                elif warrior.command["target"] is not None:
+                elif "target" in warrior.command:
                     command["data"]["pose"] = {
                         "position": warrior.position,
                         "orientation": warrior.orientation
@@ -371,8 +380,8 @@ class Athena:
             warrior.command["type"] = "goTo"
             warrior.command["target"] = (100, 200)
             warrior.command["targetOrientation"] = self.endless.goal
-            warrior.command["targetVelocity"] = 0.8
             warrior.command["before"] = 2
+            warrior.command["avoidObstacles"] = "vai que é tua mano"
 
         return self.warriors
 
