@@ -10,17 +10,19 @@ class Zeus:
         self.translate = None
         print("Zeus summoned")
 
-    def setup(self):
+    # Setup Zeus: nRobots is the num of robots in game
+    def setup(self, nRobots):
         self.actions = Actions()
         self.translate = Translate()
 
-        for i in range(0, 3):
+        for i in range(0, nRobots):
             self.robots.append(Robot())
 
         print("Zeus is set up")
         return self
 
     # Athena -> getVelocities -> Hermes
+    # Hermes(Zeus.getVelocities(Athena))
     def getVelocities(self, strategia):
         self.getRobots(strategia)
         return self.generateOutput(self.controlRoutine())
@@ -33,8 +35,8 @@ class Zeus:
             raise ValueError("Invalid data object received.")
 
         for x in range(0, len(strategia)):
-            info = strategia[x]["data"]
             self.robots[x].action.append(strategia[x]["command"])
+            info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
                 self.robots[x].position = info["pose"]["position"]
@@ -64,14 +66,20 @@ class Zeus:
 
         return self.robots
 
+    # Cálculos necessarios para gerar os pwm's
     def controlRoutine(self):
         velocities = []
         for robot in self.robots:
-            if robot.action is not None:
+            if len(robot.action) > 0:
                 velocities.append(self.translate.run(self.actions.run(robot)))
+            else:
+                # !TODO estudar comando raise ValueError. Usar ele aqui ou apenas passar velocidades Nnone?
+                print("No action command was set.")
+                velocities.append([None, None])
 
         return velocities
 
+    # Gera lista de dicionários com as velocidades de cada robô
     def generateOutput(self, velocities):
         output = [
             {

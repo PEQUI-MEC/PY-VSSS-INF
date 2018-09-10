@@ -6,7 +6,7 @@ import math
 
 class TestZeus(unittest.TestCase):
     zeus = Zeus()
-    zeus = zeus.setup()
+    zeus = zeus.setup(3)
 
     info = [
         {

@@ -1,23 +1,17 @@
 import math
-from .robot import Robot
 
 
 class Actions:
 
     def run(self, robot):
-
-        if robot.action == 'stop':
+        if robot.action[0] == "stop":
             return self.stop(robot)
-        elif robot.action == 'kick':
-            return self.kick(robot)
-        elif robot.action == 'lookAt':
+        elif robot.action[0] == "lookAt":
             return self.lookAt(robot)
-        elif robot.action == 'spinClockwise':
-            return self.spinClockwise(robot)
-        elif robot.action == 'spinCounterClockwise':
-            return self.spinCounterClockWise(robot)
-        else:
-            pass
+        elif robot.action[0] == "spin":
+            return self.spin(robot)
+        elif robot.action[0] == "goTo":
+            return self.goTo(robot)
 
     def stop(self, robot):
         robot.cmdType = 'SPEED'
@@ -29,38 +23,26 @@ class Actions:
         return robot
 
     def lookAt(self, robot):
-        if robot.targetOrientation is not None:
-            robot.cmdType = 'ORIENTATION'
+        robot.cmdType = "ORIENTATION"
 
-        elif robot.targetOrientation is None:
+        if robot.action[1] == "target":
             x = robot.target[0] - robot.position[0]
             y = robot.target[1] - robot.position[1]
-            robot.cmdType = 'ORIENTATION'
+            robot.cmdType = "ORIENTATION"
             robot.targetOrientation = math.atan2(y, -x)
 
+        return robot
+
+    def spin(self, robot):
+        robot.cmdType = "SPEED"
+        if robot.action[1] == "clockwise":
+            robot.vLeft = robot.vMax
+            robot.vRight = -robot.vMax
         else:
-            pass
+            robot.vLeft = -robot.vMax
+            robot.vRight = robot.vMax
 
         return robot
 
-    def kick(self, robot):
-        x = robot.target[0] - robot.position[0]
-        y = robot.target[1] - robot.position[1]
-        robot.cmdType = 'VECTOR'
-        robot.transAngle = -math.atan2(-y, x)
-
-        return robot
-
-    def spinClockwise(self, robot):
-        robot.cmdType = 'SPEED'
-        robot.vLeft = robot.vMax
-        robot.vRight = -robot.vMax
-
-        return robot
-
-    def spinCounterClockWise(self, robot):
-        robot.cmdType = 'SPEED'
-        robot.vLeft = -robot.vMax
-        robot.vRight = robot.vMax
-
-        return robot
+    def goTo(self, robot):
+        pass
