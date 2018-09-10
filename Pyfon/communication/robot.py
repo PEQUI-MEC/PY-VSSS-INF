@@ -1,8 +1,6 @@
 class Robot():
 	def __init__(self):
-		self.robots =
-		[
-			"\x56\x0D",
-			"\x6B\x0D",
-			"\x21\x5C"
-		]
+		self.robots = []
+		self.robots.append("\x56\x0D")
+		self.robots.append("\x6B\x0D")
+		self.robots.append("\x21\x5C")
