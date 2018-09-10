@@ -2,7 +2,6 @@ import time
 from robot import Robot
 from xbee import XBee
 from serial import Serial
-from digi.xbee.devices import XBeeDevice
 
 class SerialCommunication():
 
