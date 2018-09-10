@@ -7,8 +7,6 @@ class Translate:
     previouslyBackwards = False
 
     def run(self, robot):
-        if robot.cmdType is None:
-            raise ValueError("CmdType isn't set.")
 
         if robot.cmdType == "VECTOR":
             return self.vectorControl(robot)
