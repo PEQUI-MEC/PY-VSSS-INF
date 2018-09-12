@@ -16,6 +16,8 @@ class Translate:
             return self.orientationControl(robot)
         elif robot.cmdType == "SPEED":
             return self.speedControl(robot)
+        else:
+            raise ValueError("Invalid cmdType")
 
     def vectorControl(self, robot):
         return [0.0, 0.0]

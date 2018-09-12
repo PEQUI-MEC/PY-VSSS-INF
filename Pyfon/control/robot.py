@@ -12,6 +12,8 @@ class Robot(object):
         self.target = None
         self.targetOrientation = None
 
+        self.obstacles = None
+
         self.action = []
 
         self.cmdType = None
