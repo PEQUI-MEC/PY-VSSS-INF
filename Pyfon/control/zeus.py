@@ -69,11 +69,11 @@ class Zeus:
     def getRobots(self, strategia):
         if type(strategia) is not list or \
                 len(strategia) != self.nRobots:
-            raise ValueError("Invalid data object received.")
+            raise ValueError("Invalid data object received2.")
 
         for i in range(0, self.nRobots):
-            if(strategia[i]) is not dict:
-                raise ValueError("Invalid data object received.")
+            if type(strategia[i]) is not dict:
+                raise ValueError("Invalid data object received1.")
 
         for i in range(0, self.nRobots):
             if "command" in strategia[0] is False or \
@@ -81,9 +81,9 @@ class Zeus:
                 raise ValueError("Invalid data object received.")
 
         for x in range(0, len(strategia)):
-            if strategia[x]["command"] is not "goTo" or \
-                    strategia[x]["command"] is not "spin" or \
-                    strategia[x]["command"] is not "lookAt" or \
+            if strategia[x]["command"] is not "goTo" and \
+                    strategia[x]["command"] is not "spin" and \
+                    strategia[x]["command"] is not "lookAt" and \
                     strategia[x]["command"] is not "stop":
                 raise ValueError("Invalid command.")
 

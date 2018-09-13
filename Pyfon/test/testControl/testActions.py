@@ -6,18 +6,20 @@ import math
 
 class TestActions(unittest.TestCase):
 
-    robot = Robot()
     actions = Actions()
+    robot = Robot()
 
     def testRun(self):
-        self.robot.action = "stop"
+        self.robot.action.append("stop")
         robot = self.actions.run(self.robot)
+        del self.robot.action[0]
 
         self.assertIsNotNone(robot)
 
     def testStop(self):
-        self.robot.action = "stop"
+        self.robot.action.append("stop")
         robot = self.actions.run(self.robot)
+        del self.robot.action[0]
 
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vMax, 0)
@@ -25,18 +27,10 @@ class TestActions(unittest.TestCase):
         self.assertEqual(robot.vRight, 0)
         self.assertEqual(robot.target, [-1, -1])
 
-    def testKick(self):
-        self.robot.action = "kick"
-        self.robot.position = (100, 200)
-        self.robot.target = (100, 200)
-        robot = self.actions.run(self.robot)
-
-        self.assertEqual(robot.cmdType, "VECTOR")
-        self.assertEqual(robot.transAngle, 0)
-
     def testlookAt(self):
         # Case 1: when the robot needs to turn in some given orientation
-        self.robot.action = "lookAt"
+        self.robot.action.append("lookAt")
+        self.robot.action.append("orientation")
         self.robot.orientation = 0
         self.robot.targetOrientation = math.pi
         robot = self.actions.run(self.robot)
@@ -47,6 +41,7 @@ class TestActions(unittest.TestCase):
         # If the target is in front of him, the function is equal to PI
         self.robot.targetOrientation = None
         self.robot.cmdType = None
+        self.robot.action[1] = "target"
         self.robot.position = (100, 200)
         self.robot.target = (300, 200)
         robot = self.actions.run(self.robot)
@@ -57,6 +52,7 @@ class TestActions(unittest.TestCase):
         # If the target is in front of him, the function is equal to 0
         self.robot.targetOrientation = None
         self.robot.cmdType = None
+        self.robot.action[1] = "target"
         self.robot.position = (300, 200)
         self.robot.target = (100, 200)
         robot = self.actions.run(self.robot)
@@ -67,6 +63,7 @@ class TestActions(unittest.TestCase):
         # If the target is up, the function is equal to PI/2
         self.robot.targetOrientation = None
         self.robot.cmdType = None
+        self.robot.action[1] = "target"
         self.robot.position = (100, 100)
         self.robot.target = (100, 300)
         robot = self.actions.run(self.robot)
@@ -77,6 +74,7 @@ class TestActions(unittest.TestCase):
         # And if the target is down, the function is equal to -Pi/2
         self.robot.targetOrientation = None
         self.robot.cmdType = None
+        self.robot.action[1] = "target"
         self.robot.position = (100, 300)
         self.robot.target = (100, 100)
         robot = self.actions.run(self.robot)
@@ -84,8 +82,12 @@ class TestActions(unittest.TestCase):
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, -(math.pi/2))
 
-    def testSpinClockwise(self):
-        self.robot.action = "spinClockwise"
+        del self.robot.action[1]
+        del self.robot.action[0]
+
+    def testSpin(self):
+        self.robot.action.append("spin")
+        self.robot.action.append("clockwise")
         self.robot.vMax = 0.8
         robot = self.actions.run(self.robot)
 
@@ -93,14 +95,18 @@ class TestActions(unittest.TestCase):
         self.assertEqual(robot.vLeft, 0.8)
         self.assertEqual(robot.vRight, -0.8)
 
-    def testSpinCounterClockwise(self):
-        self.robot.action = "spinCounterClockwise"
-        self.robot.vMax = 0.8
+        self.robot.action[1] = "counter"
         robot = self.actions.run(self.robot)
 
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vLeft, -0.8)
         self.assertEqual(robot.vRight, 0.8)
+
+        del self.robot.action[1]
+        del self.robot.action[0]
+
+    def testGoTo(self):
+        pass
 
 
 if __name__ == '__main__':
