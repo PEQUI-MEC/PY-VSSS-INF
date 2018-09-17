@@ -1,5 +1,4 @@
 import math
-from .robot import Robot
 
 
 class Translate:
@@ -8,44 +7,40 @@ class Translate:
     previouslyBackwards = False
 
     def run(self, robot):
-
         if robot.cmdType is None:
-            return None
+            raise ValueError("CmdType isn't set.")
 
-        if robot.cmdType == 'UVF':
-            return self.uvfControl(robot)
-        elif robot.cmdType == 'VECTOR':
+        if robot.cmdType == "VECTOR":
             return self.vectorControl(robot)
-        elif robot.cmdType == 'POSITION':
+        elif robot.cmdType == "POSITION":
             return self.positionControl(robot)
-        elif robot.cmdType == 'ORIENTATION':
+        elif robot.cmdType == "ORIENTATION":
             return self.orientationControl(robot)
         elif robot.cmdType == "SPEED":
             return self.speedControl(robot)
-
-    def uvfControl(self, robot):
-        return [0.0, 0.0]
 
     def vectorControl(self, robot):
         return [0.0, 0.0]
 
     def positionControl(self, robot):
-        '''
+        # Stops after arriving at destination
         positionError = math.sqrt(math.pow(robot.position[0] - robot.target[0], 2) +
                                   math.pow(robot.position[1] - robot.target[1], 2))
-
-        if robot.vMax == 0 or positionError < 1:
-            robot.vRight = 0
+        if positionError < 1:
             robot.vLeft = 0
+            robot.vRight = 0
+            return [robot.vLeft, robot.Right]
 
         if self.velAcc < 0.3:
             self.velAcc = 0.3
 
+        # targetTheta in direction of [target.x, target.y]
         targetTheta = math.atan2(robot.target[1] - robot.position[1],
                                  robot.target[0] - robot.position[0])
         theta = robot.orientation
-        moveBackwards = bool(self.roundAngle(targetTheta - robot.orientation) < 0)
 
+        # Activates backward movement if thetaError > PI/2
+        moveBackwards = bool(self.roundAngle(targetTheta - robot.orientation + math.pi/2) < 0)
         if moveBackwards is not self.previouslyBackwards:
             self.velAcc = 0.3
 
@@ -57,17 +52,14 @@ class Translate:
         thetaError = self.roundAngle(targetTheta - theta)
 
         # To be continue...
-        '''
         return [0.0, 0.0]
 
     def orientationControl(self, robot):
         theta = robot.orientation
 
-        # !TODO É necessário girar se o robô estiver com a "traseira de frente pro alvo? (Se não, usar o if abaixo)
-        '''
-        if T.roundAngle(targetOrientation - orientation + math.pi/2) < 0:
-           theta = T.roundAngle(orientation + math.pi)
-        '''
+        # !TODO É necessário girar se o robô estiver com a "traseira de frente pro alvo? (Se sim, não usar o if abaixo)
+        if self.roundAngle(robot.targetOrientation - robot.orientation + math.pi/2) < 0:
+           theta = self.roundAngle(robot.orientation + math.pi)
 
         thetaError = self.roundAngle(robot.targetOrientation - theta)
 
@@ -76,15 +68,13 @@ class Translate:
             robot.vLeft = 0
             robot.vMax = 0
 
-        robot.vLeft = self.saturate(-0.8 * thetaError)
-        robot.vRight = self.saturate(0.8 * thetaError)
+        robot.vLeft = self.saturate(-robot.vMax * thetaError)
+        robot.vRight = self.saturate(robot.vMax * thetaError)
 
         return [float(robot.vLeft), float(robot.vRight)]
 
     def speedControl(self, robot):
-
-        return [float(robot.vMax), float(robot.vMax)]
-
+        return [float(robot.vLeft), float(robot.vRight)]
 
     @staticmethod
     def roundAngle(angle):

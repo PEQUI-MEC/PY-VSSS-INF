@@ -9,10 +9,29 @@ import serial, glob
 
 class Afrodite(QMainWindow):
 	"""docstring for Afrodite """
-	def __init__(self, parent=None):
-		super(Afrodite , self).__init__(parent)
+	def __init__(self):
+		super(Afrodite , self).__init__()
 
+		###### callbacks ######
+
+		##MenuBar
+        #MenuBarArquivo
+		self.loadConfigCallback = None
+		self.saveConfigCallback = None
+
+        ##StartButton
+		self.startButtonCallback = None
+
+        ##Capture
+		self.startCaptureCallback = None
+
+		##Serial
+		self.startSerialCallback = None
+
+        ##Robot
 		self.startWarpCallback = None
+
+		###### \callbacks ######
 
 		dirname = os.path.dirname(__file__)
 		filename = os.path.join(dirname, 'mainwindow.ui')
@@ -34,6 +53,7 @@ class Afrodite(QMainWindow):
 		self.checkBoxVideoViewDisableDrawing.clicked.connect(self.getStateCheckBoxVideoViewDisableDrawing)
 
 		#pushButtonVideoViewStart
+		########################## RADUKEN
 		self.pushButtonVideoViewStart.clicked.connect(self.getPushButtonVideoViewStartCLicked)
 
 		#Capture
@@ -111,9 +131,17 @@ class Afrodite(QMainWindow):
 	#MenuBarArquivo
 	def actionLoadConfigsTriggered(self):
 		fname = QFileDialog.getOpenFileName(self, 'Open file', '/',"Json files (*.json)")
+		self.loadConfigCallback()
+
+	def setActionLoadConfigsCallback(self, callback):
+		self.loadConfigCallback = callback
 
 	def actionSaveConfigsTriggered(self):
-		pass
+		## falta implementar o save
+		self.saveConfigCallback()
+	
+	def setActionSaveConfigsCallback(self, callback):
+		self.saveConfigCallback = callback
 
 	def actionSaveasConfigTriggered(self):
 		QFileDialog.getSaveFileNames(self, 'Save as file', '/',"Json files (*.json)")
@@ -153,8 +181,10 @@ class Afrodite(QMainWindow):
 
 	#StartButton
 	def getPushButtonVideoViewStartCLicked(self):
-		print("clicked")
-		return True
+		self.startButtonCallback()
+		
+	def setPushButtonStartCallback(self, callback):
+		self.startButtonCallback = callback
 
 	#Capture
 	##DeviceInformation
@@ -178,6 +208,9 @@ class Afrodite(QMainWindow):
 
 	def getPushButtonCaptureDeviceInformationStart():
 		return self.getComboBoxCaptureDeviceInformation()
+
+	def setPushButtonCaptureDeviceInformartionCallback(self, callback):
+		self.startCaptureCallback = callback
 
 	def setlabelCaptureDeviceInformation(self, device, driver, card, bus):
 		self.labelCaptureDeviceInformationDevice.setText(device)
@@ -455,7 +488,11 @@ class Afrodite(QMainWindow):
 		return self.comboBoxControlSerialDevice.currentText()
 	
 	def getPushButtonControlSerialDeviceStart(self):
-		return True
+		device = self.comboBoxControlSerialDevice.currentText()
+		self.startSerialCallback(device)
+	
+	def setPushButtonControlSerialDeviceCallback(self, callback):
+		self.startSerialCallback = callback
 
 	def getPushButtonControlSerialDeviceRefresh(self):
 		self.updateComboBoxControlSerialDevice()

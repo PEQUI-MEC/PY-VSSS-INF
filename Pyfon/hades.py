@@ -1,7 +1,9 @@
 # import numpy as np
 import sys, time
 import cv2
-from observer import Publisher, Subscriber
+# from observer import Publisher, Subscriber
+from multiprocessing import pool
+
 from vision import Apolo
 from control import Zeus
 from strategy.athena import Athena
@@ -26,7 +28,7 @@ def timeToFinish(method):
         return result
     return timed
 
-class Hades():
+class Hades(QMainWindow):
     def __init__(self, srcCam=None, srcBee=None):
 
         ### setting things up
@@ -45,27 +47,46 @@ class Hades():
         # variables
         self.startButton = False
 
+    def summonAfrodite(self):
+        # setting up interface
+        self.app = QApplication(sys.argv)
+        self.afrodite = Afrodite()
+        self.afrodite.show()
+        sys.exit(self.app.exec_())
+
     def setup(self):
-        # self.afrodite = Afrodite(self)
         # aguardando luiz ter retorno do método run
         # deve settar o callback
-        # self.apolo = Apolo(self.apoloReady)
+
+        # setting up apolo
+        self.apolo = Apolo.Apolo(self.apoloReady)
+
+        #setting up athena
         self.athena = Athena(self.athenaReady)
+        self.athena.setup(3, 300, 300, 1.0)
+
+        # setting up zeus
         self.zeus = Zeus(self.zeusReady)
+        self.zeus.setup(3)
+
+        # setting up hermes
         self.hermes = Hermes(self.srcXbee)
         # invocar fly do hermes como finalização
         # persephane deusa do submundo
 
-    def printTest(self):
-        print("test")
-
     def apoloReady(self, positions):
         print("\t\tApolo ready")
+        print(positions)
         self.athena.getTargets(positions)
+        # atuaiza as posições na interface
+        # recebe o frame e repassa para a interface
+        # print(positions)
+        
 
     def athenaReady(self, strategyInfo):
         print("\t\tAthena ready")
-        self.zeus.run(strategyInfo)
+        print(strategyInfo)
+        self.zeus.getVelocities(strategyInfo)
         
     def zeusReady(self, velocities):
         robots = [
@@ -88,10 +109,12 @@ class Hades():
 				velocities[2]['vRight']
 			],
         ]
-        self.hermes.fly(robots)
+        print("choque do trovão")
+        # self.hermes.fly(robots)
 
     def hermesReady(self, allDoneFlag):
         # faltando retorno do hermes de finalização
+        # atualiza o FPS da interface
         pass
 
     # Set link between camera and software
@@ -145,10 +168,9 @@ class Hades():
                 V
               hermes
         '''
-        
-        # loops while startButton flag is True
-        while self.startButton is True:
-            self.apolo.run()
+        # apolo inicia após start na captura da imagem
+        # apolo inicia e nunca mais para de capturar
+        self.apolo.run()
 
     def updatePositions(self):
         return True
@@ -162,19 +184,61 @@ class Hades():
     def recordGame(self):
         return True
 
+    ##### Callbacks from afrodite #####
+
+    ## MenuBar
+    #MenuBarArquivo
+    def afLoadConfig(self):
+        print("carregando configurações")
+
+    def afSaveConfig(self):
+        print("salvando configurações")
+
+    ## Todo
     def startWarp(self):
         print("Hades started warping")
 
+    def afStartButton(self):
+        self.startButton = True
+        self.puppetLoop()
+        print("COMECOU!")
+
+    def afStartCaptureButton(self, deviceLocation=None):
+        print(deviceLocation)
+        print("captura inicializada")
+
+    def afStartSerialButton(self, deviceLocation=None):
+        print(deviceLocation)
+        print("serial inicializada")
+    
+
+    ##### \Callbacks from afrodite #####
+
 def main():
+
     hades = Hades()
 
-    app = QApplication(sys.argv)
-    window = Afrodite()
-    window.setStartWarpCallback(hades.startWarp)
-    window.show()
-    sys.exit(app.exec_())
+    hades.setup()
+    hades.puppetLoop()
+    
+    # hades.summonAfrodite()
 
-    self.setup()
+    ##### Afrodite's event configuration #####
+    # window.setActionLoadConfigsCallback(hades.afLoadConfig)
+    # window.setActionSaveConfigsCallback(hades.afSaveConfig)
+
+    # window.setPushButtonStartCallback(hades.afStartButton)
+    # window.setPushButtonCaptureDeviceInformartionCallback(hades.afStartCaptureButton)
+    # window.setPushButtonControlSerialDeviceCallback(hades.afStartSerialButton)
+
+    # window.setLabelVideoViewFPS(123)
+
+    # window.setStartWarpCallback(hades.startWarp)
+
+    # ##### \Afrodite's event configuration #####
+
+    # window.show()
+    # sys.exit(app.exec_())
 
 if __name__ == '__main__':
     main()

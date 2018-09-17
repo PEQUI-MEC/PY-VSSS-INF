@@ -9,6 +9,8 @@ class Hermes():
 		self.serialCom = SerialCommunication()
 		self.startBee(port, baud)
 		self.messages = []
+
+		print("Hermes summoned.")
 	'''
 		#velocities should be received like:
 		[	

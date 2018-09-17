@@ -11,5 +11,5 @@ class Ciclope:
 		print ("SUICIDE!")
 		self.camera.release()
 		
-	def isOpened(self):
+	def isCameraOpened(self):
 		return self.camera.isOpened()
