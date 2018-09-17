@@ -19,22 +19,26 @@ class TestZeus(unittest.TestCase):
             }
         },
         {
-            "command": "lookAt",
+            "command": "spin",
             "data": {
-                "pose": {
-                    "position": [300, 200],
-                    "orientation": 1.0
-                },
-                "target": [100, 200]
+                "velocity": 0.8,
+                "direction": "counter"
             }
         },
         {
-            "command": "lookAt",
+            "command": "goTo",
             "data": {
+                "obstacles": [(0, 200), (10, 100)],
                 "pose": {
+                    "position": (100, 100),
                     "orientation": 0
                 },
-                "target": math.pi
+                "target": {
+                    "orientation": math.pi,
+                    "position": (200, 100)
+                },
+                "velocity": 1.0,
+                "before": 5
             }
         }
     ]
@@ -45,10 +49,13 @@ class TestZeus(unittest.TestCase):
     def testGetRobots(self):
         robots = self.zeus.getRobots(self.info)
 
+        #for robot in robots:
+            #print(vars(robot))
+
         self.assertEqual(len(robots), 3)
-        self.assertEqual(robots[0].action, ['lookAt', 'orientation'])
-        self.assertEqual(robots[1].action, ['lookAt', 'target'])
-        self.assertEqual(robots[2].action, ['lookAt', 'orientation'])
+        self.assertEqual(robots[0].action, ["lookAt", "orientation"])
+        self.assertEqual(robots[1].action, ["spin", "counter"])
+        self.assertEqual(robots[2].action, ["goTo", 5])
 
     def testGenerateOutput(self):
         pass

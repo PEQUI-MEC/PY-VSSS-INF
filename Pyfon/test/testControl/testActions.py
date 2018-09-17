@@ -7,27 +7,30 @@ import math
 class TestActions(unittest.TestCase):
 
     actions = Actions()
-    robot = Robot()
+    robot = None
 
     def testRun(self):
+        self.robot = Robot()
         self.robot.action.append("stop")
         robot = self.actions.run(self.robot)
-        del self.robot.action[0]
 
         self.assertIsNotNone(robot)
 
     def testStop(self):
+        self.robot = Robot()
+
         self.robot.action.append("stop")
         robot = self.actions.run(self.robot)
-        del self.robot.action[0]
+        # del self.robot.action[0]
 
         self.assertEqual(robot.cmdType, "SPEED")
         self.assertEqual(robot.vMax, 0)
         self.assertEqual(robot.vLeft, 0)
         self.assertEqual(robot.vRight, 0)
-        self.assertEqual(robot.target, [-1, -1])
 
     def testlookAt(self):
+        self.robot = Robot()
+
         # Case 1: when the robot needs to turn in some given orientation
         self.robot.action.append("lookAt")
         self.robot.action.append("orientation")
@@ -82,10 +85,10 @@ class TestActions(unittest.TestCase):
         self.assertEqual(robot.cmdType, 'ORIENTATION')
         self.assertEqual(robot.targetOrientation, -(math.pi/2))
 
-        del self.robot.action[1]
-        del self.robot.action[0]
 
     def testSpin(self):
+        self.robot = Robot()
+
         self.robot.action.append("spin")
         self.robot.action.append("clockwise")
         self.robot.vMax = 0.8
@@ -102,11 +105,21 @@ class TestActions(unittest.TestCase):
         self.assertEqual(robot.vLeft, -0.8)
         self.assertEqual(robot.vRight, 0.8)
 
-        del self.robot.action[1]
-        del self.robot.action[0]
-
     def testGoTo(self):
-        pass
+        '''
+        self.robot = Robot()
+
+        self.robot.action.append("goTo")
+        self.robot.obstacles = [(0, 200), (10, 100)]
+        self.robot.position = (100, 100)
+        self.robot.orientation = 0
+        self.robot.targetOrientation = (100, 300)
+        self.robot.target = (0, 0)
+        self.robot.vMax = 1.0
+
+        robot = self.actions.run(self.robot)
+        self.assertEqual(robot.cmdType, "VECTOR")
+        '''
 
 
 if __name__ == '__main__':

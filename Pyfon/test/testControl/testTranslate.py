@@ -36,7 +36,7 @@ class TestTranslate(unittest.TestCase):
         self.robot.targetOrientation = math.pi
         robot = self.translate.run(self.robot)
 
-        self.assertEqual([robot[0], robot[1]], [-1, 1])
+        self.assertEqual([robot[0], robot[1]], [0, 0])
 
         self.robot.cmdType = "ORIENTATION"
         self.robot.orientation = math.pi

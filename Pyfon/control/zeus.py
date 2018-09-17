@@ -2,13 +2,13 @@ from .actions import Actions
 from .translate import Translate
 from .robot import Robot
 
-
 class Zeus:
     def __init__(self):
         self.robots = []
         self.actions = None
         self.translate = None
         self.nRobots = 0
+        self.maxVelocity = 1.0
         print("Zeus summoned")
 
     '''
@@ -30,7 +30,7 @@ class Zeus:
     velocidades de cada roda
     '''
     def getVelocities(self, strategia):
-        self.getRobots(strategia)
+        self.robots = self.getRobots(strategia)
         return self.generateOutput(self.controlRoutine())
 
     '''
@@ -67,18 +67,20 @@ class Zeus:
     }
     '''
     def getRobots(self, strategia):
+        robots = []
         if type(strategia) is not list or \
                 len(strategia) != self.nRobots:
-            raise ValueError("Invalid data object received2.")
+            raise ValueError("Invalid data object received.")
 
         for i in range(0, self.nRobots):
             if type(strategia[i]) is not dict:
-                raise ValueError("Invalid data object received1.")
+                raise ValueError("Invalid data object received.")
 
-        for i in range(0, self.nRobots):
             if "command" in strategia[0] is False or \
                     "data" in strategia[0] is False:
                 raise ValueError("Invalid data object received.")
+
+            robots.append(Robot())
 
         for x in range(0, len(strategia)):
             if strategia[x]["command"] is not "goTo" and \
@@ -87,42 +89,45 @@ class Zeus:
                     strategia[x]["command"] is not "stop":
                 raise ValueError("Invalid command.")
 
-            self.robots[x].action.append(strategia[x]["command"])
+            robots[x].action.append(strategia[x]["command"])
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
-                self.robots[x].position = info["pose"]["position"]
-                self.robots[x].orientation = info["pose"]["orientation"]
+                robots[x].position = info["pose"]["position"]
+                robots[x].orientation = info["pose"]["orientation"]
 
-                self.robots[x].target = info["target"]["position"]
-                self.robots[x].targetOrientation = info["target"]["orientation"]
+                robots[x].target = info["target"]["position"]
+                robots[x].targetOrientation = info["target"]["orientation"]
 
-                self.robots[x].vMax = info["velocity"]
+                if "velocity" in info:
+                    robots[x].vMax = info["velocity"]
+                else:
+                    robots[x].vMax = self.maxVelocity
 
                 if "before" in info:
-                    self.robots[x].action.append(int(info["before"]))
+                    robots[x].action.append(int(info["before"]))
 
                 if "obstacles" in info:
-                    self.robots[x].obstacles = info["ostacles"]
+                    robots[x].obstacles = info["obstacles"]
 
             elif strategia[x]["command"] == "spin":
-                self.robots[x].vMax = info["velocity"]
-                self.robots[x].action.append(info["direction"])
+                robots[x].vMax = info["velocity"]
+                robots[x].action.append(info["direction"])
 
             elif strategia[x]["command"] == "lookAt":
-                self.robots[x].orientation = info["pose"]["orientation"]
+                robots[x].orientation = info["pose"]["orientation"]
                 if type(info["target"]) is float:
-                    self.robots[x].targetOrientation = info["target"]
-                    self.robots[x].action.append("orientation")
+                    robots[x].targetOrientation = info["target"]
+                    robots[x].action.append("orientation")
                 else:
-                    self.robots[x].position = info["pose"]["position"]
-                    self.robots[x].target = info["target"]
-                    self.robots[x].action.append("target")
+                    robots[x].position = info["pose"]["position"]
+                    robots[x].target = info["target"]
+                    robots[x].action.append("target")
 
             # elif strategia[x]["command"] == "stop":
                 # !TODO definir estrutura final do comando stop
 
-        return self.robots
+        return robots
 
     '''
     Fluxo de cálculos para gerar os pwm's que serão passados para a comunicação
