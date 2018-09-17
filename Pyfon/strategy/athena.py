@@ -219,6 +219,11 @@ class Athena:
 
             else: # stop
                 command["command"] = "stop"
+                command["data"] = {}
+                if "before" in warrior.command:
+                    command["data"]["before"] = warrior.command["before"]
+                else:
+                    command["data"]["before"] = 0
 
             response.append(command)
 
@@ -527,13 +532,16 @@ class Athena:
                 warrior.command["targetVelocity"] = warrior.defaultVel
 
             elif warrior.tactics == Athena.tPush:
-                pass
+                warrior.command["type"] = "stop"
+
             elif warrior.tactics == Athena.tSpin:
-                pass
+                warrior.command["type"] = "stop"
+
             elif warrior.tactics == Athena.tWaitPass:
-                pass
+                warrior.command["type"] = "stop"
+
             elif warrior.tactics == Athena.tKick:
-                pass
+                warrior.command["type"] = "stop"
 
         return self.warriors
 
@@ -582,7 +590,7 @@ def main():
         }
     ]
     athena = Athena()
-    athena.setup(3, 100, 100)
+    athena.setup(3, 100, 100, 0.8)
 
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(athena.getTargets(fictionalPositions))
