@@ -1,125 +1,125 @@
-import unittest
 from control.actions import Actions
-from control.robot import Robot
-import math
+from control.warrior import Warrior
+
+from math import pi
+import unittest
 
 
 class TestActions(unittest.TestCase):
 
     actions = Actions()
-    robot = None
+    warrior = None
 
     def testRun(self):
-        self.robot = Robot()
-        self.robot.action.append("stop")
-        robot = self.actions.run(self.robot)
-
-        self.assertIsNotNone(robot)
+        pass
 
     def testStop(self):
-        self.robot = Robot()
+        self.warrior = Warrior()
 
-        self.robot.action.append("stop")
-        robot = self.actions.run(self.robot)
-        # del self.robot.action[0]
+        self.warrior.action.append("stop")
+        self.warrior.action.append(0)
+        warrior = self.actions.run(self.warrior)
 
-        self.assertEqual(robot.cmdType, "SPEED")
-        self.assertEqual(robot.vMax, 0)
-        self.assertEqual(robot.vLeft, 0)
-        self.assertEqual(robot.vRight, 0)
+        self.assertEqual(warrior.cmdType, "SPEED")
+        self.assertEqual(warrior.vMax, 0)
+        self.assertEqual(warrior.vLeft, 0)
+        self.assertEqual(warrior.vRight, 0)
+
+        del self.warrior
 
     def testlookAt(self):
-        self.robot = Robot()
+        self.warrior = Warrior()
 
-        # Case 1: when the robot needs to turn in some given orientation
-        self.robot.action.append("lookAt")
-        self.robot.action.append("orientation")
-        self.robot.orientation = 0
-        self.robot.targetOrientation = math.pi
-        robot = self.actions.run(self.robot)
+        # Case 1: when the warrior needs to turn in some given orientation
+        self.warrior.action.append("lookAt")
+        self.warrior.action.append("orientation")
+        self.warrior.orientation = 0
+        self.warrior.targetOrientation = pi
+        warrior = self.actions.run(self.warrior)
 
-        self.assertEqual(robot.cmdType, "ORIENTATION")
+        self.assertEqual(warrior.cmdType, "ORIENTATION")
 
-        # Other cases: when the robot needs to look at some given target(a point)
+        # Other cases: when the warrior needs to look at some given target(a point)
         # If the target is in front of him, the function is equal to PI
-        self.robot.targetOrientation = None
-        self.robot.cmdType = None
-        self.robot.action[1] = "target"
-        self.robot.position = (100, 200)
-        self.robot.target = (300, 200)
-        robot = self.actions.run(self.robot)
+        self.warrior.targetOrientation = None
+        self.warrior.cmdType = None
+        self.warrior.action[1] = "target"
+        self.warrior.position = (100, 200)
+        self.warrior.target = (300, 200)
+        warrior = self.actions.run(self.warrior)
 
-        self.assertEqual(robot.cmdType, 'ORIENTATION')
-        self.assertEqual(robot.targetOrientation, math.pi)
+        self.assertEqual(warrior.cmdType, 'ORIENTATION')
+        self.assertEqual(warrior.targetOrientation, pi)
 
         # If the target is in front of him, the function is equal to 0
-        self.robot.targetOrientation = None
-        self.robot.cmdType = None
-        self.robot.action[1] = "target"
-        self.robot.position = (300, 200)
-        self.robot.target = (100, 200)
-        robot = self.actions.run(self.robot)
+        self.warrior.targetOrientation = None
+        self.warrior.cmdType = None
+        self.warrior.action[1] = "target"
+        self.warrior.position = (300, 200)
+        self.warrior.target = (100, 200)
+        warrior = self.actions.run(self.warrior)
 
-        self.assertEqual(robot.cmdType, 'ORIENTATION')
-        self.assertEqual(robot.targetOrientation, 0)
+        self.assertEqual(warrior.cmdType, 'ORIENTATION')
+        self.assertEqual(warrior.targetOrientation, 0)
 
         # If the target is up, the function is equal to PI/2
-        self.robot.targetOrientation = None
-        self.robot.cmdType = None
-        self.robot.action[1] = "target"
-        self.robot.position = (100, 100)
-        self.robot.target = (100, 300)
-        robot = self.actions.run(self.robot)
+        self.warrior.targetOrientation = None
+        self.warrior.cmdType = None
+        self.warrior.action[1] = "target"
+        self.warrior.position = (100, 100)
+        self.warrior.target = (100, 300)
+        warrior = self.actions.run(self.warrior)
 
-        self.assertEqual(robot.cmdType, 'ORIENTATION')
-        self.assertEqual(robot.targetOrientation, math.pi/2)
+        self.assertEqual(warrior.cmdType, 'ORIENTATION')
+        self.assertEqual(warrior.targetOrientation, pi/2)
 
         # And if the target is down, the function is equal to -Pi/2
-        self.robot.targetOrientation = None
-        self.robot.cmdType = None
-        self.robot.action[1] = "target"
-        self.robot.position = (100, 300)
-        self.robot.target = (100, 100)
-        robot = self.actions.run(self.robot)
+        self.warrior.targetOrientation = None
+        self.warrior.cmdType = None
+        self.warrior.action[1] = "target"
+        self.warrior.position = (100, 300)
+        self.warrior.target = (100, 100)
+        warrior = self.actions.run(self.warrior)
 
-        self.assertEqual(robot.cmdType, 'ORIENTATION')
-        self.assertEqual(robot.targetOrientation, -(math.pi/2))
-
+        self.assertEqual(warrior.cmdType, 'ORIENTATION')
+        self.assertEqual(warrior.targetOrientation, -(pi/2))
+        del self.warrior
 
     def testSpin(self):
-        self.robot = Robot()
+        self.warrior = Warrior()
 
-        self.robot.action.append("spin")
-        self.robot.action.append("clockwise")
-        self.robot.vMax = 0.8
-        robot = self.actions.run(self.robot)
+        self.warrior.action.append("spin")
+        self.warrior.action.append("clockwise")
+        self.warrior.vMax = 0.8
+        warrior = self.actions.run(self.warrior)
 
-        self.assertEqual(robot.cmdType, "SPEED")
-        self.assertEqual(robot.vLeft, 0.8)
-        self.assertEqual(robot.vRight, -0.8)
+        self.assertEqual(warrior.cmdType, "SPEED")
+        self.assertEqual(warrior.vLeft, 0.8)
+        self.assertEqual(warrior.vRight, -0.8)
 
-        self.robot.action[1] = "counter"
-        robot = self.actions.run(self.robot)
+        self.warrior.action[1] = "counter"
+        warrior = self.actions.run(self.warrior)
 
-        self.assertEqual(robot.cmdType, "SPEED")
-        self.assertEqual(robot.vLeft, -0.8)
-        self.assertEqual(robot.vRight, 0.8)
+        self.assertEqual(warrior.cmdType, "SPEED")
+        self.assertEqual(warrior.vLeft, -0.8)
+        self.assertEqual(warrior.vRight, 0.8)
+
+        del self.warrior
 
     def testGoTo(self):
-        '''
-        self.robot = Robot()
+        self.warrior = Warrior()
 
-        self.robot.action.append("goTo")
-        self.robot.obstacles = [(0, 200), (10, 100)]
-        self.robot.position = (100, 100)
-        self.robot.orientation = 0
-        self.robot.targetOrientation = (100, 300)
-        self.robot.target = (0, 0)
-        self.robot.vMax = 1.0
+        self.warrior.action.append("goTo")
+        self.warrior.position = (200, 300)
+        self.warrior.orientation = 0
+        self.warrior.targetOrientation = pi
+        self.warrior.target = (200, 100)
+        self.warrior.vMax = 1.0
 
-        robot = self.actions.run(self.robot)
-        self.assertEqual(robot.cmdType, "VECTOR")
-        '''
+        warrior = self.actions.run(self.warrior)
+        self.assertEqual(warrior.cmdType, "VECTOR")
+
+        del self.warrior
 
 
 if __name__ == '__main__':

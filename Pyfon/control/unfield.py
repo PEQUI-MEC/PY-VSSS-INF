@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from scipy.spatial import distance
 
 
 def gaussian(m, v):
@@ -25,10 +26,14 @@ class HyperbolicSpiral:
     def __init__(self, _Kr, _radius):
         self.Kr = _Kr
         self.radius = _radius
+        self.origin = np.array([None, None])
 
     def updateParams(self, _KR, _RADIUS):
         self.Kr = _KR
         self.radius = _RADIUS
+
+    def updateOrigin(self, newOrigin):
+        self.origin = np.array(newOrigin)
 
     def fi_h(self, _p, radius=None, cw=True):
         Kr = self.Kr
@@ -39,13 +44,16 @@ class HyperbolicSpiral:
             r = radius
 
         p = np.array(_p)
-        theta = wrap2pi(angleWithX(p))
-        ro = np.linalg.norm(p)
+        p = distance.euclidean(p, self.origin)
+        # !TODO ver cálculo do theta. Theta = eixo das abcissas à posição p
+        # theta = wrap2pi(angleWithX(p))
+        # print("Theta: " + str(theta))
+        # ro = np.linalg.norm(p)
 
-        if ro > r:
-            a = (math.pi / 2.0) * (2.0 - (r + Kr)/(ro + Kr))
+        if p > r:
+            a = (math.pi / 2.0) * (2.0 - (r + Kr)/(p + Kr))
         else:
-            a = (math.pi / 2.0) * math.sqrt(ro / r)
+            a = (math.pi / 2.0) * math.sqrt(p / r)
 
         if cw:
             return wrap2pi(theta + a)
@@ -91,27 +99,30 @@ class Move2Goal:
         self.Kr = _Kr
         self.radius = _radius
         self.hyperSpiral = HyperbolicSpiral(self.Kr, self.radius)
-        self.origin = np.array([None, None])
+        # self.origin = np.array([None, None])
 
     def updateParams(self, _KR, _RADIUS):
         self.Kr = _KR
         self.radius = _RADIUS
         self.hyperSpiral.updateParams(self.Kr, self.radius)
 
-    # !TODO AAAAAAAAAAAAAAHHHHHHHHHHH
     def updateOrigin(self, newOrigin):
-        self.origin = np.array(newOrigin)
+        self.hyperSpiral.updateOrigin(newOrigin)
+        # self.origin = np.array(newOrigin)
 
     def fi_tuf(self, _p):
         hyperSpiral = self.hyperSpiral
         n_h = self.hyperSpiral.n_h
 
-        p = np.array(_p) - self.origin
-
         r = self.radius
+
+        # !TODO Encontrar x e y dado uma orientação final desejada?
+        '''
+        p = np.array(_p)
         x,y = p
         yl = y+r
         yr = y-r
+        '''
 
         pl = np.array([x, yl])
         pr = np.array([x, yr])
@@ -226,9 +237,12 @@ class UnivectorField:
         centers = []
         minDistance = self.DMIN + 1
 
-        if self.obstacles.size:
+        print("ObstaclesSize " + str(len(self.obstacles)))
+
+        if len(self.obstacles) > 0 and self.obstacles[0][0] is not None and self.obstacles[0][1] is not None:
             # get the repulsive field centers
             for i in range(self.obstacles.shape[0]):
+                print("Obstacles " + str(self.obstacles[i]))
                 self.avdObsField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
                 center = self.avdObsField.getVirtualPos()
                 centers.append(center)
@@ -238,6 +252,7 @@ class UnivectorField:
             index = np.argmin(distVect) # index of closest center
             closestCenter = centers[index]
             minDistance = distVect[index]
+            print("MindDistance " + str(minDistance))
 
             fi_auf = self.avdObsField.fi_auf(self.robotPos, _vPos=closestCenter, _theta=True)
 
@@ -246,10 +261,13 @@ class UnivectorField:
             return fi_auf
         else:
             fi_tuf = self.mv2GoalField.fi_tuf(self.robotPos)
+            print("FiAuf " + str(fi_tuf))
             # Checks if at least one obstacle exist
-            if self.obstacles.size:
+            if len(self.obstacles) > 0 and self.obstacles[0][0] is not None and self.obstacles[0][1] is not None:
+                print("Existe? ")
                 g = gaussian(minDistance - self.DMIN, self.LDELTA)
                 diff = wrap2pi(fi_auf - fi_tuf)
+                print(g*diff + fi_tuf)
                 return g*diff + fi_tuf
 
             # if there is no obstacles

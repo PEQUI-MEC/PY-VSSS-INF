@@ -1,89 +1,93 @@
-import math
+from math import sqrt, pow, atan2, pi, fmod, fabs
 
 
 class Translate:
 
-    velAcc = 0
-    previouslyBackwards = False
+    def __init__(self):
+        self.velAcc = 0
+        self.previouslyBackwards = False
 
-    def run(self, robot):
+    def run(self, warrior):
 
-        if robot.cmdType == "VECTOR":
-            return self.vectorControl(robot)
-        elif robot.cmdType == "POSITION":
-            return self.positionControl(robot)
-        elif robot.cmdType == "ORIENTATION":
-            return self.orientationControl(robot)
-        elif robot.cmdType == "SPEED":
-            return self.speedControl(robot)
+        if warrior.cmdType == "VECTOR":
+            return self.vectorControl(warrior)
+        elif warrior.cmdType == "POSITION":
+            return self.positionControl(warrior)
+        elif warrior.cmdType == "ORIENTATION":
+            return self.orientationControl(warrior)
+        elif warrior.cmdType == "SPEED":
+            return self.speedControl(warrior)
         else:
             raise ValueError("Invalid cmdType")
 
-    def vectorControl(self, robot):
+    def vectorControl(self, warrior):
         return [0.0, 0.0]
 
-    def positionControl(self, robot):
+    def positionControl(self, warrior):
         # Stops after arriving at destination
-        positionError = math.sqrt(math.pow(robot.position[0] - robot.target[0], 2) +
-                                  math.pow(robot.position[1] - robot.target[1], 2))
+        positionError = sqrt(pow(warrior.position[0] - warrior.target[0], 2) +
+                                  pow(warrior.position[1] - warrior.target[1], 2))
         if positionError < 1:
-            robot.vLeft = 0
-            robot.vRight = 0
-            return [robot.vLeft, robot.Right]
+            warrior.vLeft = 0
+            warrior.vRight = 0
+            return [warrior.vLeft, warrior.Right]
 
         if self.velAcc < 0.3:
             self.velAcc = 0.3
 
         # targetTheta in direction of [target.x, target.y]
-        targetTheta = math.atan2(robot.target[1] - robot.position[1],
-                                 robot.target[0] - robot.position[0])
-        theta = robot.orientation
+        targetTheta = atan2(warrior.target[1] - warrior.position[1],
+                                 warrior.target[0] - warrior.position[0])
+        theta = warrior.orientation
 
         # Activates backward movement if thetaError > PI/2
-        moveBackwards = bool(self.roundAngle(targetTheta - robot.orientation + math.pi/2) < 0)
+        moveBackwards = bool(self.roundAngle(targetTheta - warrior.orientation + pi/2) < 0)
         if moveBackwards is not self.previouslyBackwards:
             self.velAcc = 0.3
 
         self.previouslyBackwards = moveBackwards
 
         if moveBackwards:
-            theta = self.roundAngle(robot.orientation + math.pi)
+            theta = self.roundAngle(warrior.orientation + pi)
 
         thetaError = self.roundAngle(targetTheta - theta)
 
         # To be continue...
         return [0.0, 0.0]
 
-    def orientationControl(self, robot):
-        theta = robot.orientation
+    def orientationControl(self, warrior):
+        theta = warrior.orientation
 
         # !TODO É necessário girar se o robô estiver com a "traseira de frente pro alvo? (Se sim, não usar o if abaixo)
-        if self.roundAngle(robot.targetOrientation - robot.orientation + math.pi/2) < 0:
-           theta = self.roundAngle(robot.orientation + math.pi)
+        if self.roundAngle(warrior.targetOrientation - warrior.orientation + pi/2) < 0:
+           theta = self.roundAngle(warrior.orientation + pi)
 
-        thetaError = self.roundAngle(robot.targetOrientation - theta)
+        thetaError = self.roundAngle(warrior.targetOrientation - theta)
 
-        if math.fabs(thetaError) < 2*math.pi/180:
-            robot.vRight = 0
-            robot.vLeft = 0
-            robot.vMax = 0
+        if fabs(thetaError) < 2*pi/180:
+            warrior.vRight = 0
+            warrior.vLeft = 0
+            warrior.vMax = 0
 
-        robot.vLeft = self.saturate(-robot.vMax * thetaError)
-        robot.vRight = self.saturate(robot.vMax * thetaError)
+        warrior.vLeft = self.saturate(-warrior.vMax * thetaError)
+        warrior.vRight = self.saturate(warrior.vMax * thetaError)
 
-        return [float(robot.vLeft), float(robot.vRight)]
+        return [float(warrior.vLeft), float(warrior.vRight)]
 
-    def speedControl(self, robot):
-        return [float(robot.vLeft), float(robot.vRight)]
+    def speedControl(self, warrior):
+        if warrior.vLeft is None or warrior.vRight is None:
+            return [float(warrior.vMax), float(warrior.vMax)]
+
+        return [float(warrior.vLeft), float(warrior.vRight)]
 
     @staticmethod
     def roundAngle(angle):
-        theta = math.fmod(angle,  2 * math.pi)
+        theta = fmod(angle,  2 * pi)
 
-        if theta > math.pi:
-            theta = theta - (2 * math.pi)
-        elif theta < -math.pi:
-            theta = theta + (2 * math.pi)
+        if theta > pi:
+            theta = theta - (2 * pi)
+        elif theta < -pi:
+            theta = theta + (2 * pi)
 
         return theta
 

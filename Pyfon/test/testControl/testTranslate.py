@@ -1,19 +1,20 @@
-import unittest
 from control.translate import Translate
-from control.robot import Robot
-import math
+from control.warrior import Warrior
+
+from math import pi
+import unittest
 
 
 class TestTranslate(unittest.TestCase):
-    robot = Robot()
+    warrior = Warrior()
     translate = Translate()
 
     def testRun(self):
-        self.robot.cmdType = "SPEED"
-        self.robot.vMax = 0.8
+        self.warrior.cmdType = "SPEED"
+        self.warrior.vMax = 0.8
 
-        robot = self.translate.run(self.robot)
-        self.assertIsNotNone(robot)
+        warrior = self.translate.run(self.warrior)
+        self.assertIsNotNone(warrior)
 
     def testUvfControl(self):
         pass
@@ -24,26 +25,26 @@ class TestTranslate(unittest.TestCase):
     def testPositionControl(self):
         '''
         translate = Translate()
-        robot = Robot([100, 200], [100, 200], 0, math.pi, 0, "POSITION", 0.8, 1, 1, None)
-        robot = translate.setup(robot)
-        self.assertEqual([robot[0], robot[1]], [0, 0])
+        warrior = warrior([100, 200], [100, 200], 0, math.pi, 0, "POSITION", 0.8, 1, 1, None)
+        warrior = translate.setup(warrior)
+        self.assertEqual([warrior[0], warrior[1]], [0, 0])
         '''
         pass
 
     def testOrientationControl(self):
-        self.robot.cmdType = "ORIENTATION"
-        self.robot.orientation = 0
-        self.robot.targetOrientation = math.pi
-        robot = self.translate.run(self.robot)
+        self.warrior.cmdType = "ORIENTATION"
+        self.warrior.orientation = 0
+        self.warrior.targetOrientation = pi
+        warrior = self.translate.run(self.warrior)
 
-        self.assertEqual([robot[0], robot[1]], [0, 0])
+        self.assertEqual([warrior[0], warrior[1]], [0, 0])
 
-        self.robot.cmdType = "ORIENTATION"
-        self.robot.orientation = math.pi
-        self.robot.targetOrientation = math.pi
-        robot = self.translate.run(self.robot)
+        self.warrior.cmdType = "ORIENTATION"
+        self.warrior.orientation = pi
+        self.warrior.targetOrientation = pi
+        warrior = self.translate.run(self.warrior)
 
-        self.assertEqual([robot[0], robot[1]], [0, 0])
+        self.assertEqual([warrior[0], warrior[1]], [0, 0])
 
 
 if __name__ == '__main__':

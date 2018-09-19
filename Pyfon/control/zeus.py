@@ -1,26 +1,27 @@
 from .actions import Actions
 from .translate import Translate
-from .robot import Robot
+from .warrior import Warrior
+
 
 class Zeus:
     def __init__(self):
-        self.robots = []
+        self.warriors = []
         self.actions = None
         self.translate = None
-        self.nRobots = 0
+        self.nWarriors = 0
         self.maxVelocity = 1.0
         print("Zeus summoned")
 
     '''
-    Setup Zeus: nRobots is the num of robots in game
+    Setup Zeus: nWarriors is the num of warriors in game
     '''
-    def setup(self, nRobots):
+    def setup(self, nWarriors):
         self.actions = Actions()
         self.translate = Translate()
-        self.nRobots = nRobots
+        self.nWarriors = nWarriors
 
-        for i in range(0, nRobots):
-            self.robots.append(Robot())
+        for i in range(0, nWarriors):
+            self.warriors.append(Warrior())
 
         print("Zeus is set up")
         return self
@@ -30,7 +31,7 @@ class Zeus:
     velocidades de cada roda
     '''
     def getVelocities(self, strategia):
-        self.robots = self.getRobots(strategia)
+        self.warriors = self.getwarriors(strategia)
         return self.generateOutput(self.controlRoutine())
 
     '''
@@ -63,24 +64,24 @@ class Zeus:
     }    
     - {
         "command": stop,
-        "data": {}
+        "data": {before: 0}
     }
     '''
-    def getRobots(self, strategia):
-        robots = []
+    def getWarriors(self, strategia):
+        warriors = []
         if type(strategia) is not list or \
-                len(strategia) != self.nRobots:
+                len(strategia) != self.nWarriors:
             raise ValueError("Invalid data object received.")
 
-        for i in range(0, self.nRobots):
+        for i in range(0, self.nWarriors):
             if type(strategia[i]) is not dict:
                 raise ValueError("Invalid data object received.")
 
-            if "command" in strategia[0] is False or \
-                    "data" in strategia[0] is False:
+            if ("command" in strategia[i]) is False or \
+                    ("data" in strategia[i]) is False:
                 raise ValueError("Invalid data object received.")
 
-            robots.append(Robot())
+            warriors.append(Warrior())
 
         for x in range(0, len(strategia)):
             if strategia[x]["command"] is not "goTo" and \
@@ -89,45 +90,45 @@ class Zeus:
                     strategia[x]["command"] is not "stop":
                 raise ValueError("Invalid command.")
 
-            robots[x].action.append(strategia[x]["command"])
+            warriors[x].action.append(strategia[x]["command"])
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
-                robots[x].position = info["pose"]["position"]
-                robots[x].orientation = info["pose"]["orientation"]
+                warriors[x].position = info["pose"]["position"]
+                warriors[x].orientation = info["pose"]["orientation"]
 
-                robots[x].target = info["target"]["position"]
-                robots[x].targetOrientation = info["target"]["orientation"]
+                warriors[x].target = info["target"]["position"]
+                warriors[x].targetOrientation = info["target"]["orientation"]
 
                 if "velocity" in info:
-                    robots[x].vMax = info["velocity"]
+                    warriors[x].vMax = info["velocity"]
                 else:
-                    robots[x].vMax = self.maxVelocity
+                    warriors[x].vMax = self.maxVelocity
 
                 if "before" in info:
-                    robots[x].action.append(int(info["before"]))
+                    warriors[x].action.append(int(info["before"]))
 
                 if "obstacles" in info:
-                    robots[x].obstacles = info["obstacles"]
+                    warriors[x].obstacles = info["obstacles"]
 
             elif strategia[x]["command"] == "spin":
-                robots[x].vMax = info["velocity"]
-                robots[x].action.append(info["direction"])
+                warriors[x].vMax = info["velocity"]
+                warriors[x].action.append(info["direction"])
 
             elif strategia[x]["command"] == "lookAt":
-                robots[x].orientation = info["pose"]["orientation"]
+                warriors[x].orientation = info["pose"]["orientation"]
                 if type(info["target"]) is float:
-                    robots[x].targetOrientation = info["target"]
-                    robots[x].action.append("orientation")
+                    warriors[x].targetOrientation = info["target"]
+                    warriors[x].action.append("orientation")
                 else:
-                    robots[x].position = info["pose"]["position"]
-                    robots[x].target = info["target"]
-                    robots[x].action.append("target")
+                    warriors[x].position = info["pose"]["position"]
+                    warriors[x].target = info["target"]
+                    warriors[x].action.append("target")
 
-            # elif strategia[x]["command"] == "stop":
-                # !TODO definir estrutura final do comando stop
+            elif strategia[x]["command"] == "stop":
+                warriors[x].action.append(int(info["before"]))
 
-        return robots
+        return warriors
 
     '''
     Fluxo de cálculos para gerar os pwm's que serão passados para a comunicação
@@ -136,9 +137,9 @@ class Zeus:
     '''
     def controlRoutine(self):
         velocities = []
-        for robot in self.robots:
-            if len(robot.action) > 0:
-                velocities.append(self.translate.run(self.actions.run(robot)))
+        for warrior in self.warriors:
+            if len(warrior.action) > 0:
+                velocities.append(self.translate.run(self.actions.run(warrior)))
 
         return velocities
 

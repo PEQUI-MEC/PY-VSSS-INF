@@ -1,4 +1,7 @@
-class Robot(object):
+from ctypes import Structure
+
+
+class Warrior(Structure):
 
     def __init__(self):
         self.position = None
