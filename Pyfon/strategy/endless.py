@@ -20,6 +20,8 @@ class Endless:
         self.goalBottom = self.height / 2 + self.goalSize[1] / 2
         self.areaTop = self.height / 2 - self.areaSize[1] / 2
         self.areaBottom = self.height / 2 + self.areaSize[1] / 2
+        self.goalieLine = self.goalSize[0] + self.robotSize
+        self.areaLine = self.goalSize[0] + self.areaSize[0] + self.robotSize
 
         print("Endless is set up.")
 
