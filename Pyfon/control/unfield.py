@@ -44,16 +44,18 @@ class HyperbolicSpiral:
             r = radius
 
         p = np.array(_p)
-        p = distance.euclidean(p, self.origin)
-        # !TODO ver cálculo do theta. Theta = eixo das abcissas à posição p
-        # theta = wrap2pi(angleWithX(p))
-        # print("Theta: " + str(theta))
-        # ro = np.linalg.norm(p)
+        # p = distance.euclidean(p, self.origin)
 
-        if p > r:
-            a = (math.pi / 2.0) * (2.0 - (r + Kr)/(p + Kr))
+        # TODO(Luana) ver cálculo do theta. Theta = eixo das abcissas à posição p
+        theta = wrap2pi(angleWithX(p))
+        # print("Theta: " + str(theta))
+        ro = np.linalg.norm(p)
+
+        # TODO(Luana) Trocar ro por p. p = distância do robo para seu target
+        if ro > r:
+            a = (math.pi / 2.0) * (2.0 - (r + Kr)/(ro + Kr))
         else:
-            a = (math.pi / 2.0) * math.sqrt(p / r)
+            a = (math.pi / 2.0) * math.sqrt(ro / r)
 
         if cw:
             return wrap2pi(theta + a)
@@ -116,13 +118,12 @@ class Move2Goal:
 
         r = self.radius
 
-        # !TODO Encontrar x e y dado uma orientação final desejada?
-        '''
+        # TODO(Luana) Encontrar x e y dado uma orientação final desejada?
         p = np.array(_p)
         x,y = p
         yl = y+r
         yr = y-r
-        '''
+
 
         pl = np.array([x, yl])
         pr = np.array([x, yr])
@@ -237,12 +238,9 @@ class UnivectorField:
         centers = []
         minDistance = self.DMIN + 1
 
-        print("ObstaclesSize " + str(len(self.obstacles)))
-
         if len(self.obstacles) > 0 and self.obstacles[0][0] is not None and self.obstacles[0][1] is not None:
             # get the repulsive field centers
             for i in range(self.obstacles.shape[0]):
-                print("Obstacles " + str(self.obstacles[i]))
                 self.avdObsField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
                 center = self.avdObsField.getVirtualPos()
                 centers.append(center)
@@ -252,7 +250,6 @@ class UnivectorField:
             index = np.argmin(distVect) # index of closest center
             closestCenter = centers[index]
             minDistance = distVect[index]
-            print("MindDistance " + str(minDistance))
 
             fi_auf = self.avdObsField.fi_auf(self.robotPos, _vPos=closestCenter, _theta=True)
 
@@ -261,13 +258,13 @@ class UnivectorField:
             return fi_auf
         else:
             fi_tuf = self.mv2GoalField.fi_tuf(self.robotPos)
-            print("FiAuf " + str(fi_tuf))
+            # print("FiAuf " + str(fi_tuf))
             # Checks if at least one obstacle exist
             if len(self.obstacles) > 0 and self.obstacles[0][0] is not None and self.obstacles[0][1] is not None:
-                print("Existe? ")
+                # print("Existe? ")
                 g = gaussian(minDistance - self.DMIN, self.LDELTA)
                 diff = wrap2pi(fi_auf - fi_tuf)
-                print(g*diff + fi_tuf)
+                # print(g*diff + fi_tuf)
                 return g*diff + fi_tuf
 
             # if there is no obstacles

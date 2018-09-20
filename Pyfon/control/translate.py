@@ -1,7 +1,28 @@
 from math import sqrt, pow, atan2, pi, fmod, fabs
 
 
+def roundAngle(angle):
+    theta = fmod(angle,  2 * pi)
+
+    if theta > pi:
+        theta = theta - (2 * pi)
+    elif theta < -pi:
+        theta = theta + (2 * pi)
+
+    return theta
+
+
+def saturate(value):
+    if value > 1:
+        value = 1
+    elif value < -1:
+        value = -1
+
+    return value
+
+
 class Translate:
+    # TODO(Luana) Defirnir um nome final para Translate e documentá-lo
 
     def __init__(self):
         self.velAcc = 0
@@ -21,6 +42,7 @@ class Translate:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self, warrior):
+
         return [0.0, 0.0]
 
     def positionControl(self, warrior):
@@ -41,36 +63,38 @@ class Translate:
         theta = warrior.orientation
 
         # Activates backward movement if thetaError > PI/2
-        moveBackwards = bool(self.roundAngle(targetTheta - warrior.orientation + pi/2) < 0)
+        moveBackwards = bool(roundAngle(targetTheta - warrior.orientation + pi/2) < 0)
         if moveBackwards is not self.previouslyBackwards:
             self.velAcc = 0.3
 
         self.previouslyBackwards = moveBackwards
 
         if moveBackwards:
-            theta = self.roundAngle(warrior.orientation + pi)
+            theta = roundAngle(warrior.orientation + pi)
 
-        thetaError = self.roundAngle(targetTheta - theta)
+        thetaError = roundAngle(targetTheta - theta)
 
         # To be continue...
+        # TODO(Luana) Terminar calculos. Levar em consideração theta_error?
+
         return [0.0, 0.0]
 
     def orientationControl(self, warrior):
         theta = warrior.orientation
 
-        # !TODO É necessário girar se o robô estiver com a "traseira de frente pro alvo? (Se sim, não usar o if abaixo)
-        if self.roundAngle(warrior.targetOrientation - warrior.orientation + pi/2) < 0:
-           theta = self.roundAngle(warrior.orientation + pi)
+        # TODO(Luana) É necessário girar se estiver com a 'traseira' de frente pro alvo? (Se sim, não usar o if abaixo)
+        if roundAngle(warrior.targetOrientation - warrior.orientation + pi/2) < 0:
+           theta = roundAngle(warrior.orientation + pi)
 
-        thetaError = self.roundAngle(warrior.targetOrientation - theta)
+        thetaError = roundAngle(warrior.targetOrientation - theta)
 
         if fabs(thetaError) < 2*pi/180:
             warrior.vRight = 0
             warrior.vLeft = 0
             warrior.vMax = 0
 
-        warrior.vLeft = self.saturate(-warrior.vMax * thetaError)
-        warrior.vRight = self.saturate(warrior.vMax * thetaError)
+        warrior.vLeft = saturate(-warrior.vMax * thetaError)
+        warrior.vRight = saturate(warrior.vMax * thetaError)
 
         return [float(warrior.vLeft), float(warrior.vRight)]
 
@@ -79,23 +103,3 @@ class Translate:
             return [float(warrior.vMax), float(warrior.vMax)]
 
         return [float(warrior.vLeft), float(warrior.vRight)]
-
-    @staticmethod
-    def roundAngle(angle):
-        theta = fmod(angle,  2 * pi)
-
-        if theta > pi:
-            theta = theta - (2 * pi)
-        elif theta < -pi:
-            theta = theta + (2 * pi)
-
-        return theta
-
-    @staticmethod
-    def saturate(value):
-        if value > 1:
-            value = 1
-        elif value < -1:
-            value = -1
-
-        return value

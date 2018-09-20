@@ -3,6 +3,8 @@ from .unfield import UnivectorField
 
 
 class Actions:
+    # TODO(Luana) Defirnir um nome final para Translate e documentá-lo
+
     def __init__(self):
         self.uvf = UnivectorField()
         self.uvf.updateConstants(0.06, 0.7, 0.1, 0.05, 0.15)
@@ -38,7 +40,7 @@ class Actions:
             warrior.vRight = 0
 
         else:
-            # !TODO Fazer controle de desesceleração
+            # TODO(Luana) Fazer controle de desesceleração
             warrior.vMax = 0
             warrior.vLeft = 0
             warrior.vRight = 0
@@ -115,15 +117,15 @@ class Actions:
         #   time = warrior.action[1]
 
         if time is None:
-            # !TODO sem aceleração ou eu quem controlo como será feito a aceleração?
-            print("VMax = " + str(warrior.vMax))
+            # TODO(Luana) Sem aceleração ou eu quem controlo como será feito a aceleração?
+            # print("VMax = " + str(warrior.vMax))
             warrior.vRight = warrior.vMax
             warrior.vLeft = warrior.vMax
-            print("warrior ", list(warrior.position))
-            print("Target ", list(warrior.target))
-            print("UVF " + str(self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target))))
+            # print("warrior ", list(warrior.position))
+            # print("Target ", list(warrior.target))
+            # print("UVF " + str(self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target))))
         else:
-            # !TODO Fazer verificação se é possível realizar o trajeto com o tempo requisitado
+            # TODO(Luana) Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass
 
         return warrior
