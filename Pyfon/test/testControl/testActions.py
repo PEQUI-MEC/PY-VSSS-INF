@@ -110,10 +110,10 @@ class TestActions(unittest.TestCase):
         self.warrior = Warrior()
 
         self.warrior.action.append("goTo")
-        self.warrior.position = (200, 300)
+        self.warrior.position = (400, 400)
         self.warrior.orientation = 0
         self.warrior.targetOrientation = pi
-        self.warrior.target = (200, 100)
+        self.warrior.target = (200, 200)
         self.warrior.vMax = 1.0
 
         warrior = self.actions.run(self.warrior)

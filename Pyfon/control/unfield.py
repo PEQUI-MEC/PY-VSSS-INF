@@ -22,6 +22,26 @@ def wrap2pi(theta):
         return theta
 
 
+def foundTheta(pointA, pointB):
+    if pointA[1] > pointB[1]:
+        opposite = pointA[1] - pointB[1]
+    else:
+        opposite = pointB[1] - pointA[1]
+
+    if pointA[0] > pointB[0]:
+        adjacent = pointA[0] - pointB[0]
+    else:
+        adjacent = pointB[0] - pointA[0]
+
+    if adjacent != 0:
+        theta = opposite / adjacent
+        theta = math.atan(theta)
+    else:
+        theta = math.pi
+
+    return theta
+
+
 class HyperbolicSpiral:
     def __init__(self, _Kr, _radius):
         self.Kr = _Kr
@@ -44,18 +64,20 @@ class HyperbolicSpiral:
             r = radius
 
         p = np.array(_p)
-        # p = distance.euclidean(p, self.origin)
 
         # TODO(Luana) ver cálculo do theta. Theta = eixo das abcissas à posição p
-        theta = wrap2pi(angleWithX(p))
-        # print("Theta: " + str(theta))
-        ro = np.linalg.norm(p)
+        # theta = wrap2pi(angleWithX(p))
+        theta = foundTheta(p, self.origin)
+        print("Theta: " + str(theta))
+        # TODO(Luana) levar em consideração targetOrientation
 
         # TODO(Luana) Trocar ro por p. p = distância do robo para seu target
-        if ro > r:
-            a = (math.pi / 2.0) * (2.0 - (r + Kr)/(ro + Kr))
+        # ro = np.linalg.norm(p)
+        p = distance.euclidean(p, self.origin)
+        if p > r:
+            a = (math.pi / 2.0) * (2.0 - (r + Kr)/(p + Kr))
         else:
-            a = (math.pi / 2.0) * math.sqrt(ro / r)
+            a = (math.pi / 2.0) * math.sqrt(p / r)
 
         if cw:
             return wrap2pi(theta + a)
@@ -120,10 +142,10 @@ class Move2Goal:
 
         # TODO(Luana) Encontrar x e y dado uma orientação final desejada?
         p = np.array(_p)
+
         x,y = p
         yl = y+r
         yr = y-r
-
 
         pl = np.array([x, yl])
         pr = np.array([x, yr])
@@ -135,9 +157,9 @@ class Move2Goal:
             vec = ( abs(yl)*nhCCW + abs(yr)*nhCW ) / (2.0 * r)
             return wrap2pi(angleWithX(vec))
         elif y < -r:
-            return hyperSpiral.fi_h(pl, cw=True)
+            return hyperSpiral.fi_h(p, cw=True)
         else: #y >= r
-            return hyperSpiral.fi_h(pr, cw=False)
+            return hyperSpiral.fi_h(p, cw=False)
 
 
 class AvoidObstacle:
@@ -258,13 +280,13 @@ class UnivectorField:
             return fi_auf
         else:
             fi_tuf = self.mv2GoalField.fi_tuf(self.robotPos)
-            # print("FiAuf " + str(fi_tuf))
+            print("FiAuf " + str(fi_tuf))
             # Checks if at least one obstacle exist
             if len(self.obstacles) > 0 and self.obstacles[0][0] is not None and self.obstacles[0][1] is not None:
-                # print("Existe? ")
+                print("Existe? ")
                 g = gaussian(minDistance - self.DMIN, self.LDELTA)
                 diff = wrap2pi(fi_auf - fi_tuf)
-                # print(g*diff + fi_tuf)
+                print(g*diff + fi_tuf)
                 return g*diff + fi_tuf
 
             # if there is no obstacles

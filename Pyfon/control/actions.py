@@ -118,12 +118,12 @@ class Actions:
 
         if time is None:
             # TODO(Luana) Sem aceleração ou eu quem controlo como será feito a aceleração?
-            # print("VMax = " + str(warrior.vMax))
+            print("VMax = " + str(warrior.vMax))
             warrior.vRight = warrior.vMax
             warrior.vLeft = warrior.vMax
-            # print("warrior ", list(warrior.position))
-            # print("Target ", list(warrior.target))
-            # print("UVF " + str(self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target))))
+            print("warrior ", list(warrior.position))
+            print("Target ", list(warrior.target))gi
+            print("UVF " + str(self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target))))
         else:
             # TODO(Luana) Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass
