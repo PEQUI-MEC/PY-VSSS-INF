@@ -20,10 +20,10 @@ class Apolo:
 		self.threshList = [None] * 4
 		self.thresholdedImages = [None] * 4
 		#Por default seta esses valores, deve ser modificado quando der o quickSave
-		self.setHSVThresh(((120,250),(0,250),(0,250)), 0)
+		self.setHSVThresh(((28,30),(0,255),(0,255)), 0)
 		self.setHSVThresh(((120,250),(0,250),(0,250)), 1)
 		self.setHSVThresh(((120,250),(0,250),(0,250)), 2)
-		self.setHSVThresh(((0,250),(0,250),(0,250)), 3)
+		self.setHSVThresh(((69,70),(0,255),(0,255)), 3)
 		
 	def getFrame(self):
 		frame = None
@@ -45,7 +45,7 @@ class Apolo:
 	'''
 	
 	def setHSVThresh(self, hsvThresh, keyword):
-		self.theshList[keyword] = hsvThresh
+		self.threshList[keyword] = hsvThresh
 
 	def getHSVThresh(self,keyword):
 		return self.threshList[keyword]
@@ -57,7 +57,7 @@ class Apolo:
 		threshMax = (thresh[0][1],thresh[1][1],thresh[2][1])
 
 		maskHSV = cv2.inRange(src,threshMin, threshMax)
-				
+		
 		return maskHSV
 	
 	#Econtra os robos em uma imagem onde o threshold foi aplicado
@@ -71,8 +71,8 @@ class Apolo:
 			M = cv2.moments(i)
 			
 			if (M['m00'] > areaMin):
-				cx = int(M['m01']/M['m00'])
-				cy = int(M['m10']/M['m00'])
+				cx = int(M['m10']/M['m00'])
+				cy = int(M['m01']/M['m00'])
 				robotPositionList.extend([(cx,cy)])
 		
 			if (len(robotPositionList) == 3): break
@@ -92,8 +92,8 @@ class Apolo:
 		for i in contours:
 			M = cv2.moments(i)
 			if (M['m00'] > areaMin):
-				cx = int(M['m01']/M['m00'])
-				cy = int(M['m10']/M['m00'])
+				cx = int(M['m10']/M['m00'])
+				cy = int(M['m01']/M['m00'])
 				break
 		
 		return (cx,cy)
@@ -108,8 +108,8 @@ class Apolo:
 			M = cv2.moments(i)
 			
 			if (M['m00'] > areaMin):
-				cx = int(M['m01']/M['m00'])
-				cy = int(M['m10']/M['m00'])
+				cx = int(M['m10']/M['m00'])
+				cy = int(M['m01']/M['m00'])
 				advRobotPositionList.extend([(cx,cy)])
 		
 			if (len(advRobotPositionList) == 3): break
@@ -144,7 +144,7 @@ class Apolo:
 	def seeThroughMyEyes(self, nome, imagem):
 		cv2.namedWindow(nome, cv2.WINDOW_AUTOSIZE)
 		cv2.imshow(nome,imagem)
-		cv2.waitKey(1)
+		cv2.waitKey(0)
 		
 	#Pega os dados dos robos, da bola e dos adversarios e coloca no formato que a Athena requer
 	def returnData(self, robotList, robotAdvList,ball):
@@ -192,7 +192,8 @@ class Apolo:
 		'''
 	
 		#Pega o frame
-		frame = self.getFrame()
+		#frame = self.getFrame()
+		frame = cv2.imread("Tags/cena.png")
 		
 		if frame is None:
 			print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -208,6 +209,7 @@ class Apolo:
 		#Mostra a imagem (nao tem necessidade, so ta ai pra debug)
 		self.seeThroughMyEyes("Original",frame)
 		self.seeThroughMyEyes("Main",self.thresholdedImages[0])
+		self.seeThroughMyEyes("GREEN",self.thresholdedImages[3])
 		
 		#Procura os robos
 		robotList = self.findRobots(self.thresholdedImages[0],30)
