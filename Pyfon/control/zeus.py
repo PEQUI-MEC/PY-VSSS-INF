@@ -1,5 +1,5 @@
-from .eunomia import Actions
-from .dice import Translate
+from .eunomia import Eunomia
+from .dice import Dice
 from .warrior import Warrior
 
 
@@ -9,8 +9,8 @@ class Zeus:
         self.warriors = []
         self.nWarriors = 0
         self.maxVelocity = 1.0
-        self.actions = Actions()
-        self.translate = Translate()
+        self.actions = Eunomia()
+        self.translate = Dice()
         print("Zeus summoned")
 
     def setup(self, nWarriors, width=100):

@@ -21,7 +21,7 @@ def saturate(value):
     return value
 
 
-class Translate:
+class Dice:
     # TODO(Luana) Defirnir um nome final para Translate e documentá-lo
 
     def __init__(self):

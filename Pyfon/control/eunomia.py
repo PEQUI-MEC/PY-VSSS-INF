@@ -2,7 +2,7 @@ from math import atan2, pi
 from .unfield import UnivectorField
 
 
-class Actions:
+class Eunomia:
     # TODO(Luana) Definir um nome final para Actions e documentá-lo
 
     def __init__(self):
