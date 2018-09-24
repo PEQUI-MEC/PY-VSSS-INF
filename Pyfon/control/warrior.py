@@ -21,4 +21,4 @@ class Warrior(Structure):
 
         self.cmdType = None
 
-
+        self.before = None

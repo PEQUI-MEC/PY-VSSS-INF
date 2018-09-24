@@ -1,13 +1,19 @@
-from math import atan2
+from math import atan2, pi
 from .unfield import UnivectorField
 
 
 class Actions:
-    # TODO(Luana) Defirnir um nome final para Translate e documentá-lo
+    # TODO(Luana) Definir um nome final para Actions e documentá-lo
 
     def __init__(self):
         self.uvf = UnivectorField()
-        self.uvf.updateConstants(0.06, 0.7, 0.1, 0.05, 0.15)
+
+    def setup(self, width=100):
+        radius = 0.2*width/1.70
+
+        # Espiral radius, m2g kr, ao k0, distance dmin, gaussian delta
+        # self.uvf.updateConstants(radius, 0.7, 0.1, 0.05, 0.15)
+        self.uvf.updateConstants(4.0, 4.9, 0.12, 5.0, 4.5)
 
     def run(self, warrior):
         if warrior.action[0] == "stop":
@@ -34,7 +40,7 @@ class Actions:
     }
     '''
     def stop(self, warrior):
-        if warrior.action[1] == 0:
+        if warrior.before == 0:
             warrior.vMax = 0
             warrior.vLeft = 0
             warrior.vRight = 0
@@ -113,17 +119,20 @@ class Actions:
 
         #  Verificar se existe um 'before' na chamada desse método
         time = None
-        # if len(warrior.action) > 1:
-        #   time = warrior.action[1]
+        # if warrior.before is not None:
+        #   time = warrior.before
 
         if time is None:
             # TODO(Luana) Sem aceleração ou eu quem controlo como será feito a aceleração?
-            print("VMax = " + str(warrior.vMax))
+
             warrior.vRight = warrior.vMax
             warrior.vLeft = warrior.vMax
-            print("warrior ", list(warrior.position))
-            print("Target ", list(warrior.target))gi
-            print("UVF " + str(self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target))))
+            print("\nwarrior ", list(warrior.position))
+            print("Target ", list(warrior.target))
+
+            uvf = self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target), warrior.targetOrientation)
+            # uvf =
+            print("UVF " + str(uvf))
         else:
             # TODO(Luana) Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass

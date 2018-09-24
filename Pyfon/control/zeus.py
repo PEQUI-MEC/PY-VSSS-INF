@@ -1,5 +1,5 @@
-from .actions import Actions
-from .translate import Translate
+from .eunomia import Actions
+from .dice import Translate
 from .warrior import Warrior
 
 
@@ -7,13 +7,13 @@ class Zeus:
 
     def __init__(self):
         self.warriors = []
-        self.actions = None
-        self.translate = None
         self.nWarriors = 0
         self.maxVelocity = 1.0
+        self.actions = Actions()
+        self.translate = Translate()
         print("Zeus summoned")
 
-    def setup(self, nWarriors):
+    def setup(self, nWarriors, width=100):
         """Zeus first movements
 
         Esse método deverá ser chamado antes de usar Zeus apropriadamente.
@@ -21,13 +21,13 @@ class Zeus:
 
         Args:
             nWarriors (int): Num of warriors in game
+            width (int):
 
         Returns:
 
         """
 
-        self.actions = Actions()
-        self.translate = Translate()
+        self.actions.setup(width)
         self.nWarriors = nWarriors
 
         for i in range(0, nWarriors):
@@ -139,7 +139,7 @@ class Zeus:
                     warriors[x].vMax = self.maxVelocity
 
                 if "before" in info:
-                    warriors[x].action.append(int(info["before"]))
+                    warriors[x].before = float(info["before"])
 
                 if "obstacles" in info:
                     warriors[x].obstacles = info["obstacles"]
@@ -159,7 +159,7 @@ class Zeus:
                     warriors[x].action.append("target")
 
             elif strategia[x]["command"] == "stop":
-                warriors[x].action.append(int(info["before"]))
+                warriors[x].before = float(info["before"])
 
         return warriors
 

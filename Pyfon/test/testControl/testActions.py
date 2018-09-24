@@ -8,6 +8,7 @@ import unittest
 class TestActions(unittest.TestCase):
 
     actions = Actions()
+    actions.setup()
     warrior = None
 
     def testRun(self):
@@ -17,7 +18,7 @@ class TestActions(unittest.TestCase):
         self.warrior = Warrior()
 
         self.warrior.action.append("stop")
-        self.warrior.action.append(0)
+        self.warrior.before = 0
         warrior = self.actions.run(self.warrior)
 
         self.assertEqual(warrior.cmdType, "SPEED")
@@ -110,10 +111,10 @@ class TestActions(unittest.TestCase):
         self.warrior = Warrior()
 
         self.warrior.action.append("goTo")
-        self.warrior.position = (400, 400)
+        self.warrior.position = (200, 200)
         self.warrior.orientation = 0
-        self.warrior.targetOrientation = pi
-        self.warrior.target = (200, 200)
+        self.warrior.targetOrientation = -((pi/2.0) + ((pi/2.0)/2.0))
+        self.warrior.target = (400, 400)
         self.warrior.vMax = 1.0
 
         warrior = self.actions.run(self.warrior)
