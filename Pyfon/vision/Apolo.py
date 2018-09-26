@@ -5,13 +5,14 @@ import sys
 sys.path.append("../")
 from vision import Camera
 
+#Constantes
 WIDTH = 640
 HEIGHT = 480
+MAIN = 0
+BALL = 1
+ADV = 2
+GREEN = 3
 
-#Fica definido que tudo relacionado a tag principal estara na posicao 0
-#Tudo relacionado a bola estara na posição 1
-#Tudo relacionado a tag dos adversarios estara na posicao 2
-#Tudo relacionado as tags secundarias estara na posicao 3
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
 class Apolo:
 	def __init__(self):
@@ -20,10 +21,10 @@ class Apolo:
 		self.threshList = [None] * 4
 		self.thresholdedImages = [None] * 4
 		#Por default seta esses valores, deve ser modificado quando der o quickSave
-		self.setHSVThresh(((28,30),(0,255),(0,255)), 0)
-		self.setHSVThresh(((120,250),(0,250),(0,250)), 1)
-		self.setHSVThresh(((120,250),(0,250),(0,250)), 2)
-		self.setHSVThresh(((69,70),(0,255),(0,255)), 3)
+		self.setHSVThresh(((28,30),(0,255),(0,255)), MAIN)
+		self.setHSVThresh(((120,250),(0,250),(0,250)), BALL)
+		self.setHSVThresh(((120,250),(0,250),(0,250)), ADV)
+		self.setHSVThresh(((69,70),(0,255),(0,255)), GREEN)
 		
 	def getFrame(self):
 		frame = None
@@ -71,6 +72,11 @@ class Apolo:
 			M = cv2.moments(i)
 			
 			if (M['m00'] > areaMin):
+				line = cv2.fitLine(i,2,0,0.01,0.01)
+				
+				print ("X - vx = ", line[2] - line[0]*1.2)
+				print ("Y - vy = ", line[1] - line[3]*1.2)
+				
 				cx = int(M['m10']/M['m00'])
 				cy = int(M['m01']/M['m00'])
 				robotPositionList.extend([(cx,cy)])
@@ -82,6 +88,24 @@ class Apolo:
 		
 		return robotPositionList
 	
+	def findSecondaryTags(self, thresholdedImage, areaMin):
+		secondaryTags = list()
+		
+		_, contours, hierarchy = cv2.findContours(thresholdedImage, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+		
+		for i in contours:
+			M = cv2.moments(i)
+			
+			if (M['m00'] > areaMin):
+				cx = int(M['m10']/M['m00'])
+				cy = int(M['m01']/M['m00'])
+				secondaryTags.extend([(cx,cy)])
+		
+			if (len(secondaryTags) == 4): break
+		
+		return secondaryTags
+		
+		
 	#Econtra a bola em uma imagem onde o threshold foi aplicado
 	def findBall(self, imagem, areaMin):
 		_, contours, hierarchy = cv2.findContours(imagem, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -121,8 +145,23 @@ class Apolo:
 		
 		
 	#TODO: Implementar essa função para definir qual robo é qual
-	def setRobots(self, secondaryTagsImage):
-		return ("R1:",103,103),("R2:",203,213),("R3:",253,303)
+	def setRobots(self, robotList, secondaryTagsList, robotRadius):
+		robots = list()
+		
+		for i in robotList:
+			#Reseta a lista de tags secundarias
+			tagsSecundarias = list()
+			for j in secondaryTagsList:
+				#Verifica se uma tag 'j' pertence ao robo 'i'
+				if (abs(i[0] - j[0]) + abs(i[1] - j[1]) <= robotRadius):
+					#Se pertencer, adiciona ela na lista de tags secundarias
+					tagsSecundarias.extend(j)
+			
+			#Linka o robo com suas tags secundarias
+			robots.extend(tagsSecundarias)
+		
+		return robots
+		
 		
 	#TODO: Encontrar orientação dos robos
 	def findRobotOrientation(self, lastPosition, newPosition):
@@ -208,14 +247,21 @@ class Apolo:
 		
 		#Mostra a imagem (nao tem necessidade, so ta ai pra debug)
 		self.seeThroughMyEyes("Original",frame)
-		self.seeThroughMyEyes("Main",self.thresholdedImages[0])
-		self.seeThroughMyEyes("GREEN",self.thresholdedImages[3])
+		self.seeThroughMyEyes("Main",self.thresholdedImages[MAIN])
+		self.seeThroughMyEyes("GREEN",self.thresholdedImages[GREEN])
 		
 		#Procura os robos
-		robotList = self.findRobots(self.thresholdedImages[0],30)
+		robotList = self.findRobots(self.thresholdedImages[MAIN],30)
+		
+		secondaryTagsList = self.findSecondaryTags(self.thresholdedImages[GREEN],30)
+		
+		print (robotList)
+		print (secondaryTagsList)
+		
+		self.setRobots(robotList,secondaryTagsList,300)
 		
 		#Procura a bola
-		ball = self.findBall(self.thresholdedImages[1],30)
+		ball = self.findBall(self.thresholdedImages[BALL],30)
 		
 		#Procura os adversarios
 		robotAdvList = robotList
