@@ -2,6 +2,7 @@
 import cv2
 import numpy as np
 import sys
+import math
 sys.path.append("../")
 from vision import Camera
 
@@ -73,18 +74,17 @@ class Apolo:
 			
 			if (M['m00'] > areaMin):
 				line = cv2.fitLine(i,2,0,0.01,0.01)
-				
-				print ("X - vx = ", line[2] - line[0]*1.2)
-				print ("Y - vy = ", line[1] - line[3]*1.2)
+				orientation = self.findRobotOrientation(line)
+				print ("ROBOT ORIENTATION: ",orientation)
 				
 				cx = int(M['m10']/M['m00'])
 				cy = int(M['m01']/M['m00'])
-				robotPositionList.extend([(cx,cy)])
+				robotPositionList.extend([(cx,cy,orientation)])
 		
 			if (len(robotPositionList) == 3): break
 		
 		while (len(robotPositionList) < 3):
-			robotPositionList.extend([(-1,-1)])
+			robotPositionList.extend([(-1,-1,-1)])
 		
 		return robotPositionList
 	
@@ -164,12 +164,13 @@ class Apolo:
 		
 		
 	#TODO: Encontrar orientação dos robos
-	def findRobotOrientation(self, lastPosition, newPosition):
-	
-		x = newPosition[0] - lastPosition[0]
-		y = (newPosition[1] - lastPosition[1]) * -1
-				
-		return np.arctan2(x,y) * 180 / np.pi
+	def findRobotOrientation(self, line):
+		if (line[1] < 0.0001): radAngle = np.arccos(abs(line[0]))
+		else: radAngle = np.arcsin(abs(line[1]))
+		
+		print (radAngle)
+		
+		return radAngle
 	
 	#Não é necessario implementar, porém, seria uma melhoria
 	def findAdvOrientation(self,previousAdvPosition, currentAdvPosition):
@@ -232,7 +233,7 @@ class Apolo:
 	
 		#Pega o frame
 		#frame = self.getFrame()
-		frame = cv2.imread("Tags/cena.png")
+		frame = cv2.imread("Tags/30Graus.png")
 		
 		if frame is None:
 			print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -266,5 +267,7 @@ class Apolo:
 		#Procura os adversarios
 		robotAdvList = robotList
 		
+		cv2.imshow("frame",frame)
+		cv2.waitKey(0)
 		#Modela os dados para o formato que a Athena recebe e retorna
 		#return self.returnData(robotList,robotAdvList,(300,300))
