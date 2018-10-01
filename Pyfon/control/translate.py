@@ -74,6 +74,10 @@ class Translate:
         return [float(robot.vLeft), float(robot.vRight)]
 
     def speedControl(self, robot):
+        if robot.vLeft is None:
+            robot.vLeft = 0
+        if robot.vRight is None:
+            robot.vRight = 0
         return [float(robot.vLeft), float(robot.vRight)]
 
     @staticmethod

@@ -40,6 +40,8 @@ class Hermes():
 		self.sendMessages(messages)
 		self.clearMessages()
 
+		self.callback("hermes done")
+
 	def startBee(self, port, baud):
 		if self.isSerial(port):
 			self.xbee = self.serialCom.startBee(port, baud)

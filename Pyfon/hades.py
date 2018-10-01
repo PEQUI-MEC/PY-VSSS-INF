@@ -2,7 +2,8 @@
 import sys, time
 import cv2
 # from observer import Publisher, Subscriber
-from multiprocessing import pool
+import multiprocessing
+import threading
 
 from vision import Apolo
 from control import Zeus
@@ -70,7 +71,7 @@ class Hades(QMainWindow):
         self.zeus.setup(3)
 
         # setting up hermes
-        self.hermes = Hermes(self.srcXbee)
+        # self.hermes = Hermes(self.srcXbee)
         # invocar fly do hermes como finalização
         # persephane deusa do submundo
 
@@ -221,7 +222,7 @@ def main():
     hades.setup()
     hades.puppetLoop()
     
-    # hades.summonAfrodite()
+    hades.summonAfrodite()
 
     ##### Afrodite's event configuration #####
     # window.setActionLoadConfigsCallback(hades.afLoadConfig)
@@ -237,8 +238,13 @@ def main():
 
     # ##### \Afrodite's event configuration #####
 
-    # window.show()
-    # sys.exit(app.exec_())
+    window.show()
+    sys.exit(app.exec_())
 
 if __name__ == '__main__':
-    main()
+    # main()
+    t = threading.Thread(name='daemon', target=main)
+    t.setDaemon(True)
+    t.start()
+    t.join()
+    
