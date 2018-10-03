@@ -13,6 +13,9 @@ MAIN = 0
 BALL = 1
 ADV = 2
 GREEN = 3
+ROBOT_RADIUS = 200
+TAG_AMIN = 100
+BALL_AMIN = 30
 
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
 class Apolo:
@@ -73,6 +76,7 @@ class Apolo:
 			M = cv2.moments(i)
 			
 			if (M['m00'] > areaMin):
+				#Encontra o robo e a sua orientação utilizando o fitLine
 				line = cv2.fitLine(i,2,0,0.01,0.01)
 				orientation = self.findRobotOrientation(line)
 				print ("ROBOT ORIENTATION: ",orientation)
@@ -143,26 +147,28 @@ class Apolo:
 		
 		return advRobotPositionList
 		
+	def inSphere(self,robotPosition,secondaryTagPosition,robotRadius):
+		if (abs(robotPosition[0] - secondaryTagPosition[0]) + abs(robotPosition[1] - secondaryTagPosition[1]) <= robotRadius):
+			return True	
+		else: return False
 		
-	#TODO: Implementar essa função para definir qual robo é qual
-	def setRobots(self, robotList, secondaryTagsList, robotRadius):
-		robots = list()
+	#Linka as tags secundarias às suas respectivas tags Principais
+	def linkTags(self, robotList, secondaryTagsList, robotRadius):
+		linkedSecondaryTags = [None] * 3
+
+		robotID = 0
 		
 		for i in robotList:
-			#Reseta a lista de tags secundarias
-			tagsSecundarias = list()
+			auxTagList = list()
 			for j in secondaryTagsList:
-				#Verifica se uma tag 'j' pertence ao robo 'i'
-				if (abs(i[0] - j[0]) + abs(i[1] - j[1]) <= robotRadius):
-					#Se pertencer, adiciona ela na lista de tags secundarias
-					tagsSecundarias.extend(j)
-			
-			#Linka o robo com suas tags secundarias
-			robots.extend(tagsSecundarias)
-		
-		return robots
-		
-		
+				if (self.inSphere(i,j,robotRadius)):
+					auxTagList.extend(j)
+					
+			linkedSecondaryTags[robotID] = auxTagList
+			robotID += 1
+				
+		return linkedSecondaryTags
+
 	#TODO: Encontrar orientação dos robos
 	def findRobotOrientation(self, line):
 		if (line[1] < 0.0001): radAngle = np.arccos(abs(line[0]))
@@ -233,7 +239,7 @@ class Apolo:
 	
 		#Pega o frame
 		#frame = self.getFrame()
-		frame = cv2.imread("Tags/30Graus.png")
+		frame = cv2.imread("Tags/60Graus.png")
 		
 		if frame is None:
 			print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -252,17 +258,22 @@ class Apolo:
 		self.seeThroughMyEyes("GREEN",self.thresholdedImages[GREEN])
 		
 		#Procura os robos
-		robotList = self.findRobots(self.thresholdedImages[MAIN],30)
+		robotList = self.findRobots(self.thresholdedImages[MAIN],TAG_AMIN)
 		
-		secondaryTagsList = self.findSecondaryTags(self.thresholdedImages[GREEN],30)
+		#Procura as tags Secundarias
+		secondaryTagsList = self.findSecondaryTags(self.thresholdedImages[GREEN],TAG_AMIN)
 		
-		print (robotList)
-		print (secondaryTagsList)
+		#Organiza as tags secundarias para corresponderem à ordem das tags primarias
+		'''
+			Exemplo: Fazer exemplo
 		
-		self.setRobots(robotList,secondaryTagsList,300)
+		'''
+		linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
+		
+		print(linkedSecondaryTags)
 		
 		#Procura a bola
-		ball = self.findBall(self.thresholdedImages[BALL],30)
+		ball = self.findBall(self.thresholdedImages[BALL],BALL_AMIN)
 		
 		#Procura os adversarios
 		robotAdvList = robotList
@@ -270,4 +281,4 @@ class Apolo:
 		cv2.imshow("frame",frame)
 		cv2.waitKey(0)
 		#Modela os dados para o formato que a Athena recebe e retorna
-		#return self.returnData(robotList,robotAdvList,(300,300))
+		#return self.returnData(robotList,robotAdvList, ball)
