@@ -22,7 +22,6 @@ def saturate(value):
 
 
 class Dice:
-    # TODO(Luana) Defirnir um nome final para Translate e documentá-lo
 
     def __init__(self):
         self.velAcc = 0
@@ -43,8 +42,50 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self, warrior):
+        if self.velAcc < 0.3:
+            self.velAcc = 0.3
 
-        return [0.0, 0.0]
+        if warrior.vMax == 0:
+            warrior.vLeft = 0
+            warrior.vRight = 0
+            return [warrior.vLeft, warrior.Right]
+
+        theta = warrior.orientation
+
+        moveBackwards = bool(abs(warrior.targetOrientation - warrior.orientation) > pi/2)
+        if moveBackwards:
+            theta = roundAngle(warrior.orientation + pi)
+        if moveBackwards != self.previouslyBackwards:
+            self.velAcc = 0.3
+
+        self.previouslyBackwards = moveBackwards
+
+        thetaError = roundAngle(warrior.targetOrientation - theta)
+
+        if abs(thetaError) > self.maxThetaError:
+            # !TODO arrumar o decremento de velocidade
+            self.velAcc = self.velAcc - 0.2
+        else:
+            if self.velAcc < warrior.vMax:
+                # !TODO arrumar o incremento de velocidade
+                self.velAcc = self.velAcc + 0.1
+            else:
+                self.velAcc = warrior.vMax
+
+        if moveBackwards:
+            warrior.vLeft = -1 + sin(thetaError) + (-1 * tan(-1 * thetaError/2))
+            warrior.vLeft = saturate(warrior.vLeft)
+
+            warrior.vRight = -1 + sin(thetaError) + (-1 * tan(-1 * thetaError / 2))
+            warrior.vRight = saturate(warrior.vRight)
+        else:
+            warrior.vLeft = 1 + sin(thetaError) + tan(thetaError / 2)
+            warrior.vLeft = saturate(warrior.vLeft)
+
+            warrior.vRight = 1 + sin(thetaError) + tan(thetaError / 2)
+            warrior.vRight = saturate(warrior.vRight)
+
+        return [warrior.vLeft*self.velAcc, warrior.vRight*self.velAcc]
 
     def positionControl(self, warrior):
         # Stops after arriving at destination
@@ -81,6 +122,7 @@ class Dice:
         else:
             difference = warrior.vMax - self.velAcc
             if difference > 0.2:
+                # !TODO arrumar incremento de velocidade
                 self.velAcc = self.velAcc + 0.2
             elif difference < 0:
                 self.velAcc = warrior.vMax
@@ -104,7 +146,7 @@ class Dice:
             warrior.vRight = 1 + sin(thetaError) + tan(thetaError / 2)
             warrior.vRight = saturate(warrior.vRight)
 
-        return [warrior.vLeft, warrior.vRight]
+        return [warrior.vLeft*self.velAcc, warrior.vRight*self.velAcc]
 
     def orientationControl(self, warrior):
         theta = warrior.orientation
