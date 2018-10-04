@@ -1,5 +1,5 @@
 from math import atan2, pi
-from .unfield import UnivectorField
+from .navigation import UnivectorField
 
 
 class Eunomia:
