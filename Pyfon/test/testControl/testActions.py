@@ -1,4 +1,4 @@
-from control.actions import Actions
+from control.eunomia import Eunomia
 from control.warrior import Warrior
 
 from math import pi
@@ -7,7 +7,7 @@ import unittest
 
 class TestActions(unittest.TestCase):
 
-    actions = Actions()
+    actions = Eunomia()
     actions.setup()
     warrior = None
 

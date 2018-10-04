@@ -1,4 +1,4 @@
-from math import sqrt, pow, atan2, pi, fmod, fabs
+from math import sqrt, pow, atan2, pi, fmod, fabs, sin, tan
 
 
 def roundAngle(angle):
@@ -27,6 +27,7 @@ class Dice:
     def __init__(self):
         self.velAcc = 0
         self.previouslyBackwards = False
+        self.maxThetaError = 20.0
 
     def run(self, warrior):
 
@@ -48,7 +49,7 @@ class Dice:
     def positionControl(self, warrior):
         # Stops after arriving at destination
         positionError = sqrt(pow(warrior.position[0] - warrior.target[0], 2) +
-                                  pow(warrior.position[1] - warrior.target[1], 2))
+                             pow(warrior.position[1] - warrior.target[1], 2))
         if positionError < 1:
             warrior.vLeft = 0
             warrior.vRight = 0
@@ -59,7 +60,7 @@ class Dice:
 
         # targetTheta in direction of [target.x, target.y]
         targetTheta = atan2(warrior.target[1] - warrior.position[1],
-                                 warrior.target[0] - warrior.position[0])
+                            warrior.target[0] - warrior.position[0])
         theta = warrior.orientation
 
         # Activates backward movement if thetaError > PI/2
@@ -74,10 +75,36 @@ class Dice:
 
         thetaError = roundAngle(targetTheta - theta)
 
-        # To be continue...
-        # TODO(Luana) Terminar calculos. Levar em consideração theta_error?
+        if abs(thetaError) > self.maxThetaError:
+            if self.velAcc > warrior.vMax:
+                self.velAcc = warrior.vMax
+        else:
+            difference = warrior.vMax - self.velAcc
+            if difference > 0.2:
+                self.velAcc = self.velAcc + 0.2
+            elif difference < 0:
+                self.velAcc = warrior.vMax
 
-        return [0.0, 0.0]
+        limiar = atan2(1.0, positionError)
+        limiar = 30 if limiar > 30 else limiar
+
+        if abs(thetaError < limiar):
+            thetaError = 0
+
+        if moveBackwards:
+            warrior.vLeft = -1 + sin(thetaError) + (-1 * tan(-1 * thetaError/2))
+            warrior.vLeft = saturate(warrior.vLeft)
+
+            warrior.vRight = -1 + sin(thetaError) + (-1 * tan(-1 * thetaError / 2))
+            warrior.vRight = saturate(warrior.vRight)
+        else:
+            warrior.vLeft = 1 + sin(thetaError) + tan(thetaError / 2)
+            warrior.vLeft = saturate(warrior.vLeft)
+
+            warrior.vRight = 1 + sin(thetaError) + tan(thetaError / 2)
+            warrior.vRight = saturate(warrior.vRight)
+
+        return [warrior.vLeft, warrior.vRight]
 
     def orientationControl(self, warrior):
         theta = warrior.orientation

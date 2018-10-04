@@ -1,4 +1,4 @@
-from control.translate import Translate
+from control.dice import Dice
 from control.warrior import Warrior
 
 from math import pi
@@ -7,7 +7,7 @@ import unittest
 
 class TestTranslate(unittest.TestCase):
     warrior = Warrior()
-    translate = Translate()
+    translate = Dice()
 
     def testRun(self):
         self.warrior.cmdType = "SPEED"
