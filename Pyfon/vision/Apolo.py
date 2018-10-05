@@ -13,8 +13,8 @@ MAIN = 0
 BALL = 1
 ADV = 2
 GREEN = 3
-ROBOT_RADIUS = 200
-TAG_AMIN = 100
+ROBOT_RADIUS = 250
+TAG_AMIN = 400
 BALL_AMIN = 30
 
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
@@ -74,19 +74,17 @@ class Apolo:
 		
 		for i in contours:
 			M = cv2.moments(i)
-			
 			if (M['m00'] > areaMin):
 				#Encontra o robo e a sua orientação utilizando o fitLine
-				line = cv2.fitLine(i,2,0,0.01,0.01)
-				orientation = self.findRobotOrientation(line)
-				print ("ROBOT ORIENTATION: ",orientation)
-				
+				#line = cv2.fitLine(i,2,0,0.01,0.01)
+				#orientation = self.findRobotOrientation(line)
+				#print ("ROBOT ORIENTATION: ",orientation)
 				cx = int(M['m10']/M['m00'])
 				cy = int(M['m01']/M['m00'])
-				robotPositionList.extend([(cx,cy,orientation)])
+				robotPositionList.extend([(cx,cy)])
 		
 			if (len(robotPositionList) == 3): break
-		
+						
 		while (len(robotPositionList) < 3):
 			robotPositionList.extend([(-1,-1,-1)])
 		
@@ -99,13 +97,13 @@ class Apolo:
 		
 		for i in contours:
 			M = cv2.moments(i)
-			
+						
 			if (M['m00'] > areaMin):
 				cx = int(M['m10']/M['m00'])
 				cy = int(M['m01']/M['m00'])
 				secondaryTags.extend([(cx,cy)])
 		
-			if (len(secondaryTags) == 4): break
+			if (len(secondaryTags) == 6): break
 		
 		return secondaryTags
 		
@@ -155,7 +153,8 @@ class Apolo:
 	#Linka as tags secundarias às suas respectivas tags Principais
 	def linkTags(self, robotList, secondaryTagsList, robotRadius):
 		linkedSecondaryTags = [None] * 3
-
+		linkedMainTags = [None] * 3
+		
 		robotID = 0
 		
 		for i in robotList:
@@ -164,17 +163,32 @@ class Apolo:
 				if (self.inSphere(i,j,robotRadius)):
 					auxTagList.extend(j)
 					
+			
 			linkedSecondaryTags[robotID] = auxTagList
+			
 			robotID += 1
-				
-		return linkedSecondaryTags
+
+		#Coloca o robo 1 na posição 1, o robo 2 na posição 2 e o robo 3 na posição 3
+		for i in range(0,3,1):
+			menor = i
+			for j in range(i+1,3,1):
+				if (len(linkedSecondaryTags[i]) > len(linkedSecondaryTags[j])):
+					menor = j
+
+			tempSecondary = linkedSecondaryTags[i]
+			linkedSecondaryTags[i] = linkedSecondaryTags[menor]
+			linkedSecondaryTags[menor] = tempSecondary
+			
+			tempMain = robotList[i]
+			robotList[i] = robotList[menor]
+			robotList[menor] = tempMain
+			
+		return robotList, linkedSecondaryTags
 
 	#TODO: Encontrar orientação dos robos
 	def findRobotOrientation(self, line):
 		if (line[1] < 0.0001): radAngle = np.arccos(abs(line[0]))
 		else: radAngle = np.arcsin(abs(line[1]))
-		
-		print (radAngle)
 		
 		return radAngle
 	
@@ -239,7 +253,7 @@ class Apolo:
 	
 		#Pega o frame
 		#frame = self.getFrame()
-		frame = cv2.imread("Tags/60Graus.png")
+		frame = cv2.imread("Tags/newTag.jpeg")
 		
 		if frame is None:
 			print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -268,10 +282,13 @@ class Apolo:
 			Exemplo: Fazer exemplo
 		
 		'''
-		linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
 		
-		print(linkedSecondaryTags)
-		
+		'''
+			Coloca as tags primarias e secundarias do robo 1 na poição 1,
+			do robo 2 na posição 2 e do robo 3 na posição 3	
+		'''
+		robotList, linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
+			
 		#Procura a bola
 		ball = self.findBall(self.thresholdedImages[BALL],BALL_AMIN)
 		
