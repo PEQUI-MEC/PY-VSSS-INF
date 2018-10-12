@@ -202,16 +202,13 @@ class AvoidObstacle:
         self.pObs = np.copy(np.array(pObs))
         self.vObs = np.copy(np.array(vObs))
 
-    def getS(self):
-        return self.K0 * (self.vObs - self.vRobot)
-
     def getVirtualPos(self):
-        sNorm = np.linalg.norm(self.getS())
+        sNorm = np.linalg.norm(self.K0 * (self.vObs - self.vRobot))
         d = np.linalg.norm(self.pObs - self.pRobot)
         if d >= sNorm:
-            vPos = self.pObs + self.getS()
+            vPos = self.pObs + (self.K0 * (self.vObs - self.vRobot))
         else:
-            vPos = self.pObs + (d/sNorm)*self.getS()
+            vPos = self.pObs + (d/sNorm)*(self.K0 * (self.vObs - self.vRobot))
         return vPos
 
     def fi_auf(self, robotPos, vPos=None, theta=True):
@@ -219,13 +216,13 @@ class AvoidObstacle:
             vPos = self.getVirtualPos()
         else:
             vPos = vPos
-        vec = self.repField.fi_r(robotPos, origin=vPos, theta=theta)
-        return vec
+
+        return self.repField.fi_r(robotPos, origin=vPos, theta=theta)
 
 
 class UnivectorField:
     def __init__(self, attackGoal=RIGHT, rotation=True):
-        # Field constants
+        # Constants
         self.RADIUS = None
         self.KR = None
         self.K0 = None
@@ -233,14 +230,15 @@ class UnivectorField:
         self.LDELTA = None
 
         # Subfields
-        self.avdObsField = AvoidObstacle([None, None], [None, None], [None, None], [None, None], self.K0)
-        self.mv2GoalField = Move2Goal(self.KR, self.RADIUS, attackGoal=attackGoal, rotationSupport=rotation)
+        self.avoidField = AvoidObstacle([None, None], [None, None], [None, None], [None, None], self.K0)
+        self.moveField = Move2Goal(self.KR, self.RADIUS, attackGoal=attackGoal, rotationSupport=rotation)
 
+        #
         self.obstacles = None
         self.obstaclesSpeed = None
         self.targetPos = None
         self.robotPos = None
-        self.vRobot = None
+        self.robotSpeed = None
         self.orientation = None
 
     def updateConstants(self, RADIUS, KR, K0, DMIN, LDELTA):
@@ -249,17 +247,17 @@ class UnivectorField:
         self.K0 = K0
         self.DMIN = DMIN
         self.LDELTA = LDELTA
-        self.avdObsField.updateParam(self.K0)
-        self.mv2GoalField.updateParams(self.KR, self.RADIUS)
+        self.avoidField.updateParam(self.K0)
+        self.moveField.updateParams(self.KR, self.RADIUS)
 
     def updateRobot(self, robotPos, vRobot):
         self.robotPos = np.array(robotPos)
-        self.vRobot = np.array(vRobot)
-        self.avdObsField.updateRobot(self.robotPos, self.vRobot)
+        self.robotSpeed = np.array(vRobot)
+        self.avoidField.updateRobot(self.robotPos, self.robotSpeed)
 
     def updateTarget(self, targetPos):
         self.targetPos = np.array(targetPos)
-        self.mv2GoalField.updateOrigin(targetPos)
+        self.moveField.updateOrigin(targetPos)
 
     def updateObstacles(self, obstacles, obsSpeeds):
         self.obstacles = np.array(obstacles)
@@ -267,17 +265,17 @@ class UnivectorField:
 
     def updateOrientation(self, orientation):
         self.orientation = np.array(orientation)
-        self.mv2GoalField.updateOrientation(orientation)
+        self.moveField.updateOrientation(orientation)
 
-    def getVec(self, robotPos=None, vRobot=None, target=None, orientation=None):
+    def getVec(self, robotPos=None, robotSpeed=None, target=None, orientation=None):
         robotPos = np.array(robotPos)
-        vRobot = np.array(vRobot)
+        robotSpeed = np.array(robotSpeed)
         target = np.array(target)
         orientation = np.array(orientation)
 
         # Atualizar valores recebidos
-        if robotPos is not None and vRobot is not None:
-            self.updateRobot(robotPos, vRobot)
+        if robotPos is not None and robotSpeed is not None:
+            self.updateRobot(robotPos, robotSpeed)
         if target is not None:
             self.updateTarget(target)
         if orientation is not None:
@@ -290,8 +288,8 @@ class UnivectorField:
 
         if self.obstacles is not None:
             for i in range(self.obstacles.shape[0]):
-                self.avdObsField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
-                center = self.avdObsField.getVirtualPos()
+                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
+                center = self.avoidField.getVirtualPos()
                 centers.append(center)
 
             centers = np.asarray(centers)
@@ -300,16 +298,16 @@ class UnivectorField:
             closestCenter = centers[index]
             minDistance = distVect[index]
 
-            fi_auf = self.avdObsField.fi_auf(self.robotPos, vPos=closestCenter, theta=True)
+            fi_auf = self.avoidField.fi_auf(self.robotPos, vPos=closestCenter, theta=True)
 
         if minDistance <= self.DMIN:
             return fi_auf
         else:
-            fi_tuf = self.mv2GoalField.fi_tuf(self.robotPos)
-            print("320:  FiAuf " + str(fi_tuf))
+            fi_tuf = self.moveField.fi_tuf(self.robotPos)
+            print("307:  FiAuf " + str(fi_tuf))
 
             if self.obstacles is not None:
-                print("325:  Existe? ")
+                print("310:  Existe? ")
                 g = gaussian(minDistance - self.DMIN, self.LDELTA)
                 diff = wrap2pi(fi_auf - fi_tuf)
                 return wrap2pi(g*diff + fi_tuf)
