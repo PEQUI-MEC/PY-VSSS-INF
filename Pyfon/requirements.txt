@@ -22,5 +22,4 @@
 -r interface/req-interface.txt
 -r test/req-tests.txt
 -r vision/req-vision.txt
--r interface/req-interface.txt
 

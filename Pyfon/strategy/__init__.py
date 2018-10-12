@@ -1,1 +1,1 @@
-import athena
+from strategy.athena import Athena
