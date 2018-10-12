@@ -1,4 +1,16 @@
 class Message():
+	"""Message Constructor
+		
+		Construtor que cria uma mensagem, constituída do id do robô
+		e da mensagem a ser enviada
+		
+        Args:
+            robotId (int): Robot id
+            message (string): message to send
+
+        Returns:
+
+    """
 	def __init__(self, robotId, message):
 		self.robotId = robotId
 		self.message = message
