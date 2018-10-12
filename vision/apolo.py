@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 import cv2
 import numpy as np
-import sys
-
-sys.path.append("../")
-from vision import Camera
+from vision import camera
 
 #Constantes
 WIDTH = 640
@@ -20,7 +17,9 @@ BALL_AMIN = 30
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
 class Apolo:
     def __init__(self, callback):
-        self.ciclope = Camera.Ciclope()
+        self.callback = callback
+
+        self.ciclope = camera.Ciclope()
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
@@ -29,6 +28,8 @@ class Apolo:
         self.setHSVThresh(((120,250),(0,250),(0,250)), BALL)
         self.setHSVThresh(((120,250),(0,250),(0,250)), ADV)
         self.setHSVThresh(((69,70),(0,255),(0,255)), GREEN)
+
+        print("Apolo summoned")
 
     def getFrame(self):
         frame = None
@@ -298,4 +299,5 @@ class Apolo:
         cv2.imshow("frame",frame)
         cv2.waitKey(0)
         #Modela os dados para o formato que a Athena recebe e retorna
-        #return self.returnData(robotList,robotAdvList, ball)
+        positions = self.returnData(robotList,robotAdvList, ball)
+        self.callback(positions)

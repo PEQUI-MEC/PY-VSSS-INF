@@ -3,11 +3,17 @@ from communication.velocity import Velocity
 from communication.message import Message
 from communication.serialCommunication import SerialCommunication
 
-class Hermes():
+class Hermes:
 
-    def __init__(self, port, baud=115200):
+    def __init__(self, callback):
+        self.callback = callback
+
         self.serialCom = SerialCommunication()
         self.messages = []
+
+        print("Hermes summoned")
+
+    def setup(self, port, baud=115200):
         self.startBee(port, baud)
 
     '''
@@ -32,8 +38,9 @@ class Hermes():
                 right_wheel_velocity
             ],
         ]
-    ''' 
+    '''
 
+    # TODO Retornar lista de strings com as mensagens enviadas
     def fly(self, velocities):        
         """Main class method
             
@@ -46,9 +53,32 @@ class Hermes():
             Returns:
 
         """
-        self.createMessages(velocities)
+        robots = [
+            # robot 1
+            [
+                0,
+                velocities[0]['vLeft'],
+                velocities[0]['vRight']
+            ],
+            # robot 2
+            [
+                1,
+                velocities[1]['vLeft'],
+                velocities[1]['vRight']
+            ],
+            # robot 3
+            [
+                2,
+                velocities[2]['vLeft'],
+                velocities[2]['vRight']
+            ],
+        ]
+        messages = self.createMessages(robots)
+
         self.sendMessages()
         self.clearMessages()
+        self.callback(messages)
+        return messages
 
     def startBee(self, port, baud):
         """ Start xBee connection
@@ -93,9 +123,9 @@ class Hermes():
 
         """
         for message in self.messages:
-            self.sendMessage(message)
+            self.sendMessage(message.robotId, message.message)
     
-    def sendMessage(self, message):
+    def sendMessage(self, robotId, message):
         """ Send message
             
             Receives message, send to robot using serialCommunication
@@ -107,7 +137,7 @@ class Hermes():
             Returns:
 
         """
-        return self.serialCom.sendMessage(message.robotId, message.message)
+        return self.serialCom.sendMessage(robotId, message)
 
     def createMessages(self, velocities):    
         """ Create all messages
@@ -117,14 +147,17 @@ class Hermes():
             method sendMessage
 
             Args:
-                message (Message): Message object to be sent
+                velocities ([]): Message object to be sent
 
             Returns:
 
         """
+        messages = []
         for robot in velocities:
-            self.createMessage(robot[0], robot[1], robot[2])
+            messages.append(self.createMessage(robot[0], robot[1], robot[2]))
             #self.createMessage(robot.id, robot.left_wheel, robot.right_wheel)
+
+        return messages
 
     def createMessage(self, robotId, left_wheel, right_wheel):
         """ Create a message

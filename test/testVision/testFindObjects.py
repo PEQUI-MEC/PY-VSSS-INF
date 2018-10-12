@@ -3,7 +3,7 @@ import random
 import numpy as np
 import sys
 import cv2
-from vision import Apolo as Vision
+from vision import apolo as Vision
 
 apolo = Vision.Apolo()
 

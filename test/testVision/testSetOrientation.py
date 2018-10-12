@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import sys
-from vision import Apolo as Vision
+from vision import apolo as Vision
 
 apolo = Vision.Apolo()
 
