@@ -28,7 +28,7 @@ class Afrodite(QMainWindow):
         # COMMUNICATION BUTTONS
         self.getPushButtonControlSerialDeviceStart.clicked.connect(self.startSerialConnection)
         self.getPushButtonControlSerialSend.clicked.connect(self.sendWheelVelocities)
-
+        self.getPushButtonControlSerialSendCommand.clicked.connect(self.sendCommand)
 
 
         """ 
@@ -136,7 +136,11 @@ class Afrodite(QMainWindow):
         robotId = getControlSerialRobots()
         leftWheel = getControlSerialSpeedLeft()
         rightWheel = getControlSerialSpeedRight()
-        self.hades.eventSendMessage(robotId, leftWheel, rightWheel)
+        self.hades.eventCreateAndSendMessage(robotId, leftWheel, rightWheel)
+
+    def sendCommand(self):
+        message = getControlSerialSendCommand()
+        self.hades.eventSendMessage(message)
 
     """ CALLBACKS A SEREM REFATORADOS
 
@@ -499,7 +503,7 @@ class Afrodite(QMainWindow):
         pass
 
     def getControlSerialSendCommand(self):
-        pass
+        return controlSerialSendCommand.currentText()
 
     def getPushButtonControlSerialSendCommand(self):
         pass
