@@ -1,4 +1,5 @@
 class Robot():
+    def __init__(self):
 	"""Robot Constructor
 		
 		Creates a vector with robot's addresses.
@@ -8,7 +9,6 @@ class Robot():
         Returns:
 
     """
-	def __init__(self):
 		self.robots = []
 		self.robots.append("\x56\x0D")
 		self.robots.append("\x6B\x0D")

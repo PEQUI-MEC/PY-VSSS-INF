@@ -5,6 +5,7 @@ from serial import Serial
 
 class SerialCommunication():
 
+    def __init__(self):
     """ Serial Communication constructor
         
         Initializes xbee and serial as none and receives robots vector from Robot class.
@@ -14,11 +15,11 @@ class SerialCommunication():
         Returns:
 
     """
-    def __init__(self):
         self.xbee = None
         self.serial = None
         self.robots = Robot().robots
 
+    def startBee(self, port, baud):
     """ Start xbee connection
         
         Start xbee connect through serial.
@@ -30,10 +31,10 @@ class SerialCommunication():
         Returns:
 
     """
-    def startBee(self, port, baud):
         self.serial = Serial(port, baud)
         self.xbee = XBee(self.serial)
-
+    
+    def killBee(self):
     """ Close xbee connection
         
         Kill xbee, closing the serial connection
@@ -43,9 +44,9 @@ class SerialCommunication():
         Returns:
 
     """
-    def killBee(self):
         self.serial.close()
 
+    def sendMessage(self, robotId, message):
     """ Send message
         
         Send a message, using xbee method xbee.send(), getting from robots vector the robot address
@@ -58,9 +59,9 @@ class SerialCommunication():
         Returns:
 
     """
-    def sendMessage(self, robotId, message):
         self.xbee.send("tx", frame = 'A',command='MY',dest_addr=self.robots[robotId-1],data=message)
-
+    
+    def newRobot(letter, address):
     """ Create a robot
 
         Args:
@@ -70,5 +71,4 @@ class SerialCommunication():
         Returns:
 
     """
-    def newRobot(letter, address):
         return True
