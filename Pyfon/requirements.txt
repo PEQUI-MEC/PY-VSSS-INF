@@ -19,6 +19,7 @@
 -r communication/req-communication.txt
 -r control/req-control.txt
 -r strategy/req-strategy.txt
+-r interface/req-interface.txt
 -r test/req-tests.txt
 -r vision/req-vision.txt
 -r interface/req-interface.txt

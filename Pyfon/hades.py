@@ -11,7 +11,7 @@ class Hades:
         self.srcCamera = srcCam
         self.srcXbee = srcBee
         self.cap = self.summonCapture()
-        # self.comm = self.summonCommunication()
+        #self.comm = self.summonCommunication()
 
     '''
     Set link between camera and software
