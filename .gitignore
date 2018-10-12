@@ -1,5 +1,6 @@
 *.pyc
 .idea/
+.DS_Store
 
 ## File-based project format:
 *.iws
@@ -33,3 +34,4 @@ modules.xml
 ### PYC ###
 
 *.pyc
+*__pycache__*
