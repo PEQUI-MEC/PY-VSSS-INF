@@ -1,0 +1,20 @@
+#
+####### req-communication.txt #######
+#
+# This file handles all required libraries to run this project
+#
+###### How to use: ######
+# If required lib needs specific version, use:
+# > lib==version
+# 
+# If required lib needs minimum or maximum version, use:
+# > lib>version     or
+# > lib>=version    or  
+# > lib<version     or
+# > lib<=version
+#
+# To include another requirement.txt file inside a requirement.txt file, use:
+# -r other-requirement-file.txt
+
+digi-xbee>=1.1.1
+xbee>=2.3.2

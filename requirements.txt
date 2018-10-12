@@ -1,0 +1,26 @@
+#
+####### example-requirements.txt #######
+#
+# This file handles all required libraries to run this project
+#
+###### How to use: ######
+# If required lib needs specific version, use:
+# > lib==version
+# 
+# If required lib needs minimum or maximum version, use:
+# > lib>version     or
+# > lib>=version    or  
+# > lib<version     or
+# > lib<=version
+#
+# To include another requirement.txt file inside a requirement.txt file, use:
+# -r other-requirement-file.txt
+
+PyQt5
+glob2>=0.6
+
+-r communication/req-communication.txt
+-r control/req-control.txt
+-r strategy/req-strategy.txt
+-r test/req-tests.txt
+-r vision/req-vision.txt
