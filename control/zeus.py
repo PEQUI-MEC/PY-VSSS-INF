@@ -6,6 +6,8 @@ from control.warrior import Warrior
 class Zeus:
 
     def __init__(self, callback):
+        self.callback = callback
+
         self.warriors = []
         self.nWarriors = 0
         self.maxVelocity = 1.0
@@ -54,7 +56,9 @@ class Zeus:
         """
 
         self.warriors = self.getWarriors(strategia)
-        return self.generateOutput(self.controlRoutine())
+        velocities = self.generateOutput(self.controlRoutine())
+        self.callback(velocities)
+        return velocities
 
     def getWarriors(self, strategia):
         """Transforma uma lista de dicionários em uma lista de Warrior()
