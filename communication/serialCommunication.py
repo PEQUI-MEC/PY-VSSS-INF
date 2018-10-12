@@ -6,69 +6,69 @@ from serial import Serial
 class SerialCommunication():
 
     def __init__(self):
-    """ Serial Communication constructor
-        
-        Initializes xbee and serial as none and receives robots vector from Robot class.
+        """ Serial Communication constructor
+            
+            Initializes xbee and serial as none and receives robots vector from Robot class.
 
-        Args:
+            Args:
 
-        Returns:
+            Returns:
 
-    """
+        """
         self.xbee = None
         self.serial = None
         self.robots = Robot().robots
 
     def startBee(self, port, baud):
-    """ Start xbee connection
-        
-        Start xbee connect through serial.
+        """ Start xbee connection
+            
+            Start xbee connect through serial.
 
-        Args:
-            port (string): Serial port
-            baud (int): transmission speed
+            Args:
+                port (string): Serial port
+                baud (int): transmission speed
 
-        Returns:
+            Returns:
 
-    """
+        """
         self.serial = Serial(port, baud)
         self.xbee = XBee(self.serial)
     
     def killBee(self):
-    """ Close xbee connection
-        
-        Kill xbee, closing the serial connection
+        """ Close xbee connection
+            
+            Kill xbee, closing the serial connection
 
-        Args:
+            Args:
 
-        Returns:
+            Returns:
 
-    """
+        """
         self.serial.close()
 
     def sendMessage(self, robotId, message):
-    """ Send message
-        
-        Send a message, using xbee method xbee.send(), getting from robots vector the robot address
-        and message received as parameter
+        """ Send message
+            
+            Send a message, using xbee method xbee.send(), getting from robots vector the robot address
+            and message received as parameter
 
-        Args:
-            robotId (int): Robot Id
-            message (string): string to send
+            Args:
+                robotId (int): Robot Id
+                message (string): string to send
 
-        Returns:
+            Returns:
 
-    """
+        """
         self.xbee.send("tx", frame = 'A',command='MY',dest_addr=self.robots[robotId-1],data=message)
     
     def newRobot(letter, address):
-    """ Create a robot
+        """ Create a robot
 
-        Args:
-            letter (string): Robot identification
-            address (string): Robot address
+            Args:
+                letter (string): Robot identification
+                address (string): Robot address
 
-        Returns:
+            Returns:
 
-    """
+        """
         return True
