@@ -35,6 +35,13 @@ class Afrodite(QMainWindow):
         self.pushButtonRobotRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
         self.pushButtonRobotRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
+        
+        # COMMUNICATION BUTTONS
+        self.getPushButtonControlSerialDeviceStart.clicked.connect(self.startSerialConnection)
+        self.getPushButtonControlSerialSend.clicked.connect(self.sendWheelVelocities)
+        self.getPushButtonControlSerialSendCommand.clicked.connect(self.sendCommand)
+
+
         """ 
         CÓDIGO A SER REFATORADO
 
@@ -123,6 +130,22 @@ class Afrodite(QMainWindow):
     # PLAY BUTTON
     def clickedPlay(self):
         self.hades.eventStart()
+
+    # COMMUNICATION
+
+    def startSerialConnection(self):
+        port = getComboBoxControlSerialDevice()
+        self.hades.eventStartXbee(port)
+
+    def sendWheelVelocities(self):
+        robotId = getControlSerialRobots()
+        leftWheel = getControlSerialSpeedLeft()
+        rightWheel = getControlSerialSpeedRight()
+        self.hades.eventCreateAndSendMessage(robotId, leftWheel, rightWheel)
+
+    def sendCommand(self):
+        message = getControlSerialSendCommand()
+        self.hades.eventSendMessage(message)
 
     # STRATEGY
 
@@ -483,16 +506,16 @@ class Afrodite(QMainWindow):
         pass
 
     def getControlSerialSpeedLeft(self):
-        pass
+        return self.controlSerialSpeedLeft.currentText()
 
     def getControlSerialSpeedRight(self):
-        pass
+        return self.controlSerialSpeedRight.currentText()
 
     def getPushButtonControlSerialSend(self):
         pass
 
     def getControlSerialSendCommand(self):
-        pass
+        return controlSerialSendCommand.currentText()
 
     def getPushButtonControlSerialSendCommand(self):
         pass
