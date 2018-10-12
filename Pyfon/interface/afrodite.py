@@ -209,6 +209,11 @@ class Afrodite(QMainWindow):
 	def getPushButtonCaptureDeviceInformationStart():
 		return self.getComboBoxCaptureDeviceInformation()
 
+	def setlabelCaptureDeviceInformation(self, device, driver, card, bus):
+		self.labelCaptureDeviceInformationDevice.setText(device)
+		self.labelCaptureDeviceInformationDriver.setText(driver)
+		self.labelCaptureDeviceInformationCard.setText(card)
+		self.labelCaptureDeviceInformationBus.setText(bus)
 	def setPushButtonCaptureDeviceInformartionCallback(self, callback):
 		self.startCaptureCallback = callback
 
@@ -287,6 +292,9 @@ class Afrodite(QMainWindow):
 		pass
 
 	def getCaptureWarpOffsetLeft(self):
+		pass
+
+	def getCaptureWarpOffsetRight(self):
 		pass
 
 	def getCaptureWarpOffsetRight(self):
@@ -420,11 +428,11 @@ class Afrodite(QMainWindow):
 		Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
 		Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
 
-		return Hmin, Smin, Vmin, Erode, Blur, Hmax, Smax, Vmax, Dilate, Amin
+		return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin
 
 	###Ball
 	def getVisionHSVCalibrationBall(self):
-		pHmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
+		Hmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
 		Smin = self.spinBoxVisionHSVCalibrationBallnSmin.value()
 		Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
 		Erode = self.spinBoxVisionHSVCalibrationBallErode.value()
@@ -435,11 +443,11 @@ class Afrodite(QMainWindow):
 		Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
 		Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
 
-		return Hmin, Smin, Vmin, Erode, Blur, Hmax, Smax, Vmax, Dilate, Amin
+		return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin
 
 	###Opponent
 	def getVisionHSVCalibrationOpponent(self):
-		pHmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
+		Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
 		Smin = self.spinBoxVisionHSVCalibrationOpponentnSmin.value()
 		Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
 		Erode = self.spinBoxVisionHSVCalibrationOpponentErode.value()
@@ -450,11 +458,11 @@ class Afrodite(QMainWindow):
 		Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
 		Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-		return Hmin, Smin, Vmin, Erode, Blur, Hmax, Smax, Vmax, Dilate, Amin
+		return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin
 		
 	###Green
 	def getVisionHSVCalibrationGreen(self):
-		pHmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
+		Hmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
 		Smin = self.spinBoxVisionHSVCalibrationGreennSmin.value()
 		Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
 		Erode = self.spinBoxVisionHSVCalibrationGreenErode.value()
@@ -465,7 +473,7 @@ class Afrodite(QMainWindow):
 		Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
 		Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
-		return Hmin, Smin, Vmin, Erode, Blur, Hmax, Smax, Vmax, Dilate, Amin
+		return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin
 	
 	#Control
 	##Serial

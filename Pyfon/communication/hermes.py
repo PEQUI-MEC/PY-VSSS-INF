@@ -1,16 +1,13 @@
 import sys
-# from velocityInfo import VelocityInfo
-# from messageInfo import MessageInfo
-from .serialCommunication import SerialCommunication
+from velocity import Velocity
+from message import Message
+from serialCommunication import SerialCommunication
 
 class Hermes():
 
 	def __init__(self, port, baud=115200):
 		self.serialCom = SerialCommunication()
-		self.startBee(port, baud)
 		self.messages = []
-
-		print("Hermes summoned.")
 	'''
 		#velocities should be received like:
 		[	
@@ -24,7 +21,6 @@ class Hermes():
 			[
 				"id": robot_id
 			 	"left_wheel": left_wheel_velocity
-			 	"right_wheel": right wheel_velocity
 			],
 			#robot 3
 			[
@@ -34,13 +30,13 @@ class Hermes():
 			],
 		]
 	'''
+		self.startBee(port, baud)
+			 	"right_wheel": right wheel_velocity
 
 	def fly(self, velocities):
 		self.createMessages(velocities)
-		self.sendMessages(messages)
+		self.sendMessages()
 		self.clearMessages()
-
-		self.callback("hermes done")
 
 	def startBee(self, port, baud):
 		if self.isSerial(port):
@@ -53,25 +49,24 @@ class Hermes():
 		self.serialCom.killBee()
 
 	def sendMessages(self):
-		for message in messages:
-			self.serialCom.sendMessage(message)
-
-		#rodar um for para enviar todas as mensagens, chamando o método sendMessage(self, robotId, message)
+		for message in self.messages:
+			self.sendMessage(message)
 	
 	def sendMessage(self, message):
-		return self.serialCom.sendMessage(message)
+		return self.serialCom.sendMessage(message.robotId, message.message)
 
 	def createMessages(self, velocities):
 		for robot in velocities:
-			createMessage(robot.id, robot.left_wheel, robot.right_wheel)
+			self.createMessage(robot[0], robot[1], robot[2])
+			#self.createMessage(robot.id, robot.left_wheel, robot.right_wheel)
 
 	def createMessage(self, robotId, left_wheel, right_wheel):
-		message = left_wheel + ";" + right_wheel
-		messages.append(Message(robotId, message))
+		message = str(left_wheel) + ";" + str(right_wheel)
+		self.messages.append(Message(robotId, message))
 		return message
 
-	def clearMessages():
-		messages = []
+	def clearMessages(self):
+		self.messages = []
 
 	def isSerial(self, port):
 		if sys.platform.startswith('linux'):

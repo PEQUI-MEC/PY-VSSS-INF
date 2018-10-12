@@ -1,8 +1,8 @@
 # coding=utf-8
 from scipy.spatial import distance
 
-from .endless import Endless
-from .warrior import Warrior
+from endless import Endless
+from warrior import Warrior
 
 #só pra testes
 import pprint
@@ -26,7 +26,7 @@ class Athena:
     tWaitPass = 6
     tKick = 7
 
-    def __init__(self, callback):
+    def __init__(self):
         self.endless = None
         self.warriors = []
         self.theirWarriors = []
@@ -40,8 +40,6 @@ class Athena:
         self.gk = None
 
         self.globalState = "push"
-
-        self.callback = callback
 
         print("Athena summoned.")
 
@@ -96,8 +94,7 @@ class Athena:
         self.analyzeAndSetRoles()
         self.selectTactics()
         self.selectActions()
-        # return self.generateResponse(self.warriors)
-        self.callback(self.generateResponse(self.warriors))
+        return self.generateResponse(self.warriors)
 
     # TODO fazer mais verificações
     def parsePositions(self, positions):

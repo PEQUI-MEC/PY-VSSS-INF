@@ -1,8 +1,7 @@
 import time
-from .robot import Robot
+from robot import Robot
 from xbee import XBee
 from serial import Serial
-from digi.xbee.devices import XBeeDevice
 
 class SerialCommunication():
 
@@ -14,7 +13,6 @@ class SerialCommunication():
 	def startBee(self, port, baud):
 		self.serial = Serial(port, baud)
 		self.xbee = XBee(self.serial)
-		#return self.xbee
 
 	def killBee(self):
 		self.serial.close()
@@ -22,13 +20,11 @@ class SerialCommunication():
 	def sendMessage(self, robotId, message):
 		start_time = time.time()
 
-		self.xbee.send("tx", frame = 'A',command='MY',dest_addr=self.robots[robotId],data=message)
+		self.xbee.send("tx", frame = 'A',command='MY',dest_addr=self.robots[robotId-1],data=message)
 		
 		elapsed_time = time.time() - start_time
 
-		print(str(robotId) + " " + str(elapsed_time))
-
-		#return True
+		#print(str(robotId) + " " + str(elapsed_time))
 
 	def newRobot(letter, address):
 		return True
