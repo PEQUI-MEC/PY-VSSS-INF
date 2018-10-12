@@ -8,7 +8,8 @@ class Hermes():
 	def __init__(self, port, baud=115200):
 		self.serialCom = SerialCommunication()
 		self.messages = []
-		'''
+		self.startBee(port, baud)
+	'''
 		#velocities should be received like:
 		[	
 			#robot 1
@@ -30,10 +31,8 @@ class Hermes():
 			 	right_wheel_velocity
 			],
 		]
-		'''
-		self.startBee(port, baud)
-		#"right_wheel": right wheel_velocity
-
+		'''	
+		
 	""" Main class method
 		
 		Receive velocities and manipulate, invoking create,
