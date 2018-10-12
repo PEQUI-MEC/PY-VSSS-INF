@@ -16,14 +16,14 @@ class Afrodite(QMainWindow):
     def __init__(self):
         super(Afrodite, self).__init__()
 
-        self.hades = hades.Hades()
+        self.hades = hades.Hades(self)
 
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'interface/mainwindow.ui')
         loadUi(filename, self)
 
-        # pushButtonVideoViewStart
-        self.pushButtonVideoViewStart.clicked.connect(self.getPushButtonStartClicked)
+        # PLAY BUTTON
+        self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
         """ 
         CÓDIGO A SER REFATORADO
 
@@ -108,14 +108,16 @@ class Afrodite(QMainWindow):
         self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(self.getStrategyTransitionsEnableTransistions)
         """
 
+        print("Afrodite summoned")
+
     """
     def mouseReleaseEvent(self, QMouseEvent):
            print('(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')')           
     """
 
-    # StartButton
-    def getPushButtonStartClicked(self):
-        self.hades.startEvent()
+    # PLAY BUTTON
+    def clickedPlay(self):
+        self.hades.eventStart()
 
     """ CALLBACKS A SEREM REFATORADOS
 

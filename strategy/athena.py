@@ -40,7 +40,7 @@ class Athena:
 
         self.globalState = "push"
 
-        print("Athena summoned.")
+        print("Athena summoned")
 
     def setup(self, numRobots, width, height, defaultVel):
         self.endless = Endless(width, height)
