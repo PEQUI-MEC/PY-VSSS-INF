@@ -67,6 +67,14 @@ class Hades:
             print("Started.")
             self.apolo.run()
 
+    def eventStartXbee(self, port):
+        self.hermes.setup(port)
+
+    def eventSendMessage(self, robotId, leftWheel, rightWheel):
+        message = self.hermes.createMessage(robotId, leftWheel, rightWheel)
+        self.hermes.sendMessage(robotId, message)
+        self.hermes.clearMessages()
+
     # Captura
     # TODO implementar callbacks de eventos das funções da captura
 

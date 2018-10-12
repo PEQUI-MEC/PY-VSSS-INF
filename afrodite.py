@@ -24,6 +24,13 @@ class Afrodite(QMainWindow):
 
         # PLAY BUTTON
         self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
+        
+        # COMMUNICATION BUTTONS
+        self.getPushButtonControlSerialDeviceStart.clicked.connect(self.startSerialConnection)
+        self.getPushButtonControlSerialSend.clicked.connect(self.sendWheelVelocities)
+
+
+
         """ 
         CÓDIGO A SER REFATORADO
 
@@ -118,6 +125,18 @@ class Afrodite(QMainWindow):
     # PLAY BUTTON
     def clickedPlay(self):
         self.hades.eventStart()
+
+    # COMMUNICATION
+
+    def startSerialConnection(self):
+        port = getComboBoxControlSerialDevice()
+        self.hades.eventStartXbee(port)
+
+    def sendWheelVelocities(self):
+        robotId = getControlSerialRobots()
+        leftWheel = getControlSerialSpeedLeft()
+        rightWheel = getControlSerialSpeedRight()
+        self.hades.eventSendMessage(robotId, leftWheel, rightWheel)
 
     """ CALLBACKS A SEREM REFATORADOS
 
@@ -471,10 +490,10 @@ class Afrodite(QMainWindow):
         pass
 
     def getControlSerialSpeedLeft(self):
-        pass
+        return self.controlSerialSpeedLeft.currentText()
 
     def getControlSerialSpeedRight(self):
-        pass
+        return self.controlSerialSpeedRight.currentText()
 
     def getPushButtonControlSerialSend(self):
         pass
