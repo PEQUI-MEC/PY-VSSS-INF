@@ -5,26 +5,26 @@ from serial import Serial
 
 class SerialCommunication():
 
-	def __init__(self):
-		self.xbee = None
-		self.serial = None
-		self.robots = Robot().robots
+    def __init__(self):
+        self.xbee = None
+        self.serial = None
+        self.robots = Robot().robots
 
-	def startBee(self, port, baud):
-		self.serial = Serial(port, baud)
-		self.xbee = XBee(self.serial)
+    def startBee(self, port, baud):
+        self.serial = Serial(port, baud)
+        self.xbee = XBee(self.serial)
 
-	def killBee(self):
-		self.serial.close()
+    def killBee(self):
+        self.serial.close()
 
-	def sendMessage(self, robotId, message):
-		start_time = time.time()
+    def sendMessage(self, robotId, message):
+        start_time = time.time()
 
-		self.xbee.send("tx", frame = 'A',command='MY',dest_addr=self.robots[robotId-1],data=message)
-		
-		elapsed_time = time.time() - start_time
+        self.xbee.send("tx", frame = 'A',command='MY',dest_addr=self.robots[robotId-1],data=message)
 
-		#print(str(robotId) + " " + str(elapsed_time))
+        elapsed_time = time.time() - start_time
 
-	def newRobot(letter, address):
-		return True
+        #print(str(robotId) + " " + str(elapsed_time))
+
+    def newRobot(letter, address):
+        return True

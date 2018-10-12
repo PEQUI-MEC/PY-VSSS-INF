@@ -64,6 +64,9 @@ class Hades:
         # invocar fly do hermes como finalização
         # persephane deusa do submundo
 
+    def startEvent(self):
+        print("Started.")
+
     def apoloReady(self, positions):
         print("\t\tApolo ready")
         print(positions)
@@ -81,23 +84,23 @@ class Hades:
     def zeusReady(self, velocities):
         robots = [
             #robot 1
-			[
-				0,
-				velocities[0]['vLeft'],
-				velocities[0]['vRight']
-	    	],
-	    	#robot 2
-			[
-				1,
-				velocities[1]['vLeft'],
-				velocities[1]['vRight']
-			],
-			#robot 3
-			[
-				2,
-				velocities[2]['vLeft'],
-				velocities[2]['vRight']
-			],
+            [
+                0,
+                velocities[0]['vLeft'],
+                velocities[0]['vRight']
+            ],
+            #robot 2
+            [
+                1,
+                velocities[1]['vLeft'],
+                velocities[1]['vRight']
+            ],
+            #robot 3
+            [
+                2,
+                velocities[2]['vLeft'],
+                velocities[2]['vRight']
+            ],
         ]
         print("choque do trovão")
         # self.hermes.fly(robots)
