@@ -123,9 +123,9 @@ class Hermes:
 
         """
         for message in self.messages:
-            self.sendMessage(message)
+            self.sendMessage(message.robotId, message.message)
     
-    def sendMessage(self, message):
+    def sendMessage(self, robotId, message):
         """ Send message
             
             Receives message, send to robot using serialCommunication
@@ -137,7 +137,7 @@ class Hermes:
             Returns:
 
         """
-        return self.serialCom.sendMessage(message.robotId, message.message)
+        return self.serialCom.sendMessage(robotId, message)
 
     def createMessages(self, velocities):    
         """ Create all messages
