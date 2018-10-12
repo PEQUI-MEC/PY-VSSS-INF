@@ -15,6 +15,8 @@ class Hades:
         self.zeus = Zeus(self.zeusReady)
         self.hermes = Hermes(self.hermesReady)
 
+        self.play = False
+
         print("Hades summoned")
 
     def setup(self):
@@ -50,16 +52,20 @@ class Hades:
         print("choque do trovão")
         self.hermes.fly(velocities)
 
-    # TODO Hermes: retornar lista de mensagens enviadas
-    def hermesReady(self, allDoneFlag):
+    def hermesReady(self, messages):
         # faltando retorno do hermes de finalização
         # atualiza o FPS da interface
-        pass
+        if self.play:
+            self.apolo.run()
 
     # EVENTOS
 
     def eventStart(self):
-        print("Started.")
+        self.play = not self.play
+
+        if self.play:
+            print("Started.")
+            self.apolo.run()
 
     # Captura
     # TODO implementar callbacks de eventos das funções da captura
