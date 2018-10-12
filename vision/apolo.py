@@ -17,6 +17,8 @@ BALL_AMIN = 30
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
 class Apolo:
     def __init__(self, callback):
+        self.callback = callback
+
         self.ciclope = camera.Ciclope()
 
         self.threshList = [None] * 4
@@ -297,4 +299,5 @@ class Apolo:
         cv2.imshow("frame",frame)
         cv2.waitKey(0)
         #Modela os dados para o formato que a Athena recebe e retorna
-        #return self.returnData(robotList,robotAdvList, ball)
+        positions = self.returnData(robotList,robotAdvList, ball)
+        self.callback(positions)

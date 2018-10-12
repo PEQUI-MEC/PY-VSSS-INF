@@ -6,6 +6,8 @@ from communication.serialCommunication import SerialCommunication
 class Hermes:
 
     def __init__(self, callback):
+        self.callback = callback
+
         self.serialCom = SerialCommunication()
         self.messages = []
 
@@ -36,8 +38,9 @@ class Hermes:
                 right_wheel_velocity
             ],
         ]
-    ''' 
+    '''
 
+    # TODO Retornar lista de strings com as mensagens enviadas
     def fly(self, velocities):        
         """Main class method
             
@@ -70,9 +73,12 @@ class Hermes:
                 velocities[2]['vRight']
             ],
         ]
-        self.createMessages(robots)
+        messages = self.createMessages(robots)
+
         self.sendMessages()
         self.clearMessages()
+        self.callback(messages)
+        return messages
 
     def startBee(self, port, baud):
         """ Start xBee connection
@@ -141,14 +147,17 @@ class Hermes:
             method sendMessage
 
             Args:
-                message (Message): Message object to be sent
+                velocities ([]): Message object to be sent
 
             Returns:
 
         """
+        messages = []
         for robot in velocities:
-            self.createMessage(robot[0], robot[1], robot[2])
+            messages.append(self.createMessage(robot[0], robot[1], robot[2]))
             #self.createMessage(robot.id, robot.left_wheel, robot.right_wheel)
+
+        return messages
 
     def createMessage(self, robotId, left_wheel, right_wheel):
         """ Create a message
