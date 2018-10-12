@@ -3,7 +3,7 @@ from hades import Hades
 from communication.hermes import Hermes
 from control import Zeus
 from afrodite import Afrodite
-from vision import Apolo
+from vision import apolo
 
 
 class HadesTest(unittest.TestCase):
@@ -46,7 +46,7 @@ class HadesTest(unittest.TestCase):
         del self.afrodite
 
         #apolo instance
-        self.apolo = Apolo()
+        self.apolo = apolo()
         self.assertIsNotNone(self.apolo)
         del self.apolo
 

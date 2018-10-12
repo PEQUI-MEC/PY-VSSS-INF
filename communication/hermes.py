@@ -3,11 +3,15 @@ from communication.velocity import Velocity
 from communication.message import Message
 from communication.serialCommunication import SerialCommunication
 
-class Hermes():
+class Hermes:
 
-    def __init__(self, port, baud=115200):
+    def __init__(self, callback):
         self.serialCom = SerialCommunication()
         self.messages = []
+
+        print("Hermes summoned")
+
+    def setup(self, port, baud=115200):
         self.startBee(port, baud)
 
     '''
@@ -46,7 +50,27 @@ class Hermes():
             Returns:
 
         """
-        self.createMessages(velocities)
+        robots = [
+            # robot 1
+            [
+                0,
+                velocities[0]['vLeft'],
+                velocities[0]['vRight']
+            ],
+            # robot 2
+            [
+                1,
+                velocities[1]['vLeft'],
+                velocities[1]['vRight']
+            ],
+            # robot 3
+            [
+                2,
+                velocities[2]['vLeft'],
+                velocities[2]['vRight']
+            ],
+        ]
+        self.createMessages(robots)
         self.sendMessages()
         self.clearMessages()
 
