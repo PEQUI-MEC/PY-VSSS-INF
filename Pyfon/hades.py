@@ -7,17 +7,17 @@ import threading
 
 from vision import Apolo
 from control import Zeus
-from strategy.athena import Athena
+from strategy import Athena
 from communication.hermes import Hermes
 
 from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog
-sys.path.append("interface/")
-from afrodite import Afrodite
+from interface.afrodite import Afrodite
 
 # This decorator returns time elapsed on execution of a method
-##### HOW TO USE #####
+# HOW TO USE
 # Before the method, place @timeToFinish
 # In the terminal will be printed the time elapsed on method execution
+
 
 def timeToFinish(method):
     def timed(*args, **kwargs):
@@ -29,10 +29,11 @@ def timeToFinish(method):
         return result
     return timed
 
+
 class Hades(QMainWindow):
     def __init__(self, srcCam=None, srcBee=None):
 
-        ### setting things up
+        # setting things up
 
         # sources
         self.srcCamera = srcCam
@@ -62,7 +63,7 @@ class Hades(QMainWindow):
         # setting up apolo
         self.apolo = Apolo.Apolo(self.apoloReady)
 
-        #setting up athena
+        # setting up athena
         self.athena = Athena(self.athenaReady)
         self.athena.setup(3, 300, 300, 1.0)
 

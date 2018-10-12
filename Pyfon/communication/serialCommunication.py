@@ -1,5 +1,5 @@
 import time
-from robot import Robot
+from communication.robot import Robot
 from xbee import XBee
 from serial import Serial
 

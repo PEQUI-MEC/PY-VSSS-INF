@@ -1,14 +1,14 @@
 import sys
-from velocity import Velocity
-from message import Message
-from serialCommunication import SerialCommunication
+from communication.velocity import Velocity
+from communication.message import Message
+from communication.serialCommunication import SerialCommunication
 
 class Hermes():
 
 	def __init__(self, port, baud=115200):
 		self.serialCom = SerialCommunication()
 		self.messages = []
-	'''
+		'''
 		#velocities should be received like:
 		[	
 			#robot 1
@@ -29,9 +29,9 @@ class Hermes():
 			 	"right_wheel": right_wheel_velocity
 			],
 		]
-	'''
+		'''
 		self.startBee(port, baud)
-			 	"right_wheel": right wheel_velocity
+		#"right_wheel": right wheel_velocity
 
 	def fly(self, velocities):
 		self.createMessages(velocities)

@@ -1,12 +1,11 @@
-        self.translate = None
-from .eunomia import Eunomia
-from .dice import Dice
-from .warrior import Warrior
+from control.eunomia import Eunomia
+from control.dice import Dice
+from control.warrior import Warrior
 
 
 class Zeus:
 
-    def __init__(self):
+    def __init__(self, callback):
         self.warriors = []
         self.nWarriors = 0
         self.maxVelocity = 1.0

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidge
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
-import icons_rc
+import interface.icons_rc
 import serial, glob
 
 class Afrodite(QMainWindow):
