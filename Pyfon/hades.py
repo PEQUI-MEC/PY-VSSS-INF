@@ -1,22 +1,20 @@
-import numpy as np
 import cv2
 # from digi.xbee.devices import
 
-'''
-Manager of all modules.
-'''
+
 class Hades:
+    """
+    Manager of all modules.
+    """
 
     def __init__(self, srcCam, srcBee):
         self.srcCamera = srcCam
         self.srcXbee = srcBee
         self.cap = self.summonCapture()
-        #self.comm = self.summonCommunication()
+        # self.comm = self.summonCommunication()
 
-    '''
-    Set link between camera and software
-    '''
     def summonCapture(self):
+        """Set link between camera and software"""
         try:
             cap = cv2.VideoCapture(self.srcCamera)
         except cv2.error:
@@ -24,10 +22,8 @@ class Hades:
         else:
             return cap
 
-    '''
-    Unlink camera and software
-    '''
     def killCapture(self):
+        """Unlink camera and software"""
         try:
             self.cap.release()
             cv2.destroyAllWindows()
@@ -37,10 +33,8 @@ class Hades:
         else:
             return None
 
-    '''
-    Cleanup capture flags and set again
-    '''
     def refreshCapture(self):
+        """Cleanup capture flags and set again"""
         self.killCapture()
         self.summonCapture()
         return True
