@@ -24,6 +24,17 @@ class Afrodite(QMainWindow):
 
         # PLAY BUTTON
         self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
+
+        # STRATEGY
+
+        # transitions
+        self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(
+            self.toggleTransitions)
+
+        # roles
+        self.pushButtonRobotRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
+        self.pushButtonRobotRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
+
         
         # COMMUNICATION BUTTONS
         self.getPushButtonControlSerialDeviceStart.clicked.connect(self.startSerialConnection)
@@ -64,10 +75,7 @@ class Afrodite(QMainWindow):
         ##Serial
         self.updateComboBoxControlSerialDevice()
 
-        #Robot
-        ##RobotFunctions
-        self.pushButtonRobotRobotFunctionsEdit.clicked.connect(self.getPushButtonRobotRobotFunctionsEdit)
-        self.pushButtonRobotRobotFunctionsDone.clicked.connect(self.getPushButtonRobotRobotFunctionsDone)
+        
 
         ##Speed
         self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
@@ -110,9 +118,6 @@ class Afrodite(QMainWindow):
         self.pushButtonStrategyFormationDelete.clicked.connect(self.getPushButtonStrategyFormationDelete)
         self.pushButtonStrategyFormationCreate.clicked.connect(self.getPushButtonStrategyFormationCreate)
         self.pushButtonStrategyFormationSave.clicked.connect(self.getPushButtonStrategyFormationSave)
-
-        ##Transitions
-        self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(self.getStrategyTransitionsEnableTransistions)
         """
 
         print("Afrodite summoned")
@@ -141,6 +146,31 @@ class Afrodite(QMainWindow):
     def sendCommand(self):
         message = getControlSerialSendCommand()
         self.hades.eventSendMessage(message)
+
+    # STRATEGY
+
+    # transitions
+    def toggleTransitions(self):
+        self.hades.eventToggleTransitions(self.checkBoxStrategyTransitionsEnableTransistions.isTristate())
+
+    # role
+    def clickEditRoles(self):
+        self.pushButtonRobotRobotFunctionsEdit.setEnabled(False)
+        self.pushButtonRobotRobotFunctionsDone.setEnabled(True)
+        self.comboBoxRobotRobotFunctionsRobot1.setEnabled(True)
+        self.comboBoxRobotRobotFunctionsRobot2.setEnabled(True)
+        self.comboBoxRobotRobotFunctionsRobot3.setEnabled(True)
+
+    def clickDoneRoles(self):
+        self.pushButtonRobotRobotFunctionsEdit.setEnabled(True)
+        self.pushButtonRobotRobotFunctionsDone.setEnabled(False)
+        self.comboBoxRobotRobotFunctionsRobot1.setEnabled(False)
+        self.comboBoxRobotRobotFunctionsRobot2.setEnabled(False)
+        self.comboBoxRobotRobotFunctionsRobot3.setEnabled(False)
+
+        self.hades.eventSelectRoles([self.comboBoxRobotRobotFunctionsRobot1.currentText(),
+                                     self.comboBoxRobotRobotFunctionsRobot2.currentText(),
+                                     self.comboBoxRobotRobotFunctionsRobot3.currentText()])
 
     """ CALLBACKS A SEREM REFATORADOS
 
@@ -288,24 +318,6 @@ class Afrodite(QMainWindow):
 
     def getCaptureWarpOffsetRight(self):
         pass
-
-    # Robot
-    # RobotFunctions
-    def getPushButtonRobotRobotFunctionsEdit(self):
-        self.pushButtonRobotRobotFunctionsEdit.setEnabled(False)
-        self.pushButtonRobotRobotFunctionsDone.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot1.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot2.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot3.setEnabled(True)
-
-    def getPushButtonRobotRobotFunctionsDone(self):
-        self.pushButtonRobotRobotFunctionsEdit.setEnabled(True)
-        self.pushButtonRobotRobotFunctionsDone.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot1.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot2.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot3.setEnabled(False)
-
-        return self.comboBoxRobotRobotFunctionsRobot1.currentText(), self.comboBoxRobotRobotFunctionsRobot2.currentText(), self.comboBoxRobotRobotFunctionsRobot3.currentText()
 
     # Speed
     def getPushButtonRobotSpeedEdit(self):
@@ -579,10 +591,6 @@ class Afrodite(QMainWindow):
 
     def getPushButtonStrategyFormationSave(self):
         pass
-
-    # Transitions
-    def getStrategyTransitionsEnableTransistions(self):
-        return self.checkBoxStrategyTransitionsEnableTransistions.isTristate()
 
     # TestParameters
     def getStrategyTestParameters(self):

@@ -1,8 +1,6 @@
 class Warrior:
 
-
-    def __init__(self, defaultVel = 0.8, name = "pericles"):
-        self.name = name
+    def __init__(self, defaultVel=0.8):
         self.defaultVel = defaultVel
 
         self.position = (0, 0)
@@ -12,6 +10,9 @@ class Warrior:
 
         self.command = {}
 
-    def setup(self, position, orientation = 0):
+    def setup(self, position, orientation=0):
         self.position = position
         self.orientation = orientation
+
+    def setDefaultVel(self, defaultVel):
+        self.defaultVel = defaultVel

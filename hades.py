@@ -95,6 +95,11 @@ class Hades:
 
     # Strategy
     # TODO implementar callbacks de eventos das funções da stratégia
+    def eventToggleTransitions(self, state):
+        self.athena.setTransitionsState(state)
+
+    def eventSelectRoles(self, roles):
+        self.athena.setRoles(roles)
 
 
 def timeToFinish(method):
