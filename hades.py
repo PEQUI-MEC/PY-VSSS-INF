@@ -89,6 +89,14 @@ class Hades:
 
     # Control
     # TODO implementar callbacks de eventos das funções do controle
+    def eventUpdateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
+        self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
+
+    def enablePIDTest(self):
+        print("PID test enabled")
+
+    def disablePIDTest(self):
+        print("PID test disabled")
 
     # Communication
     # TODO implementar callbacks de eventos das funções da comunicação

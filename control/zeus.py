@@ -11,9 +11,17 @@ class Zeus:
         self.warriors = []
         self.nWarriors = 0
         self.maxVelocity = 1.0
+        self.attackSpeed = None
+        self.defenseSpeed = None
+        self.goalkeeperSpeed = None
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
+
+    def updateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
+        self.attackSpeed = attackSpeed
+        self.defenseSpeed = defenseSpeed
+        self.goalkeeperSpeed = goalkeeperSpeed
 
     def setup(self, nWarriors, width=100):
         """Zeus first movements

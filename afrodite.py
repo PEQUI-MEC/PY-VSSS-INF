@@ -35,12 +35,20 @@ class Afrodite(QMainWindow):
         self.pushButtonRobotRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
         self.pushButtonRobotRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
+        # CONTROL BUTTONS
+
+        # speeds
+        self.updateRobotSpeeds()
+        self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
+        self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
+        # PIDTest
+        self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
         
         # COMMUNICATION BUTTONS
+
         self.getPushButtonControlSerialDeviceStart.clicked.connect(self.startSerialConnection)
         self.getPushButtonControlSerialSend.clicked.connect(self.sendWheelVelocities)
         self.getPushButtonControlSerialSendCommand.clicked.connect(self.sendCommand)
-
 
         """ 
         CÓDIGO A SER REFATORADO
@@ -131,22 +139,6 @@ class Afrodite(QMainWindow):
     def clickedPlay(self):
         self.hades.eventStart()
 
-    # COMMUNICATION
-
-    def startSerialConnection(self):
-        port = getComboBoxControlSerialDevice()
-        self.hades.eventStartXbee(port)
-
-    def sendWheelVelocities(self):
-        robotId = getControlSerialRobots()
-        leftWheel = getControlSerialSpeedLeft()
-        rightWheel = getControlSerialSpeedRight()
-        self.hades.eventCreateAndSendMessage(robotId, leftWheel, rightWheel)
-
-    def sendCommand(self):
-        message = getControlSerialSendCommand()
-        self.hades.eventSendMessage(message)
-
     # STRATEGY
 
     # transitions
@@ -171,6 +163,77 @@ class Afrodite(QMainWindow):
         self.hades.eventSelectRoles([self.comboBoxRobotRobotFunctionsRobot1.currentText(),
                                      self.comboBoxRobotRobotFunctionsRobot2.currentText(),
                                      self.comboBoxRobotRobotFunctionsRobot3.currentText()])
+
+    # CONTROL
+
+    # speeds
+    def getPushButtonRobotSpeedEdit(self):
+        self.pushButtonRobotSpeedEdit.setEnabled(False)
+        self.pushButtonRobotSpeedDone.setEnabled(True)
+        self.spinBoxRobotSpeedAttack.setEnabled(True)
+        self.horizontalSliderRobotSpeedAttack.setEnabled(True)
+        self.spinBoxRobotSpeedDefense.setEnabled(True)
+        self.horizontalSliderRobotSpeedDefense.setEnabled(True)
+        self.spinBoxRobotSpeedGoalkeeper.setEnabled(True)
+        self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(True)
+
+    def getPushButtonRobotSpeedDone(self):
+        self.pushButtonRobotSpeedEdit.setEnabled(True)
+        self.pushButtonRobotSpeedDone.setEnabled(False)
+        self.spinBoxRobotSpeedAttack.setEnabled(False)
+        self.horizontalSliderRobotSpeedAttack.setEnabled(False)
+        self.spinBoxRobotSpeedDefense.setEnabled(False)
+        self.horizontalSliderRobotSpeedDefense.setEnabled(False)
+        self.spinBoxRobotSpeedGoalkeeper.setEnabled(False)
+        self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(False)
+        self.updateRobotSpeeds()
+
+        return self.spinBoxRobotSpeedAttack.value(), self.spinBoxRobotSpeedDefense.value(), self.spinBoxRobotSpeedGoalkeeper.value()
+
+    def setRobotSpeedAttackCurrent(self, speed):
+        self.progressBarRobotSpeedAttack.setValue(speed)
+
+    def setRobotSpeedDefenseCurrent(self, speed):
+        self.progressBarRobotSpeedDefense.setValue(speed)
+
+    def setRobotSpeedGoalkeeperCurrent(self, speed):
+        self.progressBarRobotSpeedGoalkeeper.setValue(speed)
+
+    def setRobotSpeeds(self, speedAtack, speedDefense, speedGoalKeeper):
+        self.setRobotSpeedAttackCurrent(speedAtack)
+        self.setRobotSpeedDefenseCurrent(speedDefense)
+        self.setRobotSpeedGoalkeeperCurrent(speedGoalKeeper)
+
+    def updateRobotSpeeds(self):
+        self.hades.eventUpdateSpeeds(self.spinBoxRobotSpeedAttack.value(), self.spinBoxRobotSpeedDefense.value(),
+                                     self.spinBoxRobotSpeedGoalkeeper.value())
+
+    # PIDTest
+    def getPushButtonControlRobotFunctionsPIDTest(self):
+        if self.pushButtonControlRobotFunctionsPIDTest.palette().button().color().name() == '#efefef':
+            self.pushButtonControlRobotFunctionsPIDTest.setStyleSheet('background-color:#ff0000')
+            self.hades.enablePIDTest()
+
+        elif self.pushButtonControlRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
+            self.pushButtonControlRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
+            self.hades.disablePIDTest()
+
+    # COMMUNICATION
+
+    def startSerialConnection(self):
+        port = self.comboBoxControlSerialDevice.currentText()
+        self.hades.eventStartXbee(port)
+
+    def sendWheelVelocities(self):
+        # TODO robotId = getControlSerialRobots()
+        robotId = None
+        leftWheel = self.controlSerialSpeedLeft.currentText()
+        rightWheel = self.controlSerialSpeedRight.currentText()
+        self.hades.eventCreateAndSendMessage(robotId, leftWheel, rightWheel)
+
+    def sendCommand(self):
+        message = self.controlSerialSendCommand.currentText()
+        self.hades.eventSendMessage(message)
 
     """ CALLBACKS A SEREM REFATORADOS
 
@@ -319,43 +382,6 @@ class Afrodite(QMainWindow):
     def getCaptureWarpOffsetRight(self):
         pass
 
-    # Speed
-    def getPushButtonRobotSpeedEdit(self):
-        self.pushButtonRobotSpeedEdit.setEnabled(False)
-        self.pushButtonRobotSpeedDone.setEnabled(True)
-        self.spinBoxRobotSpeedAttack.setEnabled(True)
-        self.horizontalSliderRobotSpeedAttack.setEnabled(True)
-        self.spinBoxRobotSpeedDefense.setEnabled(True)
-        self.horizontalSliderRobotSpeedDefense.setEnabled(True)
-        self.spinBoxRobotSpeedGoalkeeper.setEnabled(True)
-        self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(True)
-
-    def getPushButtonRobotSpeedDone(self):
-        self.pushButtonRobotSpeedEdit.setEnabled(True)
-        self.pushButtonRobotSpeedDone.setEnabled(False)
-        self.spinBoxRobotSpeedAttack.setEnabled(False)
-        self.horizontalSliderRobotSpeedAttack.setEnabled(False)
-        self.spinBoxRobotSpeedDefense.setEnabled(False)
-        self.horizontalSliderRobotSpeedDefense.setEnabled(False)
-        self.spinBoxRobotSpeedGoalkeeper.setEnabled(False)
-        self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(False)
-
-        return self.spinBoxRobotSpeedAttack.value(), self.spinBoxRobotSpeedDefense.value(), self.spinBoxRobotSpeedGoalkeeper.value()
-
-    def setRobotSpeedAttackCurrent(self, speed):
-        self.progressBarRobotSpeedAttack.setValue(speed)
-
-    def setRobotSpeedDefenseCurrent(self, speed):
-        self.progressBarRobotSpeedDefense.setValue(speed)
-
-    def setRobotSpeedGoalkeeperCurrent(self, speed):
-        self.progressBarRobotSpeedGoalkeeper.setValue(speed)
-
-    def setRobotSpeeds(self, speedAtack, speedDefense, speedGoalKeeper):
-        self.setRobotSpeedAttackCurrent(self.speedAtack)
-        self.setRobotSpeedDefenseCurrent(self.speedDefense)
-        self.setRobotSpeedGoalkeeperCurrent(self.speedGoalKeeper)
-
     # ID
     def getPushButtonRobotIDEdit(self):
         self.pushButtonRobotIDEdit.setEnabled(False)
@@ -493,29 +519,14 @@ class Afrodite(QMainWindow):
         for port in ports:
             self.comboBoxControlSerialDevice.addItem(port)
 
-    def getComboBoxControlSerialDevice(self):
-        return self.comboBoxControlSerialDevice.currentText()
-
     def getPushButtonControlSerialDeviceStart(self):
         device = self.comboBoxControlSerialDevice.currentText()
 
     def getPushButtonControlSerialDeviceRefresh(self):
         self.updateComboBoxControlSerialDevice()
 
-    def getControlSerialRobots(self):
-        pass
-
-    def getControlSerialSpeedLeft(self):
-        return self.controlSerialSpeedLeft.currentText()
-
-    def getControlSerialSpeedRight(self):
-        return self.controlSerialSpeedRight.currentText()
-
     def getPushButtonControlSerialSend(self):
         pass
-
-    def getControlSerialSendCommand(self):
-        return controlSerialSendCommand.currentText()
 
     def getPushButtonControlSerialSendCommand(self):
         pass
@@ -562,10 +573,6 @@ class Afrodite(QMainWindow):
         self.setControlRobotStatusRobotD(statusD)
         self.setControlRobotStatusRobotF(statusF)
         self.setControlRobotStatusRobotG(statusG)
-
-    # RobotFunctions
-    def getPushButtonControlRobotFunctionsPIDTest(self):
-        return True
 
     # Strategy
     # Formation
