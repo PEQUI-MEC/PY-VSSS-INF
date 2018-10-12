@@ -19,7 +19,7 @@ BALL_AMIN = 30
 
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
 class Apolo:
-	def __init__(self):
+	def __init__(self, callback):
 		self.ciclope = Camera.Ciclope()
 		
 		self.threshList = [None] * 4

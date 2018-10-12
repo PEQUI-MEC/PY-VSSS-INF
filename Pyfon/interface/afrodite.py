@@ -4,13 +4,34 @@ from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidge
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
-import icons_rc
+import interface.icons_rc
 import serial, glob
 
 class Afrodite(QMainWindow):
 	"""docstring for Afrodite """
 	def __init__(self):
 		super(Afrodite , self).__init__()
+
+		###### callbacks ######
+
+		##MenuBar
+        #MenuBarArquivo
+		self.loadConfigCallback = None
+		self.saveConfigCallback = None
+
+        ##StartButton
+		self.startButtonCallback = None
+
+        ##Capture
+		self.startCaptureCallback = None
+
+		##Serial
+		self.startSerialCallback = None
+
+        ##Robot
+		self.startWarpCallback = None
+
+		###### \callbacks ######
 
 		dirname = os.path.dirname(__file__)
 		filename = os.path.join(dirname, 'mainwindow.ui')
@@ -32,6 +53,7 @@ class Afrodite(QMainWindow):
 		self.checkBoxVideoViewDisableDrawing.clicked.connect(self.getStateCheckBoxVideoViewDisableDrawing)
 
 		#pushButtonVideoViewStart
+		########################## RADUKEN
 		self.pushButtonVideoViewStart.clicked.connect(self.getPushButtonVideoViewStartCLicked)
 
 		#Capture
@@ -109,9 +131,17 @@ class Afrodite(QMainWindow):
 	#MenuBarArquivo
 	def actionLoadConfigsTriggered(self):
 		fname = QFileDialog.getOpenFileName(self, 'Open file', '/',"Json files (*.json)")
+		self.loadConfigCallback()
+
+	def setActionLoadConfigsCallback(self, callback):
+		self.loadConfigCallback = callback
 
 	def actionSaveConfigsTriggered(self):
-		pass
+		## falta implementar o save
+		self.saveConfigCallback()
+	
+	def setActionSaveConfigsCallback(self, callback):
+		self.saveConfigCallback = callback
 
 	def actionSaveasConfigTriggered(self):
 		QFileDialog.getSaveFileNames(self, 'Save as file', '/',"Json files (*.json)")
@@ -151,8 +181,10 @@ class Afrodite(QMainWindow):
 
 	#StartButton
 	def getPushButtonVideoViewStartCLicked(self):
-		print("clicked")
-		return True
+		self.startButtonCallback()
+		
+	def setPushButtonStartCallback(self, callback):
+		self.startButtonCallback = callback
 
 	#Capture
 	##DeviceInformation
@@ -162,7 +194,7 @@ class Afrodite(QMainWindow):
 		elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
 			ports = glob.glob('/dev/video[0-9]*')
 		elif sys.platform.startswith('darwin'):
-			ports = glob.glob('/dev/.*')
+			ports = glob.glob('/dev/*')
 		else:
 			raise EnvironmentError('Unsuported plaftorm')
 
@@ -176,6 +208,14 @@ class Afrodite(QMainWindow):
 
 	def getPushButtonCaptureDeviceInformationStart():
 		return self.getComboBoxCaptureDeviceInformation()
+
+	def setlabelCaptureDeviceInformation(self, device, driver, card, bus):
+		self.labelCaptureDeviceInformationDevice.setText(device)
+		self.labelCaptureDeviceInformationDriver.setText(driver)
+		self.labelCaptureDeviceInformationCard.setText(card)
+		self.labelCaptureDeviceInformationBus.setText(bus)
+	def setPushButtonCaptureDeviceInformartionCallback(self, callback):
+		self.startCaptureCallback = callback
 
 	def setlabelCaptureDeviceInformation(self, device, driver, card, bus):
 		self.labelCaptureDeviceInformationDevice.setText(device)
@@ -240,7 +280,10 @@ class Afrodite(QMainWindow):
 	#ToDo
 	###Warp
 	def getPushButtonCaptureWarpWarp(self):
-		pass
+		self.startWarpCallback()
+
+	def setStartWarpCallback(self, callback):
+		self.startWarpCallback = callback
 
 	def getPushButtonCaptureWarpReset(self):
 		pass
@@ -249,6 +292,9 @@ class Afrodite(QMainWindow):
 		pass
 
 	def getCaptureWarpOffsetLeft(self):
+		pass
+
+	def getCaptureWarpOffsetRight(self):
 		pass
 
 	def getCaptureWarpOffsetRight(self):
@@ -450,7 +496,11 @@ class Afrodite(QMainWindow):
 		return self.comboBoxControlSerialDevice.currentText()
 	
 	def getPushButtonControlSerialDeviceStart(self):
-		return True
+		device = self.comboBoxControlSerialDevice.currentText()
+		self.startSerialCallback(device)
+	
+	def setPushButtonControlSerialDeviceCallback(self, callback):
+		self.startSerialCallback = callback
 
 	def getPushButtonControlSerialDeviceRefresh(self):
 		self.updateComboBoxControlSerialDevice()

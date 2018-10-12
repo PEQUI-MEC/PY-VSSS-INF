@@ -1,10 +1,9 @@
 # coding=utf-8
 from scipy.spatial import distance
+from strategy.endless import Endless
+from strategy.warrior import Warrior
 
-from endless import Endless
-from warrior import Warrior
-
-#só pra testes
+# só pra testes
 import pprint
 
 
@@ -26,7 +25,7 @@ class Athena:
     tWaitPass = 6
     tKick = 7
 
-    def __init__(self):
+    def __init__(self, callback):
         self.endless = None
         self.warriors = []
         self.theirWarriors = []

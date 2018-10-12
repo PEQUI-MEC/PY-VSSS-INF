@@ -16,5 +16,5 @@
 # To include another requirement.txt file inside a requirement.txt file, use:
 # -r other-requirement-file.txt
 
-PyQt5>=5.11.2 
+PyQt>=5.11.2
 glob2>=0.6
