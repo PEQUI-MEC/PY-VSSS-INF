@@ -3,7 +3,6 @@ from .navigation import UnivectorField
 
 
 class Eunomia:
-    # TODO(Luana) Definir um nome final para Actions e documentá-lo
 
     def __init__(self):
         self.uvf = UnivectorField()
@@ -26,7 +25,8 @@ class Eunomia:
 
         elif warrior.action[0] == "lookAt":
             warrior.cmdType = "ORIENTATION"
-            warrior.targetOrientation = self.lookAt(warrior.action[1], warrior.target,  warrior.position, warrior.targetOrientation)
+            warrior.targetOrientation = self.lookAt(warrior.action[1], warrior.target,  warrior.position,
+                                                    warrior.targetOrientation)
             return warrior
 
         elif warrior.action[0] == "goTo":
@@ -130,8 +130,8 @@ class Eunomia:
             print("\nwarrior ", list(warrior.position))
             print("Target ", list(warrior.target))
 
-            uvf = self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target), warrior.targetOrientation)
-            # uvf =
+            uvf = self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target),
+                                  warrior.targetOrientation)
             print("UVF " + str(uvf))
         else:
             # TODO(Luana) Fazer verificação se é possível realizar o trajeto com o tempo requisitado
