@@ -52,7 +52,7 @@ class Dice:
 
         theta = warrior.orientation
 
-        moveBackwards = bool(abs(warrior.targetOrientation - warrior.orientation) > pi/2)
+        moveBackwards = bool(abs(warrior.transAngle - warrior.orientation) > pi/2)
         if moveBackwards:
             theta = roundAngle(warrior.orientation + pi)
         if moveBackwards != self.previouslyBackwards:
@@ -60,7 +60,7 @@ class Dice:
 
         self.previouslyBackwards = moveBackwards
 
-        thetaError = roundAngle(warrior.targetOrientation - theta)
+        thetaError = roundAngle(warrior.transAngle - theta)
 
         if abs(thetaError) > self.maxThetaError:
             # !TODO arrumar o decremento de velocidade

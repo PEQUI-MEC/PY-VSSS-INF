@@ -4,24 +4,37 @@ from control.warrior import Warrior
 
 
 class Zeus:
+    """
+
+    Attributes:
+        callback (def):
+        warriors (list):
+        nWarriors (int):
+        robotsSpeeds (list):
+        actions:
+        translate:
+    """
 
     def __init__(self, callback):
-        self.callback = callback
+        """
 
+        Args:
+            callback:
+        """
+
+        self.callback = callback
         self.warriors = []
         self.nWarriors = 0
-        self.maxVelocity = 1.0
-        self.attackSpeed = None
-        self.defenseSpeed = None
-        self.goalkeeperSpeed = None
+        self.robotsSpeed = None
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
 
-    def updateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
-        self.attackSpeed = attackSpeed
-        self.defenseSpeed = defenseSpeed
-        self.goalkeeperSpeed = goalkeeperSpeed
+    def updateSpeeds(self, robotA, robotB, robotC):
+        self.robotsSpeed = []
+        self.robotsSpeed.append(robotA)
+        self.robotsSpeed.append(robotB)
+        self.robotsSpeed.append(robotC)
 
     def setup(self, nWarriors, width=100):
         """Zeus first movements
@@ -110,6 +123,8 @@ class Zeus:
         Returns:
             list: Lista de object Warrior()
 
+        Raises:
+            ValueError:
         """
 
         # TODO(Luana) Testar paralelização com um(1) processo para cada robô.
@@ -148,7 +163,7 @@ class Zeus:
                 if "velocity" in info:
                     warriors[x].vMax = info["velocity"]
                 else:
-                    warriors[x].vMax = self.maxVelocity
+                    warriors[x].vMax = self.robotsSpeed[x]
 
                 if "before" in info:
                     warriors[x].before = float(info["before"])

@@ -8,11 +8,9 @@ class Eunomia:
         self.uvf = UnivectorField()
 
     def setup(self, width=100):
-        radius = 0.2*width/1.70
-
-        # Espiral radius, m2g kr, ao k0, distance dmin, gaussian delta
-        # self.uvf.updateConstants(radius, 0.7, 0.1, 0.05, 0.15)
-        self.uvf.updateConstants(4.0, 4.9, 0.12, 5.0, 4.5)
+        # radius = 0.2*width/1.70
+        # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
+        self.uvf.updateConstants(6.0, 5.9, 0.12, 5.0, 4.5)
 
     def run(self, warrior):
         if warrior.action[0] == "stop":
@@ -33,13 +31,18 @@ class Eunomia:
             warrior.cmdType = "VECTOR"
             return self.goTo(warrior)
 
-    '''
-    - {
+    def stop(self, warrior):
+        """
+        - {
         "command": stop,
         "data": {}
     }
-    '''
-    def stop(self, warrior):
+        Args:
+            warrior:
+
+        Returns:
+
+        """
         if warrior.before == 0:
             warrior.vMax = 0
             warrior.vLeft = 0
@@ -53,14 +56,19 @@ class Eunomia:
 
         return warrior
 
-    '''
-    - {
+    def spin(self, warrior):
+        """
+          - {
         "command": "spin",
         "data": { "velocity": X m/s, "direction": "clockwise" | "counter"
         }
     }
-    '''
-    def spin(self, warrior):
+        Args:
+            warrior:
+
+        Returns:
+
+        """
         if warrior.action[1] == "clockwise":
             warrior.vLeft = warrior.vMax
             warrior.vRight = -warrior.vMax
@@ -70,8 +78,9 @@ class Eunomia:
 
         return warrior
 
-    '''
-    - {
+    def lookAt(self, where, target, position, orientation=None):
+        """
+        - {
         "command": "lookAt",
         "data": {
             "pose": {
@@ -81,8 +90,15 @@ class Eunomia:
             "target": θ radianos | (x, y)
         }
     }
-    '''
-    def lookAt(self, where, target, position, orientation=None):
+        Args:
+            where:
+            target:
+            position:
+            orientation:
+
+        Returns:
+
+        """
         if where is "orientation":
             return orientation
 
@@ -94,8 +110,9 @@ class Eunomia:
         else:
             raise ValueError("Invalid data.")
 
-    '''
-    - {
+    def goTo(self, warrior):
+        """
+        - {
         "command": "goTo",
         "data": {
             "obstacles": [(x, y)] # opcional - se passado, desviar de tais obstaclos
@@ -105,13 +122,22 @@ class Eunomia:
             "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
         }
     }
-    '''
-    def goTo(self, warrior):
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
         # Se o targetOrientation passado for um ponto, calcular o targetOrientation usando o lookAt
         if type(warrior.targetOrientation) is tuple:
+            self.uvf.updateOrientation(warrior.targetOrientation)
             target = warrior.targetOrientation
             del warrior.targetOrientation
             warrior.targetOrientation = self.lookAt("target", target, warrior.position)
+        # else:
+            # TODO(Luana) Tratar se passado apenas uma orientação.
+            # O uvf utiliza um ponto x,y para construir o plano de orientação final da espiral hiberbólica.
 
         # Verificar se existe obstáculos para se desviar
         if warrior.obstacles is not None:
@@ -123,16 +149,15 @@ class Eunomia:
         #   time = warrior.before
 
         if time is None:
-            # TODO(Luana) Sem aceleração ou eu quem controlo como será feito a aceleração?
-
             warrior.vRight = warrior.vMax
             warrior.vLeft = warrior.vMax
-            print("\nwarrior ", list(warrior.position))
-            print("Target ", list(warrior.target))
 
-            uvf = self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target),
-                                  warrior.targetOrientation)
-            print("UVF " + str(uvf))
+            # print("\nwarrior ", list(warrior.position))
+            # print("Target ", list(warrior.target))
+
+            warrior.transAngle = self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight],
+                                                 list(warrior.target), warrior.targetOrientation)
+            # print("UVF " + str(warrior.transAngle))
         else:
             # TODO(Luana) Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass
