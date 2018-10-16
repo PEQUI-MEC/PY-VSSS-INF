@@ -1,18 +1,44 @@
-from math import atan2, pi
+from math import atan2
 from .navigation import UnivectorField
 
 
 class Eunomia:
+    """Action Controller
+
+    Attributes:
+        uvf : Instance of Univector Field class. This class manager all robot navigation.
+    """
 
     def __init__(self):
         self.uvf = UnivectorField()
 
     def setup(self, width=100):
+        """
+
+        Args:
+            width:
+
+        Returns:
+
+        """
+
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
         self.uvf.updateConstants(6.0, 5.9, 0.12, 5.0, 4.5)
 
     def run(self, warrior):
+        """Main method of action controller
+
+        Recebe um objeto do tipo Warrior(). De acordo com o tipo de ação de warrior, chama-se o respectivo método que
+        irá tratar e calcular corretamente todos os dados necessários para a geração de velocidades.
+
+        Args:
+            warrior:
+
+        Returns:
+            Warrior(): objeto com as variáveis calculadas e prontas para geração de velocidades
+
+        """
         if warrior.action[0] == "stop":
             warrior.cmdType = "SPEED"
             return self.stop(warrior)
@@ -32,11 +58,13 @@ class Eunomia:
             return self.goTo(warrior)
 
     def stop(self, warrior):
-        """
+        """Command Stop
+
         - {
-        "command": stop,
-        "data": {}
-    }
+            "command": stop,
+            "data": {}
+        }
+
         Args:
             warrior:
 
@@ -57,12 +85,13 @@ class Eunomia:
         return warrior
 
     def spin(self, warrior):
-        """
+        """Command Spin
+
           - {
-        "command": "spin",
-        "data": { "velocity": X m/s, "direction": "clockwise" | "counter"
-        }
-    }
+                "command": "spin",
+                "data": { "velocity": X m/s, "direction": "clockwise" | "counter"}
+            }
+
         Args:
             warrior:
 
@@ -79,17 +108,19 @@ class Eunomia:
         return warrior
 
     def lookAt(self, where, target, position, orientation=None):
-        """
+        """Command lookAt
+
         - {
-        "command": "lookAt",
-        "data": {
-            "pose": {
-                "position": (x, y),  # opcional - é passado se o target for um ponto
-                "orientation": θ radianos
-            },
-            "target": θ radianos | (x, y)
+            "command": "lookAt",
+            "data": {
+                "pose": {
+                    "position": (x, y),  # opcional - é passado se o target for um ponto
+                    "orientation": θ radianos
+                },
+                "target": θ radianos | (x, y)
+            }
         }
-    }
+
         Args:
             where:
             target:
@@ -111,17 +142,19 @@ class Eunomia:
             raise ValueError("Invalid data.")
 
     def goTo(self, warrior):
-        """
+        """Command goTo
+
         - {
-        "command": "goTo",
-        "data": {
-            "obstacles": [(x, y)] # opcional - se passado, desviar de tais obstaclos
-            "pose": {"position": (x, y), "orientation": θ radianos},
-            "target": {"position": (x, y), "orientation": θ radianos | (x, y)},  # opcional - pode ser uma orientação final ou uma posição de lookAt
-            "velocity": X m/s,  # opcional - se passado, sem before, é a velocidade constante / com before é velocidade padrão
-            "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
+            "command": "goTo",
+            "data": {
+                "obstacles": [(x, y)] # opcional - se passado, desviar de tais obstaclos
+                "pose": {"position": (x, y), "orientation": θ radianos},
+                "target": {"position": (x, y), "orientation": θ radianos | (x, y)},  # opcional - pode ser uma orientação final ou uma posição de lookAt
+                "velocity": X m/s,  # opcional - se passado, sem before, é a velocidade constante / com before é velocidade padrão
+                "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
+            }
         }
-    }
+
         Args:
             warrior:
 
@@ -131,7 +164,7 @@ class Eunomia:
 
         # Se o targetOrientation passado for um ponto, calcular o targetOrientation usando o lookAt
         if type(warrior.targetOrientation) is tuple:
-            self.uvf.updateOrientation(warrior.targetOrientation)
+            self.uvf.updateOrientation(list(warrior.targetOrientation))
             target = warrior.targetOrientation
             del warrior.targetOrientation
             warrior.targetOrientation = self.lookAt("target", target, warrior.position)
@@ -152,12 +185,12 @@ class Eunomia:
             warrior.vRight = warrior.vMax
             warrior.vLeft = warrior.vMax
 
-            # print("\nwarrior ", list(warrior.position))
-            # print("Target ", list(warrior.target))
+            print("\nwarrior ", list(warrior.position))
+            print("Target ", list(warrior.target))
 
             warrior.transAngle = self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight],
                                                  list(warrior.target), warrior.targetOrientation)
-            # print("UVF " + str(warrior.transAngle))
+            print("UVF " + str(warrior.transAngle))
         else:
             # TODO(Luana) Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass

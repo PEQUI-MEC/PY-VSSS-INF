@@ -85,7 +85,7 @@ class TestZeus(unittest.TestCase):
 
         self.assertEqual(len(warriors), 3)
         self.assertEqual(warriors[0].action, ["goTo"])
-        self.assertEqual(warriors[1].action, ["stop", 0])
+        self.assertEqual(warriors[1].action, ["stop"])
         self.assertEqual(warriors[2].action, ["goTo"])
 
         warriors = self.zeus.getWarriors(self.info2)
@@ -93,7 +93,7 @@ class TestZeus(unittest.TestCase):
         self.assertEqual(len(warriors), 3)
         self.assertEqual(warriors[0].action, ["lookAt", "orientation"])
         self.assertEqual(warriors[1].action, ["spin", "clockwise"])
-        self.assertEqual(warriors[2].action, ["goTo", 5])
+        self.assertEqual(warriors[2].action, ["goTo"])
 
     def testGenerateOutput(self):
         pass

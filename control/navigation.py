@@ -142,10 +142,10 @@ class Move2Goal:
 
         if -self.radius <= y < self.radius:
             nhCounterClockwise = self.hyperSpiral.hyperbolic(pl, clockwise=False)
-            nhCounterClockwise = np.array[cos(nhCounterClockwise), sin(nhCounterClockwise)]
+            nhCounterClockwise = np.array([cos(nhCounterClockwise), sin(nhCounterClockwise)])
 
             nhClockwise = self.hyperSpiral.hyperbolic(pr, clockwise=True)
-            nhClockwise = np.array[cos(nhClockwise), sin(nhClockwise)]
+            nhClockwise = np.array([cos(nhClockwise), sin(nhClockwise)])
 
             movement = (abs(yl) * nhCounterClockwise + abs(yr) * nhClockwise) / (2.0 * self.radius)
             movement = np.dot(self.toCanonicalMatrix, movement).reshape(2, )
@@ -157,8 +157,8 @@ class Move2Goal:
                 theta = self.hyperSpiral.hyperbolic(pr, clockwise=False)
 
             # TODO(Luana) no artigo aqui ele só usa o theta
-            # movement = np.array([cos(theta), sin(theta)])
-            # movement = np.dot(self.toCanonicalMatrix, movement).reshape(2, )
+            movement = np.array([cos(theta), sin(theta)])
+            movement = np.dot(self.toCanonicalMatrix, movement).reshape(2, )
 
         return atan2(movement[1], movement[0])
 
@@ -211,7 +211,7 @@ class UnivectorField:
         self.lDelta = None
 
         # Subfields
-        self.avoidField = AvoidObstacle([None, None], [None, None], [None, None], [None, None], self.K0)
+        self.avoidField = AvoidObstacle([None, None], [None, None], [None, None], [None, None], self.k0)
         self.moveField = Move2Goal(self.kr, self.radius, attackGoal=attackGoal, rotationSupport=rotation)
 
         #

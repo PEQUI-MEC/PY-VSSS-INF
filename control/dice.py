@@ -2,6 +2,15 @@ from math import sqrt, pow, atan2, pi, fmod, fabs, sin, tan
 
 
 def roundAngle(angle):
+    """
+
+    Args:
+        angle:
+
+    Returns:
+
+    """
+
     theta = fmod(angle,  2 * pi)
 
     if theta > pi:
@@ -13,6 +22,15 @@ def roundAngle(angle):
 
 
 def saturate(value):
+    """
+
+    Args:
+        value:
+
+    Returns:
+
+    """
+
     if value > 1:
         value = 1
     elif value < -1:
@@ -22,6 +40,12 @@ def saturate(value):
 
 
 class Dice:
+    """
+    Attributes:
+        velAcc (float):
+        previouslyBackwards (boolean):
+        maxThetaError (float):
+    """
 
     def __init__(self):
         self.velAcc = 0
@@ -29,6 +53,14 @@ class Dice:
         self.maxThetaError = 20.0
 
     def run(self, warrior):
+        """
+
+        Args:
+            warrior:
+
+        Returns:
+
+        """
 
         if warrior.cmdType == "VECTOR":
             return self.vectorControl(warrior)
@@ -42,6 +74,15 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self, warrior):
+        """
+
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
         if self.velAcc < 0.3:
             self.velAcc = 0.3
 
@@ -88,6 +129,15 @@ class Dice:
         return [warrior.vLeft*self.velAcc, warrior.vRight*self.velAcc]
 
     def positionControl(self, warrior):
+        """
+
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
         # Stops after arriving at destination
         positionError = sqrt(pow(warrior.position[0] - warrior.target[0], 2) +
                              pow(warrior.position[1] - warrior.target[1], 2))
@@ -149,6 +199,15 @@ class Dice:
         return [warrior.vLeft*self.velAcc, warrior.vRight*self.velAcc]
 
     def orientationControl(self, warrior):
+        """
+
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
         theta = warrior.orientation
 
         # TODO(Luana) É necessário girar se estiver com a 'traseira' de frente pro alvo? (Se sim, não usar o if abaixo)
@@ -168,6 +227,15 @@ class Dice:
         return [float(warrior.vLeft), float(warrior.vRight)]
 
     def speedControl(self, warrior):
+        """
+
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
         if warrior.vLeft is None or warrior.vRight is None:
             return [float(warrior.vMax), float(warrior.vMax)]
 

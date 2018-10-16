@@ -15,7 +15,7 @@ class Zeus:
         translate:
     """
 
-    def __init__(self, callback):
+    def __init__(self, callback=None):
         """
 
         Args:
@@ -31,6 +31,16 @@ class Zeus:
         print("Zeus summoned")
 
     def updateSpeeds(self, robotA, robotB, robotC):
+        """
+
+        Args:
+            robotA:
+            robotB:
+            robotC:
+
+        Returns:
+
+        """
         self.robotsSpeed = []
         self.robotsSpeed.append(robotA)
         self.robotsSpeed.append(robotB)
