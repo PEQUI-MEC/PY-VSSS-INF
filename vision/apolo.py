@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 #from vision import camera
-import camera
+#import camera
 
 #Constantes
 WIDTH = 640
@@ -16,11 +16,11 @@ TAG_AMIN = 400
 BALL_AMIN = 30
 
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
+#Criar função pra retonar a imagem com threshold para fazer a calibração
 class Apolo:
-    def __init__(self, callback = None):
+    def __init__(self, callback = None, camera = None):
         self.callback = callback
-
-        self.ciclope = camera.Ciclope()
+        self.ciclope = camera
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
@@ -31,6 +31,7 @@ class Apolo:
         self.setHSVThresh(((69,70),(0,255),(0,255)), GREEN)
 
         print("Apolo summoned")
+
 
     def getFrame(self):
         frame = None
@@ -170,6 +171,7 @@ class Apolo:
         return linkedSecondaryTags
 
 
+    #Refatorar e documentar
     def findRobotOrientation(self, robotPos, secondaryTagPosition):
         # h² = c1² + c2² -> Teorema Pitágoras
 
@@ -220,6 +222,7 @@ class Apolo:
 
         print (orientation)
 
+    #Refatorar e documentar
     def findInterestPoint(self, robotPosition, tag1, tag2):
         #Queremos achar a bola verde mais à esquerda, pra jogar na mesma função que calcula a orientação do robo de 1 bola
 
@@ -265,10 +268,6 @@ class Apolo:
 
         #Caso de bosta
         return None
-
-    #TODO: Encontrar orientação dos robos
-    #def findRobotOrientation(self, line):
-    #	pass
 
     #Não é necessario implementar, porém, seria uma melhoria
     def findAdvOrientation(self,previousAdvPosition, currentAdvPosition):
@@ -359,10 +358,6 @@ class Apolo:
             Exemplo: Fazer exemplo
         
         '''
-        #print ("SECONDARY")
-        #print (secondaryTagsList)
-
-        #print ("LINKED")
 
         linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
 
