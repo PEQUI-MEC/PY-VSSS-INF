@@ -42,15 +42,15 @@ class Hades:
         print(positions)
         self.afrodite.updateFrameVideoView(imagem)
 
+        if (self.play):
+            print ("TA CHAMANDO")
+            #threading.Thread(target=self.athena.getTargets, positions)
+        #else:
+        #    apoloCallbackThread = threading.Thread(target=self.apolo.run)
+        #    apoloCallbackThread.start()
+
         apoloCallbackThread = threading.Thread(target=self.apolo.run)
-
         apoloCallbackThread.start()
-
-        #if (self.play):
-            #self.athena.getTargets(positions)
-        # atuaiza as posições na interface
-        # recebe o frame e repassa para a interface
-        # print(positions)
 
     def athenaReady(self, strategyInfo):
         print("\t\tAthena ready")
@@ -68,6 +68,9 @@ class Hades:
             self.apolo.run()
 
     # EVENTOS
+    def setHSVVision(self, id):
+        self.apolo.setImg(id)
+
 
     def eventStartVision(self):
         apoloThread = threading.Thread(target=self.apolo.run)

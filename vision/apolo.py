@@ -20,9 +20,10 @@ class Apolo:
         self.callback = callback
 
         self.ciclope = camera
-
+        self.imageId = 10
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
+
         #Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28,30),(0,255),(0,255)), MAIN)
         self.setHSVThresh(((120,250),(0,250),(0,250)), BALL)
@@ -151,6 +152,9 @@ class Apolo:
             return True
         else: return False
 
+    def setImg(self, id):
+        self.imageId = id
+
     #Linka as tags secundarias às suas respectivas tags Principais
     def linkTags(self, robotList, secondaryTagsList, robotRadius):
         linkedSecondaryTags = [None] * 3
@@ -208,7 +212,7 @@ class Apolo:
         cv2.waitKey(0)
 
     #Pega os dados dos robos, da bola e dos adversarios e coloca no formato que a Athena requer
-    def returnData(self, robotList, robotAdvList,ball):
+    def returnData(self, robotList, robotAdvList, ball):
         output = [
             [
                 #OurRobots
@@ -291,5 +295,8 @@ class Apolo:
 
         #Modela os dados para o formato que a Athena recebe e retorna
         positions = self.returnData(robotList,robotAdvList, ball)
+
+        if (self.imageId == 0):
+            frame = self.thresholdedImages[0]
 
         self.callback(positions,frame)
