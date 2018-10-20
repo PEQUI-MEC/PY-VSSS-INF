@@ -42,8 +42,8 @@ class Hades:
         print(positions)
         self.afrodite.updateFrameVideoView(imagem)
 
-        if (self.play):
-            self.athena.getTargets(positions)
+        #if (self.play):
+            #self.athena.getTargets(positions)
         # atuaiza as posições na interface
         # recebe o frame e repassa para a interface
         # print(positions)
@@ -66,7 +66,9 @@ class Hades:
     # EVENTOS
 
     def eventStartVision(self):
-            self.apolo.run()
+        while True:
+            positions, frame = self.apolo.run()
+            self.apoloReady(positions, frame)
 
     def eventStartGame(self):
         self.play = not self.play

@@ -12,6 +12,7 @@ from datetime import datetime
 import interface.icons_rc
 import serial, glob
 import hades
+import threading
 
 
 class Afrodite(QMainWindow):
@@ -290,25 +291,17 @@ class Afrodite(QMainWindow):
         self.labelVideoViewFPS.setText("FPS: " + str(fps))
 
     #LoadImage
-    #APAGAR
-    def getStartWebcamVideoView(self):
-        #self.capture=cv2.VideoCapture(0)
-        #self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-        #self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-
-
-        self.updateFrameVideoView()
 
     def updateFrameVideoView(self, image):
-        #ret,self.image=self.capture.read()
-        #self.image=cv2.flip(self.image,1)
-
         self.image = image
+
         #Desenhar na tela
         if(self.checkBoxVideoViewDisableDrawing.isChecked()):
             self.drawingImageVideoView()
 
         self.displayImageVideoView(1)
+
+        return None
 
     def displayImageVideoView(self,window=1):
         qformat = QImage.Format_Indexed8
@@ -419,11 +412,13 @@ class Afrodite(QMainWindow):
     # DeviceInformation
     def getPushButtonCaptureDeviceInformationStart(self):
         print("Botton: DeviceInformationStart : Clicked")
-        self.getComboBoxCaptureDeviceInformation()
+        cameraId = self.getComboBoxCaptureDeviceInformation()
         #TODO: trocar a camera de acordo com o que for selecionado
 
-        self.hades.eventStartVision()
-        #self.getStartWebcamVideoView()
+        self.hadesThread = threading.Thread(target=self.hades.eventStartVision)
+
+        self.hadesThread.start()
+
 
     def updateComboBoxCaptureDeviceInformation(self):
         if sys.platform.startswith('win'):

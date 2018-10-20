@@ -252,8 +252,8 @@ class Apolo:
         '''
 
         #Pega o frame
-        #frame = self.getFrame()
-        frame = cv2.imread("./vision/Tags/newTag.png")
+        frame = self.getFrame()
+        #frame = cv2.imread("./vision/Tags/newTag.png")
 
         if frame is None:
             print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -299,4 +299,6 @@ class Apolo:
         #cv2.waitKey(0)
         #Modela os dados para o formato que a Athena recebe e retorna
         positions = self.returnData(robotList,robotAdvList, ball)
-        self.callback(positions,frame)
+
+        return positions, frame
+        #self.callback(positions,frame)
