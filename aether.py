@@ -11,7 +11,6 @@ Faz a conexão entre o simulador e os módulos do programa
 model = load_model_from_path("simulator/scene.xml")
 sim = MjSim(model)
 viewer = MjViewer(sim)
-epoch = 0
 
 
 # define os métodos circulares
@@ -27,9 +26,7 @@ def zeusReady(velocities):
     viewer.render()
 
     # refaz o ciclo
-    if epoch < 100:
-        # athena.getTargets(sim.positions)
-        pass
+    # athena.getTargets(sim.positions)
 
 
 # prepara os módulos
