@@ -1,5 +1,5 @@
-import Apolo
+import apolo
 
-apolo = Apolo.Apolo()
+apolo = apolo.Apolo()
 
 apolo.run()

@@ -4,13 +4,15 @@ from vision import Apolo
 from control import Zeus
 from strategy import Athena
 from communication import Hermes
+from vision import Ciclope
 
 
 class Hades:
     def __init__(self, afrodite):
         # gods
         self.afrodite = afrodite
-        self.apolo = Apolo(self.apoloReady)
+        self.ciclope = Ciclope(0)
+        self.apolo = Apolo(self.apoloReady, self.ciclope)
         self.athena = Athena(self.athenaReady)
         self.zeus = Zeus(self.zeusReady)
         self.hermes = Hermes(self.hermesReady)
@@ -35,10 +37,13 @@ class Hades:
 
     # CALLBACKS
 
-    def apoloReady(self, positions):
+    def apoloReady(self, positions, imagem):
         print("\t\tApolo ready")
         print(positions)
-        self.athena.getTargets(positions)
+        self.afrodite.updateFrameVideoView(imagem)
+
+        if (self.play):
+            self.athena.getTargets(positions)
         # atuaiza as posições na interface
         # recebe o frame e repassa para a interface
         # print(positions)
@@ -60,7 +65,10 @@ class Hades:
 
     # EVENTOS
 
-    def eventStart(self):
+    def eventStartVision(self):
+            self.apolo.run()
+
+    def eventStartGame(self):
         self.play = not self.play
 
         if self.play:
@@ -80,6 +88,8 @@ class Hades:
 
     # Captura
     # TODO implementar callbacks de eventos das funções da captura
+    def changeCamera(self,id):
+        self.ciclope.changeCamera(id)
 
     # Vision
     # TODO implementar callbacks de eventos das funções da visão

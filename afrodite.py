@@ -290,19 +290,20 @@ class Afrodite(QMainWindow):
         self.labelVideoViewFPS.setText("FPS: " + str(fps))
 
     #LoadImage
+    #APAGAR
     def getStartWebcamVideoView(self):
-        self.capture=cv2.VideoCapture(0)
-        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        #self.capture=cv2.VideoCapture(0)
+        #self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        #self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 
-        self.timer=QTimer(self)
-        self.timer.timeout.connect(self.updateFrameVideoView)
-        self.timer.start(0)
 
-    def updateFrameVideoView(self):
-        ret,self.image=self.capture.read()
-        self.image=cv2.flip(self.image,1)
+        self.updateFrameVideoView()
 
+    def updateFrameVideoView(self, image):
+        #ret,self.image=self.capture.read()
+        #self.image=cv2.flip(self.image,1)
+
+        self.image = image
         #Desenhar na tela
         if(self.checkBoxVideoViewDisableDrawing.isChecked()):
             self.drawingImageVideoView()
@@ -419,7 +420,10 @@ class Afrodite(QMainWindow):
     def getPushButtonCaptureDeviceInformationStart(self):
         print("Botton: DeviceInformationStart : Clicked")
         self.getComboBoxCaptureDeviceInformation()
-        self.getStartWebcamVideoView()
+        #TODO: trocar a camera de acordo com o que for selecionado
+
+        self.hades.eventStartVision()
+        #self.getStartWebcamVideoView()
 
     def updateComboBoxCaptureDeviceInformation(self):
         if sys.platform.startswith('win'):
