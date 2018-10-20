@@ -12,8 +12,6 @@ from datetime import datetime
 import interface.icons_rc
 import serial, glob
 import hades
-import threading
-
 
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
@@ -415,10 +413,7 @@ class Afrodite(QMainWindow):
         cameraId = self.getComboBoxCaptureDeviceInformation()
         #TODO: trocar a camera de acordo com o que for selecionado
 
-        self.hadesThread = threading.Thread(target=self.hades.eventStartVision)
-
-        self.hadesThread.start()
-
+        self.hades.eventStartVision()
 
     def updateComboBoxCaptureDeviceInformation(self):
         if sys.platform.startswith('win'):
