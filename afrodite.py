@@ -1,9 +1,13 @@
 import sys
 import os
-from PyQt5.QtCore import pyqtSlot
+import cv2 #Somente para testes
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSlot, QTimer
+from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog,QGroupBox
 from PyQt5.uic import loadUi
-from PyQt5 import QtCore, QtGui, QtWidgets
+
 from datetime import datetime
 import interface.icons_rc
 import serial, glob
@@ -45,13 +49,13 @@ class Afrodite(QMainWindow):
         self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
         
         # COMMUNICATION BUTTONS
-
+        '''
         self.getPushButtonControlSerialDeviceStart.clicked.connect(self.startSerialConnection)
         self.getPushButtonControlSerialSend.clicked.connect(self.sendWheelVelocities)
         self.getPushButtonControlSerialSendCommand.clicked.connect(self.sendCommand)
-
-        """ 
-        CÓDIGO A SER REFATORADO
+        '''
+ 
+        #CÓDIGO A SER REFATORADO
 
         # MenuBar #
 
@@ -71,6 +75,7 @@ class Afrodite(QMainWindow):
 
         #Capture
         ##DeviceInformation
+        self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
         self.updateComboBoxCaptureDeviceInformation()
         self.getComboBoxCaptureDeviceInformation()
 
@@ -126,14 +131,14 @@ class Afrodite(QMainWindow):
         self.pushButtonStrategyFormationDelete.clicked.connect(self.getPushButtonStrategyFormationDelete)
         self.pushButtonStrategyFormationCreate.clicked.connect(self.getPushButtonStrategyFormationCreate)
         self.pushButtonStrategyFormationSave.clicked.connect(self.getPushButtonStrategyFormationSave)
-        """
+        
 
         print("Afrodite summoned")
 
-    """
+    '''
     def mouseReleaseEvent(self, QMouseEvent):
            print('(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')')           
-    """
+    '''
 
     # PLAY BUTTON
     def clickedPlay(self):
@@ -235,7 +240,8 @@ class Afrodite(QMainWindow):
         message = self.controlSerialSendCommand.currentText()
         self.hades.eventSendMessage(message)
 
-    """ CALLBACKS A SEREM REFATORADOS
+     
+    #CALLBACKS A SEREM REFATORADOS
 
     # MenuBar
     # MenuBarArquivo
@@ -283,8 +289,142 @@ class Afrodite(QMainWindow):
     def setLabelVideoViewFPS(self, fps):
         self.labelVideoViewFPS.setText("FPS: " + str(fps))
 
+    #LoadImage
+    #APAGAR
+    def getStartWebcamVideoView(self):
+        #self.capture=cv2.VideoCapture(0)
+        #self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        #self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+
+
+        self.updateFrameVideoView()
+
+    def updateFrameVideoView(self, image):
+        #ret,self.image=self.capture.read()
+        #self.image=cv2.flip(self.image,1)
+
+        self.image = image
+        #Desenhar na tela
+        if(self.checkBoxVideoViewDisableDrawing.isChecked()):
+            self.drawingImageVideoView()
+
+        self.displayImageVideoView(1)
+
+    def displayImageVideoView(self,window=1):
+        qformat = QImage.Format_Indexed8
+
+        if len(self.image.shape)==3:
+            if self.image.shape[2]==4:
+                qformat=QImage.Format_RGBA888
+            else:
+                qformat=QImage.Format_RGB888
+
+        outImage=QImage(self.image, self.image.shape[1], self.image.shape[0], self.image.strides[0], qformat)
+
+        outImage=outImage.rgbSwapped()
+
+        if window==1:
+            self.graphicsViewVideoViewVideo.setPixmap(QPixmap.fromImage(outImage))
+            self.graphicsViewVideoViewVideo.setScaledContents(True)
+
+    def graphicsViewVideoViewVideoClicked(self, event):
+        point = QtGui.QCursor.pos()
+        print("X:" + str(point.x()) + " | " + "Y:" + str(point.y())) 
+
+    def getBallPosition(self):
+        self.cont+=1
+        return (447,self.cont)
+
+    '''-----------------------DESENHO SOBRA A IMAGEM------------------'''
+
+    def drawingImageVideoView(self):
+        #Desenho da Bola
+        cv2.circle(self.image, self.getBallPosition(), 7,  (255,255,255), 2)
+
+        #TEST
+        cv2.circle(self.image, self.getBallPosition(), 50,  (67,255,255), 6)
+        cv2.rectangle(self.image,(384,50),(510,128),(0,255,0),3)
+        ######
+
+        self.nRobots = setAmountRobots() #??????
+        self.robots = setRobots() #??????
+        self.advRobots = setAdvRobots()
+        '''
+        #TODO GET POSITIONk
+        for i in range(0, nRobots):
+            #Orientação do robô
+            line(self.image, Robots::get_position(i), Robots::get_secondary_tag(i),cv::Scalar(255,255,0), 2);
+            #id do robô
+            putText(self.image, std::to_string(i+1),cv::Point(Robots::get_position(i).x-5,Robots::get_position(i).y-17),cv::FONT_HERSHEY_PLAIN,1,cv::Scalar(255,255,0),2);
+            #marcação do robô
+            circle(self.image, Robots::get_position(i), 15, cv::Scalar(255,255,0), 2);
+
+            // vetor que todos os robos estão executando
+            cv::Point aux_point;
+            aux_point.x = int(100*cos(Robots::get_transAngle(i)));
+            aux_point.y = - int(100*sin(Robots::get_transAngle(i)));
+            aux_point += Robots::get_position(i);
+            arrowed_line(self.image, Robots::get_position(i), aux_point, cv::Scalar(255, 0, 0), 2);
+
+        for (int i = 0; i < Robots::SIZE; i++)
+            
+
+        // adversários
+        for(int i = 0; i < advRobots.size(); i++)
+            circle(self.image, advRobots.at(i), 15, cv::Scalar(0,0,255), 2);
+
+        // ----------- DESENHOS DA ESTRATÉGIA ---------- //
+
+        if(interface.get_start_game_flag())
+            // desenha a estimativa da bola
+            circle(cameraFlow, Ball_Est, 7, cv::Scalar(255,140,0), 2);
+
+            // desenha os alvos dos robôs
+            for(int i = 0; i < Robots::SIZE; i++)
+                circle(cameraFlow, Robots::get_target(i), 7, cv::Scalar(127,255,127), 2);
+                putText(cameraFlow, std::to_string(i+1), cv::Point(Robots::get_target(i).x-5, Robots::get_target(i).y-17),cv::FONT_HERSHEY_PLAIN,1,cv::Scalar(127,255,127),2);
+
+        // ----------- DESENHOS DO CONTROLE ---------- //
+
+        if(strategyGUI.formation_flag)
+            // exibe os robos virtuais
+            for(int i = 0; i < Robots::SIZE; i++)
+                if(virtual_robot_selected == i)
+                    circle(cameraFlow,virtual_robots_positions[i], 20, cv::Scalar(0,255,100), 3);
+
+                // posição
+                circle(cameraFlow,virtual_robots_positions[i], 17, cv::Scalar(0,255,0), 2);
+                // orientação
+                arrowed_line(cameraFlow, virtual_robots_positions[i], virtual_robots_orientations[i], cv::Scalar(0, 255, 0), 2);
+                // identificação
+                putText(cameraFlow, std::to_string(i+1),virtual_robots_positions[i] + cv::Point(-14,10),cv::FONT_HERSHEY_PLAIN,1,cv::Scalar(0,255,0),2);
+
+
+        if (interface.imageView.PID_test_flag)
+            for(int i = 0; i < Robots::SIZE; i++)
+                if(Robots::is_target_set(i)) {
+                    // linha branca no alvo sendo executado
+                    line(cameraFlow, Robots::get_position(i), Robots::get_target(i), cv::Scalar(255,255,255),2);
+
+                // círculo branco no alvo sendo executado
+                circle(cameraFlow,Robots::get_target(i), 9, cv::Scalar(255,255,255), 2);
+
+            if(Selec_index != -1)
+                circle(cameraFlow, Robots::get_position(Selec_index), 17, cv::Scalar(255,255,255), 2);
+
+    '''
+    #########################################################
+
     # Capture
     # DeviceInformation
+    def getPushButtonCaptureDeviceInformationStart(self):
+        print("Botton: DeviceInformationStart : Clicked")
+        self.getComboBoxCaptureDeviceInformation()
+        #TODO: trocar a camera de acordo com o que for selecionado
+
+        self.hades.eventStartVision()
+        #self.getStartWebcamVideoView()
+
     def updateComboBoxCaptureDeviceInformation(self):
         if sys.platform.startswith('win'):
             ports = ['COM%s' % (i+1) for i in range(256)]
@@ -302,9 +442,6 @@ class Afrodite(QMainWindow):
 
     def getComboBoxCaptureDeviceInformation(self):
         return self.comboBoxCaptureDeviceInformation.currentText()
-
-    def getPushButtonCaptureDeviceInformationStart(self):
-        return self.getComboBoxCaptureDeviceInformation()
 
     def setlabelCaptureDeviceInformation(self, device, driver, card, bus):
         self.labelCaptureDeviceInformationDevice.setText(device)
@@ -617,7 +754,7 @@ class Afrodite(QMainWindow):
 
     def getStrategyTestParametersName5(self):
         return self.spinBoxStrategyTestParametersGoalieLine.value()
-    """
+    
 
 
 def main():
