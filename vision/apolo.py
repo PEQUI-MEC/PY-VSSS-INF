@@ -393,9 +393,9 @@ class Apolo:
                 print ("TAG2: ",tag2)
                 print ("TAG1: ",tag3)
 
-                print ("VAI CHAMA")
                 stepTag1 = self.findInterestPoint(robotList[i], tag1, tag2)
-                print ("CHAMOU")
+
+
                 '''
                 print ("STEP1: ",stepTag1)
                 
