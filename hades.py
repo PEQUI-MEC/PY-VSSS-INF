@@ -5,7 +5,7 @@ from control import Zeus
 from strategy import Athena
 from communication import Hermes
 from vision import Ciclope
-
+import threading
 
 class Hades:
     def __init__(self, afrodite):
@@ -42,8 +42,12 @@ class Hades:
         print(positions)
         self.afrodite.updateFrameVideoView(imagem)
 
-        if (self.play):
-            self.athena.getTargets(positions)
+        apoloCallbackThread = threading.Thread(target=self.apolo.run)
+
+        apoloCallbackThread.start()
+
+        #if (self.play):
+            #self.athena.getTargets(positions)
         # atuaiza as posições na interface
         # recebe o frame e repassa para a interface
         # print(positions)
@@ -66,14 +70,17 @@ class Hades:
     # EVENTOS
 
     def eventStartVision(self):
-            self.apolo.run()
+        apoloThread = threading.Thread(target=self.apolo.run)
+
+        apoloThread.start()
 
     def eventStartGame(self):
         self.play = not self.play
-
+        '''
         if self.play:
             print("Started.")
             self.apolo.run()
+        '''
 
     def eventStartXbee(self, port):
         self.hermes.setup(port)
