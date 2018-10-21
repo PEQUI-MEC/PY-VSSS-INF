@@ -21,6 +21,7 @@ class Afrodite(QMainWindow):
         super(Afrodite, self).__init__()
 
         self.hades = hades.Hades(self)
+        self.hades.setup()
 
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'interface/mainwindow.ui')
