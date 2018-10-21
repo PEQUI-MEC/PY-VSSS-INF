@@ -27,6 +27,11 @@ class Apolo:
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
 
+        self.robotPositions = [(0,0,0,True),(0,0,0,True),(0,0,0,True)]
+        self.ballPosition = [0,0]
+        self.advRobotPositions = self.robotPositions
+        self.positions = self.returnData(self.robotPositions,self.advRobotPositions, self.ballPosition)
+
         #Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28,30),(0,255),(0,255)), MAIN)
         self.setHSVThresh(((120,250),(0,250),(0,250)), BALL)
@@ -90,12 +95,15 @@ class Apolo:
 
                 cx = int(M['m10']/M['m00'])
                 cy = int(M['m01']/M['m00'])
-                robotPositionList.extend([(cx,cy,-1)])
+                robotPositionList.extend([(cx,cy,0,False)])
 
             if (len(robotPositionList) == 3): break
 
-        while (len(robotPositionList) < 3):
-            robotPositionList.extend([(-1,-1,-1)])
+        if len(robotPositionList) < 3:
+
+            while (len(robotPositionList) < 3):
+                robotPositionList.extend([(-1, -1, -1, False)])
+
 
         return robotPositionList
 
@@ -121,17 +129,20 @@ class Apolo:
     def findBall(self, imagem, areaMin):
         _, contours, hierarchy = cv2.findContours(imagem, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        cx = -1
-        cy = -1
+        okFlag = False
 
         for i in contours:
             M = cv2.moments(i)
             if (M['m00'] > areaMin):
                 cx = int(M['m10']/M['m00'])
                 cy = int(M['m01']/M['m00'])
+                okFlag = True
                 break
 
-        return (cx,cy)
+        if okFlag:
+            return (cx,cy)
+        else:
+            return None
 
     #Econtra os robos adversarios em uma imagem onde o threshold foi aplicado
     def findAdvRobots(self, thresholdedImage, areaMin):
@@ -345,7 +356,7 @@ class Apolo:
             self.thresholdedImages[i] = self.applyThreshold(frameHSV, i)
 
         #Procura os robos
-        robotList = self.findRobots(self.thresholdedImages[MAIN],TAG_AMIN)
+        tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN],TAG_AMIN)
 
         #Procura as tags Secundarias
         secondaryTagsList = self.findSecondaryTags(self.thresholdedImages[GREEN],TAG_AMIN)
@@ -355,57 +366,65 @@ class Apolo:
             Exemplo: Fazer exemplo
         
         '''
-
-        linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
+        linkedSecondaryTags = self.linkTags(tempRobotPosition, secondaryTagsList,ROBOT_RADIUS)
 
         for i in range(0,3,1):
             try:
-                orientation = 0
+                if (tempRobotPosition[i][0] != -1):
+                    if (len(linkedSecondaryTags[i]) == 2):
+                       orientation = self.findRobotOrientation(tempRobotPosition[i],linkedSecondaryTags[i])
+                       tempRobotPosition[i] = [tempRobotPosition[i][0], tempRobotPosition[i][1], orientation, True]
+                    elif (len(linkedSecondaryTags[i]) == 4):
+                        tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
+                        tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
 
-                if (len(linkedSecondaryTags[i]) == 2):
-                   orientation = self.findRobotOrientation(robotList[i],linkedSecondaryTags[i])
-                elif (len(linkedSecondaryTags[i]) == 4):
-                    tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
-                    tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
+                        interestSecondaryTag = self.findInterestPoint(tempRobotPosition[i], tag1, tag2)
 
-                    interestSecondaryTag = self.findInterestPoint(robotList[i], tag1, tag2)
-
-                    orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
-                #elif:
-                else:
-                    tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
-                    tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
-                    tag3 = [linkedSecondaryTags[i][4],linkedSecondaryTags[i][5]]
-
-                    stepTag1 = self.findInterestPoint(robotList[i], tag1, tag2)
-
-                    if (stepTag1 is None):
-                        interestSecondaryTag = self.findInterestPoint(robotList[i], tag1, tag3)
+                        orientation = self.findRobotOrientation(tempRobotPosition[i],interestSecondaryTag)
+                        tempRobotPosition[i] = [tempRobotPosition[i][0], tempRobotPosition[i][1], orientation, True]
+                    #elif:
                     else:
-                        stepTag2 = self.findInterestPoint(robotList[i], stepTag1, tag3)
+                        tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
+                        tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
+                        tag3 = [linkedSecondaryTags[i][4],linkedSecondaryTags[i][5]]
 
-                        if (stepTag2 is None):
-                            interestSecondaryTag = stepTag1
-                        else: interestSecondaryTag = stepTag2
+                        stepTag1 = self.findInterestPoint(tempRobotPosition[i], tag1, tag2)
+
+                        if (stepTag1 is None):
+                            interestSecondaryTag = self.findInterestPoint(tempRobotPosition[i], tag1, tag3)
+                        else:
+                            stepTag2 = self.findInterestPoint(tempRobotPosition[i], stepTag1, tag3)
+
+                            if (stepTag2 is None):
+                                interestSecondaryTag = stepTag1
+                            else: interestSecondaryTag = stepTag2
 
 
-                    orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
-
-                robotList[i] = [robotList[i][0], robotList[i][1], orientation]
+                        orientation = self.findRobotOrientation(tempRobotPosition[i],interestSecondaryTag)
+                        tempRobotPosition[i] = [tempRobotPosition[i][0], tempRobotPosition[i][1], orientation, True]
             except:
-                print ("Nao foi possivel encontrar todas as orientações")
-                print ("Provavelmente a calibração das tags secundarias está zoada")
+                pass
 
         #Procura a bola
-        ball = self.findBall(self.thresholdedImages[BALL],BALL_AMIN)
+        tempBallPosition = self.findBall(self.thresholdedImages[BALL],BALL_AMIN)
 
         #Procura os adversarios
-        robotAdvList = robotList
+        self.advRobotPositions = self.robotPositions
+
+        if tempBallPosition is not None:
+            self.ballPosition = tempBallPosition
+
+        for i in range(0,3,1):
+            if tempRobotPosition[i][3]:
+                self.robotPositions[i] = tempRobotPosition[i]
 
         #Modela os dados para o formato que a Athena recebe e retorna
-        positions = self.returnData(robotList,robotAdvList, ball)
+
+        self.positions = self.returnData(self.robotPositions,self.advRobotPositions,self.ballPosition)
+
+        print (self.positions)
 
         if (self.imageId != -1):
             frame = self.thresholdedImages[self.imageId]
 
-        self.callback(positions,frame)
+        self.callback(self.positions,frame)
