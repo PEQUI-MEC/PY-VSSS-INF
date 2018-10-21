@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1355</width>
-     <height>24</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuBarArquivo">
@@ -2328,31 +2328,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0" colspan="2">
-            <widget class="QProgressBar" name="progressBarRobotSpeedAttack">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximum">
-              <number>12</number>
-             </property>
-             <property name="value">
-              <number>12</number>
-             </property>
-             <property name="format">
-              <string>%v</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
          <item>
@@ -2447,31 +2422,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0" colspan="2">
-            <widget class="QProgressBar" name="progressBarRobotSpeedDefense">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximum">
-              <number>12</number>
-             </property>
-             <property name="value">
-              <number>12</number>
-             </property>
-             <property name="format">
-              <string>%v</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
          <item>
@@ -2563,31 +2513,6 @@
              </property>
              <property name="invertedAppearance">
               <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="2">
-            <widget class="QProgressBar" name="progressBarRobotSpeedGoalkeeper">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximum">
-              <number>12</number>
-             </property>
-             <property name="value">
-              <number>12</number>
-             </property>
-             <property name="format">
-              <string>%v</string>
              </property>
             </widget>
            </item>
