@@ -699,9 +699,7 @@ class Afrodite(QMainWindow):
     def getPushButtonControlSerialSend(self):
         id = self.comboBoxControlSerialRobots.currentText()
         left = self.lineEditControlSerialSpeedLeft.text()
-        print("left", left)
         right = self.lineEditControlSerialSpeedRight.text()
-        print("right", right)
         if id is not None and left is not None and right is not None:
             self.hades.eventCreateAndSendMessage(id, left, right)
 
