@@ -120,7 +120,7 @@ class Hades:
 
     # Communication
     def eventStartXbee(self, port):
-        self.hermes.setup(port)
+        self.hermes.setup(port=port)
 
     def eventCreateAndSendMessage(self, robotId, leftWheel, rightWheel):
         message = self.hermes.createMessage(robotId, leftWheel, rightWheel)
