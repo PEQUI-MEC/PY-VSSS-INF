@@ -209,7 +209,10 @@ class Athena:
 
             elif warrior.command["type"] == "lookAt":
                 command["command"] = "lookAt"
-                command["data"] = {}
+                command["data"]["pose"] = {
+                    "position": warrior.position,
+                    "orientation": warrior.orientation
+                }
 
                 if "targetOrientation" in warrior.command:
                     command["data"]["target"] = warrior.command["targetOrientation"]

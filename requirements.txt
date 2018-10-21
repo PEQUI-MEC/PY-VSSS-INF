@@ -18,6 +18,7 @@
 
 PyQt5
 glob2>=0.6
+numpy
 
 -r communication/req-communication.txt
 -r control/req-control.txt
