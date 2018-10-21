@@ -12,8 +12,7 @@ class Hades:
     def __init__(self, afrodite):
         # gods
         self.afrodite = afrodite
-        self.ciclope = Ciclope(0) #Por padrão instancia a camera 0, quando for selecionado na interface, troca a camera
-        self.apolo = Apolo(self.apoloReady, self.ciclope)
+        #self.apolo = Apolo(self.apoloReady, self.ciclope)
         self.athena = Athena(self.athenaReady)
         self.zeus = Zeus(self.zeusReady)
         self.hermes = Hermes(self.hermesReady)
@@ -106,7 +105,9 @@ class Hades:
         print("Hades started") if self.play else print("Hades stopped")
 
     # Camera e Visão
-    def eventStartVision(self):
+    def eventStartVision(self, cameraId):
+        self.ciclope = Ciclope(int(cameraId))
+        self.apolo = Apolo(self.apoloReady, self.ciclope)
         apoloThread = threading.Thread(target=self.apolo.run)
         apoloThread.start()
 
