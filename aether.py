@@ -14,8 +14,8 @@ Faz a conexão entre o simulador e os módulos do programa
 # DEFINIÇÕES
 field_width = 640
 field_height = 480
-
 pp = pprint.PrettyPrinter(indent=4)
+
 
 # FUNÇÕES
 def convertPositionX(coord):
@@ -37,7 +37,7 @@ def convertPositionY(coord):
 
 
 def convertVelocity(vel):
-    return vel * 100
+    return vel * 10
 
 
 def generatePositions(team):
@@ -137,13 +137,12 @@ def athena2Ready(strategyInfo):
 
 
 def zeus1Ready(velocities):
-    print(len(velocities))
     sim.data.ctrl[0] = convertVelocity(velocities[0]["vLeft"])
     sim.data.ctrl[1] = convertVelocity(velocities[0]["vRight"])
-    #sim.data.ctrl[2] = convertVelocity(velocities[1]["vLeft"])
-    #sim.data.ctrl[3] = convertVelocity(velocities[1]["vRight"])
-    #sim.data.ctrl[4] = convertVelocity(velocities[2]["vLeft"])
-    #ssim.data.ctrl[5] = convertVelocity(velocities[2]["vRight"])
+    sim.data.ctrl[2] = convertVelocity(velocities[1]["vLeft"])
+    sim.data.ctrl[3] = convertVelocity(velocities[1]["vRight"])
+    sim.data.ctrl[4] = convertVelocity(velocities[2]["vLeft"])
+    sim.data.ctrl[5] = convertVelocity(velocities[2]["vRight"])
 
     # refaz o ciclo
     athenaThread = threading.Thread(target=athena1.getTargets, args=[generatePositions(0)])
@@ -192,7 +191,7 @@ zeus2.setup(3)
 initThread1 = threading.Thread(target=athena1.getTargets, args=[generatePositions(0)])
 initThread2 = threading.Thread(target=athena2.getTargets, args=[generatePositions(1)])
 initThread1.start()
-# initThread2.start()
+# initThread2.start() # TODO habilitar quando funcionar
 
 while True:
     sim.step()

@@ -12,14 +12,15 @@ class Hades:
     def __init__(self, afrodite):
         # gods
         self.afrodite = afrodite
-        self.ciclope = Ciclope(0) #Por padrão instancia a camera 0, quando for selecionado na interface, troca a camera
-        self.apolo = Apolo(self.apoloReady, self.ciclope)
+        #self.apolo = Apolo(self.apoloReady, self.ciclope)
         self.athena = Athena(self.athenaReady)
         self.zeus = Zeus(self.zeusReady)
         self.hermes = Hermes(self.hermesReady)
 
         self.play = False
         self.isCalibrating = False
+
+        self.timeCascadeStarted = 0
 
         print("Hades summoned")
 
@@ -41,11 +42,24 @@ class Hades:
     # CALLBACKS
 
     def apoloReady(self, positions, imagem):
+        # calcula o fps e manda pra interface
+        lastCascadeTime = time.time() - self.timeCascadeStarted
+        fps = 1 / lastCascadeTime
+        self.afrodite.setLabelVideoViewFPS("{:.2f}".format(fps))
+        self.timeCascadeStarted = time.time()
+
+        # atualiza o vídeo na interface
         self.afrodite.updateFrameVideoView(imagem)
 
-        if (self.isCalibrating):
+        # atualiza as posições dos robôs na interface
+        self.afrodite.updateLabelVideoViewPositionsRobot1(positions[0][0]["position"], positions[0][0]["orientation"])
+        self.afrodite.updateLabelVideoViewPositionsRobot2(positions[0][1]["position"], positions[0][1]["orientation"])
+        self.afrodite.updateLabelVideoViewPositionsRobot3(positions[0][2]["position"], positions[0][2]["orientation"])
+        self.afrodite.updateLabelVideoViewPositionsBall(positions[2]["position"])
+
+        if self.isCalibrating:
             index = self.afrodite.getHSVIndex()
-            self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index),index)
+            self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index), index)
         
         # decide qual é o próximo módulo na cascata
         if self.play:
@@ -53,7 +67,7 @@ class Hades:
         else:
             nextOnCascade = threading.Thread(target=self.apolo.run)
 
-        nextOnCascade.start()  # inicia o processamento no próximo módulo
+        nextOnCascade.start()  # inicia o processamento no próximo módulo (deve ser a última coisa a ser feita)
 
     def athenaReady(self, strategyInfo):
         print("\t\tAthena ready")
@@ -98,7 +112,9 @@ class Hades:
         print("Hades started") if self.play else print("Hades stopped")
 
     # Camera e Visão
-    def eventStartVision(self):
+    def eventStartVision(self, cameraId):
+        self.ciclope = Ciclope(int(cameraId))
+        self.apolo = Apolo(self.apoloReady, self.ciclope)
         apoloThread = threading.Thread(target=self.apolo.run)
         apoloThread.start()
 

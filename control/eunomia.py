@@ -128,15 +128,12 @@ class Eunomia:
 
         """
 
-        if self.warrior.action[1] is "orientation":
-            self.warrior.orientation = self.warrior.targetOrientation
-
-        elif self.warrior.action[1] is "target":
+        if self.warrior.action[1] is "target":
             x = self.warrior.target[0] - self.warrior.position[0]
             y = self.warrior.target[1] - self.warrior.position[1]
             self.warrior.targetOrientation = atan2(y, -x)
 
-        else:
+        elif self.warrior.action[1] is not "orientation":
             raise ValueError("Invalid data.")
 
     def goTo(self):

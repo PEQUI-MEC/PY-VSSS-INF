@@ -282,17 +282,20 @@ class Afrodite(QMainWindow):
     '''
     # VideoView
     # Positions
-    def updateLabelVideoViewPositionsRobot1(self,x,y,z):
-        self.labelVideoViewPositionsRobot1.setText("(" + str(x) + "," + str(y) + "," + str(z) + ")")
+    def updateLabelVideoViewPositionsRobot1(self, position, orientation):
+        self.labelVideoViewPositionsRobot1.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
+                                                   str(orientation) + " rad)")
 
-    def updateLabelVideoViewPositionsRobot2(self,x,y,z):
-        self.labelVideoViewPositionsRobot2.setText("(" + str(x) + "," + str(y) + "," + str(z) + ")")
+    def updateLabelVideoViewPositionsRobot2(self, position, orientation):
+        self.labelVideoViewPositionsRobot2.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
+                                                   str(orientation) + " rad)")
 
-    def updateLabelVideoViewPositionsRobot3(self,x,y,z):
-        self.labelVideoViewPositionsRobot3.setText("(" + str(x) + "," + str(y) + "," + str(z) + ")")
+    def updateLabelVideoViewPositionsRobot3(self, position, orientation):
+        self.labelVideoViewPositionsRobot3.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
+                                                   str(orientation) + " rad)")
 
-    def updateLabelVideoViewPositionsBall(self,x,y,z):
-        self.labelVideoViewPositionsBall.setText("(" + str(x) + "," + str(y) + "," + str(z) + ")")
+    def updateLabelVideoViewPositionsBall(self, position):
+        self.labelVideoViewPositionsBall.setText("(" + str(position[0]) + ", " + str(position[1]) + ")")
 
     # CheckBoxVideoViewDisableDrawing
     def getStateCheckBoxVideoViewDisableDrawing(self):
@@ -427,17 +430,29 @@ class Afrodite(QMainWindow):
         cameraId = self.getComboBoxCaptureDeviceInformation()
         # TODO: trocar a camera de acordo com o que for selecionado
 
-        self.hades.eventStartVision()
+        self.hades.eventStartVision(cameraId)
 
     def updateComboBoxCaptureDeviceInformation(self):
-        if sys.platform.startswith('win'):
-            ports = ['COM%s' % (i+1) for i in range(256)]
-        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            ports = glob.glob('/dev/video[0-9]*')
-        elif sys.platform.startswith('darwin'):
-            ports = glob.glob('/dev/*')
-        else:
-            raise EnvironmentError('Unsuported plaftorm')
+        #if sys.platform.startswith('win'):
+        cams =[]
+        try:
+            for i in range(0,3):
+                cam = cv2.VideoCapture(i)
+                if cam.isOpened():
+                    cams.append(str(i)) # 'CAM' + str(i)
+                    cam.release()
+                else:
+                    break
+        except:
+            pass
+        ports = cams
+            #cams.clear()
+        #elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        #    ports = glob.glob('/dev/video[0-9]*')
+        #elif sys.platform.startswith('darwin'):
+        #    ports = glob.glob('/dev/*')
+        #else:
+        #    raise EnvironmentError('Unsuported plaftorm')
 
         self.comboBoxCaptureDeviceInformation.clear()
 
