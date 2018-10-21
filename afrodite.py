@@ -11,6 +11,7 @@ from PyQt5.uic import loadUi
 from datetime import datetime
 import interface.icons_rc
 import serial, glob
+import serial.tools.list_ports as list_ports
 import hades
 import threading
 
@@ -656,7 +657,15 @@ class Afrodite(QMainWindow):
     # Serial
     def updateComboBoxControlSerialDevice(self):
         if sys.platform.startswith('win'):
-            ports = ['COM%s' % (i+1) for i in range(256)]
+            serial_ports = list_ports.comports()
+            for port in serial_ports:
+                try:
+                    s = serial.Serial(port)
+                    s.close()
+                    result.append(port)
+                except (OSError, serial.SerialException):
+                    pass
+            ports = result
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
             ports = glob.glob('/dev/ttyU[A-Za-z]*')
         elif sys.platform.startswith('darwin'):
