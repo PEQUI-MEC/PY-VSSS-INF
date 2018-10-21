@@ -18,6 +18,7 @@ class Hades:
         self.hermes = Hermes(self.hermesReady)
 
         self.play = False
+        self.isCalibrating = False
 
         print("Hades summoned")
 
@@ -38,9 +39,11 @@ class Hades:
     # CALLBACKS
 
     def apoloReady(self, positions, imagem):
-        print("\t\tApolo ready")
-        print(positions)
         self.afrodite.updateFrameVideoView(imagem)
+
+        if (self.isCalibrating):
+            index = self.afrodite.getHSVIndex()
+            self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index),index)
 
         if (self.play):
             print ("TA CHAMANDO")
@@ -48,9 +51,9 @@ class Hades:
         #else:
         #    apoloCallbackThread = threading.Thread(target=self.apolo.run)
         #    apoloCallbackThread.start()
-
-        apoloCallbackThread = threading.Thread(target=self.apolo.run)
-        apoloCallbackThread.start()
+        else:
+            apoloCallbackThread = threading.Thread(target=self.apolo.run)
+            apoloCallbackThread.start()
 
     def athenaReady(self, strategyInfo):
         print("\t\tAthena ready")
@@ -70,6 +73,13 @@ class Hades:
     # EVENTOS
     def setHSVVision(self, id):
         self.apolo.setImg(id)
+
+    def calibrationEvent(self):
+        if self.isCalibrating:
+            self.isCalibrating = False
+        else:
+            self.isCalibrating = True
+            self.apolo.resetImageId()
 
 
     def eventStartVision(self):
