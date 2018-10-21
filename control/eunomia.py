@@ -1,4 +1,4 @@
-from math import atan2
+from math import atan2, pi, cos, sin
 from .navigation import UnivectorField
 
 
@@ -160,10 +160,12 @@ class Eunomia:
 
         """
 
-        # Se o targetOrientation passado não for um ponto, gerar um ponto no infinito
+        # Se o targetOrientation passado não for um ponto
         if type(self.warrior.targetOrientation) is not tuple:
-            target = self.warrior.targetOrientation
+            theta = self.warrior.targetOrientation
             del self.warrior.targetOrientation
+            self.warrior.targetOrientation = [50 * cos(theta * pi / 180), 50 * sin(theta * pi / 180)]
+
 
         #  Verificar se existe um 'before' na chamada desse método
         time = None
