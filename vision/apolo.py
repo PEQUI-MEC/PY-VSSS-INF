@@ -20,9 +20,10 @@ class Apolo:
         self.callback = callback
 
         self.ciclope = camera
-        self.imageId = 10
+
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
+        self.imageId = -1
 
         #Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28,30),(0,255),(0,255)), MAIN)
@@ -50,8 +51,12 @@ class Apolo:
             2 - Adv
             3 - Green
     '''
+    def resetImageId(self):
+        self.imageId = -1
 
     def setHSVThresh(self, hsvThresh, keyword):
+        self.imageId = keyword
+        print(hsvThresh)
         self.threshList[keyword] = hsvThresh
 
     def getHSVThresh(self,keyword):
@@ -151,9 +156,6 @@ class Apolo:
         if (abs(robotPosition[0] - secondaryTagPosition[0]) + abs(robotPosition[1] - secondaryTagPosition[1]) <= robotRadius):
             return True
         else: return False
-
-    def setImg(self, id):
-        self.imageId = id
 
     #Linka as tags secundarias às suas respectivas tags Principais
     def linkTags(self, robotList, secondaryTagsList, robotRadius):
@@ -257,6 +259,7 @@ class Apolo:
 
         #Pega o frame
         frame = self.getFrame()
+        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
 
         if frame is None:
             print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -296,7 +299,7 @@ class Apolo:
         #Modela os dados para o formato que a Athena recebe e retorna
         positions = self.returnData(robotList,robotAdvList, ball)
 
-        if (self.imageId == 0):
-            frame = self.thresholdedImages[0]
+        if (self.imageId != -1):
+            frame = self.thresholdedImages[self.imageId]
 
         self.callback(positions,frame)
