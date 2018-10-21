@@ -51,12 +51,12 @@
      <x>0</x>
      <y>0</y>
      <width>1355</width>
-     <height>24</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuBarArquivo">
     <property name="title">
-     <string>Arquivo</string>
+     <string>Ar&amp;quivo</string>
     </property>
     <addaction name="separator"/>
     <addaction name="actionLoadConfigs"/>
@@ -67,7 +67,7 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>He&amp;lp</string>
     </property>
     <addaction name="actionRulesVSSS"/>
     <addaction name="separator"/>
@@ -154,7 +154,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -6440,7 +6440,7 @@
          </widget>
         </widget>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -6653,6 +6653,26 @@
           <height>25</height>
          </size>
         </property>
+        <item>
+         <property name="text">
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>C</string>
+         </property>
+        </item>
        </widget>
        <widget class="QLineEdit" name="lineEditControlSerialSpeedLeft">
         <property name="geometry">
@@ -6990,7 +7010,7 @@
          </size>
         </property>
         <property name="value">
-         <number>24</number>
+         <number>0</number>
         </property>
        </widget>
        <widget class="QLabel" name="labelControlRobotStatusRobotB">
@@ -7043,7 +7063,7 @@
          </size>
         </property>
         <property name="value">
-         <number>24</number>
+         <number>0</number>
         </property>
        </widget>
        <widget class="QLabel" name="labelControlRobotStatusRobotC">
@@ -7096,7 +7116,7 @@
          </size>
         </property>
         <property name="value">
-         <number>24</number>
+         <number>0</number>
         </property>
        </widget>
        <widget class="QLabel" name="labelControlRobotStatusRobotD">
@@ -7149,7 +7169,7 @@
          </size>
         </property>
         <property name="value">
-         <number>24</number>
+         <number>0</number>
         </property>
        </widget>
        <widget class="QProgressBar" name="progressBarControlRobotStatusRobotG">
@@ -7174,7 +7194,7 @@
          </size>
         </property>
         <property name="value">
-         <number>24</number>
+         <number>0</number>
         </property>
        </widget>
        <widget class="QLabel" name="labelControlRobotStatusRobotG">
@@ -7255,7 +7275,7 @@
          </size>
         </property>
         <property name="value">
-         <number>24</number>
+         <number>0</number>
         </property>
        </widget>
       </widget>
@@ -7916,7 +7936,7 @@
    <property name="minimumSize">
     <size>
      <width>750</width>
-     <height>470</height>
+     <height>500</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -7924,6 +7944,18 @@
      <width>1125</width>
      <height>705</height>
     </size>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::TabFocus</enum>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::CustomContextMenu</enum>
+   </property>
+   <property name="acceptDrops">
+    <bool>false</bool>
    </property>
    <property name="features">
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
@@ -8234,22 +8266,6 @@
       <string>FPS: XX</string>
      </property>
     </widget>
-    <widget class="QGraphicsView" name="graphicsViewVideoViewVideo">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>20</y>
-       <width>511</width>
-       <height>401</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButtonVideoViewStart">
      <property name="geometry">
       <rect>
@@ -8279,6 +8295,22 @@
       </size>
      </property>
     </widget>
+    <widget class="QLabel" name="graphicsViewVideoViewVideo">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>20</y>
+       <width>501</width>
+       <height>401</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
   </widget>
   <action name="actionLoadConfigs">
@@ -8287,7 +8319,7 @@
      <normaloff>:/Icons/Imgs/open-file.png</normaloff>:/Icons/Imgs/open-file.png</iconset>
    </property>
    <property name="text">
-    <string>Load Configs</string>
+    <string>&amp;Load Configs</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -8299,7 +8331,7 @@
      <normaloff>:/Icons/Imgs/Save.png</normaloff>:/Icons/Imgs/Save.png</iconset>
    </property>
    <property name="text">
-    <string>Save Configs</string>
+    <string>&amp;Save Configs</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -8311,7 +8343,7 @@
      <normaloff>:/Icons/Imgs/Save-as.png</normaloff>:/Icons/Imgs/Save-as.png</iconset>
    </property>
    <property name="text">
-    <string>Save as Configs</string>
+    <string>Save as &amp;Configs</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
@@ -8323,7 +8355,7 @@
      <normaloff>:/Icons/Imgs/exit.png</normaloff>:/Icons/Imgs/exit.png</iconset>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>&amp;Exit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -8335,7 +8367,7 @@
      <normaloff>:/Icons/Imgs/devil.png</normaloff>:/Icons/Imgs/devil.png</iconset>
    </property>
    <property name="text">
-    <string>Rules VSSS</string>
+    <string>&amp;Rules VSSS</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -8347,7 +8379,7 @@
      <normaloff>:/Icons/Imgs/icontexto-webdev-about.png</normaloff>:/Icons/Imgs/icontexto-webdev-about.png</iconset>
    </property>
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
  </widget>

@@ -18,17 +18,22 @@ BALL_AMIN = 30
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
 #Criar função pra retonar a imagem com threshold para fazer a calibração
 class Apolo:
-    def __init__(self, callback = None, camera = None):
+    def __init__(self, callback, camera):
         self.callback = callback
+        self.ciclope = camera
+
         self.ciclope = camera
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
+
         #Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28,30),(0,255),(0,255)), MAIN)
         self.setHSVThresh(((120,250),(0,250),(0,250)), BALL)
         self.setHSVThresh(((120,250),(0,250),(0,250)), ADV)
         self.setHSVThresh(((69,70),(0,255),(0,255)), GREEN)
+
+        self.imageId = -1
 
         print("Apolo summoned")
 
@@ -51,8 +56,11 @@ class Apolo:
         2 - Adv
         3 - Green
     '''
-    
+    def resetImageId(self):
+        self.imageId = -1
+
     def setHSVThresh(self, hsvThresh, keyword):
+        self.imageId = keyword
         self.threshList[keyword] = hsvThresh
 
     def getHSVThresh(self,keyword):
@@ -284,7 +292,7 @@ class Apolo:
         cv2.waitKey(0)
 
     #Pega os dados dos robos, da bola e dos adversarios e coloca no formato que a Athena requer
-    def returnData(self, robotList, robotAdvList,ball):
+    def returnData(self, robotList, robotAdvList, ball):
         output = [
             [
                 #OurRobots
@@ -328,8 +336,8 @@ class Apolo:
         '''
 
         #Pega o frame
-        #frame = self.getFrame()
-        frame = cv2.imread("Tags/nova90inv3Balls.png")
+        frame = self.getFrame()
+        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
 
         if frame is None:
             print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -341,11 +349,6 @@ class Apolo:
         #Aplica todos os thresholds (pode adicionar threads)
         for i in range(0,4,1):
             self.thresholdedImages[i] = self.applyThreshold(frameHSV, i)
-
-        #Mostra a imagem (nao tem necessidade, so ta ai pra debug)
-        self.seeThroughMyEyes("Original",frame)
-        self.seeThroughMyEyes("Main",self.thresholdedImages[MAIN])
-        self.seeThroughMyEyes("GREEN",self.thresholdedImages[GREEN])
 
         #Procura os robos
         robotList = self.findRobots(self.thresholdedImages[MAIN],TAG_AMIN)
@@ -415,8 +418,10 @@ class Apolo:
         #Procura os adversarios
         robotAdvList = robotList
 
-        cv2.imshow("frame",frame)
-        cv2.waitKey(0)
         #Modela os dados para o formato que a Athena recebe e retorna
         positions = self.returnData(robotList,robotAdvList, ball)
-        #self.callback(positions)
+
+        if (self.imageId != -1):
+            frame = self.thresholdedImages[self.imageId]
+
+        self.callback(positions,frame)

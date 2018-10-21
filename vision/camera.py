@@ -1,8 +1,9 @@
 import cv2
 
 class Ciclope:
-    def __init__(self, cameraId):
-        self.camera = cv2.VideoCapture(cameraId)
+    def __init__(self, id):
+        self.camera = cv2.VideoCapture(id)
+        print("Ciclope summoned")
 
     #Testar o changeCamera
     def changeCamera(self, cameraId):
@@ -10,6 +11,10 @@ class Ciclope:
         self.camera = cv2.VideoCapture(cameraId)
     def getFrame(self):
         return self.camera.read()
+
+    def changeCamera(self,id):
+        self.killYourself()
+        self.camera = cv2.VideoCapture(id)
 
     def killYourself(self):
         print ("SUICIDE!")

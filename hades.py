@@ -1,4 +1,5 @@
 import time
+import threading
 
 from vision import Apolo
 from vision import Ciclope
@@ -18,6 +19,7 @@ class Hades:
         self.hermes = Hermes(self.hermesReady)
 
         self.play = False
+        self.isCalibrating = False
 
         print("Hades summoned")
 
@@ -25,6 +27,7 @@ class Hades:
         # set up apolo
 
         # set up athena
+        # TODO passar as dimensões corretamente
         self.athena.setup(3, 300, 300, 1.0)
 
         # set up zeus
@@ -37,60 +40,75 @@ class Hades:
 
     # CALLBACKS
 
-    def apoloReady(self, positions):
-        print("\t\tApolo ready")
-        print(positions)
-        self.athena.getTargets(positions)
-        # atuaiza as posições na interface
-        # recebe o frame e repassa para a interface
-        # print(positions)
+    def apoloReady(self, positions, imagem):
+        self.afrodite.updateFrameVideoView(imagem)
+
+        if (self.isCalibrating):
+            index = self.afrodite.getHSVIndex()
+            self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index),index)
+        
+        # decide qual é o próximo módulo na cascata
+        if self.play:
+            nextOnCascade = threading.Thread(target=self.athena.getTargets, args=[positions])
+        else:
+            nextOnCascade = threading.Thread(target=self.apolo.run)
+
+        nextOnCascade.start()  # inicia o processamento no próximo módulo
 
     def athenaReady(self, strategyInfo):
         print("\t\tAthena ready")
-        print(strategyInfo)
-        self.zeus.getVelocities(strategyInfo)
 
-    def zeusReady(self, velocities):
-        print("choque do trovão")
-        self.hermes.fly(velocities)
-
-    def hermesReady(self, messages):
-        # faltando retorno do hermes de finalização
-        # atualiza o FPS da interface
+        # decide qual é o próximo módulo na cascata
         if self.play:
-            self.apolo.run()
+            nextOnCascade = threading.Thread(target=self.zeus.getVelocities, args=[strategyInfo])
+        else:
+            nextOnCascade = threading.Thread(target=self.apolo.run)
+            
+        nextOnCascade.start()
 
     # EVENTOS
+    def calibrationEvent(self):
+        if self.isCalibrating:
+            self.isCalibrating = False
+            self.apolo.resetImageId()
+        else:
+            self.isCalibrating = True
 
-    def eventStart(self):
-        self.play = not self.play
+    def zeusReady(self, velocities):
+        print("\t\tZeus ready")
 
+        # decide qual é o próximo módulo na cascata
         if self.play:
-            print("Started.")
-            self.apolo.run()
+            nextOnCascade = threading.Thread(target=self.hermes.fly, args=[velocities])
+        else:
+            nextOnCascade = threading.Thread(target=self.apolo.run)
 
-    def eventStartXbee(self, port):
-        self.hermes.setup(port)
+        nextOnCascade.start()  # inicia o processamento no próximo módulo
 
-    def eventCreateAndSendMessage(self, robotId, leftWheel, rightWheel):
-        message = self.hermes.createMessage(robotId, leftWheel, rightWheel)
-        self.hermes.sendMessage(robotId, message)
-        self.hermes.clearMessages()
+    def hermesReady(self, messages):
+        # TODO está faltando retorno do hermes de finalização
+        # TODO atualizar o FPS da interface
+        nextOnCascade = threading.Thread(target=self.apolo.run)
+        nextOnCascade.start()  # inicia o processamento no próximo módulo
 
-    def eventSendMessage(self, message):
-        self.hermes.sendMessage(message)
+    # EVENTOS
+    # Hades
+    def eventStartGame(self):
+        self.play = not self.play
+        print("Hades started") if self.play else print("Hades stopped")
 
-    # Captura
-    # TODO implementar callbacks de eventos das funções da captura
+    # Camera e Visão
+    def eventStartVision(self):
+        apoloThread = threading.Thread(target=self.apolo.run)
+        apoloThread.start()
 
-    # Vision
-    # TODO implementar callbacks de eventos das funções da visão
+    def changeCamera(self, cameraId):
+        self.ciclope.changeCamera(cameraId)
 
-    # Robots
-    # TODO implementar callbacks de eventos das funções de configuração dos robôs
+    def setHSVVision(self, thresholdId):
+        self.apolo.setImg(thresholdId)
 
     # Control
-    # TODO implementar callbacks de eventos das funções do controle
     def eventUpdateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
         self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
 
@@ -101,10 +119,18 @@ class Hades:
         print("PID test disabled")
 
     # Communication
-    # TODO implementar callbacks de eventos das funções da comunicação
+    def eventStartXbee(self, port):
+        self.hermes.setup(port=port)
+
+    def eventCreateAndSendMessage(self, robotId, leftWheel, rightWheel):
+        message = self.hermes.createMessage(robotId, leftWheel, rightWheel)
+        self.hermes.sendMessage(robotId, message)
+        self.hermes.clearMessages()
+
+    def eventSendMessage(self, message):
+        self.hermes.sendMessage(message)
 
     # Strategy
-    # TODO implementar callbacks de eventos das funções da stratégia
     def eventToggleTransitions(self, state):
         self.athena.setTransitionsState(state)
 
