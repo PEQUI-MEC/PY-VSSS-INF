@@ -1,6 +1,7 @@
 from control.eunomia import Eunomia
 from control.dice import Dice
 from control.warrior import Warrior
+from multiprocessing import Pool
 
 
 class Zeus:
@@ -25,7 +26,7 @@ class Zeus:
         self.callback = callback
         self.warriors = []
         self.nWarriors = 0
-        self.robotsSpeed = None
+        self.robotsSpeed = [0, 0, 0]
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
@@ -41,10 +42,9 @@ class Zeus:
         Returns:
 
         """
-        self.robotsSpeed = []
-        self.robotsSpeed.append(robotA)
-        self.robotsSpeed.append(robotB)
-        self.robotsSpeed.append(robotC)
+        self.robotsSpeed[0] = robotA
+        self.robotsSpeed[1] = robotB
+        self.robotsSpeed[2] = robotC
 
     def setup(self, nWarriors, width=100):
         """Zeus first movements
@@ -201,6 +201,7 @@ class Zeus:
                     warriors[x].action.append("target")
 
             elif strategia[x]["command"] == "stop":
+                warriors[x].vMax = 0
                 warriors[x].before = float(info["before"])
 
         return warriors
@@ -222,6 +223,10 @@ class Zeus:
         for warrior in self.warriors:
             if len(warrior.action) > 0:
                 velocities.append(self.translate.run(self.actions.run(warrior)))
+
+        # with Pool(processes=3) as pool:
+        #    warriors = pool.map(self.actions.run, self.warriors)
+        #    velocities = pool.map(self.translate.run, warriors)
 
         return velocities
 

@@ -66,7 +66,6 @@ class Repulsive:
             self.updateOrigin(origin)
 
         position = np.array(p) - self.origin
-
         if theta is True:
             return atan2(position[1], position[0])
         else:
@@ -105,8 +104,8 @@ class Move2Goal:
         self.attackGoal = np.array(orientation)
 
     def buildAxis(self):
-        if type(self.attackGoal) == type(list) and self.rotation is True:
-            self.x = self.attackGoal - self.origin
+        if type(self.attackGoal) != type(int) and self.rotation is True:
+            self.x = np.array(self.attackGoal - self.origin, dtype=np.float32)
         else:
             if self.attackGoal == 1:
                 self.x = [1.0, 0.0]
@@ -154,13 +153,13 @@ class Move2Goal:
 
 
 class AvoidObstacle:
-    def __init__(self, k0=None, obstaclePos=None, obstacleSpeed=None, robotPos=None, robotSpeed=None):
-        self.obstaclePos = np.array(obstaclePos)
-        self.obstacleSpeed = np.array(obstacleSpeed)
-        self.robotPos = np.array(robotPos)
-        self.robotSpeed = np.array(robotSpeed)
+    def __init__(self):
+        self.obstaclePos = None
+        self.obstacleSpeed = None
+        self.robotPos = None
+        self.robotSpeed = None
         self.repulsive = Repulsive()
-        self.k0 = k0
+        self.k0 = None
 
     def updateParam(self, k0):
         self.k0 = k0
@@ -177,9 +176,10 @@ class AvoidObstacle:
         s = np.linalg.norm(self.k0 * (self.obstacleSpeed - self.robotSpeed))
         distanceBetween = np.linalg.norm(self.obstaclePos - self.robotPos)
         if distanceBetween >= s:
-            virtualPos = self.obstaclePos + (self.k0 * (self.obstacleSpeed - self.robotSpeed))
+            virtualPos = (self.k0 * (self.obstacleSpeed - self.robotSpeed)) + self.obstaclePos
         else:
-            virtualPos = self.obstaclePos + (distanceBetween / s) * (self.k0 * (self.obstacleSpeed - self.robotSpeed))
+            virtualPos = ((distanceBetween / s) * (self.k0 * (self.obstacleSpeed - self.robotSpeed))) + self.obstaclePos
+
         return virtualPos
 
     def avoid(self, robotPos, vPos=None, theta=True):
@@ -187,7 +187,6 @@ class AvoidObstacle:
             virtualPos = self.getVirtualPos()
         else:
             virtualPos = vPos
-
         return self.repulsive.repulsive(robotPos, origin=virtualPos, theta=theta)
 
 
@@ -219,10 +218,10 @@ class UnivectorField:
         self.moveField.updateParams(self.kr, self.radius)
 
     def updateRobot(self, robotPos, robotSpeed):
-        self.avoidField.updateRobot(self.robotPos, self.robotSpeed)
-
         self.robotPos = np.array(robotPos)
         self.robotSpeed = np.array(robotSpeed)
+
+        self.avoidField.updateRobot(self.robotPos, self.robotSpeed)
 
     def updateTarget(self, targetPos):
         self.moveField.updateOrigin(targetPos)
@@ -235,7 +234,7 @@ class UnivectorField:
     def updateOrientation(self, orientation):
         self.moveField.updateOrientation(orientation)
 
-    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[[0, 0], [0, 0]], orientation=None):
+    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=None):
         if robotPos is not None and robotSpeed is not None:
             self.updateRobot(robotPos, robotSpeed)
         if target is not None:
@@ -249,8 +248,8 @@ class UnivectorField:
         fi_auf = 0.0
         minDistance = self.dMin + 1
         if self.obstacles is not None:
-            for i in range(len(self.obstacles)):
-                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
+            for i in range(0, len(self.obstacles)):
+                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
                 center = self.avoidField.getVirtualPos()
                 centers.append(center)
 

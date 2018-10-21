@@ -78,7 +78,8 @@ class TestZeus(unittest.TestCase):
     ]
 
     def testGetVelocities(self):
-        pass
+        velocities = self.zeus.getVelocities(self.info)
+        print(velocities)
 
     def testGetWarriors(self):
         warriors = self.zeus.getWarriors(self.info)
