@@ -154,7 +154,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -6656,6 +6656,11 @@
         <item>
          <property name="text">
           <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>F</string>
          </property>
         </item>
         <item>
