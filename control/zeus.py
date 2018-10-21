@@ -42,9 +42,13 @@ class Zeus:
         Returns:
 
         """
+        print("[Zeus] New speeds:")
         self.robotsSpeed[0] = robotA
         self.robotsSpeed[1] = robotB
         self.robotsSpeed[2] = robotC
+
+        for robot in self.robotsSpeed:
+            print(robot)
 
     def setup(self, nWarriors, width=100):
         """Zeus first movements

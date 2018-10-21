@@ -49,8 +49,6 @@ class Dice:
 
     def __init__(self):
         self.warrior = None
-        self.velAcc = 0
-        self.previouslyBackwards = False
         self.maxThetaError = roundAngle(20.0*pi/180)
 
     def run(self, warrior):
@@ -87,9 +85,6 @@ class Dice:
 
         """
 
-        if self.velAcc < 0.3:
-            self.velAcc = 0.3
-
         if self.warrior.vMax == 0:
             return [0.0, 0.0]
 
@@ -104,22 +99,8 @@ class Dice:
         moveBackwards = bool(abs(targetTheta - self.warrior.orientation) > pi/2)
         if moveBackwards:
             theta = roundAngle(self.warrior.orientation + pi)
-        if moveBackwards != self.previouslyBackwards:
-            self.velAcc = 0.3
-
-        self.previouslyBackwards = moveBackwards
 
         thetaError = roundAngle(targetTheta - theta)
-
-        if abs(thetaError) > self.maxThetaError:
-            # !TODO arrumar o decremento de velocidade
-            self.velAcc = self.velAcc - 0.2
-        else:
-            if self.velAcc < self.warrior.vMax:
-                # !TODO arrumar o incremento de velocidade
-                self.velAcc = self.velAcc + 0.1
-            else:
-                self.velAcc = self.warrior.vMax
 
         if moveBackwards:
             self.warrior.vLeft = -1 - sin(thetaError) + (-1 * tan(thetaError/2))
@@ -134,7 +115,7 @@ class Dice:
             self.warrior.vRight = 1 + sin(thetaError) + tan(thetaError / 2)
             self.warrior.vRight = saturate(self.warrior.vRight)
 
-        return [self.warrior.vLeft*self.velAcc, self.warrior.vRight*self.velAcc]
+        return [self.warrior.vLeft, self.warrior.vRight]
 
     def positionControl(self):
         """
@@ -159,36 +140,16 @@ class Dice:
         if positionError < 1:
             return [0.0, 0.0]
 
-        if self.velAcc < 0.3:
-            self.velAcc = 0.3
-
         targetTheta = atan2(target[1] - self.warrior.position[1], target[0] - self.warrior.position[0])
         theta = self.warrior.orientation
 
         # Activates backward movement if thetaError > PI/2
         moveBackwards = bool(roundAngle(targetTheta - self.warrior.orientation + pi/2) < 0)
-        if moveBackwards is not self.previouslyBackwards:
-            self.velAcc = 0.3
-
-        self.previouslyBackwards = moveBackwards
 
         if moveBackwards:
             theta = roundAngle(self.warrior.orientation + pi)
 
         thetaError = roundAngle(targetTheta - theta)
-
-        if abs(thetaError) > self.maxThetaError:
-            if self.velAcc > self.warrior.vMax:
-                self.velAcc = self.warrior.vMax
-            elif self.velAcc > 0.3:
-                self.velAcc = self.velAcc - 0.2
-        else:
-            difference = self.warrior.vMax - self.velAcc
-            if difference > 0.2:
-                # !TODO arrumar incremento de velocidade
-                self.velAcc = self.velAcc + 0.2
-            elif difference < 0:
-                self.velAcc = self.warrior.vMax
 
         limiar = atan2(1.0, positionError)
         limiar = 30 if limiar > 30 else limiar
@@ -209,7 +170,7 @@ class Dice:
             self.warrior.vRight = 1 + sin(thetaError) + tan(thetaError / 2)
             self.warrior.vRight = saturate(self.warrior.vRight)
 
-        return [self.warrior.vLeft*self.velAcc, self.warrior.vRight*self.velAcc]
+        return [self.warrior.vLeft, self.warrior.vRight]
 
     def orientationControl(self):
         """

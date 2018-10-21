@@ -15,7 +15,9 @@ class Hermes:
         print("Hermes summoned")
 
     def setup(self, port, baud=115200):
-        self.startBee(port, baud)
+        print(self.startBee(port, baud))
+
+        print("Hermes is set up")
 
     '''
         #velocities should be received like:
@@ -165,7 +167,9 @@ class Hermes:
             right_wheel (float): right wheel velocity
         Returns: a string containing created message
         """
-        message = str(left_wheel) + ";" + str(right_wheel)
+        # TODO trocar código do robô para receber left-right
+        # message = str(left_wheel) + ";" + str(right_wheel)
+        message = str(right_wheel) + ";" + str(left_wheel)
         self.messages.append(Message(robotId, message))
         return message
 

@@ -166,7 +166,6 @@ class Eunomia:
             del self.warrior.targetOrientation
             self.warrior.targetOrientation = [50 * cos(theta * pi / 180), 50 * sin(theta * pi / 180)]
 
-
         #  Verificar se existe um 'before' na chamada desse método
         time = None
         # if warrior.before is not None:

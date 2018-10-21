@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import cv2
 import numpy as np
-from vision import camera
+#from vision import camera
+#import camera
 
 #Constantes
 WIDTH = 640
@@ -15,12 +16,14 @@ TAG_AMIN = 400
 BALL_AMIN = 30
 
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
+#Criar função pra retonar a imagem com threshold para fazer a calibração
 class Apolo:
     def __init__(self, callback, camera):
         self.callback = callback
+        self.ciclope = camera
 
         self.ciclope = camera
-        self.imageId = 10
+
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
 
@@ -30,7 +33,10 @@ class Apolo:
         self.setHSVThresh(((120,250),(0,250),(0,250)), ADV)
         self.setHSVThresh(((69,70),(0,255),(0,255)), GREEN)
 
+        self.imageId = -1
+
         print("Apolo summoned")
+
 
     def getFrame(self):
         frame = None
@@ -44,14 +50,17 @@ class Apolo:
         return frameHSV
 
     #hsvThresh deve ser do tipo (hmin,hmax),(smin,smax),(vmin,vmax)
-    '''Keyword:
-            0 - MAIN
-            1 - Ball
-            2 - Adv
-            3 - Green
+    ''''Keyword:
+        0 - MAIN
+        1 - Ball
+        2 - Adv
+        3 - Green
     '''
+    def resetImageId(self):
+        self.imageId = -1
 
     def setHSVThresh(self, hsvThresh, keyword):
+        self.imageId = keyword
         self.threshList[keyword] = hsvThresh
 
     def getHSVThresh(self,keyword):
@@ -76,14 +85,12 @@ class Apolo:
 
         for i in contours:
             M = cv2.moments(i)
+
             if (M['m00'] > areaMin):
-                #Encontra o robo e a sua orientação utilizando o fitLine
-                #line = cv2.fitLine(i,2,0,0.01,0.01)
-                #orientation = self.findRobotOrientation(line)
-                #print ("ROBOT ORIENTATION: ",orientation)
+
                 cx = int(M['m10']/M['m00'])
                 cy = int(M['m01']/M['m00'])
-                robotPositionList.extend([(cx,cy)])
+                robotPositionList.extend([(cx,cy,-1)])
 
             if (len(robotPositionList) == 3): break
 
@@ -152,50 +159,117 @@ class Apolo:
             return True
         else: return False
 
-    def setImg(self, id):
-        self.imageId = id
-
     #Linka as tags secundarias às suas respectivas tags Principais
     def linkTags(self, robotList, secondaryTagsList, robotRadius):
         linkedSecondaryTags = [None] * 3
-        linkedMainTags = [None] * 3
 
         robotID = 0
 
         for i in robotList:
-            auxTagList = list()
-            for j in secondaryTagsList:
-                if (self.inSphere(i,j,robotRadius)):
-                    auxTagList.extend(j)
+            if (i != (-1,-1,-1)):
+                auxTagList = list()
+                for j in secondaryTagsList:
+                    if (self.inSphere(i,j,robotRadius)):
+                        auxTagList.extend(j)
 
-
-            linkedSecondaryTags[robotID] = auxTagList
+                linkedSecondaryTags[robotID] = auxTagList
 
             robotID += 1
 
-        #Coloca o robo 1 na posição 1, o robo 2 na posição 2 e o robo 3 na posição 3
-        for i in range(0,3,1):
-            menor = i
-            for j in range(i+1,3,1):
-                if (len(linkedSecondaryTags[i]) > len(linkedSecondaryTags[j])):
-                    menor = j
+        return linkedSecondaryTags
 
-            tempSecondary = linkedSecondaryTags[i]
-            linkedSecondaryTags[i] = linkedSecondaryTags[menor]
-            linkedSecondaryTags[menor] = tempSecondary
 
-            tempMain = robotList[i]
-            robotList[i] = robotList[menor]
-            robotList[menor] = tempMain
+    #Refatorar e documentar
+    def findRobotOrientation(self, robotPos, secondaryTagPosition):
+        # h² = c1² + c2² -> Teorema Pitágoras
 
-        return robotList, linkedSecondaryTags
+        distance = ((robotPos[0] - secondaryTagPosition[0]) * (robotPos[0] - secondaryTagPosition[0])) + ((robotPos[1] - secondaryTagPosition[1]) * (robotPos[1] - secondaryTagPosition[1]))
+        distance = np.sqrt(distance)
 
-    #TODO: Encontrar orientação dos robos
-    def findRobotOrientation(self, line):
-        if (line[1] < 0.0001): radAngle = np.arccos(abs(line[0]))
-        else: radAngle = np.arcsin(abs(line[1]))
+        '''
+        Calculo da posição relativa:
+        xFinal - xInicial , yFinal - yInicial
+        
+        Como na imagem o Y cresce pra baixo, então é necessário inverter, ficando entao yInicial - yFinal
+        
+        '''
 
-        return radAngle
+        relativePosition = [(secondaryTagPosition[0] - robotPos[0])/distance, (robotPos[1] - secondaryTagPosition[1])/distance]
+
+        if (abs(relativePosition[0]) == 0):
+            #Quando a variação em X é zero, arctg é indefino (divisão por zero). Sendo assim, deve utilizar arcsin
+            #Porém, a função arcsin para 90º demora mto (mais de 1,5 segundos), entao já seto o valor de 90º radianos direto
+            orientation = 1.5708
+        else:
+            orientation = np.arctan(relativePosition[1]/relativePosition[0])
+
+        #Corrige a orientação para o seu devido quadrante
+        if (relativePosition[0] < 0):
+            if (relativePosition[1] >= 0):
+                #Quadrante 2
+                orientation = np.pi - abs(orientation)
+            elif (relativePosition[1] < 0):
+                #Quadrante 3
+                orientation = np.pi + orientation
+        elif (relativePosition[0] >= 0):
+            if (relativePosition[1] < 0):
+                #Quadrante 4
+                orientation = 2 * np.pi - abs(orientation)
+
+        #Nesse ponto, temos a orientação da tag Verde, porém, a orientação do robo fica à 135 graus anti-horario
+        #Por isso, devemos subtrair 135º radianos
+
+        orientation = ((orientation - 2.35619) % 6.28319)
+
+        #Nesse ponto, temos a orientação entre 0 - 2pi, porém, o controle precisa dela no intervalo de -pi a pi
+        if (orientation > np.pi):
+            orientation = -np.pi + (orientation - np.pi)
+
+        return orientation
+
+    #Refatorar e documentar
+    def findInterestPoint(self, robotPosition, tag1, tag2):
+        #Queremos achar a bola verde mais à esquerda, pra jogar na mesma função que calcula a orientação do robo de 1 bola
+
+        #Como o Y cresce pra baixo, tem q inverter
+        secondary1 = [tag1[0] - robotPosition[0], robotPosition[1] - tag1[1]]
+        secondary2 = [tag2[0] - robotPosition[0], robotPosition[1] - tag2[1]]
+
+        if (secondary1[0] >= 0 and secondary1[1] >= 0):
+            #Quadrante 1
+            if(secondary2[0] < 0 and secondary2[1] >= 0):
+                #Quadrante 2
+                return tag1
+            elif (secondary2[0] >= 0 and secondary2[1] < 0):
+                #Quadrante 4
+                return tag2
+        elif (secondary1[0] < 0 and secondary1[1] >= 0):
+            #Quadrante 2
+            if(secondary2[0] < 0 and secondary2[1] < 0):
+                #Quadrante 3
+                return tag1
+            elif (secondary2[0] >= 0 and secondary2[1] >= 0):
+                #Quadrante 1
+                return tag2
+        elif (secondary1[0] < 0 and secondary1[1] < 0):
+            #Quadrante 3
+            if(secondary2[0] >= 0 and secondary2[1] < 0):
+                #Quadrante 4
+                return tag1
+            elif (secondary2[0] < 0 and secondary2[1] >= 0):
+                #Quadrante 3
+                return tag2
+        elif (secondary1[0] >= 0 and secondary1[1] < 0):
+            #Quadrante 4
+            if(secondary2[0] >= 0 and secondary2[1] >= 0):
+                #Quadrante 1
+                return tag1
+            elif (secondary2[0] < 0 and secondary2[1] < 0): #Arrumar esses menor e menor igual pra condizer com o esperado
+                #Quadrante 1
+                return tag2
+
+        #Caso de bosta
+        return None
 
     #Não é necessario implementar, porém, seria uma melhoria
     def findAdvOrientation(self,previousAdvPosition, currentAdvPosition):
@@ -218,15 +292,15 @@ class Apolo:
                 #OurRobots
                 {
                     "position": (robotList[0][0], robotList[0][1]),
-                    "orientation": 0.5
+                    "orientation": robotList[0][2]
                 },
                 {
                     "position": (robotList[1][0], robotList[1][1]),
-                    "orientation": 0.5
+                    "orientation": robotList[1][2]
                 },
                 {
                     "position": (robotList[2][0], robotList[2][1]),
-                    "orientation": 0.5
+                    "orientation": robotList[2][2]
                 }
             ],
             [
@@ -257,6 +331,7 @@ class Apolo:
 
         #Pega o frame
         frame = self.getFrame()
+        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
 
         if frame is None:
             print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -281,11 +356,42 @@ class Apolo:
         
         '''
 
-        '''
-            Coloca as tags primarias e secundarias do robo 1 na poição 1,
-            do robo 2 na posição 2 e do robo 3 na posição 3    
-        '''
-        robotList, linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
+        linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
+
+
+        for i in range(0,3,1):
+            orientation = 0
+
+            if (len(linkedSecondaryTags[i]) == 2):
+               orientation = self.findRobotOrientation(robotList[i],linkedSecondaryTags[i])
+            elif (len(linkedSecondaryTags[i]) == 4):
+                tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
+                tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
+
+                interestSecondaryTag = self.findInterestPoint(robotList[i], tag1, tag2)
+
+                orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
+            #elif:
+            else:
+                tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
+                tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
+                tag3 = [linkedSecondaryTags[i][4],linkedSecondaryTags[i][5]]
+
+                stepTag1 = self.findInterestPoint(robotList[i], tag1, tag2)
+                
+                if (stepTag1 is None):
+                    interestSecondaryTag = self.findInterestPoint(robotList[i], tag1, tag3)
+                else:
+                    stepTag2 = self.findInterestPoint(robotList[i], stepTag1, tag3)
+                
+                    if (stepTag2 is None):
+                        interestSecondaryTag = stepTag1
+                    else: interestSecondaryTag = stepTag2
+
+
+                orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
+
+            robotList[i] = [robotList[i][0], robotList[i][1], orientation]
 
         #Procura a bola
         ball = self.findBall(self.thresholdedImages[BALL],BALL_AMIN)
@@ -296,7 +402,7 @@ class Apolo:
         #Modela os dados para o formato que a Athena recebe e retorna
         positions = self.returnData(robotList,robotAdvList, ball)
 
-        if (self.imageId == 0):
-            frame = self.thresholdedImages[0]
+        if (self.imageId != -1):
+            frame = self.thresholdedImages[self.imageId]
 
         self.callback(positions,frame)
