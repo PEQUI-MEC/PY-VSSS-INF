@@ -430,17 +430,29 @@ class Afrodite(QMainWindow):
         cameraId = self.getComboBoxCaptureDeviceInformation()
         # TODO: trocar a camera de acordo com o que for selecionado
 
-        self.hades.eventStartVision()
+        self.hades.eventStartVision(cameraId)
 
     def updateComboBoxCaptureDeviceInformation(self):
-        if sys.platform.startswith('win'):
-            ports = ['COM%s' % (i+1) for i in range(256)]
-        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            ports = glob.glob('/dev/video[0-9]*')
-        elif sys.platform.startswith('darwin'):
-            ports = glob.glob('/dev/*')
-        else:
-            raise EnvironmentError('Unsuported plaftorm')
+        #if sys.platform.startswith('win'):
+        cams =[]
+        try:
+            for i in range(0,3):
+                cam = cv2.VideoCapture(i)
+                if cam.isOpened():
+                    cams.append(str(i)) # 'CAM' + str(i)
+                    cam.release()
+                else:
+                    break
+        except:
+            pass
+        ports = cams
+            #cams.clear()
+        #elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        #    ports = glob.glob('/dev/video[0-9]*')
+        #elif sys.platform.startswith('darwin'):
+        #    ports = glob.glob('/dev/*')
+        #else:
+        #    raise EnvironmentError('Unsuported plaftorm')
 
         self.comboBoxCaptureDeviceInformation.clear()
 
