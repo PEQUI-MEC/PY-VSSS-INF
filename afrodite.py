@@ -117,7 +117,7 @@ class Afrodite(QMainWindow):
 
         self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
         self.pushButtonControlSerialSendCommand.clicked.connect(self.getPushButtonControlSerialSendCommand)
-        self.updateComboBoxControlSerialDevice()
+        #self.updateComboBoxControlSerialDevice()
         self.getComboBoxControlSerialDevice()
 
         '''
