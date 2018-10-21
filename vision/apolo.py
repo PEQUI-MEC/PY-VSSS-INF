@@ -16,10 +16,10 @@ BALL_AMIN = 30
 
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
 class Apolo:
-    def __init__(self, callback):
+    def __init__(self, callback, camera):
         self.callback = callback
 
-        self.ciclope = camera.Ciclope()
+        self.ciclope = camera
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
@@ -245,7 +245,6 @@ class Apolo:
 
         return output
 
-
     #Funçao principal da visao
     def run(self):
         '''TO DO:
@@ -253,8 +252,7 @@ class Apolo:
         '''
 
         #Pega o frame
-        #frame = self.getFrame()
-        frame = cv2.imread("Tags/newTag.jpeg")
+        frame = self.getFrame()
 
         if frame is None:
             print ("Nao há câmeras ou o dispositivo está ocupado")
@@ -266,11 +264,6 @@ class Apolo:
         #Aplica todos os thresholds (pode adicionar threads)
         for i in range(0,4,1):
             self.thresholdedImages[i] = self.applyThreshold(frameHSV, i)
-
-        #Mostra a imagem (nao tem necessidade, so ta ai pra debug)
-        self.seeThroughMyEyes("Original",frame)
-        self.seeThroughMyEyes("Main",self.thresholdedImages[MAIN])
-        self.seeThroughMyEyes("GREEN",self.thresholdedImages[GREEN])
 
         #Procura os robos
         robotList = self.findRobots(self.thresholdedImages[MAIN],TAG_AMIN)
@@ -296,8 +289,7 @@ class Apolo:
         #Procura os adversarios
         robotAdvList = robotList
 
-        cv2.imshow("frame",frame)
-        cv2.waitKey(0)
         #Modela os dados para o formato que a Athena recebe e retorna
         positions = self.returnData(robotList,robotAdvList, ball)
-        self.callback(positions)
+
+        self.callback(positions,frame)
