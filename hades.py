@@ -1,11 +1,12 @@
 import time
+import threading
 
 from vision import Apolo
+from vision import Ciclope
 from control import Zeus
 from strategy import Athena
 from communication import Hermes
-from vision import Ciclope
-import threading
+
 
 class Hades:
     def __init__(self, afrodite):
@@ -25,6 +26,7 @@ class Hades:
         # set up apolo
 
         # set up athena
+        # TODO passar as dimensões corretamente
         self.athena.setup(3, 300, 300, 1.0)
 
         # set up zeus
@@ -37,54 +39,76 @@ class Hades:
 
     # CALLBACKS
 
-    def apoloReady(self, positions, imagem):
+    def apoloReady(self, positions, image):
         print("\t\tApolo ready")
-        print(positions)
-        self.afrodite.updateFrameVideoView(imagem)
 
-        if (self.play):
-            print ("TA CHAMANDO")
-            #threading.Thread(target=self.athena.getTargets, positions)
-        #else:
-        #    apoloCallbackThread = threading.Thread(target=self.apolo.run)
-        #    apoloCallbackThread.start()
+        # atualiza a interface com a imagem do callback
+        self.afrodite.updateFrameVideoView(image)
 
-        apoloCallbackThread = threading.Thread(target=self.apolo.run)
-        apoloCallbackThread.start()
+        # decide qual é o próximo módulo na cascata
+        if self.play:
+            nextOnCascade = threading.Thread(target=self.athena.getTargets, args=[positions])
+        else:
+            nextOnCascade = threading.Thread(target=self.apolo.run)
+
+        nextOnCascade.start()  # inicia o processamento no próximo módulo
 
     def athenaReady(self, strategyInfo):
         print("\t\tAthena ready")
-        print(strategyInfo)
-        self.zeus.getVelocities(strategyInfo)
+
+        # decide qual é o próximo módulo na cascata
+        if self.play:
+            nextOnCascade = threading.Thread(target=self.zeus.getVelocities, args=[strategyInfo])
+        else:
+            nextOnCascade = threading.Thread(target=self.apolo.run)
+
+        nextOnCascade.start()  # inicia o processamento no próximo módulo
 
     def zeusReady(self, velocities):
-        print("choque do trovão")
-        self.hermes.fly(velocities)
+        print("\t\tZeus ready")
+
+        # decide qual é o próximo módulo na cascata
+        if self.play:
+            nextOnCascade = threading.Thread(target=self.hermes.fly, args=[velocities])
+        else:
+            nextOnCascade = threading.Thread(target=self.apolo.run)
+
+        nextOnCascade.start()  # inicia o processamento no próximo módulo
 
     def hermesReady(self, messages):
-        # faltando retorno do hermes de finalização
-        # atualiza o FPS da interface
-        if self.play:
-            self.apolo.run()
+        # TODO está faltando retorno do hermes de finalização
+        # TODO atualizar o FPS da interface
+        nextOnCascade = threading.Thread(target=self.apolo.run)
+        nextOnCascade.start()  # inicia o processamento no próximo módulo
 
     # EVENTOS
-    def setHSVVision(self, id):
-        self.apolo.setImg(id)
-
-
-    def eventStartVision(self):
-        apoloThread = threading.Thread(target=self.apolo.run)
-
-        apoloThread.start()
-
+    # Hades
     def eventStartGame(self):
         self.play = not self.play
-        '''
-        if self.play:
-            print("Started.")
-            self.apolo.run()
-        '''
+        print("Hades started") if self.play else print("Hades stopped")
 
+    # Camera e Visão
+    def eventStartVision(self):
+        apoloThread = threading.Thread(target=self.apolo.run)
+        apoloThread.start()
+
+    def changeCamera(self, cameraId):
+        self.ciclope.changeCamera(cameraId)
+
+    def setHSVVision(self, thresholdId):
+        self.apolo.setImg(thresholdId)
+
+    # Control
+    def eventUpdateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
+        self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
+
+    def enablePIDTest(self):
+        print("PID test enabled")
+
+    def disablePIDTest(self):
+        print("PID test disabled")
+
+    # Communication
     def eventStartXbee(self, port):
         self.hermes.setup(port)
 
@@ -96,33 +120,7 @@ class Hades:
     def eventSendMessage(self, message):
         self.hermes.sendMessage(message)
 
-    # Captura
-    # TODO implementar callbacks de eventos das funções da captura
-    def changeCamera(self,id):
-        self.ciclope.changeCamera(id)
-
-    # Vision
-    # TODO implementar callbacks de eventos das funções da visão
-
-    # Robots
-    # TODO implementar callbacks de eventos das funções de configuração dos robôs
-
-    # Control
-    # TODO implementar callbacks de eventos das funções do controle
-    def eventUpdateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
-        self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
-
-    def enablePIDTest(self):
-        print("PID test enabled")
-
-    def disablePIDTest(self):
-        print("PID test disabled")
-
-    # Communication
-    # TODO implementar callbacks de eventos das funções da comunicação
-
     # Strategy
-    # TODO implementar callbacks de eventos das funções da stratégia
     def eventToggleTransitions(self, state):
         self.athena.setTransitionsState(state)
 
