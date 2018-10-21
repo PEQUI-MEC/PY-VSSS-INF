@@ -5,6 +5,10 @@ class Ciclope:
         self.camera = cv2.VideoCapture(id)
         print("Ciclope summoned")
 
+    #Testar o changeCamera
+    def changeCamera(self, cameraId):
+        self.killYourself()
+        self.camera = cv2.VideoCapture(cameraId)
     def getFrame(self):
         return self.camera.read()
 

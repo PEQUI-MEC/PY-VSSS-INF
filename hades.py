@@ -12,7 +12,7 @@ class Hades:
     def __init__(self, afrodite):
         # gods
         self.afrodite = afrodite
-        self.ciclope = Ciclope(0)
+        self.ciclope = Ciclope(0) #Por padrão instancia a camera 0, quando for selecionado na interface, troca a camera
         self.apolo = Apolo(self.apoloReady, self.ciclope)
         self.athena = Athena(self.athenaReady)
         self.zeus = Zeus(self.zeusReady)
