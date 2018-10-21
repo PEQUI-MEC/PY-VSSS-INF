@@ -359,8 +359,9 @@ class Apolo:
         linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
 
         for i in range(0,3,1):
-            orientation = 0
-            if linkedSecondaryTags[i] is not None:
+            try:
+                orientation = 0
+
                 if (len(linkedSecondaryTags[i]) == 2):
                    orientation = self.findRobotOrientation(robotList[i],linkedSecondaryTags[i])
                 elif (len(linkedSecondaryTags[i]) == 4):
@@ -391,6 +392,9 @@ class Apolo:
                     orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
 
                 robotList[i] = [robotList[i][0], robotList[i][1], orientation]
+            except:
+                print ("Nao foi possivel encontrar todas as orientações")
+                print ("Provavelmente a calibração das tags secundarias está zoada")
 
         #Procura a bola
         ball = self.findBall(self.thresholdedImages[BALL],BALL_AMIN)

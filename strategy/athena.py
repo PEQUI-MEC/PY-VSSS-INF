@@ -191,6 +191,8 @@ class Athena:
 
                 if "targetOrientation" in warrior.command:
                     command["data"]["target"]["orientation"] = warrior.command["targetOrientation"]
+                else:
+                    command["data"]["target"]["orientation"] = self.endless.goal
 
                 if "targetVelocity" in warrior.command:
                     command["data"]["velocity"] = warrior.command["targetVelocity"]
@@ -209,6 +211,7 @@ class Athena:
 
             elif warrior.command["type"] == "lookAt":
                 command["command"] = "lookAt"
+                command["data"] = {}
                 command["data"]["pose"] = {
                     "position": warrior.position,
                     "orientation": warrior.orientation
@@ -230,7 +233,7 @@ class Athena:
                 command["data"]["velocity"] = warrior.command["targetVelocity"]
                 command["data"]["direction"] = warrior.command["spinDirection"]
 
-            else: # stop
+            else:  # stop
                 command["command"] = "stop"
                 command["data"] = {}
                 if "before" in warrior.command:
