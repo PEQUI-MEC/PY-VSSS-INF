@@ -11,7 +11,8 @@ class TestTranslate(unittest.TestCase):
 
     def testRun(self):
         self.warrior.cmdType = "SPEED"
-        self.warrior.vMax = 0.8
+        self.warrior.vLeft = 0.8
+        self.warrior.vRight = 0.8
 
         warrior = self.translate.run(self.warrior)
         self.assertIsNotNone(warrior)
@@ -35,6 +36,7 @@ class TestTranslate(unittest.TestCase):
         self.warrior.cmdType = "ORIENTATION"
         self.warrior.orientation = 0
         self.warrior.targetOrientation = pi
+        self.warrior.vMax=0.8
         warrior = self.translate.run(self.warrior)
 
         self.assertEqual([warrior[0], warrior[1]], [0, 0])

@@ -1,121 +1,171 @@
-from math import atan2, pi
+from math import atan2, pi, cos, sin
 from .navigation import UnivectorField
 
 
 class Eunomia:
+    """Action Controller
+
+    Attributes:
+        uvf : Instance of Univector Field class. This class manager all robot navigation.
+    """
 
     def __init__(self):
         self.uvf = UnivectorField()
+        self.warrior = None
 
     def setup(self, width=100):
-        radius = 0.2*width/1.70
+        """
 
-        # Espiral radius, m2g kr, ao k0, distance dmin, gaussian delta
-        # self.uvf.updateConstants(radius, 0.7, 0.1, 0.05, 0.15)
-        self.uvf.updateConstants(4.0, 4.9, 0.12, 5.0, 4.5)
+        Args:
+            width:
+
+        Returns:
+
+        """
+
+        # radius = 0.2*width/1.70
+        # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
+        self.uvf.updateConstants(radius=6.0, kr=5.9, k0=0.12, dMin=5.0, lDelta=4.5)
 
     def run(self, warrior):
+        """Main method of action controller
+
+        Recebe um objeto do tipo Warrior(). De acordo com o tipo de ação de warrior, chama-se o respectivo método que
+        irá tratar e calcular corretamente todos os dados necessários para a geração de velocidades.
+
+        Args:
+            warrior:
+
+        Returns:
+            Warrior(): objeto com as variáveis calculadas e prontas para geração de velocidades
+
+        """
+
+        self.warrior = warrior
+
         if warrior.action[0] == "stop":
             warrior.cmdType = "SPEED"
-            return self.stop(warrior)
+            self.stop()
 
         elif warrior.action[0] == "spin":
             warrior.cmdType = "SPEED"
-            return self.spin(warrior)
+            self.spin()
 
         elif warrior.action[0] == "lookAt":
             warrior.cmdType = "ORIENTATION"
-            warrior.targetOrientation = self.lookAt(warrior.action[1], warrior.target,  warrior.position,
-                                                    warrior.targetOrientation)
-            return warrior
+            self.lookAt()
 
         elif warrior.action[0] == "goTo":
             warrior.cmdType = "VECTOR"
-            return self.goTo(warrior)
+            self.goTo()
 
-    '''
-    - {
-        "command": stop,
-        "data": {}
-    }
-    '''
-    def stop(self, warrior):
-        if warrior.before == 0:
-            warrior.vMax = 0
-            warrior.vLeft = 0
-            warrior.vRight = 0
+        return self.warrior
+
+    def stop(self, ):
+        """Command Stop
+
+        - {
+            "command": stop,
+            "data": {}
+        }
+
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
+        if self.warrior.before == 0:
+            self.warrior.vLeft = 0
+            self.warrior.vRight = 0
 
         else:
-            # TODO(Luana) Fazer controle de desesceleração
-            warrior.vMax = 0
-            warrior.vLeft = 0
-            warrior.vRight = 0
+            # TODO Fazer controle de desesceleração
+            self.warrior.vLeft = 0
+            self.warrior.vRight = 0
 
-        return warrior
+    def spin(self):
+        """Command Spin
 
-    '''
-    - {
-        "command": "spin",
-        "data": { "velocity": X m/s, "direction": "clockwise" | "counter"
-        }
-    }
-    '''
-    def spin(self, warrior):
-        if warrior.action[1] == "clockwise":
-            warrior.vLeft = warrior.vMax
-            warrior.vRight = -warrior.vMax
+          - {
+                "command": "spin",
+                "data": { "velocity": X m/s, "direction": "clockwise" | "counter"}
+            }
+
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
+        if self.warrior.action[1] == "clockwise":
+            self.warrior.vLeft = self.warrior.vMax
+            self.warrior.vRight = -self.warrior.vMax
         else:
-            warrior.vLeft = -warrior.vMax
-            warrior.vRight = warrior.vMax
+            self.warrior.vLeft = -self.warrior.vMax
+            self.warrior.vRight = self.warrior.vMax
 
-        return warrior
+    def lookAt(self):
+        """Command lookAt
 
-    '''
-    - {
-        "command": "lookAt",
-        "data": {
-            "pose": {
-                "position": (x, y),  # opcional - é passado se o target for um ponto
-                "orientation": θ radianos
-            },
-            "target": θ radianos | (x, y)
+        - {
+            "command": "lookAt",
+            "data": {
+                "pose": {
+                    "position": (x, y),  # opcional - é passado se o target for um ponto
+                    "orientation": θ radianos
+                },
+                "target": θ radianos | (x, y)
+            }
         }
-    }
-    '''
-    def lookAt(self, where, target, position, orientation=None):
-        if where is "orientation":
-            return orientation
 
-        elif where is "target":
-            x = target[0] - position[0]
-            y = target[1] - position[1]
-            return atan2(y, -x)
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
+        if self.warrior.action[1] is "orientation":
+            self.warrior.orientation = self.warrior.targetOrientation
+
+        elif self.warrior.action[1] is "target":
+            x = self.warrior.target[0] - self.warrior.position[0]
+            y = self.warrior.target[1] - self.warrior.position[1]
+            self.warrior.targetOrientation = atan2(y, -x)
 
         else:
             raise ValueError("Invalid data.")
 
-    '''
-    - {
-        "command": "goTo",
-        "data": {
-            "obstacles": [(x, y)] # opcional - se passado, desviar de tais obstaclos
-            "pose": {"position": (x, y), "orientation": θ radianos},
-            "target": {"position": (x, y), "orientation": θ radianos | (x, y)},  # opcional - pode ser uma orientação final ou uma posição de lookAt
-            "velocity": X m/s,  # opcional - se passado, sem before, é a velocidade constante / com before é velocidade padrão
-            "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
-        }
-    }
-    '''
-    def goTo(self, warrior):
-        # Se o targetOrientation passado for um ponto, calcular o targetOrientation usando o lookAt
-        if type(warrior.targetOrientation) is tuple:
-            target = warrior.targetOrientation
-            del warrior.targetOrientation
-            warrior.targetOrientation = self.lookAt("target", target, warrior.position)
+    def goTo(self):
+        """Command goTo
 
-        # Verificar se existe obstáculos para se desviar
-        if warrior.obstacles is not None:
-            self.uvf.updateObstacles(warrior.obstacles, [[0, 0], [0, 0]])
+        - {
+            "command": "goTo",
+            "data": {
+                "obstacles": [(x, y)] # opcional - se passado, desviar de tais obstaclos
+                "pose": {"position": (x, y), "orientation": θ radianos},
+                "target": {"position": (x, y), "orientation": θ radianos | (x, y)},  # opcional - pode ser uma orientação final ou uma posição de lookAt
+                "velocity": X m/s,  # opcional - se passado, sem before, é a velocidade constante / com before é velocidade padrão
+                "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
+            }
+        }
+
+        Args:
+            warrior:
+
+        Returns:
+
+        """
+
+        # Se o targetOrientation passado não for um ponto
+        if type(self.warrior.targetOrientation) is not tuple:
+            theta = self.warrior.targetOrientation
+            del self.warrior.targetOrientation
+            self.warrior.targetOrientation = [50 * cos(theta * pi / 180), 50 * sin(theta * pi / 180)]
+
 
         #  Verificar se existe um 'before' na chamada desse método
         time = None
@@ -123,18 +173,18 @@ class Eunomia:
         #   time = warrior.before
 
         if time is None:
-            # TODO(Luana) Sem aceleração ou eu quem controlo como será feito a aceleração?
+            self.warrior.vRight = self.warrior.vMax
+            self.warrior.vLeft = self.warrior.vMax
 
-            warrior.vRight = warrior.vMax
-            warrior.vLeft = warrior.vMax
-            print("\nwarrior ", list(warrior.position))
-            print("Target ", list(warrior.target))
+            # print("\nwarrior ", list(warrior.position))
+            # print("Target ", list(warrior.target))
 
-            uvf = self.uvf.getVec(list(warrior.position), [warrior.vLeft, warrior.vRight], list(warrior.target),
-                                  warrior.targetOrientation)
-            print("UVF " + str(uvf))
+            self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
+                                                         robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
+                                                         target=list(self.warrior.target),
+                                                         obstacles=self.warrior.obstacles,
+                                                         orientation=self.warrior.targetOrientation)
+            # print("UVF " + str(warrior.transAngle))
         else:
-            # TODO(Luana) Fazer verificação se é possível realizar o trajeto com o tempo requisitado
+            # TODO Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass
-
-        return warrior

@@ -1,83 +1,57 @@
-import math
+from math import pi, atan2, sin, cos, exp, sqrt
 import numpy as np
-from scipy.spatial import distance
+
+# TODO Documentar tudo
 
 
 def gaussian(m, v):
-    return math.exp(-(m**2) / (2 * (v**2)))
-
-
-def angleWithX(p):
-    i = np.array([1.0, 0.0])
-    theta = math.atan2(np.cross(i, p), np.dot(i, p))
-    return theta
+    return exp(-(m**2) / (2 * (v**2)))
 
 
 def wrap2pi(theta):
-    if theta > math.pi:
-        return theta - 2 * math.pi
-    if theta < -math.pi:
-        return 2 * math.pi + theta
+    if theta > pi:
+        return theta - 2 * pi
+    if theta < -pi:
+        return 2 * pi + theta
     else:
         return theta
 
 
-def angle(target, position):
-    x = target[0] - position[0]
-    y = target[1] - position[1]
-    return math.atan2(y, -x)
-
-
 class HyperbolicSpiral:
-    def __init__(self, Kr, radius):
-        self.Kr = Kr
+    def __init__(self, kr, radius):
+        self.kr = kr
         self.radius = radius
         self.origin = None
-        self.orientation = None
 
-    def updateParams(self, KR, RADIUS):
-        self.Kr = KR
-        self.radius = RADIUS
+    def updateParams(self, kr, radius):
+        self.kr = kr
+        self.radius = radius
 
     def updateOrigin(self, newOrigin):
         self.origin = np.array(newOrigin)
 
-    def updateOrientation(self, orientation):
-        self.orientation = np.array(orientation)
-
-    def fi_h(self, p, radius=None, cw=True):
-        if radius is None:
-            r = self.radius
-        else:
-            r = radius
-
-        # theta = angle(p, self.origin) - (self.orientation - angle(p, self.origin))
-        theta = math.atan2(p[1], p[0])  # TODO(Luana) Verificar mudanças
-        print("61: Theta: " + str(theta))
-
-        # p = distance.euclidean(_p, self.origin)
-        ro = np.linalg.norm(p)  # TODO(Luana) Verificar mudanças
-        if ro > r:
-            a = (math.pi / 2.0) * (2.0 - (r + self.Kr)/(ro + self.Kr))
-        else:
-            a = (math.pi / 2.0) * math.sqrt(ro / r)
-
-        if cw:
-            _theta = wrap2pi(theta+a)
-            return math.atan2(math.sin(_theta), math.cos(_theta))
-        else:
-            _theta = wrap2pi(theta - a)
-            return math.atan2(math.sin(_theta), math.cos(_theta))
-
-    def n_h(self, p, radius=None, cw=True):
-        if radius is None:
+    def hyperbolic(self, position, r=None, clockwise=True):
+        if r is None:
             radius = self.radius
         else:
-            radius = radius
+            radius = r
 
-        fi = self.fi_h(p, radius, cw)
+        # theta = angle(p, self.origin) - (self.orientation - angle(p, self.origin))
+        theta = atan2(position[1], position[0])
+        # print(": Theta: " + str(theta))
 
-        return np.array([math.cos(fi), math.cos(fi)])
+        ro = np.linalg.norm(position - self.origin)
+        if ro > radius:
+            spiral = (pi / 2.0) * (2.0 - (radius + self.kr) / (ro + self.kr))
+        else:
+            spiral = (pi / 2.0) * sqrt(ro / radius)
+
+        if clockwise:
+            spiral = wrap2pi(theta + spiral)
+            return atan2(sin(spiral), cos(spiral))
+        else:
+            spiral = wrap2pi(theta - spiral)
+            return atan2(sin(spiral), cos(spiral))
 
 
 class Repulsive:
@@ -85,78 +59,70 @@ class Repulsive:
         self.origin = None
 
     def updateOrigin(self, newOrigin):
-        self.origin = np.copy(newOrigin)
+        self.origin = newOrigin
 
-    def fi_r(self, p, origin=None, theta=True):
+    def repulsive(self, p, origin=None, theta=True):
         if origin is not None:
             self.updateOrigin(origin)
 
-        p = np.array(p) - self.origin
-
+        position = np.array(p) - self.origin
         if theta is True:
-            # theta = angleWithX(p)
-            # return wrap2pi(theta)
-            return math.atan2(p[1], p[0])
+            return atan2(position[1], position[0])
         else:
-            return p
-
-
-LEFT = 0
-RIGHT = 1
+            return position
 
 
 class Move2Goal:
 
-    def __init__(self, Kr, radius, attackGoal=RIGHT, rotationSupport=False):
-        self.Kr = Kr
+    def __init__(self, kr=None, radius=None, attackGoal=1, rotation=True):
+        self.kr = kr
         self.radius = radius
-        self.hyperSpiral = HyperbolicSpiral(self.Kr, self.radius)
-        self.orientation = None
-        self.origin = None
-        self.attack_goal = attackGoal
-        self.rotation_support = rotationSupport
-        self.u = np.array([None, None])
-        self.v = np.array([None, None])
-        self.toUnivectorMatrix = None
-        self.toCanonicalMatrix = None
 
-    def updateParams(self, KR, RADIUS):
-        self.Kr = KR
-        self.radius = RADIUS
-        self.hyperSpiral.updateParams(self.Kr, self.radius)
+        self.origin = None
+
+        self.x = None
+        self.y = None
+        self.attackGoal = attackGoal
+        self.rotation = rotation
+        self.toUnivector = None
+        self.toGame = None
+
+        self.hyperSpiral = HyperbolicSpiral(self.kr, self.radius)
+
+    def updateParams(self, kr, radius):
+        self.kr = kr
+        self.radius = radius
+        self.hyperSpiral.updateParams(self.kr, self.radius)
 
     def updateOrigin(self, newOrigin):
         self.origin = np.array(newOrigin)
         self.hyperSpiral.updateOrigin(newOrigin)
+
         self.buildAxis()
 
     def updateOrientation(self, orientation):
-        self.orientation = np.array(orientation)
-        self.hyperSpiral.updateOrientation(orientation)
+        self.attackGoal = np.array(orientation)
 
-    # TODO to targetOrientation
     def buildAxis(self):
-        if type(self.attack_goal) != type(int) and self.rotation_support is True:
-            self.u = np.array(self.attack_goal - self.origin, dtype=np.float32)
-        else:  # is int
-            if self.attack_goal == RIGHT:
-                self.u = np.array([-1.0, 0.0])
+        if type(self.attackGoal) != type(int) and self.rotation is True:
+            self.x = np.array(self.attackGoal - self.origin, dtype=np.float32)
+        else:
+            if self.attackGoal == 1:
+                self.x = [1.0, 0.0]
             else:
-                self.u = np.array([1.0, 0.0])
+                self.x = [-1.0, 0.0]
 
-        self.u /= -np.linalg.norm(self.u)
-        theta = math.atan2(self.u[1], self.u[0])
-        self.v = np.array([-math.sin(theta), math.cos(theta)])
+        self.x /= -np.linalg.norm(self.x)
+        theta = atan2(self.x[1], self.x[0])
+        self.y = [-sin(theta), cos(theta)]
 
-        self.toCanonicalMatrix = np.array([self.u, self.v]).T
-        self.toUnivectorMatrix = np.linalg.inv(self.toCanonicalMatrix)
+        self.toGame = np.array([self.x, self.y]).T
+        self.toUnivector = np.linalg.inv(self.toGame)
 
     def fi_tuf(self, p):
-        p = np.array(p) - self.origin
-
-        # TODO verificar de onde deabos deve ser esse x e y
-        p = np.dot(self.toUnivectorMatrix, p).reshape(2, )
-        x, y = p
+        position = np.array(p) - self.origin
+        position = np.dot(self.toUnivector, position).reshape(2, )
+        x, y = position
         yl = y + self.radius
         yr = y - self.radius
 
@@ -164,131 +130,126 @@ class Move2Goal:
         pr = np.array([x, yl])
 
         if -self.radius <= y < self.radius:
-            nhCCW = self.hyperSpiral.n_h(pl, cw=False)
-            nhCW = self.hyperSpiral.n_h(pr, cw=True)
+            nhCounterClockwise = self.hyperSpiral.hyperbolic(pl, clockwise=False)
+            nhCounterClockwise = np.array([cos(nhCounterClockwise), sin(nhCounterClockwise)])
 
-            vec = (abs(yl) * nhCCW + abs(yr) * nhCW) / (2.0 * self.radius)
-            vec = np.dot(self.toCanonicalMatrix, vec).reshape(2, )
-            # return wrap2pi(angleWithX(vec))
+            nhClockwise = self.hyperSpiral.hyperbolic(pr, clockwise=True)
+            nhClockwise = np.array([cos(nhClockwise), sin(nhClockwise)])
+
+            movement = (abs(yl) * nhCounterClockwise + abs(yr) * nhClockwise) / (2.0 * self.radius)
+            movement = np.dot(self.toGame, movement).reshape(2, )
+
         else:
             if y < -self.radius:
-                theta = self.hyperSpiral.fi_h(pl, cw=True)
-            else:  # y >= r
-                theta = self.hyperSpiral.fi_h(pr, cw=False)
+                theta = self.hyperSpiral.hyperbolic(pl, clockwise=True)
+            else:
+                theta = self.hyperSpiral.hyperbolic(pr, clockwise=False)
 
-            vec = np.array([math.cos(theta), math.sin(theta)])
-            vec = np.dot(self.toCanonicalMatrix, vec).reshape(2, )
+            # No artigo aqui ele só usa o theta
+            movement = np.array([cos(theta), sin(theta)])
+            movement = np.dot(self.toGame, movement).reshape(2, )
 
-        return math.atan2(vec[1], vec[0])
+        return atan2(movement[1], movement[0])
 
 
 class AvoidObstacle:
-    def __init__(self, pObs, vObs, pRobot, vRobot, K0):
-        self.pObs = np.array(pObs)
-        self.vObs = np.array(vObs)
-        self.pRobot = np.array(pRobot)
-        self.vRobot = np.array(vRobot)
-        self.K0 = K0
-        self.repField = Repulsive()
+    def __init__(self):
+        self.obstaclePos = None
+        self.obstacleSpeed = None
+        self.robotPos = None
+        self.robotSpeed = None
+        self.repulsive = Repulsive()
+        self.k0 = None
 
-    def updateParam(self, K0):
-        self.K0 = K0
+    def updateParam(self, k0):
+        self.k0 = k0
 
-    def updateRobot(self, pRobot, vRobot):
-        self.pRobot = np.array(pRobot)
-        self.vRobot = np.array(vRobot)
+    def updateRobot(self, robotPos, robotSpeed):
+        self.robotPos = np.array(robotPos)
+        self.robotSpeed = np.array(robotSpeed)
 
-    def updateObstacle(self, pObs, vObs):
-        self.pObs = np.copy(np.array(pObs))
-        self.vObs = np.copy(np.array(vObs))
+    def updateObstacle(self, obstaclePos, obstacleSpeed):
+        self.obstaclePos = np.array(obstaclePos)
+        self.obstacleSpeed = np.array(obstacleSpeed)
 
     def getVirtualPos(self):
-        sNorm = np.linalg.norm(self.K0 * (self.vObs - self.vRobot))
-        d = np.linalg.norm(self.pObs - self.pRobot)
-        if d >= sNorm:
-            vPos = self.pObs + (self.K0 * (self.vObs - self.vRobot))
+        s = np.linalg.norm(self.k0 * (self.obstacleSpeed - self.robotSpeed))
+        distanceBetween = np.linalg.norm(self.obstaclePos - self.robotPos)
+        if distanceBetween >= s:
+            virtualPos = (self.k0 * (self.obstacleSpeed - self.robotSpeed)) + self.obstaclePos
         else:
-            vPos = self.pObs + (d/sNorm)*(self.K0 * (self.vObs - self.vRobot))
-        return vPos
+            virtualPos = ((distanceBetween / s) * (self.k0 * (self.obstacleSpeed - self.robotSpeed))) + self.obstaclePos
 
-    def fi_auf(self, robotPos, vPos=None, theta=True):
+        return virtualPos
+
+    def avoid(self, robotPos, vPos=None, theta=True):
         if vPos is None:
-            vPos = self.getVirtualPos()
+            virtualPos = self.getVirtualPos()
         else:
-            vPos = vPos
-
-        return self.repField.fi_r(robotPos, origin=vPos, theta=theta)
+            virtualPos = vPos
+        return self.repulsive.repulsive(robotPos, origin=virtualPos, theta=theta)
 
 
 class UnivectorField:
-    def __init__(self, attackGoal=RIGHT, rotation=True):
-        # Constants
-        self.RADIUS = None
-        self.KR = None
-        self.K0 = None
-        self.DMIN = None
-        self.LDELTA = None
+    def __init__(self):
+        self.radius = None
+        self.kr = None
+        self.k0 = None
+        self.dMin = None
+        self.lDelta = None
 
-        # Subfields
-        self.avoidField = AvoidObstacle([None, None], [None, None], [None, None], [None, None], self.K0)
-        self.moveField = Move2Goal(self.KR, self.RADIUS, attackGoal=attackGoal, rotationSupport=rotation)
-
-        #
         self.obstacles = None
         self.obstaclesSpeed = None
         self.targetPos = None
         self.robotPos = None
         self.robotSpeed = None
-        self.orientation = None
 
-    def updateConstants(self, RADIUS, KR, K0, DMIN, LDELTA):
-        self.RADIUS = RADIUS
-        self.KR = KR
-        self.K0 = K0
-        self.DMIN = DMIN
-        self.LDELTA = LDELTA
-        self.avoidField.updateParam(self.K0)
-        self.moveField.updateParams(self.KR, self.RADIUS)
+        self.moveField = Move2Goal()
+        self.avoidField = AvoidObstacle()
 
-    def updateRobot(self, robotPos, vRobot):
+    def updateConstants(self, radius, kr, k0, dMin, lDelta):
+        self.radius = radius
+        self.kr = kr
+        self.k0 = k0
+        self.dMin = dMin
+        self.lDelta = lDelta
+
+        self.avoidField.updateParam(self.k0)
+        self.moveField.updateParams(self.kr, self.radius)
+
+    def updateRobot(self, robotPos, robotSpeed):
         self.robotPos = np.array(robotPos)
-        self.robotSpeed = np.array(vRobot)
+        self.robotSpeed = np.array(robotSpeed)
+
         self.avoidField.updateRobot(self.robotPos, self.robotSpeed)
 
     def updateTarget(self, targetPos):
-        self.targetPos = np.array(targetPos)
         self.moveField.updateOrigin(targetPos)
+        self.targetPos = np.array(targetPos)
 
-    def updateObstacles(self, obstacles, obsSpeeds):
+    def updateObstacles(self, obstacles, obstacleSpeeds):
         self.obstacles = np.array(obstacles)
-        self.obstaclesSpeed = np.array(obsSpeeds)
+        self.obstaclesSpeed = np.array(obstacleSpeeds)
 
     def updateOrientation(self, orientation):
-        self.orientation = np.array(orientation)
         self.moveField.updateOrientation(orientation)
 
-    def getVec(self, robotPos=None, robotSpeed=None, target=None, orientation=None):
-        robotPos = np.array(robotPos)
-        robotSpeed = np.array(robotSpeed)
-        target = np.array(target)
-        orientation = np.array(orientation)
-
-        # Atualizar valores recebidos
+    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=None):
         if robotPos is not None and robotSpeed is not None:
             self.updateRobot(robotPos, robotSpeed)
         if target is not None:
             self.updateTarget(target)
         if orientation is not None:
             self.updateOrientation(orientation)
+        if obstacles is not None:
+            self.updateObstacles(obstacles, ostaclesSpeed)
 
-        closestCenter = np.array([None, None])
         centers = []
-        minDistance = self.DMIN + 1
         fi_auf = 0.0
-
+        minDistance = self.dMin + 1
         if self.obstacles is not None:
-            for i in range(self.obstacles.shape[0]):
-                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
+            for i in range(0, len(self.obstacles)):
+                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
                 center = self.avoidField.getVirtualPos()
                 centers.append(center)
 
@@ -298,19 +259,19 @@ class UnivectorField:
             closestCenter = centers[index]
             minDistance = distVect[index]
 
-            fi_auf = self.avoidField.fi_auf(self.robotPos, vPos=closestCenter, theta=True)
+            fi_auf = self.avoidField.avoid(self.robotPos, vPos=closestCenter, theta=True)
 
-        if minDistance <= self.DMIN:
+        if minDistance <= self.dMin:
             return fi_auf
         else:
             fi_tuf = self.moveField.fi_tuf(self.robotPos)
-            print("307:  FiAuf " + str(fi_tuf))
+            # print(":  FiAuf " + str(fi_tuf))
 
             if self.obstacles is not None:
-                print("310:  Existe? ")
-                g = gaussian(minDistance - self.DMIN, self.LDELTA)
+                # print(":  Existe? ")
+                guass = gaussian(minDistance - self.dMin, self.lDelta)
                 diff = wrap2pi(fi_auf - fi_tuf)
-                return wrap2pi(g*diff + fi_tuf)
+                return wrap2pi(guass*diff + fi_tuf)
 
             else:
                 return fi_tuf
