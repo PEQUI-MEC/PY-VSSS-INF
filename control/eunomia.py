@@ -11,6 +11,7 @@ class Eunomia:
 
     def __init__(self):
         self.uvf = UnivectorField()
+        self.warrior = None
 
     def setup(self, width=100):
         """
@@ -24,7 +25,7 @@ class Eunomia:
 
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
-        self.uvf.updateConstants(radius=6.0, kr=5.9, k0=0.12, dMinex=5.0, lDelta=4.5)
+        self.uvf.updateConstants(radius=6.0, kr=5.9, k0=0.12, dMin=5.0, lDelta=4.5)
 
     def run(self, warrior):
         """Main method of action controller
@@ -39,23 +40,28 @@ class Eunomia:
             Warrior(): objeto com as variáveis calculadas e prontas para geração de velocidades
 
         """
+
+        self.warrior = warrior
+
         if warrior.action[0] == "stop":
             warrior.cmdType = "SPEED"
-            return self.stop(warrior)
+            self.stop()
 
         elif warrior.action[0] == "spin":
             warrior.cmdType = "SPEED"
-            return self.spin(warrior)
+            self.spin()
 
         elif warrior.action[0] == "lookAt":
             warrior.cmdType = "ORIENTATION"
-            return self.lookAt(warrior)
+            self.lookAt()
 
         elif warrior.action[0] == "goTo":
             warrior.cmdType = "VECTOR"
-            return self.goTo(warrior)
+            self.goTo()
 
-    def stop(self, warrior):
+        return self.warrior
+
+    def stop(self, ):
         """Command Stop
 
         - {
@@ -70,20 +76,16 @@ class Eunomia:
 
         """
 
-        if warrior.before == 0:
-            warrior.vMax = 0
-            warrior.vLeft = 0
-            warrior.vRight = 0
+        if self.warrior.before == 0:
+            self.warrior.vLeft = 0
+            self.warrior.vRight = 0
 
         else:
             # TODO Fazer controle de desesceleração
-            warrior.vMax = 0
-            warrior.vLeft = 0
-            warrior.vRight = 0
+            self.warrior.vLeft = 0
+            self.warrior.vRight = 0
 
-        return warrior
-
-    def spin(self, warrior):
+    def spin(self):
         """Command Spin
 
           - {
@@ -98,16 +100,14 @@ class Eunomia:
 
         """
 
-        if warrior.action[1] == "clockwise":
-            warrior.vLeft = warrior.vMax
-            warrior.vRight = -warrior.vMax
+        if self.warrior.action[1] == "clockwise":
+            self.warrior.vLeft = self.warrior.vMax
+            self.warrior.vRight = -self.warrior.vMax
         else:
-            warrior.vLeft = -warrior.vMax
-            warrior.vRight = warrior.vMax
+            self.warrior.vLeft = -self.warrior.vMax
+            self.warrior.vRight = self.warrior.vMax
 
-        return warrior
-
-    def lookAt(self, warrior):
+    def lookAt(self):
         """Command lookAt
 
         - {
@@ -128,20 +128,18 @@ class Eunomia:
 
         """
 
-        if warrior.action[1] is "orientation":
-            warrior.orientation = warrior.targetOrientation
+        if self.warrior.action[1] is "orientation":
+            self.warrior.orientation = self.warrior.targetOrientation
 
-        elif warrior.action[1] is "target":
-            x = warrior.target[0] - warrior.position[0]
-            y = warrior.target[1] - warrior.position[1]
-            warrior.targetOrientation = atan2(y, -x)
+        elif self.warrior.action[1] is "target":
+            x = self.warrior.target[0] - self.warrior.position[0]
+            y = self.warrior.target[1] - self.warrior.position[1]
+            self.warrior.targetOrientation = atan2(y, -x)
 
         else:
             raise ValueError("Invalid data.")
 
-        return warrior
-
-    def goTo(self, warrior):
+    def goTo(self):
         """Command goTo
 
         - {
@@ -163,9 +161,9 @@ class Eunomia:
         """
 
         # Se o targetOrientation passado não for um ponto, gerar um ponto no infinito
-        if type(warrior.targetOrientation) is not tuple:
-            target = warrior.targetOrientation
-            del warrior.targetOrientation
+        if type(self.warrior.targetOrientation) is not tuple:
+            target = self.warrior.targetOrientation
+            del self.warrior.targetOrientation
 
         #  Verificar se existe um 'before' na chamada desse método
         time = None
@@ -173,20 +171,18 @@ class Eunomia:
         #   time = warrior.before
 
         if time is None:
-            warrior.vRight = warrior.vMax
-            warrior.vLeft = warrior.vMax
+            self.warrior.vRight = self.warrior.vMax
+            self.warrior.vLeft = self.warrior.vMax
 
             # print("\nwarrior ", list(warrior.position))
             # print("Target ", list(warrior.target))
 
-            warrior.transAngle = self.uvf.univector(robotPos=list(warrior.position),
-                                                    robotSpeed=[warrior.vLeft, warrior.vRight],
-                                                    target=list(warrior.target),
-                                                    obstacles=warrior.obstacles,
-                                                    orientation=warrior.targetOrientation)
+            self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
+                                                         robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
+                                                         target=list(self.warrior.target),
+                                                         obstacles=self.warrior.obstacles,
+                                                         orientation=self.warrior.targetOrientation)
             # print("UVF " + str(warrior.transAngle))
         else:
             # TODO Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass
-
-        return warrior

@@ -183,11 +183,15 @@ class Zeus:
                     warriors[x].obstacles = info["obstacles"]
 
             elif strategia[x]["command"] == "spin":
-                warriors[x].vMax = info["velocity"]
                 warriors[x].action.append(info["direction"])
+                if "velocity" in info:
+                    warriors[x].vMax = info["velocity"]
+                else:
+                    warriors[x].vMax = self.robotsSpeed[x]
 
             elif strategia[x]["command"] == "lookAt":
                 warriors[x].orientation = info["pose"]["orientation"]
+                warriors[x].vMax = 0.8
                 if type(info["target"]) is float:
                     warriors[x].targetOrientation = info["target"]
                     warriors[x].action.append("orientation")

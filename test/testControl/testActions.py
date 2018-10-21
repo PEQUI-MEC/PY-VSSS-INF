@@ -22,7 +22,6 @@ class TestActions(unittest.TestCase):
         warrior = self.actions.run(self.warrior)
 
         self.assertEqual(warrior.cmdType, "SPEED")
-        self.assertEqual(warrior.vMax, 0)
         self.assertEqual(warrior.vLeft, 0)
         self.assertEqual(warrior.vRight, 0)
 
