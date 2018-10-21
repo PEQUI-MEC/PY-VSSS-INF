@@ -430,27 +430,26 @@ class Afrodite(QMainWindow):
         self.hades.eventStartVision(cameraId)
 
     def updateComboBoxCaptureDeviceInformation(self):
-        if sys.platform.startswith('win'):
-            cams =[]
-            try:
-                for i in range(0,3):
-                    print(i)
-                    cam = cv2.VideoCapture(i)
-                    if cam.isOpened():
-                        cams.append(str(i)) # 'CAM' + str(i)
-                        cam.release()
-                    else:
-                        break
-            except:
-                pass
-            ports = cams
+        #if sys.platform.startswith('win'):
+        cams =[]
+        try:
+            for i in range(0,3):
+                cam = cv2.VideoCapture(i)
+                if cam.isOpened():
+                    cams.append(str(i)) # 'CAM' + str(i)
+                    cam.release()
+                else:
+                    break
+        except:
+            pass
+        ports = cams
             #cams.clear()
-        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            ports = glob.glob('/dev/video[0-9]*')
-        elif sys.platform.startswith('darwin'):
-            ports = glob.glob('/dev/*')
-        else:
-            raise EnvironmentError('Unsuported plaftorm')
+        #elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        #    ports = glob.glob('/dev/video[0-9]*')
+        #elif sys.platform.startswith('darwin'):
+        #    ports = glob.glob('/dev/*')
+        #else:
+        #    raise EnvironmentError('Unsuported plaftorm')
 
         self.comboBoxCaptureDeviceInformation.clear()
 
