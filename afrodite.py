@@ -117,7 +117,7 @@ class Afrodite(QMainWindow):
 
         self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
         self.pushButtonControlSerialSendCommand.clicked.connect(self.getPushButtonControlSerialSendCommand)
-        #self.updateComboBoxControlSerialDevice()
+        self.updateComboBoxControlSerialDevice()
         self.getComboBoxControlSerialDevice()
 
         '''
@@ -670,14 +670,16 @@ class Afrodite(QMainWindow):
     def updateComboBoxControlSerialDevice(self):
         if sys.platform.startswith('win'):
             serial_ports = list_ports.comports()
+            result = []
             for port in serial_ports:
                 try:
-                    s = serial.Serial(port)
+                    s = serial.Serial(port.device)
                     s.close()
-                    result.append(port)
+                    result.append(port.device)
                 except (OSError, serial.SerialException):
                     pass
             ports = result
+            #result.clear()
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
             ports = glob.glob('/dev/ttyU[A-Za-z]*')
         elif sys.platform.startswith('darwin'):
