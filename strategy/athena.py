@@ -98,10 +98,16 @@ class Athena:
         self.callback(commands)
         return commands
 
-    # TODO fazer mais verificações
     def __parsePositions(self, positions):
         if type(positions) is not list or type(positions[0]) is not list or type(positions[1]) is not list or type(positions[2]) is not dict:
             raise ValueError("Invalid positions object received.")
+
+        if len(positions) is not 3:  # allies, enemies and ball
+            raise ValueError("Invalid positions length")
+
+        if len(positions[0]) is not len(self.warriors):
+            raise ValueError("Invalid allies size length (" + str(len(positions[0])) +
+                             "). Expected " + str(len(self.warriors)))
 
         for i in range(0, len(positions[0])):
             if type(positions[0][i]) is not dict:
