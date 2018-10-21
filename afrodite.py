@@ -1,6 +1,6 @@
 import sys
 import os
-import cv2 #Somente para testes
+import cv2  # Somente para testes
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QTimer
@@ -14,6 +14,7 @@ import serial, glob
 import hades
 import threading
 
+
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
 
@@ -21,6 +22,7 @@ class Afrodite(QMainWindow):
         super(Afrodite, self).__init__()
 
         self.hades = hades.Hades(self)
+        self.hades.setup()
 
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'interface/mainwindow.ui')
@@ -55,7 +57,7 @@ class Afrodite(QMainWindow):
         self.getPushButtonControlSerialSendCommand.clicked.connect(self.sendCommand)
         '''
  
-        #CÓDIGO A SER REFATORADO
+        # CÓDIGO A SER REFATORADO
 
         # MenuBar #
 
@@ -755,7 +757,6 @@ class Afrodite(QMainWindow):
     def getStrategyTestParametersName5(self):
         return self.spinBoxStrategyTestParametersGoalieLine.value()
     
-
 
 def main():
     app = QApplication(sys.argv)
