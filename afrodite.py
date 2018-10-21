@@ -12,6 +12,7 @@ from datetime import datetime
 import interface.icons_rc
 import serial, glob
 import hades
+import threading
 
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
@@ -141,7 +142,7 @@ class Afrodite(QMainWindow):
 
     # PLAY BUTTON
     def clickedPlay(self):
-        self.hades.eventStart()
+        self.hades.eventStartGame()
 
     # STRATEGY
 
@@ -560,6 +561,9 @@ class Afrodite(QMainWindow):
             self.stackedWidgetVisionHSVCalibration.setEnabled(False)
         else:
             self.stackedWidgetVisionHSVCalibration.setEnabled(True)
+            self.hades.setHSVVision(0)
+            getHSVcalibThread = threading.Thread(target=self.getHSVCalibration)
+            getHSVcalibThread.start()
 
     def getPushButtonVisionHSVCalibrationNext(self):
         if self.stackedWidgetVisionHSVCalibration.currentIndex() < 3:
@@ -568,6 +572,12 @@ class Afrodite(QMainWindow):
     def getPushButtonVisionHSVCalibrationPrev(self):
         if self.stackedWidgetVisionHSVCalibration.currentIndex() > 0:
             self.stackedWidgetVisionHSVCalibration.setCurrentIndex(self.stackedWidgetVisionHSVCalibration.currentIndex() - 1)
+
+    def getHSVCalibration(self):
+        while (self.stackedWidgetVisionHSVCalibration.isEnabled()):
+            print ("TA INO")
+        self.hades.setHSVVision(10)
+
 
     # Main
     def getVisionHSVCalibrationMain(self):
@@ -582,7 +592,7 @@ class Afrodite(QMainWindow):
         Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin
+        print (((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin)
 
     # Ball
     def getVisionHSVCalibrationBall(self):
