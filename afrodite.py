@@ -582,9 +582,6 @@ class Afrodite(QMainWindow):
             self.stackedWidgetVisionHSVCalibration.setEnabled(False)
         else:
             self.stackedWidgetVisionHSVCalibration.setEnabled(True)
-            self.hades.setHSVVision(0)
-            getHSVcalibThread = threading.Thread(target=self.getHSVCalibration)
-            getHSVcalibThread.start()
 
         self.hades.calibrationEvent()
 

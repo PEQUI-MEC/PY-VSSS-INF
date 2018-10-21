@@ -67,15 +67,12 @@ class Hades:
         nextOnCascade.start()
 
     # EVENTOS
-    def setHSVVision(self, id):
-        self.apolo.setImg(id)
-
     def calibrationEvent(self):
         if self.isCalibrating:
             self.isCalibrating = False
+            self.apolo.resetImageId()
         else:
             self.isCalibrating = True
-            self.apolo.resetImageId()
 
     def zeusReady(self, velocities):
         print("\t\tZeus ready")

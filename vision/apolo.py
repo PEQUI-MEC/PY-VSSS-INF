@@ -23,13 +23,14 @@ class Apolo:
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
-        self.imageId = -1
 
         #Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28,30),(0,255),(0,255)), MAIN)
         self.setHSVThresh(((120,250),(0,250),(0,250)), BALL)
         self.setHSVThresh(((120,250),(0,250),(0,250)), ADV)
         self.setHSVThresh(((69,70),(0,255),(0,255)), GREEN)
+
+        self.imageId = -1
 
         print("Apolo summoned")
 
@@ -56,7 +57,6 @@ class Apolo:
 
     def setHSVThresh(self, hsvThresh, keyword):
         self.imageId = keyword
-        print(hsvThresh)
         self.threshList[keyword] = hsvThresh
 
     def getHSVThresh(self,keyword):
@@ -258,8 +258,8 @@ class Apolo:
         '''
 
         #Pega o frame
-        frame = self.getFrame()
-        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
+        #frame = self.getFrame()
+        frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
 
         if frame is None:
             print ("Nao há câmeras ou o dispositivo está ocupado")
