@@ -83,18 +83,21 @@ class Afrodite(QMainWindow):
         # CONTROL
 
         # speeds
+        self.progressBarRobotSpeedAttack.setValue(0)
         self.spinBoxRobotSpeedAttack.setValue(0)
         self.spinBoxRobotSpeedAttack.setMinimum(0)
         self.spinBoxRobotSpeedAttack.setMaximum(140)
         self.horizontalSliderRobotSpeedAttack.setMinimum(0)
         self.horizontalSliderRobotSpeedAttack.setMaximum(140)
 
+        self.progressBarRobotSpeedDefense.setValue(0)
         self.spinBoxRobotSpeedDefense.setValue(0)
         self.spinBoxRobotSpeedDefense.setMinimum(0)
         self.spinBoxRobotSpeedDefense.setMaximum(140)
         self.horizontalSliderRobotSpeedDefense.setMinimum(0)
         self.horizontalSliderRobotSpeedDefense.setMaximum(140)
 
+        self.progressBarRobotSpeedGoalkeeper.setValue(0)
         self.spinBoxRobotSpeedGoalkeeper.setValue(0)
         self.spinBoxRobotSpeedGoalkeeper.setMinimum(0)
         self.spinBoxRobotSpeedGoalkeeper.setMaximum(140)
@@ -108,9 +111,9 @@ class Afrodite(QMainWindow):
         self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
         
         # COMMUNICATION
-
         self.pushButtonControlSerialDeviceStart.clicked.connect(self.getPushButtonControlSerialDeviceStart)
         self.pushButtonControlSerialDeviceRefresh.clicked.connect(self.getPushButtonControlSerialDeviceRefresh)
+
         self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
         self.pushButtonControlSerialSendCommand.clicked.connect(self.getPushButtonControlSerialSendCommand)
         self.updateComboBoxControlSerialDevice()
@@ -205,16 +208,13 @@ class Afrodite(QMainWindow):
         return self.spinBoxRobotSpeedAttack.value(), self.spinBoxRobotSpeedDefense.value(), self.spinBoxRobotSpeedGoalkeeper.value()
 
     def setRobotSpeedAttackCurrent(self, speed):
-        self.spinBoxRobotSpeedAttack.setValue(speed)
-        self.horizontalSliderRobotSpeedAttack.setValue(speed)
+        self.progressBarRobotSpeedAttack.setValue(speed)
 
     def setRobotSpeedDefenseCurrent(self, speed):
-        self.spinBoxRobotSpeedDefense.setValue(speed)
-        self.horizontalSliderRobotSpeedDefense.setValue(speed)
+        self.progressBarRobotSpeedDefense.setValue(speed)
 
     def setRobotSpeedGoalkeeperCurrent(self, speed):
-        self.spinBoxRobotSpeedGoalkeeper.setValue(speed)
-        self.horizontalSliderRobotSpeedGoalkeeper.setValue(speed)
+        self.progressBarRobotSpeedGoalkeeper.setValue(speed)
 
     def setRobotSpeeds(self, speedAtack, speedDefense, speedGoalKeeper):
         self.setRobotSpeedAttackCurrent(speedAtack)
@@ -678,10 +678,14 @@ class Afrodite(QMainWindow):
         self.updateComboBoxControlSerialDevice()
 
     def getPushButtonControlSerialSend(self):
-        pass
+        id = self.comboBoxControlSerialRobots.currentText()
+        left = self.lineEditControlSerialSpeedLeft.text()
+        right = self.lineEditControlSerialSpeedRight.text()
+        self.hades.eventCreateAndSendMessage(id, left, right)
 
     def getPushButtonControlSerialSendCommand(self):
-        pass
+        command = self.lineEditControlSerialSendCommand.text()
+        self.hades.eventSendMessage(command)
 
     '''
     def getControlSerialSetSkippedFrames(self):
