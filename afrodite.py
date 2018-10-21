@@ -14,6 +14,7 @@ import serial, glob
 import hades
 import threading
 
+
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
 
@@ -42,7 +43,24 @@ class Afrodite(QMainWindow):
         # CONTROL BUTTONS
 
         # speeds
-        self.updateRobotSpeeds()
+        self.spinBoxRobotSpeedAttack.setValue(0)
+        self.spinBoxRobotSpeedAttack.setMinimum(0)
+        self.spinBoxRobotSpeedAttack.setMaximum(140)
+        self.horizontalSliderRobotSpeedAttack.setMinimum(0)
+        self.horizontalSliderRobotSpeedAttack.setMaximum(140)
+
+        self.spinBoxRobotSpeedDefense.setValue(0)
+        self.spinBoxRobotSpeedDefense.setMinimum(0)
+        self.spinBoxRobotSpeedDefense.setMaximum(140)
+        self.horizontalSliderRobotSpeedDefense.setMinimum(0)
+        self.horizontalSliderRobotSpeedDefense.setMaximum(140)
+
+        self.spinBoxRobotSpeedGoalkeeper.setValue(0)
+        self.spinBoxRobotSpeedGoalkeeper.setMinimum(0)
+        self.spinBoxRobotSpeedGoalkeeper.setMaximum(140)
+        self.horizontalSliderRobotSpeedGoalkeeper.setMinimum(0)
+        self.horizontalSliderRobotSpeedGoalkeeper.setMaximum(140)
+
         self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
         self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
         # PIDTest
@@ -88,12 +106,6 @@ class Afrodite(QMainWindow):
         ##Serial
         self.updateComboBoxControlSerialDevice()
 
-        
-
-        ##Speed
-        self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
-        self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
-
         ##ID
         self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
         self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
@@ -121,9 +133,6 @@ class Afrodite(QMainWindow):
 
         ##RobotStatus
         self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
-
-        ##RobotFunctions
-        self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
 
         #Strategy
         ##Formation
