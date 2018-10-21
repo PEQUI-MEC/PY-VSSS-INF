@@ -19,6 +19,7 @@ class Hades:
         self.hermes = Hermes(self.hermesReady)
 
         self.play = False
+        self.isCalibrating = False
 
         print("Hades summoned")
 
@@ -39,12 +40,13 @@ class Hades:
 
     # CALLBACKS
 
-    def apoloReady(self, positions, image):
-        print("\t\tApolo ready")
+    def apoloReady(self, positions, imagem):
+        self.afrodite.updateFrameVideoView(imagem)
 
-        # atualiza a interface com a imagem do callback
-        self.afrodite.updateFrameVideoView(image)
-
+        if (self.isCalibrating):
+            index = self.afrodite.getHSVIndex()
+            self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index),index)
+        
         # decide qual é o próximo módulo na cascata
         if self.play:
             nextOnCascade = threading.Thread(target=self.athena.getTargets, args=[positions])
@@ -61,8 +63,16 @@ class Hades:
             nextOnCascade = threading.Thread(target=self.zeus.getVelocities, args=[strategyInfo])
         else:
             nextOnCascade = threading.Thread(target=self.apolo.run)
+            
+        nextOnCascade.start()
 
-        nextOnCascade.start()  # inicia o processamento no próximo módulo
+    # EVENTOS
+    def calibrationEvent(self):
+        if self.isCalibrating:
+            self.isCalibrating = False
+            self.apolo.resetImageId()
+        else:
+            self.isCalibrating = True
 
     def zeusReady(self, velocities):
         print("\t\tZeus ready")

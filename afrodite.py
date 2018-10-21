@@ -12,6 +12,7 @@ from PyQt5.uic import loadUi
 from datetime import datetime
 import interface.icons_rc
 import serial, glob
+import serial.tools.list_ports as list_ports
 import hades
 import threading
 
@@ -561,6 +562,12 @@ class Afrodite(QMainWindow):
             return "Split"
 
     # HSVCalibration
+    def getHSVCalibrationOption(self):
+        return self.stackedWidgetVisionHSVCalibration.isEnabled()
+
+    def getHSVIndex(self):
+        return self.stackedWidgetVisionHSVCalibration.currentIndex()
+
     def getPushButtonVisionHSVCalibrationSwap(self):
         stringAux = self.labelVisionHSVCalibrationSwap.text()
         self.labelVisionHSVCalibrationSwap.setText(self.pushButtonVisionHSVCalibrationSwap.text())
@@ -573,9 +580,8 @@ class Afrodite(QMainWindow):
             self.stackedWidgetVisionHSVCalibration.setEnabled(False)
         else:
             self.stackedWidgetVisionHSVCalibration.setEnabled(True)
-            self.hades.setHSVVision(0)
-            getHSVcalibThread = threading.Thread(target=self.getHSVCalibration)
-            getHSVcalibThread.start()
+
+        self.hades.calibrationEvent()
 
     def getPushButtonVisionHSVCalibrationNext(self):
         if self.stackedWidgetVisionHSVCalibration.currentIndex() < 3:
@@ -585,10 +591,15 @@ class Afrodite(QMainWindow):
         if self.stackedWidgetVisionHSVCalibration.currentIndex() > 0:
             self.stackedWidgetVisionHSVCalibration.setCurrentIndex(self.stackedWidgetVisionHSVCalibration.currentIndex() - 1)
 
-    def getHSVCalibration(self):
-        while self.stackedWidgetVisionHSVCalibration.isEnabled():
-            print("TA INO")
-        self.hades.setHSVVision(10)
+    def getHSVCalibration(self, index):
+        if index == 0:
+            return self.getVisionHSVCalibrationMain()
+        elif index == 1:
+            return self.getVisionHSVCalibrationBall()
+        elif index == 2:
+            return self.getVisionHSVCalibrationOpponent()
+        elif index == 3:
+            return self.getVisionHSVCalibrationGreen()
 
     # Main
     def getVisionHSVCalibrationMain(self):
@@ -602,13 +613,13 @@ class Afrodite(QMainWindow):
         Vmax = self.spinBoxVisionHSVCalibrationMainVmax.value()
         Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
-
-        print(((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin)
+        
+        return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax), Erode, Blur, Dilate, Amin)
 
     # Ball
     def getVisionHSVCalibrationBall(self):
         Hmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
-        Smin = self.spinBoxVisionHSVCalibrationBallnSmin.value()
+        Smin = self.spinBoxVisionHSVCalibrationBallSmin.value()
         Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
         Erode = self.spinBoxVisionHSVCalibrationBallErode.value()
         Blur = self.spinBoxVisionHSVCalibrationBallBlur.value()
@@ -618,12 +629,12 @@ class Afrodite(QMainWindow):
         Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin
+        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
 
     # Opponent
     def getVisionHSVCalibrationOpponent(self):
         Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
-        Smin = self.spinBoxVisionHSVCalibrationOpponentnSmin.value()
+        Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
         Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
         Erode = self.spinBoxVisionHSVCalibrationOpponentErode.value()
         Blur = self.spinBoxVisionHSVCalibrationOpponentBlur.value()
@@ -633,12 +644,12 @@ class Afrodite(QMainWindow):
         Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin
+        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
 
     # Green
     def getVisionHSVCalibrationGreen(self):
         Hmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
-        Smin = self.spinBoxVisionHSVCalibrationGreennSmin.value()
+        Smin = self.spinBoxVisionHSVCalibrationGreenSmin.value()
         Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
         Erode = self.spinBoxVisionHSVCalibrationGreenErode.value()
         Blur = self.spinBoxVisionHSVCalibrationGreenBlur.value()
@@ -648,7 +659,7 @@ class Afrodite(QMainWindow):
         Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin
+        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
 
     # Control
     # Serial
@@ -658,7 +669,15 @@ class Afrodite(QMainWindow):
 
     def updateComboBoxControlSerialDevice(self):
         if sys.platform.startswith('win'):
-            ports = ['COM%s' % (i+1) for i in range(256)]
+            serial_ports = list_ports.comports()
+            for port in serial_ports:
+                try:
+                    s = serial.Serial(port)
+                    s.close()
+                    result.append(port)
+                except (OSError, serial.SerialException):
+                    pass
+            ports = result
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
             ports = glob.glob('/dev/ttyU[A-Za-z]*')
         elif sys.platform.startswith('darwin'):
