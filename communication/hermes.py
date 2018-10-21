@@ -167,7 +167,9 @@ class Hermes:
             right_wheel (float): right wheel velocity
         Returns: a string containing created message
         """
-        message = str(left_wheel) + ";" + str(right_wheel)
+        # TODO trocar código do robô para receber left-right
+        # message = str(left_wheel) + ";" + str(right_wheel)
+        message = str(right_wheel) + ";" + str(left_wheel)
         self.messages.append(Message(robotId, message))
         return message
 

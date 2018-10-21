@@ -715,11 +715,13 @@ class Afrodite(QMainWindow):
         id = self.comboBoxControlSerialRobots.currentText()
         left = self.lineEditControlSerialSpeedLeft.text()
         right = self.lineEditControlSerialSpeedRight.text()
-        self.hades.eventCreateAndSendMessage(id, left, right)
+        if id is not None and left != "" and right != "":
+            self.hades.eventCreateAndSendMessage(id, left, right)
 
     def getPushButtonControlSerialSendCommand(self):
         command = self.lineEditControlSerialSendCommand.text()
-        self.hades.eventSendMessage(command)
+        if command != "":
+            self.hades.eventSendMessage(command)
 
     '''
     def getControlSerialSetSkippedFrames(self):

@@ -6660,6 +6660,11 @@
         </item>
         <item>
          <property name="text">
+          <string>F</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>A</string>
          </property>
         </item>
