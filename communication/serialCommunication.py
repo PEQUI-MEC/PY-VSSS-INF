@@ -3,7 +3,8 @@ from communication.robot import Robot
 from xbee import XBee
 from serial import Serial
 
-class SerialCommunication():
+
+class SerialCommunication:
 
     def __init__(self):
         """ Serial Communication constructor
@@ -59,9 +60,9 @@ class SerialCommunication():
             Returns:
 
         """
-        self.xbee.send("tx", frame = 'A',command='MY',dest_addr=self.robots[robotId-1],data=message)
+        self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId-1], data=message)
     
-    def newRobot(letter, address):
+    def newRobot(self, letter, address):
         """ Create a robot
 
             Args:
