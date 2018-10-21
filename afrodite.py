@@ -1,3 +1,4 @@
+# coding=utf-8
 import sys
 import os
 import cv2  # Somente para testes
@@ -52,12 +53,12 @@ class Afrodite(QMainWindow):
         self.pushButtonVisionHSVCalibrationNext.clicked.connect(self.getPushButtonVisionHSVCalibrationNext)
 
         # Capture
-        ##DeviceInformation
+        # DeviceInformation
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
         self.updateComboBoxCaptureDeviceInformation()
         self.getComboBoxCaptureDeviceInformation()
 
-        ##Warp
+        # Warp
         self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
         self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
         self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
@@ -107,21 +108,18 @@ class Afrodite(QMainWindow):
         self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
         
         # COMMUNICATION
-        '''
-        self.getPushButtonControlSerialDeviceStart.clicked.connect(self.startSerialConnection)
-        self.getPushButtonControlSerialSend.clicked.connect(self.sendWheelVelocities)
-        self.getPushButtonControlSerialSendCommand.clicked.connect(self.sendCommand)
-        
-        #serial
-        self.updateComboBoxControlSerialDevice()
-        
-        # Serial
+
         self.pushButtonControlSerialDeviceStart.clicked.connect(self.getPushButtonControlSerialDeviceStart)
         self.pushButtonControlSerialDeviceRefresh.clicked.connect(self.getPushButtonControlSerialDeviceRefresh)
         self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
         self.pushButtonControlSerialSendCommand.clicked.connect(self.getPushButtonControlSerialSendCommand)
-        self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
+        self.updateComboBoxControlSerialDevice()
+        self.getComboBoxControlSerialDevice()
+
         '''
+        # Serial        
+        self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
+        
 
         # RobotStatus
         self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
@@ -129,7 +127,7 @@ class Afrodite(QMainWindow):
         # id
         self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
         self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
-
+        '''
         # MENUBAR
 
         # MenuBar - Arquivo
@@ -426,7 +424,7 @@ class Afrodite(QMainWindow):
     def getPushButtonCaptureDeviceInformationStart(self):
         print("Botton: DeviceInformationStart : Clicked")
         cameraId = self.getComboBoxCaptureDeviceInformation()
-        #TODO: trocar a camera de acordo com o que for selecionado
+        # TODO: trocar a camera de acordo com o que for selecionado
 
         self.hades.eventStartVision()
 
@@ -654,6 +652,10 @@ class Afrodite(QMainWindow):
 
     # Control
     # Serial
+    def getPushButtonControlSerialDeviceStart(self):
+        device = self.getComboBoxControlSerialDevice()
+        self.hades.eventStartXbee(device)
+
     def updateComboBoxControlSerialDevice(self):
         if sys.platform.startswith('win'):
             ports = ['COM%s' % (i+1) for i in range(256)]
@@ -669,8 +671,8 @@ class Afrodite(QMainWindow):
         for port in ports:
             self.comboBoxControlSerialDevice.addItem(port)
 
-    def getPushButtonControlSerialDeviceStart(self):
-        device = self.comboBoxControlSerialDevice.currentText()
+    def getComboBoxControlSerialDevice(self):
+        return self.comboBoxControlSerialDevice.currentText()
 
     def getPushButtonControlSerialDeviceRefresh(self):
         self.updateComboBoxControlSerialDevice()
@@ -681,6 +683,7 @@ class Afrodite(QMainWindow):
     def getPushButtonControlSerialSendCommand(self):
         pass
 
+    '''
     def getControlSerialSetSkippedFrames(self):
         pass
 
@@ -723,7 +726,7 @@ class Afrodite(QMainWindow):
         self.setControlRobotStatusRobotD(statusD)
         self.setControlRobotStatusRobotF(statusF)
         self.setControlRobotStatusRobotG(statusG)
-
+    '''
     # Strategy
     # Formation
     def updateComboBoxStrategyFormationLoadStrategy(self, strategys):

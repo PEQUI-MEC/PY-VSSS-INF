@@ -15,7 +15,9 @@ class Hermes:
         print("Hermes summoned")
 
     def setup(self, port, baud=115200):
-        self.startBee(port, baud)
+        print(self.startBee(port, baud))
+
+        print("Hermes is set up")
 
     '''
         #velocities should be received like:
