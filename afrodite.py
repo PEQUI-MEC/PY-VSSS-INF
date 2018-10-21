@@ -31,17 +31,55 @@ class Afrodite(QMainWindow):
         # PLAY BUTTON
         self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
 
+        # VISION
+
+        # VideoView #
+        # CheckBoxVideoViewDisableDrawing
+        self.checkBoxVideoViewDisableDrawing.clicked.connect(self.getStateCheckBoxVideoViewDisableDrawing)
+
+        #Capture
+        self.pushButtonVisionVideoCapturePictureNameSave.clicked.connect(
+            self.getPushButtonVisionVideoCapturePictureNameSave)
+        self.pushButtonVisionVideoCaptureVideoNameSave.clicked.connect(
+            self.getPushButtonVisionVideoCaptureVideoNameSave)
+
+        # ModeView
+
+        # HSVCalibration
+        self.pushButtonVisionHSVCalibrationSwap.clicked.connect(self.getPushButtonVisionHSVCalibrationSwap)
+        self.pushButtonVisionHSVCalibrationEdit.clicked.connect(self.getPushButtonVisionHSVCalibrationEdit)
+        self.pushButtonVisionHSVCalibrationPrev.clicked.connect(self.getPushButtonVisionHSVCalibrationPrev)
+        self.pushButtonVisionHSVCalibrationNext.clicked.connect(self.getPushButtonVisionHSVCalibrationNext)
+
+        # Capture
+        ##DeviceInformation
+        self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
+        self.updateComboBoxCaptureDeviceInformation()
+        self.getComboBoxCaptureDeviceInformation()
+
+        ##Warp
+        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
+        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
+        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
+
         # STRATEGY
 
         # transitions
-        self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(
-            self.toggleTransitions)
+        self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(self.toggleTransitions)
 
         # roles
         self.pushButtonRobotRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
         self.pushButtonRobotRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
-        # CONTROL BUTTONS
+        '''
+        # formation load
+        self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormationLoad)
+        self.pushButtonStrategyFormationDelete.clicked.connect(self.getPushButtonStrategyFormationDelete)
+        self.pushButtonStrategyFormationCreate.clicked.connect(self.getPushButtonStrategyFormationCreate)
+        self.pushButtonStrategyFormationSave.clicked.connect(self.getPushButtonStrategyFormationSave)
+        '''
+
+        # CONTROL
 
         # speeds
         self.spinBoxRobotSpeedAttack.setValue(0)
@@ -64,84 +102,47 @@ class Afrodite(QMainWindow):
 
         self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
         self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
-        # PIDTest
+
+        # pid test
         self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
         
-        # COMMUNICATION BUTTONS
+        # COMMUNICATION
         '''
         self.getPushButtonControlSerialDeviceStart.clicked.connect(self.startSerialConnection)
         self.getPushButtonControlSerialSend.clicked.connect(self.sendWheelVelocities)
         self.getPushButtonControlSerialSendCommand.clicked.connect(self.sendCommand)
-        '''
- 
-        # CÓDIGO A SER REFATORADO
-
-        # MenuBar #
-
-        # MenuBar - Arquivo
-        self.actionLoadConfigs.triggered.connect(self.actionLoadConfigsTriggered)
-        self.actionSaveConfigs.triggered.connect(self.actionSaveConfigsTriggered)
-        self.actionSaveasConfigs.triggered.connect(self.actionSaveasConfigTriggered)
-        self.actionExit.triggered.connect(self.actionExitTriggered)
-
-        # MenuBar - Help
-        self.actionRulesVSSS.triggered.connect(self.actionRulesVSSSTriggered)
-        self.actionAbout.triggered.connect(self.actionAboutTriggered)
-
-        # VideoView #
-        # CheckBoxVideoViewDisableDrawing
-        self.checkBoxVideoViewDisableDrawing.clicked.connect(self.getStateCheckBoxVideoViewDisableDrawing)
-
-        #Capture
-        ##DeviceInformation
-        self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
-        self.updateComboBoxCaptureDeviceInformation()
-        self.getComboBoxCaptureDeviceInformation()
-
-        ##Warp
-        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
-        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
-        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
-
-        #Control
-        ##Serial
+        
+        #serial
         self.updateComboBoxControlSerialDevice()
-
-        ##ID
-        self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
-        self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
-
-        #Vision
-        ##Capture
-        self.pushButtonVisionVideoCapturePictureNameSave.clicked.connect(self.getPushButtonVisionVideoCapturePictureNameSave)
-        self.pushButtonVisionVideoCaptureVideoNameSave.clicked.connect(self.getPushButtonVisionVideoCaptureVideoNameSave)
-
-        #ModeView
-
-        #HSVCalibration
-        self.pushButtonVisionHSVCalibrationSwap.clicked.connect(self.getPushButtonVisionHSVCalibrationSwap)
-        self.pushButtonVisionHSVCalibrationEdit.clicked.connect(self.getPushButtonVisionHSVCalibrationEdit)
-        self.pushButtonVisionHSVCalibrationPrev.clicked.connect(self.getPushButtonVisionHSVCalibrationPrev)
-        self.pushButtonVisionHSVCalibrationNext.clicked.connect(self.getPushButtonVisionHSVCalibrationNext)
-
-        #Control
-        ##Serial
+        
+        # Serial
         self.pushButtonControlSerialDeviceStart.clicked.connect(self.getPushButtonControlSerialDeviceStart)
         self.pushButtonControlSerialDeviceRefresh.clicked.connect(self.getPushButtonControlSerialDeviceRefresh)
         self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
         self.pushButtonControlSerialSendCommand.clicked.connect(self.getPushButtonControlSerialSendCommand)
         self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
+        '''
 
-        ##RobotStatus
+        # RobotStatus
         self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
 
-        #Strategy
-        ##Formation
-        self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormationLoad)
-        self.pushButtonStrategyFormationDelete.clicked.connect(self.getPushButtonStrategyFormationDelete)
-        self.pushButtonStrategyFormationCreate.clicked.connect(self.getPushButtonStrategyFormationCreate)
-        self.pushButtonStrategyFormationSave.clicked.connect(self.getPushButtonStrategyFormationSave)
+        # id
+        self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
+        self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
+
+        # MENUBAR
+
+        # MenuBar - Arquivo
+        self.actionExit.triggered.connect(self.actionExitTriggered)
+        '''
+        self.actionLoadConfigs.triggered.connect(self.actionLoadConfigsTriggered)
+        self.actionSaveConfigs.triggered.connect(self.actionSaveConfigsTriggered)
+        self.actionSaveasConfigs.triggered.connect(self.actionSaveasConfigTriggered)
         
+        # MenuBar - Help
+        self.actionRulesVSSS.triggered.connect(self.actionRulesVSSSTriggered)
+        self.actionAbout.triggered.connect(self.actionAboutTriggered)
+        '''
 
         print("Afrodite summoned")
 
@@ -220,8 +221,9 @@ class Afrodite(QMainWindow):
         self.setRobotSpeedGoalkeeperCurrent(speedGoalKeeper)
 
     def updateRobotSpeeds(self):
-        self.hades.eventUpdateSpeeds(self.spinBoxRobotSpeedAttack.value(), self.spinBoxRobotSpeedDefense.value(),
-                                     self.spinBoxRobotSpeedGoalkeeper.value())
+        self.hades.eventUpdateSpeeds(self.spinBoxRobotSpeedAttack.value()/100.0,
+                                     self.spinBoxRobotSpeedDefense.value()/100.0,
+                                     self.spinBoxRobotSpeedGoalkeeper.value()/100.0)
 
     # PIDTest
     def getPushButtonControlRobotFunctionsPIDTest(self):
@@ -250,11 +252,9 @@ class Afrodite(QMainWindow):
         message = self.controlSerialSendCommand.currentText()
         self.hades.eventSendMessage(message)
 
-     
-    #CALLBACKS A SEREM REFATORADOS
-
-    # MenuBar
+    # MENU BAR
     # MenuBarArquivo
+    '''
     def actionLoadConfigsTriggered(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file', '/', "Json files (*.json)")
         self.loadConfigCallback()
@@ -266,17 +266,18 @@ class Afrodite(QMainWindow):
     def actionSaveasConfigTriggered(self):
         QFileDialog.getSaveFileNames(self, 'Save as file', '/',"Json files (*.json)")
         pass
-
+    '''
     def actionExitTriggered(self):
         return self.close()
 
     # MenuBarHelp
+    '''
     def actionRulesVSSSTriggered(self):
         pass
 
     def actionAboutTriggered(self):
         pass
-
+    '''
     # VideoView
     # Positions
     def updateLabelVideoViewPositionsRobot1(self,x,y,z):
@@ -305,18 +306,18 @@ class Afrodite(QMainWindow):
         self.image = image
 
         #Desenhar na tela
-        if(self.checkBoxVideoViewDisableDrawing.isChecked()):
+        if self.checkBoxVideoViewDisableDrawing.isChecked():
             self.drawingImageVideoView()
 
         self.displayImageVideoView(1)
 
         return None
 
-    def displayImageVideoView(self,window=1):
+    def displayImageVideoView(self, window=1):
         qformat = QImage.Format_Indexed8
 
-        if len(self.image.shape)==3:
-            if self.image.shape[2]==4:
+        if len(self.image.shape) == 3:
+            if self.image.shape[2] == 4:
                 qformat=QImage.Format_RGBA888
             else:
                 qformat=QImage.Format_RGB888
@@ -325,7 +326,7 @@ class Afrodite(QMainWindow):
 
         outImage=outImage.rgbSwapped()
 
-        if window==1:
+        if window == 1:
             self.graphicsViewVideoViewVideo.setPixmap(QPixmap.fromImage(outImage))
             self.graphicsViewVideoViewVideo.setScaledContents(True)
 
@@ -584,10 +585,9 @@ class Afrodite(QMainWindow):
             self.stackedWidgetVisionHSVCalibration.setCurrentIndex(self.stackedWidgetVisionHSVCalibration.currentIndex() - 1)
 
     def getHSVCalibration(self):
-        while (self.stackedWidgetVisionHSVCalibration.isEnabled()):
-            print ("TA INO")
+        while self.stackedWidgetVisionHSVCalibration.isEnabled():
+            print("TA INO")
         self.hades.setHSVVision(10)
-
 
     # Main
     def getVisionHSVCalibrationMain(self):
@@ -602,7 +602,7 @@ class Afrodite(QMainWindow):
         Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
 
-        print (((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin)
+        print(((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax)), Erode, Blur, Dilate, Amin)
 
     # Ball
     def getVisionHSVCalibrationBall(self):
