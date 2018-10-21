@@ -282,17 +282,20 @@ class Afrodite(QMainWindow):
     '''
     # VideoView
     # Positions
-    def updateLabelVideoViewPositionsRobot1(self,x,y,z):
-        self.labelVideoViewPositionsRobot1.setText("(" + str(x) + "," + str(y) + "," + str(z) + ")")
+    def updateLabelVideoViewPositionsRobot1(self, position, orientation):
+        self.labelVideoViewPositionsRobot1.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
+                                                   str(orientation) + " rad)")
 
-    def updateLabelVideoViewPositionsRobot2(self,x,y,z):
-        self.labelVideoViewPositionsRobot2.setText("(" + str(x) + "," + str(y) + "," + str(z) + ")")
+    def updateLabelVideoViewPositionsRobot2(self, position, orientation):
+        self.labelVideoViewPositionsRobot2.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
+                                                   str(orientation) + " rad)")
 
-    def updateLabelVideoViewPositionsRobot3(self,x,y,z):
-        self.labelVideoViewPositionsRobot3.setText("(" + str(x) + "," + str(y) + "," + str(z) + ")")
+    def updateLabelVideoViewPositionsRobot3(self, position, orientation):
+        self.labelVideoViewPositionsRobot3.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
+                                                   str(orientation) + " rad)")
 
-    def updateLabelVideoViewPositionsBall(self,x,y,z):
-        self.labelVideoViewPositionsBall.setText("(" + str(x) + "," + str(y) + "," + str(z) + ")")
+    def updateLabelVideoViewPositionsBall(self, position):
+        self.labelVideoViewPositionsBall.setText("(" + str(position[0]) + ", " + str(position[1]) + ")")
 
     # CheckBoxVideoViewDisableDrawing
     def getStateCheckBoxVideoViewDisableDrawing(self):

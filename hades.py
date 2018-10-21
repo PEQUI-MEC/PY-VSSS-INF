@@ -43,13 +43,20 @@ class Hades:
     # CALLBACKS
 
     def apoloReady(self, positions, imagem):
-        # calcula o fps
+        # calcula o fps e manda pra interface
         lastCascadeTime = time.time() - self.timeCascadeStarted
         fps = 1 / lastCascadeTime
         self.afrodite.setLabelVideoViewFPS("{:.2f}".format(fps))
         self.timeCascadeStarted = time.time()
 
+        # atualiza o vídeo na interface
         self.afrodite.updateFrameVideoView(imagem)
+
+        # atualiza as posições dos robôs na interface
+        self.afrodite.updateLabelVideoViewPositionsRobot1(positions[0][0]["position"], positions[0][0]["orientation"])
+        self.afrodite.updateLabelVideoViewPositionsRobot2(positions[0][1]["position"], positions[0][1]["orientation"])
+        self.afrodite.updateLabelVideoViewPositionsRobot3(positions[0][2]["position"], positions[0][2]["orientation"])
+        self.afrodite.updateLabelVideoViewPositionsBall(positions[2]["position"])
 
         if self.isCalibrating:
             index = self.afrodite.getHSVIndex()
@@ -61,7 +68,7 @@ class Hades:
         else:
             nextOnCascade = threading.Thread(target=self.apolo.run)
 
-        nextOnCascade.start()  # inicia o processamento no próximo módulo
+        nextOnCascade.start()  # inicia o processamento no próximo módulo (deve ser a última coisa a ser feita)
 
     def athenaReady(self, strategyInfo):
         print("\t\tAthena ready")

@@ -14,8 +14,8 @@ Faz a conexão entre o simulador e os módulos do programa
 # DEFINIÇÕES
 field_width = 640
 field_height = 480
-
 pp = pprint.PrettyPrinter(indent=4)
+
 
 # FUNÇÕES
 def convertPositionX(coord):
