@@ -358,40 +358,43 @@ class Apolo:
 
         linkedSecondaryTags = self.linkTags(robotList,secondaryTagsList,ROBOT_RADIUS)
 
-
         for i in range(0,3,1):
-            orientation = 0
+            try:
+                orientation = 0
 
-            if (len(linkedSecondaryTags[i]) == 2):
-               orientation = self.findRobotOrientation(robotList[i],linkedSecondaryTags[i])
-            elif (len(linkedSecondaryTags[i]) == 4):
-                tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
-                tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
+                if (len(linkedSecondaryTags[i]) == 2):
+                   orientation = self.findRobotOrientation(robotList[i],linkedSecondaryTags[i])
+                elif (len(linkedSecondaryTags[i]) == 4):
+                    tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
+                    tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
 
-                interestSecondaryTag = self.findInterestPoint(robotList[i], tag1, tag2)
+                    interestSecondaryTag = self.findInterestPoint(robotList[i], tag1, tag2)
 
-                orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
-            #elif:
-            else:
-                tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
-                tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
-                tag3 = [linkedSecondaryTags[i][4],linkedSecondaryTags[i][5]]
-
-                stepTag1 = self.findInterestPoint(robotList[i], tag1, tag2)
-                
-                if (stepTag1 is None):
-                    interestSecondaryTag = self.findInterestPoint(robotList[i], tag1, tag3)
+                    orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
+                #elif:
                 else:
-                    stepTag2 = self.findInterestPoint(robotList[i], stepTag1, tag3)
-                
-                    if (stepTag2 is None):
-                        interestSecondaryTag = stepTag1
-                    else: interestSecondaryTag = stepTag2
+                    tag1 = [linkedSecondaryTags[i][0],linkedSecondaryTags[i][1]]
+                    tag2 = [linkedSecondaryTags[i][2],linkedSecondaryTags[i][3]]
+                    tag3 = [linkedSecondaryTags[i][4],linkedSecondaryTags[i][5]]
+
+                    stepTag1 = self.findInterestPoint(robotList[i], tag1, tag2)
+
+                    if (stepTag1 is None):
+                        interestSecondaryTag = self.findInterestPoint(robotList[i], tag1, tag3)
+                    else:
+                        stepTag2 = self.findInterestPoint(robotList[i], stepTag1, tag3)
+
+                        if (stepTag2 is None):
+                            interestSecondaryTag = stepTag1
+                        else: interestSecondaryTag = stepTag2
 
 
-                orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
+                    orientation = self.findRobotOrientation(robotList[i],interestSecondaryTag)
 
-            robotList[i] = [robotList[i][0], robotList[i][1], orientation]
+                robotList[i] = [robotList[i][0], robotList[i][1], orientation]
+            except:
+                print ("Nao foi possivel encontrar todas as orientações")
+                print ("Provavelmente a calibração das tags secundarias está zoada")
 
         #Procura a bola
         ball = self.findBall(self.thresholdedImages[BALL],BALL_AMIN)
