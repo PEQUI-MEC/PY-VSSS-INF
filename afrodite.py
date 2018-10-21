@@ -207,13 +207,16 @@ class Afrodite(QMainWindow):
         return self.spinBoxRobotSpeedAttack.value(), self.spinBoxRobotSpeedDefense.value(), self.spinBoxRobotSpeedGoalkeeper.value()
 
     def setRobotSpeedAttackCurrent(self, speed):
-        self.progressBarRobotSpeedAttack.setValue(speed)
+        self.spinBoxRobotSpeedAttack.setValue(speed)
+        self.horizontalSliderRobotSpeedAttack.setValue(speed)
 
     def setRobotSpeedDefenseCurrent(self, speed):
-        self.progressBarRobotSpeedDefense.setValue(speed)
+        self.spinBoxRobotSpeedDefense.setValue(speed)
+        self.horizontalSliderRobotSpeedDefense.setValue(speed)
 
     def setRobotSpeedGoalkeeperCurrent(self, speed):
-        self.progressBarRobotSpeedGoalkeeper.setValue(speed)
+        self.spinBoxRobotSpeedGoalkeeper.setValue(speed)
+        self.horizontalSliderRobotSpeedGoalkeeper.setValue(speed)
 
     def setRobotSpeeds(self, speedAtack, speedDefense, speedGoalKeeper):
         self.setRobotSpeedAttackCurrent(speedAtack)
