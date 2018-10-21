@@ -21,6 +21,8 @@ class Hades:
         self.play = False
         self.isCalibrating = False
 
+        self.timeCascadeStarted = 0
+
         print("Hades summoned")
 
     def setup(self):
@@ -41,11 +43,17 @@ class Hades:
     # CALLBACKS
 
     def apoloReady(self, positions, imagem):
+        # calcula o fps
+        lastCascadeTime = time.time() - self.timeCascadeStarted
+        fps = 1 / lastCascadeTime
+        self.afrodite.setLabelVideoViewFPS("{:.2f}".format(fps))
+        self.timeCascadeStarted = time.time()
+
         self.afrodite.updateFrameVideoView(imagem)
 
-        if (self.isCalibrating):
+        if self.isCalibrating:
             index = self.afrodite.getHSVIndex()
-            self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index),index)
+            self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index), index)
         
         # decide qual é o próximo módulo na cascata
         if self.play:
