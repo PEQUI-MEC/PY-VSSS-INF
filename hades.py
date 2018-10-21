@@ -98,7 +98,7 @@ class Hades:
 
     # Camera e Visão
     def eventStartVision(self, cameraId):
-        self.ciclope = Ciclope(cameraId)
+        self.ciclope = Ciclope(int(cameraId))
         self.apolo = Apolo(self.apoloReady, self.ciclope)
         apoloThread = threading.Thread(target=self.apolo.run)
         apoloThread.start()
