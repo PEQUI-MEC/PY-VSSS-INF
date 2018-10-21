@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Criado e disponibilizado por Bruno Brandão (brunobrandao1523@gmail.com). Obrigado! -->
 <mujoco>
   <compiler angle="radian" inertiafromgeom="auto"/>
   <option timestep="0.001"/>
@@ -8,32 +9,32 @@
   </default>
 
   <asset>
-    <texture name="Field" file="/home/bruno/Field3.png" gridsize="1 1" builtin="none" type="2d"/>
+    <texture name="Field" file="assets/field.png" gridsize="1 1" builtin="none" type="2d"/>
     <!-- <texture name="wall1" builtin="none" type="cube"
-      fileright="/home/bruno/White.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-      filedown="/home/bruno/Black.png" filefront="/home/bruno/Black.png" fileback="/home/bruno/Black.png" />
+      fileright="/home/bruno/White.png" fileleft="assets/black.png" fileup="assets/black.png"
+      filedown="assets/black.png" filefront="assets/black.png" fileback="assets/black.png" />
     <texture name="wall2" builtin="none" type="cube"
-      fileright="/home/bruno/Black.png" fileleft="/home/bruno/White.png" fileup="/home/bruno/Black.png"
-      filedown="/home/bruno/Black.png" filefront="/home/bruno/Black.png" fileback="/home/bruno/Black.png" />
+      fileright="assets/black.png" fileleft="/home/bruno/White.png" fileup="assets/black.png"
+      filedown="assets/black.png" filefront="assets/black.png" fileback="assets/black.png" />
     <texture name="wall3" builtin="none" type="cube"
-      fileright="/home/bruno/Black.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-      filedown="/home/bruno/Black.png" filefront="/home/bruno/White.png" fileback="/home/bruno/Black.png" />
+      fileright="assets/black.png" fileleft="assets/black.png" fileup="assets/black.png"
+      filedown="assets/black.png" filefront="/home/bruno/White.png" fileback="assets/black.png" />
     <texture name="wall4" builtin="none" type="cube"
-      fileright="/home/bruno/White.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-      filedown="/home/bruno/Black.png" filefront="/home/bruno/Black.png" fileback="/home/bruno/White.png" />       -->
-    <texture name="Tag1" builtin="none" type="cube" fileright="/home/bruno/Black.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-    filedown="/home/bruno/Black.png" filefront="/home/bruno/Ytag1.png" fileback="/home/bruno/Black.png" />
-    <texture name="Tag2" builtin="none" type="cube" fileright="/home/bruno/Black.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-    filedown="/home/bruno/Black.png" filefront="/home/bruno/Ytag2.png" fileback="/home/bruno/Black.png" />
-    <texture name="Tag3" builtin="none" type="cube" fileright="/home/bruno/Black.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-    filedown="/home/bruno/Black.png" filefront="/home/bruno/Ytag3.png" fileback="/home/bruno/Black.png" />
-    <texture name="Tag4" builtin="none" type="cube" fileright="/home/bruno/Black.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-    filedown="/home/bruno/Black.png" filefront="/home/bruno/Btag1.png" fileback="/home/bruno/Black.png" />
-    <texture name="Tag5" builtin="none" type="cube" fileright="/home/bruno/Black.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-    filedown="/home/bruno/Black.png" filefront="/home/bruno/Btag2.png" fileback="/home/bruno/Black.png" />
-    <texture name="Tag6" builtin="none" type="cube" fileright="/home/bruno/Black.png" fileleft="/home/bruno/Black.png" fileup="/home/bruno/Black.png"
-    filedown="/home/bruno/Black.png" filefront="/home/bruno/Btag3.png" fileback="/home/bruno/Black.png" />
-    <texture name="bodytex" builtin="none" type="cube" file="/home/bruno/Black.png"/>
+      fileright="/home/bruno/White.png" fileleft="assets/black.png" fileup="assets/black.png"
+      filedown="assets/black.png" filefront="assets/black.png" fileback="/home/bruno/White.png" />       -->
+    <texture name="Tag1" builtin="none" type="cube" fileright="assets/black.png" fileleft="assets/black.png" fileup="assets/black.png"
+    filedown="assets/black.png" filefront="assets/y1.png" fileback="assets/black.png" />
+    <texture name="Tag2" builtin="none" type="cube" fileright="assets/black.png" fileleft="assets/black.png" fileup="assets/black.png"
+    filedown="assets/black.png" filefront="assets/y2.png" fileback="assets/black.png" />
+    <texture name="Tag3" builtin="none" type="cube" fileright="assets/black.png" fileleft="assets/black.png" fileup="assets/black.png"
+    filedown="assets/black.png" filefront="assets/y3.png" fileback="assets/black.png" />
+    <texture name="Tag4" builtin="none" type="cube" fileright="assets/black.png" fileleft="assets/black.png" fileup="assets/black.png"
+    filedown="assets/black.png" filefront="assets/b1.png" fileback="assets/black.png" />
+    <texture name="Tag5" builtin="none" type="cube" fileright="assets/black.png" fileleft="assets/black.png" fileup="assets/black.png"
+    filedown="assets/black.png" filefront="assets/b2.png" fileback="assets/black.png" />
+    <texture name="Tag6" builtin="none" type="cube" fileright="assets/black.png" fileleft="assets/black.png" fileup="assets/black.png"
+    filedown="assets/black.png" filefront="assets/b3.png" fileback="assets/black.png" />
+    <texture name="bodytex" builtin="none" type="cube" file="assets/black.png"/>
     <material name="field_paint" rgba="1 1 1 1" specular="0" emission="1" texture="Field" shininess="0"/>
     <material name="wall_material" rgba="0 0 0 1" shininess="0"/>
     <material name="body" rgba="0 1 1 1" texture="bodytex" shininess="0"/>
@@ -46,7 +47,7 @@
     <material name="ball_surf" rgba="1 0.5 0 1" emission="0.3" shininess="0.8"/>
   </asset>
 
-  <!---PISTA--->
+  <!--PISTA-->
   <worldbody>
     <geom conaffinity="1" contype="0" name="field" pos="0 0 0" size="0.875 0.65 10" material="field_paint" type="plane"/>
     <geom conaffinity="1" contype="0" name="upper_wall" pos="0 0.65 0.025" size="0.775 0.025 0.02"  material="wall_material" type="box"/>
@@ -73,23 +74,23 @@
     <geom conaffinity="1" contype="0" name="x line down test" rgba="0 1 1 1" pos="0.375 -0.4 0" size="0.025 0.001 0.01" type="box"/> -->
 
   </worldbody>
-  <!---PISTA--->
+  <!--PISTA-->
 
-  <!---LUZES--->
+  <!--LUZES-->
   <worldbody>
     <light name="light_01" mode="fixed" pos="0.8 0 2" dir="-0.75 0 -1" cutoff="45"/>
     <light name="light_02" mode="fixed" pos="-0.8 0 2" dir="0.75 0 -1" cutoff="45"/>
   </worldbody>
-  <!---LUZES--->
+  <!--LUZES-->
 
 
-  <!---CAMERA--->
+  <!--CAMERA-->
   <worldbody>
     <camera name="camera" mode="fixed" pos="0 0 2" fovy="38.58"/>
   </worldbody>
-  <!---CAMERA--->
+  <!--CAMERA-->
 
-  <!---BOLA--->
+  <!--BOLA-->
   <worldbody>
     <body name="ball" pos="0 0 0.022">
       <joint type="free" name="Ball"/>
@@ -97,9 +98,9 @@
       <geom conaffinity="1" contype="1" size="0.02135" material="ball_surf" type="sphere"/>
     </body>
   </worldbody>
-  <!---BOLA--->
+  <!--BOLA-->
 
-  <!---ROBOS--->
+  <!--ROBOS-->
   <worldbody>
     <body name="robot_01" pos="-0.2 0 0.04">
       <joint type="free" name="Robot_01"/>

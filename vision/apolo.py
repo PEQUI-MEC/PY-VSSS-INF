@@ -20,16 +20,16 @@ class Apolo:
         self.callback = callback
 
         self.ciclope = camera
+
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
+        self.imageId = -1
 
         #Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28,30),(0,255),(0,255)), MAIN)
         self.setHSVThresh(((120,250),(0,250),(0,250)), BALL)
         self.setHSVThresh(((120,250),(0,250),(0,250)), ADV)
         self.setHSVThresh(((69,70),(0,255),(0,255)), GREEN)
-
-        self.imageId = -1
 
         print("Apolo summoned")
 
@@ -156,7 +156,6 @@ class Apolo:
         if (abs(robotPosition[0] - secondaryTagPosition[0]) + abs(robotPosition[1] - secondaryTagPosition[1]) <= robotRadius):
             return True
         else: return False
-
 
     #Linka as tags secundarias às suas respectivas tags Principais
     def linkTags(self, robotList, secondaryTagsList, robotRadius):
