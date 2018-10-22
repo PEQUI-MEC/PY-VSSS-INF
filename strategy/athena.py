@@ -131,8 +131,8 @@ class Athena:
         return positions
 
     def __generateResponse(self, warriors):
-        """
-            :return: Formato dos comandos:
+        """Retorna um vetor de comandos para os robôs
+            Formato dos comandos:
             - {
                 "command": "stop"
             }
@@ -174,6 +174,10 @@ class Athena:
                     },
                     "target": θ radianos | (x, y)
                 }
+            }
+            - {
+                "command": stop,
+                "data": {before: 0}
             }
         """
         response = []

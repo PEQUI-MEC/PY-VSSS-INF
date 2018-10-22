@@ -19,19 +19,25 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # FUNÇÕES
 def convertPositionX(coord):
-    """
-    Traz o valor pra positivo e multiplica pela proporção (largura máxima)/(posição x máxima)
-    :param coord: Coordenada da posição no mundo da simulação a ser convertida
-    :return: Coordenada da posição na proporção utilizada pela estratégia
+    """Traz o valor pra positivo e multiplica pela proporção (largura máxima)/(posição x máxima)
+
+    Args:
+         coord: Coordenada da posição no mundo da simulação a ser convertida
+
+    Returns:
+        Coordenada da posição na proporção utilizada pela estratégia
     """
     return (coord + 0.8083874182591296) * field_width / 1.6167748365182593
 
 
 def convertPositionY(coord):
-    """
-    Traz o valor pra positivo e multiplica pela proporção (altura máxima)/(posição y máxima)
-    :param coord: Coordenada da posição no mundo da simulação a ser convertida
-    :return: Coordenada da posição na proporção utilizada pela estratégia
+    """Traz o valor pra positivo e multiplica pela proporção (altura máxima)/(posição y máxima)
+
+    Args:
+        coord: Coordenada da posição no mundo da simulação a ser convertida
+
+    Returns:
+        Coordenada da posição na proporção utilizada pela estratégia
     """
     return (coord + 0.8083874182591296) * field_height / 1.6167748365182593
 
@@ -41,19 +47,18 @@ def convertVelocity(vel):
 
 
 def generatePositions(team):
-    """
-    Cria o vetor de posições no formato esperado pela estratégia
+    """Cria o vetor de posições no formato esperado pela estratégia
     O 'sim.data.qpos' possui, em cada posição, o seguinte:
         0: pos X
         1: pos Y
         2: pos Z
-        3: mat rotation X
-        4: mat rotation Y
-        5: mat rotation Z
-        6: quat rotation X
-        7: quat rotation Y
-        8: quat rotation Z
-    :return: Vetor de posições no formato correto
+        3: quat component w
+        4: quat component x
+        5: quat component y
+        6: quat component z
+
+    Returns:
+        Vetor de posições no formato correto
     """
     r1 = -math.atan2(
         2 * (
@@ -126,7 +131,7 @@ def generatePositions(team):
 
 # CALLBACKS
 def athena1Ready(strategyInfo):
-    pp.pprint(strategyInfo)
+    # pp.pprint(strategyInfo)
     zeusThread = threading.Thread(target=zeus1.getVelocities, args=[strategyInfo])
     zeusThread.start()
 

@@ -174,23 +174,15 @@ class Dice:
 
     def orientationControl(self):
         """
-
-        Args:
-            warrior:
-
         Returns:
-
         """
-
-        targetTheta = self.warrior.orientation - (- self.warrior.targetOrientation)
-        targetTheta = round((targetTheta * 180 / pi) * 100) / 100
-        targetTheta = roundAngle(targetTheta * pi/180)
+        targetTheta = self.warrior.targetOrientation
 
         theta = self.warrior.orientation
 
         # É necessário girar se estiver com a 'traseira' de frente pro alvo? (Se sim, não usar o if abaixo)
         if roundAngle(targetTheta - self.warrior.orientation + pi/2) < 0:
-           theta = roundAngle(self.warrior.orientation + pi)
+            theta = roundAngle(self.warrior.orientation + pi)
 
         thetaError = roundAngle(targetTheta - theta)
 
@@ -205,12 +197,7 @@ class Dice:
 
     def speedControl(self):
         """
-
-        Args:
-            warrior:
-
         Returns:
-
         """
 
         return [float(round(self.warrior.vLeft * 100) / 100),

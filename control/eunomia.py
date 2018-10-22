@@ -61,19 +61,13 @@ class Eunomia:
 
         return self.warrior
 
-    def stop(self, ):
+    def stop(self):
         """Command Stop
 
         - {
             "command": stop,
             "data": {}
         }
-
-        Args:
-            warrior:
-
-        Returns:
-
         """
 
         if self.warrior.before == 0:
@@ -92,12 +86,6 @@ class Eunomia:
                 "command": "spin",
                 "data": { "velocity": X m/s, "direction": "clockwise" | "counter"}
             }
-
-        Args:
-            warrior:
-
-        Returns:
-
         """
 
         if self.warrior.action[1] == "clockwise":
@@ -120,12 +108,6 @@ class Eunomia:
                 "target": θ radianos | (x, y)
             }
         }
-
-        Args:
-            warrior:
-
-        Returns:
-
         """
 
         if self.warrior.action[1] is "target":
@@ -149,12 +131,6 @@ class Eunomia:
                 "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
             }
         }
-
-        Args:
-            warrior:
-
-        Returns:
-
         """
 
         # Se o targetOrientation passado não for um ponto
