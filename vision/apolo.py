@@ -341,8 +341,8 @@ class Apolo:
         '''
 
         #Pega o frame
-        frame = self.getFrame()
-        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
+        #frame = self.getFrame()
+        frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
 
         if frame is None:
             print ("Nao há câmeras ou o dispositivo está ocupado")

@@ -19,7 +19,6 @@ import threading
 
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
-
     def __init__(self):
         super(Afrodite, self).__init__()
 
@@ -52,6 +51,38 @@ class Afrodite(QMainWindow):
         self.pushButtonVisionHSVCalibrationEdit.clicked.connect(self.getPushButtonVisionHSVCalibrationEdit)
         self.pushButtonVisionHSVCalibrationPrev.clicked.connect(self.getPushButtonVisionHSVCalibrationPrev)
         self.pushButtonVisionHSVCalibrationNext.clicked.connect(self.getPushButtonVisionHSVCalibrationNext)
+
+
+        self.spinBoxVisionHSVCalibrationMainHmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainHmin.setMaximum(255)
+       
+        self.spinBoxVisionHSVCalibrationMainSmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainSmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainVmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainVmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainErode.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainErode.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainBlur.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainBlur.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainHmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainHmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainSmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainSmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainVmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainVmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainDilate.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainDilate.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainAmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainAmin.setMaximum(255)
+
 
         # Capture
         # DeviceInformation
@@ -411,7 +442,16 @@ class Afrodite(QMainWindow):
         if (interface.imageView.PID_test_flag)
             for(int i = 0; i < Robots::SIZE; i++)
                 if(Robots::is_target_set(i)) {
-                    // linha branca no alvo sendo executado
+                    // liHmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
+        Smin = self.spinBoxVisionHSVCalibrationMainSmin.value()
+        Vmin = self.spinBoxVisionHSVCalibrationMainVmin.value()
+        Erode = self.spinBoxVisionHSVCalibrationMainErode.value()
+        Blur = self.spinBoxVisionHSVCalibrationMainBlur.value()
+        Hmax = self.spinBoxVisionHSVCalibrationMainHmax.value()
+        Smax = self.spinBoxVisionHSVCalibrationMainSmax.value()
+        Vmax = self.spinBoxVisionHSVCalibrationMainVmax.value()
+        Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
+        Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()nha branca no alvo sendo executado
                     line(cameraFlow, Robots::get_position(i), Robots::get_target(i), cv::Scalar(255,255,255),2);
 
                 // círculo branco no alvo sendo executado

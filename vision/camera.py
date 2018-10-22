@@ -2,7 +2,8 @@ import cv2
 
 class Ciclope:
     def __init__(self, id):
-        self.camera = cv2.VideoCapture(id)
+        #self.camera = cv2.VideoCapture(id)
+        self.camera = cv2.VideoCapture(0)
         print("Ciclope summoned")
 
     #Testar o changeCamera
