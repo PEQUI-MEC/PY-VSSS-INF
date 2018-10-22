@@ -1,4 +1,3 @@
-#
 ####### req-vision.txt #######
 #
 # This file handles all required libraries to run this project
