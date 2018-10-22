@@ -42,8 +42,7 @@ def saturate(value):
 class Dice:
     """
     Attributes:
-        velAcc (float):
-        previouslyBackwards (boolean):
+        warrior:
         maxThetaError (float):
     """
 
@@ -77,12 +76,7 @@ class Dice:
 
     def vectorControl(self):
         """
-
-        Args:
-            warrior:
-
         Returns:
-
         """
 
         if self.warrior.vMax == 0:
@@ -119,12 +113,7 @@ class Dice:
 
     def positionControl(self):
         """
-
-        Args:
-            warrior:
-
         Returns:
-
         """
 
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
