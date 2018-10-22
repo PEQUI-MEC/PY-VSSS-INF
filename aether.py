@@ -39,7 +39,7 @@ def convertPositionY(coord):
     Returns:
         Coordenada da posição na proporção utilizada pela estratégia
     """
-    return (coord + 0.8083874182591296) * field_height / 1.6167748365182593
+    return (coord + 0.58339083) * field_height / 1.16678166
 
 
 def convertVelocity(vel):
