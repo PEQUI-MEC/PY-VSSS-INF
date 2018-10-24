@@ -21,7 +21,9 @@ class Hades:
         self.play = False
         self.isCalibrating = False
 
-        self.timeCascadeStarted = 0
+        self.cascadeTime = 0
+        self.cascadeLoops = 0
+        self.cascadeLastTime = 0
 
         print("Hades summoned")
 
@@ -42,12 +44,16 @@ class Hades:
 
     # CALLBACKS
 
+    #@QtCore.pyqtSlot(list, tuple)
     def apoloReady(self, positions, imagem):
         # calcula o fps e manda pra interface
-        lastCascadeTime = time.time() - self.timeCascadeStarted
-        fps = 1 / lastCascadeTime
-        self.afrodite.setLabelVideoViewFPS("{:.2f}".format(fps))
-        self.timeCascadeStarted = time.time()
+        self.cascadeTime += time.time() - self.cascadeLastTime
+        self.cascadeLoops += 1
+        self.cascadeLastTime = time.time()
+        if self.cascadeTime > 1:
+            fps = self.cascadeLoops / self.cascadeTime
+            self.afrodite.setLabelVideoViewFPS("{:.2f}".format(fps))
+            self.cascadeTime = self.cascadeLoops = 0
 
         # atualiza o vídeo na interface
         self.prepareDraw(positions)
