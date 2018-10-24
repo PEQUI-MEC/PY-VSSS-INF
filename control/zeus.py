@@ -8,7 +8,6 @@ class Zeus:
     """Class of robot Control
 
     Attributes:
-        callback: function that should be call after all Control routines.
         warriors: Warrior() list with the information of the robots.
         nWarriors: Robots in play.
         robotsSpeeds: interface speed list.
@@ -16,14 +15,7 @@ class Zeus:
         translate: Instance of class Dice() that calculates the robots velocities.
     """
 
-    def __init__(self, callback=None):
-        """
-
-        Args:
-            callback:
-        """
-
-        self.callback = callback
+    def __init__(self):
         self.warriors = []
         self.nWarriors = 0
         self.robotsSpeed = [0, 0, 0]
@@ -92,7 +84,6 @@ class Zeus:
 
         self.warriors = self.getWarriors(strategia)
         velocities = self.generateOutput(self.controlRoutine())
-        self.callback(velocities)
         return velocities
 
     def getWarriors(self, strategia):

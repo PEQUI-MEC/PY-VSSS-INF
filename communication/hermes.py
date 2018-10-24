@@ -6,9 +6,7 @@ from communication.serialCommunication import SerialCommunication
 
 class Hermes:
 
-    def __init__(self, callback):
-        self.callback = callback
-
+    def __init__(self):
         self.serialCom = SerialCommunication()
         self.messages = []
 
@@ -80,7 +78,6 @@ class Hermes:
 
         self.sendMessages()
         self.clearMessages()
-        self.callback(messages)
         return messages
 
     def startBee(self, port, baud):

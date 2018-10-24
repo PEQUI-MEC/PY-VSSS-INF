@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import cv2
 import numpy as np
-#from vision import camera
+from vision.camera import Ciclope
 #import camera
 
 #Constantes
@@ -18,11 +18,8 @@ BALL_AMIN = 30
 #O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
 #Criar função pra retonar a imagem com threshold para fazer a calibração
 class Apolo:
-    def __init__(self, callback, camera):
-        self.callback = callback
-        self.ciclope = camera
-
-        self.ciclope = camera
+    def __init__(self, cameraId):
+        self.ciclope = Ciclope(int(cameraId))
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
@@ -42,6 +39,8 @@ class Apolo:
 
         print("Apolo summoned")
 
+    def changeCamera(self, cameraId):
+        self.ciclope.changeCamera(cameraId)
 
     def getFrame(self):
         frame = None
@@ -424,7 +423,7 @@ class Apolo:
 
         # print(self.positions)
 
-        if (self.imageId != -1):
+        if self.imageId != -1:
             frame = self.thresholdedImages[self.imageId]
 
-        self.callback(self.positions,frame)
+        return self.positions, frame

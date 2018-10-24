@@ -1,22 +1,22 @@
 import time
-import threading
+from PyQt5.QtCore import QThread, pyqtSignal
 
 from vision import Apolo
-from vision import Ciclope
 from control import Zeus
 from strategy import Athena
 from communication import Hermes
 
 
-class Hades:
-    def __init__(self, afrodite):
+class Hades(QThread):
+    sigfps = pyqtSignal(str)
+
+    def __init__(self):
+        QThread.__init__(self)
         # gods
-        self.afrodite = afrodite
-        self.ciclope = None
         self.apolo = None
-        self.athena = Athena(self.athenaReady)
-        self.zeus = Zeus(self.zeusReady)
-        self.hermes = Hermes(self.hermesReady)
+        self.athena = Athena()
+        self.zeus = Zeus()
+        self.hermes = Hermes()
 
         self.play = False
         self.isCalibrating = False
@@ -42,22 +42,39 @@ class Hades:
         # invocar fly do hermes como finalização
         # persephane deusa do submundo
 
-    # CALLBACKS
+    # LOOP PRINCIPAL
+    def run(self):
+        while True:
+            # visão
+            positions = self.runApolo()
 
-    #@QtCore.pyqtSlot(list, tuple)
-    def apoloReady(self, positions, imagem):
-        # calcula o fps e manda pra interface
-        self.cascadeTime += time.time() - self.cascadeLastTime
-        self.cascadeLoops += 1
-        self.cascadeLastTime = time.time()
-        if self.cascadeTime > 1:
-            fps = self.cascadeLoops / self.cascadeTime
-            self.afrodite.setLabelVideoViewFPS("{:.2f}".format(fps))
-            self.cascadeTime = self.cascadeLoops = 0
+            if self.play:
+                commands = self.runAthena(positions)
+                velocities = self.runZeus(commands)
+                self.hermesRules(velocities)
+
+            self.getFPS()
+
+    def stop(self):
+        self.wait()
+
+    # MAIN METHODS
+
+    def runApolo(self):
+        """
+        Roda a visão, atualiza a interface e retorna as posições
+
+        Returns:
+            lista com as posições dos objetos
+        """
+        if self.apolo is None:
+            return
+
+        positions, frame = self.apolo.run()
 
         # atualiza o vídeo na interface
         self.prepareDraw(positions)
-        self.afrodite.updateFrameVideoView(imagem)
+        self.afrodite.updateFrameVideoView(frame)
 
         # atualiza as posições dos robôs na interface
         self.afrodite.updateLabelVideoViewPositionsRobot1(positions[0][0]["position"], positions[0][0]["orientation"])
@@ -68,52 +85,32 @@ class Hades:
         if self.isCalibrating:
             index = self.afrodite.getHSVIndex()
             self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index), index)
-        
-        # decide qual é o próximo módulo na cascata
-        if self.play:
-            nextOnCascade = threading.Thread(target=self.athena.getTargets, args=[positions])
-        else:
-            nextOnCascade = threading.Thread(target=self.apolo.run)
 
-        nextOnCascade.start()  # inicia o processamento no próximo módulo (deve ser a última coisa a ser feita)
+        return positions
 
-    def athenaReady(self, strategyInfo):
-        # print("\t\tAthena ready")
+    def runAthena(self, positions):
+        commands = self.athena.getTargets(positions)
 
-        # decide qual é o próximo módulo na cascata
-        if self.play:
-            nextOnCascade = threading.Thread(target=self.zeus.getVelocities, args=[strategyInfo])
-        else:
-            nextOnCascade = threading.Thread(target=self.apolo.run)
-            
-        nextOnCascade.start()
+        return commands
 
-    # EVENTOS
-    def calibrationEvent(self):
-        if self.isCalibrating:
-            self.isCalibrating = False
-            self.apolo.resetImageId()
-        else:
-            self.isCalibrating = True
+    def zeusRules(self, commands):
+        velocities = self.zeus.getVelocities(commands)
+        return velocities
 
-    def zeusReady(self, velocities):
-        # print("\t\tZeus ready")
-
-        # decide qual é o próximo módulo na cascata
-        if self.play:
-            nextOnCascade = threading.Thread(target=self.hermes.fly, args=[velocities])
-        else:
-            nextOnCascade = threading.Thread(target=self.apolo.run)
-
-        nextOnCascade.start()  # inicia o processamento no próximo módulo
-
-    def hermesReady(self, messages):
-        # TODO está faltando retorno do hermes de finalização
-        # TODO atualizar o FPS da interface
-        nextOnCascade = threading.Thread(target=self.apolo.run)
-        nextOnCascade.start()  # inicia o processamento no próximo módulo
+    def hermesRules(self, velocities):
+        self.hermes.fly(velocities)
 
     # HELPERS
+    def getFPS(self):
+        # calcula o fps e manda pra interface
+        self.cascadeTime += time.time() - self.cascadeLastTime
+        self.cascadeLoops += 1
+        self.cascadeLastTime = time.time()
+        if self.cascadeTime > 1:
+            fps = self.cascadeLoops / self.cascadeTime
+            self.sigfps.emit("{:.2f}".format(fps))
+            self.cascadeTime = self.cascadeLoops = 0
+
     def prepareDraw(self, positions):
         for i in range(0, len(positions[0])):
             if type(positions[0][i]) is not dict:
@@ -153,14 +150,18 @@ class Hades:
         print("Hades started") if self.play else print("Hades stopped")
 
     # Camera e Visão
+    def calibrationEvent(self):
+        if self.isCalibrating:
+            self.isCalibrating = False
+            self.apolo.resetImageId()
+        else:
+            self.isCalibrating = True
+
     def eventStartVision(self, cameraId):
-        self.ciclope = Ciclope(int(cameraId))
-        self.apolo = Apolo(self.apoloReady, self.ciclope)
-        apoloThread = threading.Thread(target=self.apolo.run)
-        apoloThread.start()
+        self.apolo = Apolo(cameraId)
 
     def changeCamera(self, cameraId):
-        self.ciclope.changeCamera(cameraId)
+        self.apolo.changeCamera(cameraId)
 
     def setHSVVision(self, thresholdId):
         self.apolo.setImg(thresholdId)

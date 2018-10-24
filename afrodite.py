@@ -15,7 +15,6 @@ import interface.icons_rc
 import serial, glob
 import serial.tools.list_ports as list_ports
 import hades
-import threading
 
 
 class Afrodite(QMainWindow):
@@ -24,8 +23,10 @@ class Afrodite(QMainWindow):
     def __init__(self):
         super(Afrodite, self).__init__()
 
-        self.hades = hades.Hades(self)
+        self.hades = hades.Hades()
         self.hades.setup()
+        self.hades.sigfps.connect(self.setLabelVideoViewFPS)
+        self.hades.start()
 
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'interface/mainwindow.ui')
