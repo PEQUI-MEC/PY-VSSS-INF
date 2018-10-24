@@ -6,7 +6,8 @@ import cv2  # Somente para testes
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QTimer
 from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QApplication,QDialog,QMainWindow,QMenuBar,QDockWidget,QCheckBox,QStackedWidget,QFileDialog,QGroupBox
+from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMenuBar, QDockWidget, QCheckBox, QStackedWidget, \
+    QFileDialog, QGroupBox
 from PyQt5.uic import loadUi
 
 from datetime import datetime
@@ -19,6 +20,7 @@ import threading
 
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
+
     def __init__(self):
         super(Afrodite, self).__init__()
 
@@ -30,6 +32,7 @@ class Afrodite(QMainWindow):
         loadUi(filename, self)
 
         self.image = None
+        self.objectsToDraw = {}
 
         # PLAY BUTTON
         self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
@@ -40,7 +43,7 @@ class Afrodite(QMainWindow):
         # CheckBoxVideoViewDisableDrawing
         self.checkBoxVideoViewDisableDrawing.clicked.connect(self.getStateCheckBoxVideoViewDisableDrawing)
 
-        #Capture
+        # Capture
         self.pushButtonVisionVideoCapturePictureNameSave.clicked.connect(
             self.getPushButtonVisionVideoCapturePictureNameSave)
         self.pushButtonVisionVideoCaptureVideoNameSave.clicked.connect(
@@ -54,13 +57,13 @@ class Afrodite(QMainWindow):
         self.pushButtonVisionHSVCalibrationPrev.clicked.connect(self.getPushButtonVisionHSVCalibrationPrev)
         self.pushButtonVisionHSVCalibrationNext.clicked.connect(self.getPushButtonVisionHSVCalibrationNext)
 
+        # MAIN
 
-		#MAIN
         self.spinBoxVisionHSVCalibrationMainHmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationMainHmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationMainHmin.setMinimum(0)
         self.horizontalSliderVisionHSVCalibrationMainHmin.setMaximum(255)
-        
+
         self.spinBoxVisionHSVCalibrationMainSmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationMainSmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationMainSmin.setMinimum(0)
@@ -68,8 +71,8 @@ class Afrodite(QMainWindow):
 
         self.spinBoxVisionHSVCalibrationMainVmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationMainVmin.setMaximum(255)
-        #self.horizontalSliderVisionHSVCalibrationMainVmin.setMinimum(0)
-        #self.horizontalSliderVisionHSVCalibrationMainVmin.setMaximum(255)
+        # self.horizontalSliderVisionHSVCalibrationMainVmin.setMinimum(0)
+        # self.horizontalSliderVisionHSVCalibrationMainVmin.setMaximum(255)
 
         self.spinBoxVisionHSVCalibrationMainErode.setMinimum(0)
         self.spinBoxVisionHSVCalibrationMainErode.setMaximum(255)
@@ -105,14 +108,14 @@ class Afrodite(QMainWindow):
         self.spinBoxVisionHSVCalibrationMainAmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationMainAmin.setMinimum(0)
         self.horizontalSliderVisionHSVCalibrationMainAmin.setMaximum(255)
-		
-		#BALL
-		
+
+        # BALL
+
         self.spinBoxVisionHSVCalibrationBallHmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationBallHmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationBallHmin.setMinimum(0)
         self.horizontalSliderVisionHSVCalibrationBallHmin.setMaximum(255)
-        
+
         self.spinBoxVisionHSVCalibrationBallSmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationBallSmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationBallSmin.setMinimum(0)
@@ -120,8 +123,8 @@ class Afrodite(QMainWindow):
 
         self.spinBoxVisionHSVCalibrationBallVmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationBallVmin.setMaximum(255)
-        #self.horizontalSliderVisionHSVCalibrationBallVmin.setMinimum(0)
-        #self.horizontalSliderVisionHSVCalibrationBallVmin.setMaximum(255)
+        # self.horizontalSliderVisionHSVCalibrationBallVmin.setMinimum(0)
+        # self.horizontalSliderVisionHSVCalibrationBallVmin.setMaximum(255)
 
         self.spinBoxVisionHSVCalibrationBallErode.setMinimum(0)
         self.spinBoxVisionHSVCalibrationBallErode.setMaximum(255)
@@ -157,13 +160,13 @@ class Afrodite(QMainWindow):
         self.spinBoxVisionHSVCalibrationBallAmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationBallAmin.setMinimum(0)
         self.horizontalSliderVisionHSVCalibrationBallAmin.setMaximum(255)
-		
-		#Green
+
+        # Green
         self.spinBoxVisionHSVCalibrationGreenHmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationGreenHmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationGreenHmin.setMinimum(0)
         self.horizontalSliderVisionHSVCalibrationGreenHmin.setMaximum(255)
-        
+
         self.spinBoxVisionHSVCalibrationGreenSmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationGreenSmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationGreenSmin.setMinimum(0)
@@ -171,8 +174,8 @@ class Afrodite(QMainWindow):
 
         self.spinBoxVisionHSVCalibrationGreenVmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationGreenVmin.setMaximum(255)
-        #self.horizontalSliderVisionHSVCalibrationGreenVmin.setMinimum(0)
-        #self.horizontalSliderVisionHSVCalibrationGreenVmin.setMaximum(255)
+        # self.horizontalSliderVisionHSVCalibrationGreenVmin.setMinimum(0)
+        # self.horizontalSliderVisionHSVCalibrationGreenVmin.setMaximum(255)
 
         self.spinBoxVisionHSVCalibrationGreenErode.setMinimum(0)
         self.spinBoxVisionHSVCalibrationGreenErode.setMaximum(255)
@@ -208,14 +211,14 @@ class Afrodite(QMainWindow):
         self.spinBoxVisionHSVCalibrationGreenAmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationGreenAmin.setMinimum(0)
         self.horizontalSliderVisionHSVCalibrationGreenAmin.setMaximum(255)
-		
-		#Opponent
-		
+
+        # Opponent
+
         self.spinBoxVisionHSVCalibrationOpponentHmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationOpponentHmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationOpponentHmin.setMinimum(0)
         self.horizontalSliderVisionHSVCalibrationOpponentHmin.setMaximum(255)
-        
+
         self.spinBoxVisionHSVCalibrationOpponentSmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationOpponentSmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationOpponentSmin.setMinimum(0)
@@ -223,8 +226,8 @@ class Afrodite(QMainWindow):
 
         self.spinBoxVisionHSVCalibrationOpponentVmin.setMinimum(0)
         self.spinBoxVisionHSVCalibrationOpponentVmin.setMaximum(255)
-        #self.horizontalSliderVisionHSVCalibrationOpponentVmin.setMinimum(0)
-        #self.horizontalSliderVisionHSVCalibrationOpponentVmin.setMaximum(255)
+        # self.horizontalSliderVisionHSVCalibrationOpponentVmin.setMinimum(0)
+        # self.horizontalSliderVisionHSVCalibrationOpponentVmin.setMaximum(255)
 
         self.spinBoxVisionHSVCalibrationOpponentErode.setMinimum(0)
         self.spinBoxVisionHSVCalibrationOpponentErode.setMaximum(255)
@@ -260,7 +263,6 @@ class Afrodite(QMainWindow):
         self.spinBoxVisionHSVCalibrationOpponentAmin.setMaximum(255)
         self.horizontalSliderVisionHSVCalibrationOpponentAmin.setMinimum(0)
         self.horizontalSliderVisionHSVCalibrationOpponentAmin.setMaximum(255)
-
 
         # Capture
         # DeviceInformation
@@ -319,7 +321,7 @@ class Afrodite(QMainWindow):
 
         # pid test
         self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
-        
+
         # COMMUNICATION
         self.pushButtonControlSerialDeviceStart.clicked.connect(self.getPushButtonControlSerialDeviceStart)
         self.pushButtonControlSerialDeviceRefresh.clicked.connect(self.getPushButtonControlSerialDeviceRefresh)
@@ -419,7 +421,9 @@ class Afrodite(QMainWindow):
         self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(False)
         self.updateRobotSpeeds()
 
-        return self.spinBoxRobotSpeedAttack.value(), self.spinBoxRobotSpeedDefense.value(), self.spinBoxRobotSpeedGoalkeeper.value()
+        return self.spinBoxRobotSpeedAttack.value(), \
+               self.spinBoxRobotSpeedDefense.value(), \
+               self.spinBoxRobotSpeedGoalkeeper.value()
 
     def setRobotSpeedAttackCurrent(self, speed):
         self.progressBarRobotSpeedAttack.setValue(speed)
@@ -436,9 +440,9 @@ class Afrodite(QMainWindow):
         self.setRobotSpeedGoalkeeperCurrent(speedGoalKeeper)
 
     def updateRobotSpeeds(self):
-        self.hades.eventUpdateSpeeds(self.spinBoxRobotSpeedAttack.value()/100.0,
-                                     self.spinBoxRobotSpeedDefense.value()/100.0,
-                                     self.spinBoxRobotSpeedGoalkeeper.value()/100.0)
+        self.hades.eventUpdateSpeeds(self.spinBoxRobotSpeedAttack.value() / 100.0,
+                                     self.spinBoxRobotSpeedDefense.value() / 100.0,
+                                     self.spinBoxRobotSpeedGoalkeeper.value() / 100.0)
 
     # PIDTest
     def getPushButtonControlRobotFunctionsPIDTest(self):
@@ -482,6 +486,7 @@ class Afrodite(QMainWindow):
         QFileDialog.getSaveFileNames(self, 'Save as file', '/',"Json files (*.json)")
         pass
     '''
+
     def actionExitTriggered(self):
         return self.close()
 
@@ -493,6 +498,7 @@ class Afrodite(QMainWindow):
     def actionAboutTriggered(self):
         pass
     '''
+
     # VideoView
     # Positions
     def updateLabelVideoViewPositionsRobot1(self, position, orientation):
@@ -524,8 +530,8 @@ class Afrodite(QMainWindow):
         self.image = image
 
         # desenhar na tela
-        if self.checkBoxVideoViewDisableDrawing.isChecked():
-            self.drawingImageVideoView()
+        if not self.checkBoxVideoViewDisableDrawing.isChecked():
+            self.drawImageVideoView()
 
         self.displayImageVideoView(1)
 
@@ -548,102 +554,50 @@ class Afrodite(QMainWindow):
             self.graphicsViewVideoViewVideo.setPixmap(QPixmap.fromImage(outImage))
             self.graphicsViewVideoViewVideo.setScaledContents(True)
 
-    def graphicsViewVideoViewVideoClicked(self, event):
+    @staticmethod
+    def graphicsViewVideoViewVideoClicked():  # event
         point = QtGui.QCursor.pos()
-        print("X:" + str(point.x()) + " | " + "Y:" + str(point.y())) 
+        print("X:" + str(point.x()) + " | " + "Y:" + str(point.y()))
 
-    def getBallPosition(self):
-        self.cont += 1
-        return 447, self.cont
+    def drawImageVideoView(self):
+        """Itera sobre o self.objectsToDraw e desenha cada objeto
+        Os objetos nessa lista devem ser do tipo:
+        {
+            "shape": "circle" | "rect" | "robot",
+            "position": (x, y),
+            "color": (r, g, b),
+            "label": # string - rótulo do objeto (opcional)
+            "radius": # number - se shape = circle
+            "limit": (x1, y1) # se shape = rect
+            "orientation": # number - se shape = robot (opcional)
+            "target": (x2, y2) # se shape = robot (opcional)
+            "targetOrientation": (x3, y3) # se shape = robot (opcional)
+        }
+        """
+        if self.image is not None:
+            for key, objectToDraw in self.objectsToDraw.items():
+                if objectToDraw["shape"] == "robot":
+                    cv2.rectangle(self.image, objectToDraw["position"],
+                                  (objectToDraw["position"][0] + 10, objectToDraw["position"][1] + 10),
+                                  objectToDraw["color"], 2)
 
-    '''-----------------------DESENHO SOBRE A IMAGEM------------------'''
+                    if "label" in objectToDraw:
+                        cv2.putText(self.image, objectToDraw["label"], objectToDraw["position"],
+                                    cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
 
-    def drawingImageVideoView(self):
-        #Desenho da Bola
-        cv2.circle(self.image, self.getBallPosition(), 7,  (255,255,255), 2)
+                    if "target" in objectToDraw:
+                        cv2.line(self.image, objectToDraw["position"], objectToDraw["target"], objectToDraw["color"], 2)
+                        cv2.circle(self.image, objectToDraw["target"], 5, objectToDraw["color"], 2)
 
-        #TEST
-        cv2.circle(self.image, self.getBallPosition(), 50,  (67,255,255), 6)
-        cv2.rectangle(self.image,(384,50),(510,128),(0,255,0),3)
-        ######
+                elif objectToDraw["shape"] == "circle":
+                    cv2.circle(self.image, objectToDraw["position"], objectToDraw["radius"], objectToDraw["color"], 2)
 
-        self.nRobots = setAmountRobots() #??????
-        self.robots = setRobots() #??????
-        self.advRobots = setAdvRobots()
-        '''
-        #TODO GET POSITIONk
-        for i in range(0, nRobots):
-            #Orientação do robô
-            line(self.image, Robots::get_position(i), Robots::get_secondary_tag(i),cv::Scalar(255,255,0), 2);
-            #id do robô
-            putText(self.image, std::to_string(i+1),cv::Point(Robots::get_position(i).x-5,Robots::get_position(i).y-17),cv::FONT_HERSHEY_PLAIN,1,cv::Scalar(255,255,0),2);
-            #marcação do robô
-            circle(self.image, Robots::get_position(i), 15, cv::Scalar(255,255,0), 2);
+                    if "label" in objectToDraw:
+                        cv2.putText(self.image, objectToDraw["label"], objectToDraw["position"],
+                                    cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
 
-            // vetor que todos os robos estão executando
-            cv::Point aux_point;
-            aux_point.x = int(100*cos(Robots::get_transAngle(i)));
-            aux_point.y = - int(100*sin(Robots::get_transAngle(i)));
-            aux_point += Robots::get_position(i);
-            arrowed_line(self.image, Robots::get_position(i), aux_point, cv::Scalar(255, 0, 0), 2);
-
-        for (int i = 0; i < Robots::SIZE; i++)
-            
-
-        // adversários
-        for(int i = 0; i < advRobots.size(); i++)
-            circle(self.image, advRobots.at(i), 15, cv::Scalar(0,0,255), 2);
-
-        // ----------- DESENHOS DA ESTRATÉGIA ---------- //
-
-        if(interface.get_start_game_flag())
-            // desenha a estimativa da bola
-            circle(cameraFlow, Ball_Est, 7, cv::Scalar(255,140,0), 2);
-
-            // desenha os alvos dos robôs
-            for(int i = 0; i < Robots::SIZE; i++)
-                circle(cameraFlow, Robots::get_target(i), 7, cv::Scalar(127,255,127), 2);
-                putText(cameraFlow, std::to_string(i+1), cv::Point(Robots::get_target(i).x-5, Robots::get_target(i).y-17),cv::FONT_HERSHEY_PLAIN,1,cv::Scalar(127,255,127),2);
-
-        // ----------- DESENHOS DO CONTROLE ---------- //
-
-        if(strategyGUI.formation_flag)
-            // exibe os robos virtuais
-            for(int i = 0; i < Robots::SIZE; i++)
-                if(virtual_robot_selected == i)
-                    circle(cameraFlow,virtual_robots_positions[i], 20, cv::Scalar(0,255,100), 3);
-
-                // posição
-                circle(cameraFlow,virtual_robots_positions[i], 17, cv::Scalar(0,255,0), 2);
-                // orientação
-                arrowed_line(cameraFlow, virtual_robots_positions[i], virtual_robots_orientations[i], cv::Scalar(0, 255, 0), 2);
-                // identificação
-                putText(cameraFlow, std::to_string(i+1),virtual_robots_positions[i] + cv::Point(-14,10),cv::FONT_HERSHEY_PLAIN,1,cv::Scalar(0,255,0),2);
-
-
-        if (interface.imageView.PID_test_flag)
-            for(int i = 0; i < Robots::SIZE; i++)
-                if(Robots::is_target_set(i)) {
-                    // liHmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
-        Smin = self.spinBoxVisionHSVCalibrationMainSmin.value()
-        Vmin = self.spinBoxVisionHSVCalibrationMainVmin.value()
-        Erode = self.spinBoxVisionHSVCalibrationMainErode.value()
-        Blur = self.spinBoxVisionHSVCalibrationMainBlur.value()
-        Hmax = self.spinBoxVisionHSVCalibrationMainHmax.value()
-        Smax = self.spinBoxVisionHSVCalibrationMainSmax.value()
-        Vmax = self.spinBoxVisionHSVCalibrationMainVmax.value()
-        Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
-        Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()nha branca no alvo sendo executado
-                    line(cameraFlow, Robots::get_position(i), Robots::get_target(i), cv::Scalar(255,255,255),2);
-
-                // círculo branco no alvo sendo executado
-                circle(cameraFlow,Robots::get_target(i), 9, cv::Scalar(255,255,255), 2);
-
-            if(Selec_index != -1)
-                circle(cameraFlow, Robots::get_position(Selec_index), 17, cv::Scalar(255,255,255), 2);
-
-    '''
-    #########################################################
+                elif objectToDraw["shape"] == "rect":
+                    cv2.rectangle(self.image, objectToDraw["position"], objectToDraw["limit"], objectToDraw["color"], 2)
 
     # Capture
     # DeviceInformation
@@ -655,25 +609,26 @@ class Afrodite(QMainWindow):
         self.hades.eventStartVision(cameraId)
 
     def updateComboBoxCaptureDeviceInformation(self):
-        #if sys.platform.startswith('win'):
-        cams =[]
+        # if sys.platform.startswith('win'):
+        cams = []
         try:
-            for i in range(0,3):
+            for i in range(0, 3):
                 cam = cv2.VideoCapture(i)
                 if cam.isOpened():
-                    cams.append(str(i)) # 'CAM' + str(i)
+                    cams.append(str(i))  # 'CAM' + str(i)
                     cam.release()
                 else:
                     break
         except:
             pass
+
         ports = cams
-            #cams.clear()
-        #elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        # cams.clear()
+        # elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
         #    ports = glob.glob('/dev/video[0-9]*')
-        #elif sys.platform.startswith('darwin'):
+        # elif sys.platform.startswith('darwin'):
         #    ports = glob.glob('/dev/*')
-        #else:
+        # else:
         #    raise EnvironmentError('Unsuported plaftorm')
 
         self.comboBoxCaptureDeviceInformation.clear()
@@ -822,11 +777,15 @@ class Afrodite(QMainWindow):
 
     def getPushButtonVisionHSVCalibrationNext(self):
         if self.stackedWidgetVisionHSVCalibration.currentIndex() < 3:
-            self.stackedWidgetVisionHSVCalibration.setCurrentIndex(self.stackedWidgetVisionHSVCalibration.currentIndex() + 1)
+            self.stackedWidgetVisionHSVCalibration.setCurrentIndex(
+                self.stackedWidgetVisionHSVCalibration.currentIndex() + 1
+            )
 
     def getPushButtonVisionHSVCalibrationPrev(self):
         if self.stackedWidgetVisionHSVCalibration.currentIndex() > 0:
-            self.stackedWidgetVisionHSVCalibration.setCurrentIndex(self.stackedWidgetVisionHSVCalibration.currentIndex() - 1)
+            self.stackedWidgetVisionHSVCalibration.setCurrentIndex(
+                self.stackedWidgetVisionHSVCalibration.currentIndex() - 1
+            )
 
     def getHSVCalibration(self, index):
         if index == 0:
@@ -850,8 +809,8 @@ class Afrodite(QMainWindow):
         Vmax = self.spinBoxVisionHSVCalibrationMainVmax.value()
         Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
-        
-        return ((Hmin, Hmax), (Smin, Smax),(Vmin, Vmax), Erode, Blur, Dilate, Amin)
+
+        return (Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin
 
     # Ball
     def getVisionHSVCalibrationBall(self):
@@ -866,7 +825,7 @@ class Afrodite(QMainWindow):
         Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
+        return (Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin
 
     # Opponent
     def getVisionHSVCalibrationOpponent(self):
@@ -881,7 +840,7 @@ class Afrodite(QMainWindow):
         Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
+        return (Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin
 
     # Green
     def getVisionHSVCalibrationGreen(self):
@@ -896,7 +855,7 @@ class Afrodite(QMainWindow):
         Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
         Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
+        return (Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin
 
     # Control
     # Serial
@@ -916,7 +875,7 @@ class Afrodite(QMainWindow):
                 except (OSError, serial.SerialException):
                     pass
             ports = result
-            #result.clear()
+            # result.clear()
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
             ports = glob.glob('/dev/ttyU[A-Za-z]*')
         elif sys.platform.startswith('darwin'):
@@ -936,11 +895,11 @@ class Afrodite(QMainWindow):
         self.updateComboBoxControlSerialDevice()
 
     def getPushButtonControlSerialSend(self):
-        id = self.comboBoxControlSerialRobots.currentText()
+        robotId = self.comboBoxControlSerialRobots.currentText()
         left = self.lineEditControlSerialSpeedLeft.text()
         right = self.lineEditControlSerialSpeedRight.text()
-        if id is not None and left != "" and right != "":
-            self.hades.eventCreateAndSendMessage(id, left, right)
+        if robotId is not None and left != "" and right != "":
+            self.hades.eventCreateAndSendMessage(robotId, left, right)
 
     def getPushButtonControlSerialSendCommand(self):
         command = self.lineEditControlSerialSendCommand.text()
@@ -963,7 +922,8 @@ class Afrodite(QMainWindow):
 
     def setLabelControlRobotStatusLastUpdate(self):
         now = datetime.now()
-        self.labelControlRobotStatusLastUpdate.setText("Last Update: " + str(now.hour) + ":" + str(now.minute) + ":" + str(now.second))
+        self.labelControlRobotStatusLastUpdate.setText("Last Update: " + str(now.hour) + ":" + str(now.minute) + ":" + 
+        str(now.second))
 
     def setControlRobotStatusRobotA(self, status):
         self.progressBarControlRobotStatusRobotA.setValue(status)
@@ -991,6 +951,7 @@ class Afrodite(QMainWindow):
         self.setControlRobotStatusRobotF(statusF)
         self.setControlRobotStatusRobotG(statusG)
     '''
+
     # Strategy
     # Formation
     def updateComboBoxStrategyFormationLoadStrategy(self, strategys):
@@ -1018,7 +979,11 @@ class Afrodite(QMainWindow):
 
     # TestParameters
     def getStrategyTestParameters(self):
-        return self.getStrategyTestParametersGoalieLine(), self.getStrategyTestParametersGoalieOffset(), self.getStrategyTestParametersName3(), self.getStrategyTestParametersName4(), self.getStrategyTestParametersName5()
+        return self.getStrategyTestParametersGoalieLine(), \
+               self.getStrategyTestParametersGoalieOffset(), \
+               self.getStrategyTestParametersName3(), \
+               self.getStrategyTestParametersName4(), \
+               self.getStrategyTestParametersName5()
 
     def getStrategyTestParametersGoalieLine(self):
         return self.spinBoxStrategyTestParametersGoalieLine.value()
@@ -1034,7 +999,7 @@ class Afrodite(QMainWindow):
 
     def getStrategyTestParametersName5(self):
         return self.spinBoxStrategyTestParametersGoalieLine.value()
-    
+
 
 def main():
     app = QApplication(sys.argv)

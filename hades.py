@@ -12,7 +12,8 @@ class Hades:
     def __init__(self, afrodite):
         # gods
         self.afrodite = afrodite
-        #self.apolo = Apolo(self.apoloReady, self.ciclope)
+        self.ciclope = None
+        self.apolo = None
         self.athena = Athena(self.athenaReady)
         self.zeus = Zeus(self.zeusReady)
         self.hermes = Hermes(self.hermesReady)
@@ -49,6 +50,7 @@ class Hades:
         self.timeCascadeStarted = time.time()
 
         # atualiza o vídeo na interface
+        self.prepareDraw(positions)
         self.afrodite.updateFrameVideoView(imagem)
 
         # atualiza as posições dos robôs na interface
@@ -104,6 +106,39 @@ class Hades:
         # TODO atualizar o FPS da interface
         nextOnCascade = threading.Thread(target=self.apolo.run)
         nextOnCascade.start()  # inicia o processamento no próximo módulo
+
+    # HELPERS
+    def prepareDraw(self, positions):
+        for i in range(0, len(positions[0])):
+            if type(positions[0][i]) is not dict:
+                raise ValueError("Invalid value for our warriors received.")
+
+            self.afrodite.objectsToDraw["robot" + str(i + 1)] = {
+                "shape": "robot",
+                "position": positions[0][i]["position"],
+                "color": (255, 255, 0),
+                "label": str(i + 1),
+                "orientation": positions[0][i]["orientation"]
+            }
+
+        for i in range(0, len(positions[1])):
+            if type(positions[1][i]) is not dict:
+                raise ValueError("Invalid value for our warriors received.")
+
+            self.afrodite.objectsToDraw["advRobot" + str(i + 1)] = {
+                "shape": "robot",
+                "position": positions[1][i]["position"],
+                "color": (0, 0, 255),
+                "label": str(i + 1),
+            }
+
+        self.afrodite.objectsToDraw["ball"] = {
+            "shape": "circle",
+            "position": positions[2]["position"],
+            "color": (255, 255, 255),
+            "label": "Bola",
+            "radius": 4
+        }
 
     # EVENTOS
     # Hades
