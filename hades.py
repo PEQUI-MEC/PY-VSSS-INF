@@ -1,5 +1,6 @@
 import time
 from PyQt5.QtCore import QThread, pyqtSignal
+import numpy
 
 from vision import Apolo
 from control import Zeus
@@ -8,7 +9,10 @@ from communication import Hermes
 
 
 class Hades(QThread):
-    sigfps = pyqtSignal(str)
+    sigFps = pyqtSignal(str)
+    sigDraw = pyqtSignal(dict)
+    sigDisplay = pyqtSignal(numpy.ndarray)
+    sigPositions = pyqtSignal(list)
 
     def __init__(self):
         QThread.__init__(self)
@@ -26,6 +30,9 @@ class Hades(QThread):
         self.cascadeLastTime = 0
 
         print("Hades summoned")
+
+    def __del__(self):
+        self.wait()
 
     def setup(self):
         # set up apolo
@@ -53,11 +60,6 @@ class Hades(QThread):
                 velocities = self.runZeus(commands)
                 self.hermesRules(velocities)
 
-            self.getFPS()
-
-    def stop(self):
-        self.wait()
-
     # MAIN METHODS
 
     def runApolo(self):
@@ -74,23 +76,36 @@ class Hades(QThread):
 
         # atualiza o vídeo na interface
         self.prepareDraw(positions)
-        self.afrodite.updateFrameVideoView(frame)
+        self.sigDisplay.emit(frame)
 
         # atualiza as posições dos robôs na interface
-        self.afrodite.updateLabelVideoViewPositionsRobot1(positions[0][0]["position"], positions[0][0]["orientation"])
-        self.afrodite.updateLabelVideoViewPositionsRobot2(positions[0][1]["position"], positions[0][1]["orientation"])
-        self.afrodite.updateLabelVideoViewPositionsRobot3(positions[0][2]["position"], positions[0][2]["orientation"])
-        self.afrodite.updateLabelVideoViewPositionsBall(positions[2]["position"])
+        formattedPositions = [
+            [
+                positions[0][0]["position"],
+                positions[0][0]["orientation"]
+            ],
+            [
+                positions[0][1]["position"],
+                positions[0][1]["orientation"]
+            ],
+            [
+                positions[0][2]["position"],
+                positions[0][2]["orientation"]
+            ],
+            positions[2]["position"]
+        ]
+        self.sigPositions.emit(formattedPositions)
 
         if self.isCalibrating:
             index = self.afrodite.getHSVIndex()
             self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index), index)
 
+        self.getFPS()
+
         return positions
 
     def runAthena(self, positions):
         commands = self.athena.getTargets(positions)
-
         return commands
 
     def zeusRules(self, commands):
@@ -108,15 +123,17 @@ class Hades(QThread):
         self.cascadeLastTime = time.time()
         if self.cascadeTime > 1:
             fps = self.cascadeLoops / self.cascadeTime
-            self.sigfps.emit("{:.2f}".format(fps))
+            self.sigFps.emit("{:.2f}".format(fps))
             self.cascadeTime = self.cascadeLoops = 0
 
     def prepareDraw(self, positions):
+        objectsToDraw = {}
+
         for i in range(0, len(positions[0])):
             if type(positions[0][i]) is not dict:
                 raise ValueError("Invalid value for our warriors received.")
 
-            self.afrodite.objectsToDraw["robot" + str(i + 1)] = {
+            objectsToDraw["robot" + str(i + 1)] = {
                 "shape": "robot",
                 "position": positions[0][i]["position"],
                 "color": (255, 255, 0),
@@ -128,20 +145,22 @@ class Hades(QThread):
             if type(positions[1][i]) is not dict:
                 raise ValueError("Invalid value for our warriors received.")
 
-            self.afrodite.objectsToDraw["advRobot" + str(i + 1)] = {
+            objectsToDraw["advRobot" + str(i + 1)] = {
                 "shape": "robot",
                 "position": positions[1][i]["position"],
                 "color": (0, 0, 255),
                 "label": str(i + 1),
             }
 
-        self.afrodite.objectsToDraw["ball"] = {
+        objectsToDraw["ball"] = {
             "shape": "circle",
             "position": positions[2]["position"],
             "color": (255, 255, 255),
             "label": "Bola",
             "radius": 4
         }
+
+        self.sigDraw.emit(objectsToDraw)
 
     # EVENTOS
     # Hades

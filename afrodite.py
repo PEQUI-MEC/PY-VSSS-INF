@@ -25,7 +25,10 @@ class Afrodite(QMainWindow):
 
         self.hades = hades.Hades()
         self.hades.setup()
-        self.hades.sigfps.connect(self.setLabelVideoViewFPS)
+        self.hades.sigFps.connect(self.setLabelVideoViewFPS)
+        self.hades.sigDraw.connect(self.updateObjectsToDraw)
+        self.hades.sigDisplay.connect(self.updateFrameVideoView)
+        self.hades.sigPositions.connect(self.updateLabelVideoViewPositions)
         self.hades.start()
 
         dirname = os.path.dirname(__file__)
@@ -502,20 +505,15 @@ class Afrodite(QMainWindow):
 
     # VideoView
     # Positions
-    def updateLabelVideoViewPositionsRobot1(self, position, orientation):
-        self.labelVideoViewPositionsRobot1.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
-                                                   str(orientation) + " rad)")
+    def updateLabelVideoViewPositions(self, positions):
+        self.labelVideoViewPositionsRobot1.setText("(" + str(positions[0][0][0]) + ", " + str(positions[0][0][1]) + ", " +
+                                                   str(positions[0][1]) + " rad)")
+        self.labelVideoViewPositionsRobot2.setText("(" + str(positions[1][0][0]) + ", " + str(positions[1][0][1]) + ", " +
+                                                   str(positions[1][1]) + " rad)")
+        self.labelVideoViewPositionsRobot3.setText("(" + str(positions[2][0][0]) + ", " + str(positions[2][0][1]) + ", " +
+                                                   str(positions[2][1]) + " rad)")
+        self.labelVideoViewPositionsBall.setText("(" + str(positions[3][0]) + ", " + str(positions[3][1]) + ")")
 
-    def updateLabelVideoViewPositionsRobot2(self, position, orientation):
-        self.labelVideoViewPositionsRobot2.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
-                                                   str(orientation) + " rad)")
-
-    def updateLabelVideoViewPositionsRobot3(self, position, orientation):
-        self.labelVideoViewPositionsRobot3.setText("(" + str(position[0]) + ", " + str(position[1]) + ", " +
-                                                   str(orientation) + " rad)")
-
-    def updateLabelVideoViewPositionsBall(self, position):
-        self.labelVideoViewPositionsBall.setText("(" + str(position[0]) + ", " + str(position[1]) + ")")
 
     # CheckBoxVideoViewDisableDrawing
     def getStateCheckBoxVideoViewDisableDrawing(self):
@@ -559,6 +557,9 @@ class Afrodite(QMainWindow):
     def graphicsViewVideoViewVideoClicked():  # event
         point = QtGui.QCursor.pos()
         print("X:" + str(point.x()) + " | " + "Y:" + str(point.y()))
+
+    def updateObjectsToDraw(self, newObjects):
+        self.objectsToDraw = newObjects
 
     def drawImageVideoView(self):
         """Itera sobre o self.objectsToDraw e desenha cada objeto
