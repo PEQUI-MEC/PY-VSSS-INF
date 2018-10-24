@@ -134,18 +134,11 @@ class Eunomia:
         """
 
         # Se o targetOrientation passado não for um ponto
-
         if type(self.warrior.targetOrientation) is not tuple:
-            '''
-            theta = atan2(sin(self.warrior.orientation - self.warrior.targetOrientation),
-                          cos(self.warrior.orientation - self.warrior.targetOrientation))
+            theta = atan2(sin(self.warrior.targetOrientation), -cos(self.warrior.targetOrientation))
+            target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
             del self.warrior.targetOrientation
-            self.warrior.targetOrientation = [50 * cos(theta), 50 * sin(theta)]
-            '''
-            # x = self.warrior.targetOrientation[0] - self.warrior.position[0]
-            # y = self.warrior.targetOrientation[1] - self.warrior.position[1]
-            del self.warrior.targetOrientation
-            # self.warrior.targetOrientation = atan2(y, -x)
+            self.warrior.targetOrientation = target
 
         #  Verificar se existe um 'before' na chamada desse método
         time = None
@@ -156,20 +149,12 @@ class Eunomia:
             self.warrior.vRight = self.warrior.vMax
             self.warrior.vLeft = self.warrior.vMax
 
-            # print("\nwarrior ", list(warrior.position))
-            # print("Target ", list(warrior.target))
-            self.warrior.target = [0.0, 0.0]
-            # print(self.warrior.position)
-            # print("\n\n")
-            # self.warrior.transAngle = self.warrior.targetOrientation
-
             self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
                                                          robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
                                                          target=list(self.warrior.target),
                                                          obstacles=list(self.warrior.obstacles),
                                                          orientation=self.warrior.targetOrientation)
 
-            # print("UVF " + str(warrior.transAngle))
         else:
             # TODO Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass
