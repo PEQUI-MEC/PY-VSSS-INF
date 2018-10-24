@@ -150,9 +150,9 @@ class Eunomia:
 
             # print("\nwarrior ", list(warrior.position))
             # print("Target ", list(warrior.target))
-            self.warrior.target = [640.0, 480.0]
-            print(self.warrior.position)
-            print("\n\n")
+            # self.warrior.target = [640.0, 480.0]
+            # print(self.warrior.position)
+            # print("\n\n")
             self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
                                                          robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
                                                          target=list(self.warrior.target),
