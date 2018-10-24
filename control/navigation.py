@@ -214,6 +214,8 @@ class UnivectorField:
         self.dMin = dMin
         self.lDelta = lDelta
 
+        print(self.dMin)
+
         self.avoidField.updateParam(self.k0)
         self.moveField.updateParams(self.kr, self.radius)
 
@@ -248,6 +250,7 @@ class UnivectorField:
         fi_auf = 0.0
         minDistance = self.dMin + 1
         if self.obstacles is not None:
+
             for i in range(0, len(self.obstacles)):
                 self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
                 center = self.avoidField.getVirtualPos()
@@ -262,6 +265,7 @@ class UnivectorField:
             fi_auf = self.avoidField.avoid(self.robotPos, vPos=closestCenter, theta=True)
 
         if minDistance <= self.dMin:
+            # print("minDistance: ", minDistance)
             return fi_auf
         else:
             fi_tuf = self.moveField.fi_tuf(self.robotPos)

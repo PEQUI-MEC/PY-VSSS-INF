@@ -78,17 +78,16 @@ class Dice:
         """
         Returns:
         """
-
         if self.warrior.vMax == 0:
             return [0.0, 0.0]
 
-        theta = float(atan2(sin(self.warrior.orientation - (-self.warrior.transAngle)),
-                            cos(self.warrior.orientation - (-self.warrior.transAngle))) * 180 / pi)
-        theta = round(theta * 100) / 100
+        # theta = float(atan2(sin(self.warrior.orientation - (-self.warrior.transAngle)),
+        #                     cos(self.warrior.orientation - (-self.warrior.transAngle))) * 180 / pi)
+        # theta = round(theta * 100) / 100
 
-        target = [50 * cos(theta * pi/180), 50 * sin(theta * pi/180)]
-        targetTheta = atan2(target[1] - self.warrior.position[1], target[0] - self.warrior.position[0])
-
+        # target = [50 * cos(theta * pi/180), 50 * sin(theta * pi/180)]
+        # targetTheta = atan2(target[1] - self.warrior.position[1], target[0] - self.warrior.position[0])
+        targetTheta = self.warrior.transAngle
         theta = self.warrior.orientation
         moveBackwards = bool(abs(targetTheta - self.warrior.orientation) > pi/2)
         if moveBackwards:
@@ -115,51 +114,36 @@ class Dice:
         """
         Returns:
         """
-
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0]
 
-        temp = [self.warrior.target[0] - self.warrior.position[0], self.warrior.target[1] - self.warrior.position[1]]
-        transTarget = [round(cos(self.warrior.orientation) * (temp[0]) + sin(self.warrior.orientation) * temp[1]),
-                       round(-(sin(self.warrior.orientation) * (temp[0]) + cos(self.warrior.orientation) * temp[1]))]
-        target = [round(transTarget[0] * ((150.0/640.0)*100)/100), round(transTarget[1] * ((130.0/480.0)*100)/100)]
+        targetTheta = atan2((self.warrior.target[1] - self.warrior.position[1])*1.3 / 480,
+                            -(self.warrior.target[0] - self.warrior.position[0])*1.5 / 640)
+        currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
-        # Stops after arriving at destination
-        positionError = sqrt(pow(self.warrior.position[0] - target[0], 2) + pow(self.warrior.position[1] - target[1], 2))
-        if positionError < 1:
-            return [0.0, 0.0]
-
-        targetTheta = atan2(target[1] - self.warrior.position[1], target[0] - self.warrior.position[0])
-        theta = self.warrior.orientation
-
-        # Activates backward movement if thetaError > PI/2
-        moveBackwards = bool(roundAngle(targetTheta - self.warrior.orientation + pi/2) < 0)
-
-        if moveBackwards:
-            theta = roundAngle(self.warrior.orientation + pi)
-
-        thetaError = roundAngle(targetTheta - theta)
-
-        limiar = atan2(1.0, positionError)
-        limiar = 30 if limiar > 30 else limiar
-
-        if abs(thetaError < limiar):
-            thetaError = 0
-
-        if moveBackwards:
-            self.warrior.vLeft = -1 - sin(thetaError) + (-1 * tan(thetaError/2))
-            self.warrior.vLeft = saturate(self.warrior.vLeft)
-
-            self.warrior.vRight = -1 + sin(thetaError) + (-1 * tan(-1 * thetaError / 2))
-            self.warrior.vRight = saturate(self.warrior.vRight)
+        if atan2(sin(targetTheta - currentTheta + pi/2), cos(targetTheta - currentTheta + pi/2)) < 0:
+            backward = True
+            m = 1
         else:
-            self.warrior.vLeft = 1 - sin(thetaError) + tan(-1 * thetaError / 2)
-            self.warrior.vLeft = saturate(self.warrior.vLeft)
+            backward = False
+            m = -1
 
-            self.warrior.vRight = 1 + sin(thetaError) + tan(thetaError / 2)
-            self.warrior.vRight = saturate(self.warrior.vRight)
+        if backward:
+            currentTheta = currentTheta + pi
+            currentTheta = atan2(sin(currentTheta), cos(currentTheta))
 
-        return [self.warrior.vLeft, self.warrior.vRight]
+        thetaError = atan2(sin(targetTheta - currentTheta), cos(targetTheta - currentTheta))
+
+        left = m + sin(thetaError)
+        right = m - sin(thetaError)
+
+        left = saturate(left)
+        right = saturate(right)
+
+        left = self.warrior.vMax * left
+        right = self.warrior.vMax * right
+
+        return [left, right]
 
     def orientationControl(self):
         """
