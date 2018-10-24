@@ -19,7 +19,6 @@ import threading
 
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
-
     def __init__(self):
         super(Afrodite, self).__init__()
 
@@ -52,6 +51,214 @@ class Afrodite(QMainWindow):
         self.pushButtonVisionHSVCalibrationEdit.clicked.connect(self.getPushButtonVisionHSVCalibrationEdit)
         self.pushButtonVisionHSVCalibrationPrev.clicked.connect(self.getPushButtonVisionHSVCalibrationPrev)
         self.pushButtonVisionHSVCalibrationNext.clicked.connect(self.getPushButtonVisionHSVCalibrationNext)
+
+
+		#MAIN
+        self.spinBoxVisionHSVCalibrationMainHmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainHmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainHmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainHmin.setMaximum(255)
+        
+        self.spinBoxVisionHSVCalibrationMainSmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainSmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainSmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainSmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainVmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainVmin.setMaximum(255)
+        #self.horizontalSliderVisionHSVCalibrationMainVmin.setMinimum(0)
+        #self.horizontalSliderVisionHSVCalibrationMainVmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainErode.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainErode.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainErode.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainErode.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainBlur.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainBlur.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainBlur.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainBlur.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainHmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainHmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainHmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainHmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainSmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainSmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainSmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainSmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainVmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainVmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainVmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainVmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainDilate.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainDilate.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainDilate.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainDilate.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationMainAmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationMainAmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationMainAmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationMainAmin.setMaximum(255)
+		
+		#BALL
+		
+        self.spinBoxVisionHSVCalibrationBallHmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallHmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallHmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallHmin.setMaximum(255)
+        
+        self.spinBoxVisionHSVCalibrationBallSmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallSmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallSmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallSmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationBallVmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallVmin.setMaximum(255)
+        #self.horizontalSliderVisionHSVCalibrationBallVmin.setMinimum(0)
+        #self.horizontalSliderVisionHSVCalibrationBallVmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationBallErode.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallErode.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallErode.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallErode.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationBallBlur.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallBlur.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallBlur.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallBlur.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationBallHmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallHmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallHmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallHmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationBallSmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallSmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallSmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallSmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationBallVmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallVmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallVmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallVmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationBallDilate.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallDilate.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallDilate.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallDilate.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationBallAmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationBallAmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationBallAmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationBallAmin.setMaximum(255)
+		
+		#Green
+        self.spinBoxVisionHSVCalibrationGreenHmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenHmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenHmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenHmin.setMaximum(255)
+        
+        self.spinBoxVisionHSVCalibrationGreenSmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenSmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenSmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenSmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationGreenVmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenVmin.setMaximum(255)
+        #self.horizontalSliderVisionHSVCalibrationGreenVmin.setMinimum(0)
+        #self.horizontalSliderVisionHSVCalibrationGreenVmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationGreenErode.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenErode.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenErode.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenErode.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationGreenBlur.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenBlur.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenBlur.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenBlur.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationGreenHmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenHmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenHmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenHmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationGreenSmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenSmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenSmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenSmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationGreenVmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenVmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenVmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenVmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationGreenDilate.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenDilate.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenDilate.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenDilate.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationGreenAmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationGreenAmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationGreenAmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationGreenAmin.setMaximum(255)
+		
+		#Opponent
+		
+        self.spinBoxVisionHSVCalibrationOpponentHmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentHmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentHmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentHmin.setMaximum(255)
+        
+        self.spinBoxVisionHSVCalibrationOpponentSmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentSmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentSmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentSmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationOpponentVmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentVmin.setMaximum(255)
+        #self.horizontalSliderVisionHSVCalibrationOpponentVmin.setMinimum(0)
+        #self.horizontalSliderVisionHSVCalibrationOpponentVmin.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationOpponentErode.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentErode.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentErode.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentErode.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationOpponentBlur.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentBlur.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentBlur.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentBlur.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationOpponentHmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentHmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentHmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentHmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationOpponentSmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentSmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentSmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentSmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationOpponentVmax.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentVmax.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentVmax.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentVmax.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationOpponentDilate.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentDilate.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentDilate.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentDilate.setMaximum(255)
+
+        self.spinBoxVisionHSVCalibrationOpponentAmin.setMinimum(0)
+        self.spinBoxVisionHSVCalibrationOpponentAmin.setMaximum(255)
+        self.horizontalSliderVisionHSVCalibrationOpponentAmin.setMinimum(0)
+        self.horizontalSliderVisionHSVCalibrationOpponentAmin.setMaximum(255)
+
 
         # Capture
         # DeviceInformation
@@ -411,7 +618,16 @@ class Afrodite(QMainWindow):
         if (interface.imageView.PID_test_flag)
             for(int i = 0; i < Robots::SIZE; i++)
                 if(Robots::is_target_set(i)) {
-                    // linha branca no alvo sendo executado
+                    // liHmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
+        Smin = self.spinBoxVisionHSVCalibrationMainSmin.value()
+        Vmin = self.spinBoxVisionHSVCalibrationMainVmin.value()
+        Erode = self.spinBoxVisionHSVCalibrationMainErode.value()
+        Blur = self.spinBoxVisionHSVCalibrationMainBlur.value()
+        Hmax = self.spinBoxVisionHSVCalibrationMainHmax.value()
+        Smax = self.spinBoxVisionHSVCalibrationMainSmax.value()
+        Vmax = self.spinBoxVisionHSVCalibrationMainVmax.value()
+        Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
+        Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()nha branca no alvo sendo executado
                     line(cameraFlow, Robots::get_position(i), Robots::get_target(i), cv::Scalar(255,255,255),2);
 
                 // círculo branco no alvo sendo executado

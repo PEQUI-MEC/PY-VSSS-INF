@@ -1,4 +1,4 @@
-####### req-strategy.txt #######
+####### req-interface.txt #######
 #
 # This file handles all required libraries to run this project
 #
@@ -14,4 +14,5 @@
 #
 # To include another requirement.txt file inside a requirement.txt file, use:
 # -r other-requirement-file.txt
-scipy
+
+PyQt5

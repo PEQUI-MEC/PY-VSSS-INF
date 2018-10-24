@@ -1,4 +1,4 @@
-####### req-strategy.txt #######
+####### req-sim.txt #######
 #
 # This file handles all required libraries to run this project
 #
@@ -14,4 +14,6 @@
 #
 # To include another requirement.txt file inside a requirement.txt file, use:
 # -r other-requirement-file.txt
-scipy
+
+numpy
+mujoco-py<1.50.2,>=1.50.1
