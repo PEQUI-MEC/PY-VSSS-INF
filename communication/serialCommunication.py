@@ -60,7 +60,8 @@ class SerialCommunication:
             Returns:
 
         """
-        self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
+        if self.xbee is not None:
+            self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
     
     def newRobot(self, letter, address):
         """ Create a robot

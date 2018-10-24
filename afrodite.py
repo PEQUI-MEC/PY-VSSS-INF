@@ -514,11 +514,6 @@ class Afrodite(QMainWindow):
                                                    str(positions[2][1]) + " rad)")
         self.labelVideoViewPositionsBall.setText("(" + str(positions[3][0]) + ", " + str(positions[3][1]) + ")")
 
-
-    # CheckBoxVideoViewDisableDrawing
-    def getStateCheckBoxVideoViewDisableDrawing(self):
-        return self.checkBoxVideoViewDisableDrawing.isTristate()
-
     # FPS
     def setLabelVideoViewFPS(self, fps):
         self.labelVideoViewFPS.setText("FPS: " + str(fps))

@@ -53,16 +53,16 @@ class Hades(QThread):
     def run(self):
         while True:
             # visão
-            positions = self.runApolo()
+            positions = self.apoloRules()
 
             if self.play:
-                commands = self.runAthena(positions)
-                velocities = self.runZeus(commands)
+                commands = self.athenaRules(positions)
+                velocities = self.zeusRules(commands)
                 self.hermesRules(velocities)
 
     # MAIN METHODS
 
-    def runApolo(self):
+    def apoloRules(self):
         """
         Roda a visão, atualiza a interface e retorna as posições
 
@@ -70,7 +70,7 @@ class Hades(QThread):
             lista com as posições dos objetos
         """
         if self.apolo is None:
-            return
+            return None
 
         positions, frame = self.apolo.run()
 
@@ -104,15 +104,24 @@ class Hades(QThread):
 
         return positions
 
-    def runAthena(self, positions):
+    def athenaRules(self, positions):
+        if positions is None:
+            return None
+
         commands = self.athena.getTargets(positions)
         return commands
 
     def zeusRules(self, commands):
+        if commands is None:
+            return None
+
         velocities = self.zeus.getVelocities(commands)
         return velocities
 
     def hermesRules(self, velocities):
+        if velocities is None:
+            return None
+
         self.hermes.fly(velocities)
 
     # HELPERS
