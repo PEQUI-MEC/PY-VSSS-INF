@@ -214,8 +214,6 @@ class UnivectorField:
         self.dMin = dMin
         self.lDelta = lDelta
 
-        print(self.dMin)
-
         self.avoidField.updateParam(self.k0)
         self.moveField.updateParams(self.kr, self.radius)
 
@@ -236,7 +234,7 @@ class UnivectorField:
     def updateOrientation(self, orientation):
         self.moveField.updateOrientation(orientation)
 
-    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=None):
+    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=[650, 250]):
         if robotPos is not None and robotSpeed is not None:
             self.updateRobot(robotPos, robotSpeed)
         if target is not None:
@@ -249,6 +247,7 @@ class UnivectorField:
         centers = []
         fi_auf = 0.0
         minDistance = self.dMin + 1
+        self.obstacles = None
         if self.obstacles is not None:
 
             for i in range(0, len(self.obstacles)):
@@ -272,10 +271,9 @@ class UnivectorField:
             # print(":  FiAuf " + str(fi_tuf))
 
             if self.obstacles is not None:
-                # print(":  Existe? ")
                 guass = gaussian(minDistance - self.dMin, self.lDelta)
                 diff = wrap2pi(fi_auf - fi_tuf)
                 return wrap2pi(guass*diff + fi_tuf)
 
             else:
-                return fi_tuf
+                return -pi/2

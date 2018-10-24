@@ -25,7 +25,7 @@ class Eunomia:
 
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
-        self.uvf.updateConstants(radius=4.0, kr=3.9, k0=0.12, dMin=5.0, lDelta=4.5)
+        self.uvf.updateConstants(radius=4.0, kr=3.9, k0=0.12, dMin=4.0, lDelta=4.5)
 
     def run(self, warrior):
         """Main method of action controller
@@ -56,7 +56,7 @@ class Eunomia:
             self.lookAt()
 
         elif warrior.action[0] == "goTo":
-            warrior.cmdType = "POSITION"
+            warrior.cmdType = "VECTOR"
             self.goTo()
 
         return self.warrior
@@ -134,10 +134,18 @@ class Eunomia:
         """
 
         # Se o targetOrientation passado não for um ponto
+
         if type(self.warrior.targetOrientation) is not tuple:
-            theta = self.warrior.targetOrientation
+            '''
+            theta = atan2(sin(self.warrior.orientation - self.warrior.targetOrientation),
+                          cos(self.warrior.orientation - self.warrior.targetOrientation))
             del self.warrior.targetOrientation
-            self.warrior.targetOrientation = [50 * cos(theta * pi / 180), 50 * sin(theta * pi / 180)]
+            self.warrior.targetOrientation = [50 * cos(theta), 50 * sin(theta)]
+            '''
+            # x = self.warrior.targetOrientation[0] - self.warrior.position[0]
+            # y = self.warrior.targetOrientation[1] - self.warrior.position[1]
+            del self.warrior.targetOrientation
+            # self.warrior.targetOrientation = atan2(y, -x)
 
         #  Verificar se existe um 'before' na chamada desse método
         time = None
@@ -150,14 +158,17 @@ class Eunomia:
 
             # print("\nwarrior ", list(warrior.position))
             # print("Target ", list(warrior.target))
-            # self.warrior.target = [640.0, 480.0]
+            self.warrior.target = [640.0, 480.0]
             # print(self.warrior.position)
             # print("\n\n")
+            # self.warrior.transAngle = self.warrior.targetOrientation
+
             self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
                                                          robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
                                                          target=list(self.warrior.target),
-                                                         obstacles=self.warrior.obstacles,
+                                                         obstacles=list(self.warrior.obstacles),
                                                          orientation=self.warrior.targetOrientation)
+
             # print("UVF " + str(warrior.transAngle))
         else:
             # TODO Fazer verificação se é possível realizar o trajeto com o tempo requisitado

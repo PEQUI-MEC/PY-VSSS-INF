@@ -75,40 +75,38 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self):
-        """
-        Returns:
-        """
         if self.warrior.vMax == 0:
             return [0.0, 0.0]
 
-        # theta = float(atan2(sin(self.warrior.orientation - (-self.warrior.transAngle)),
-        #                     cos(self.warrior.orientation - (-self.warrior.transAngle))) * 180 / pi)
-        # theta = round(theta * 100) / 100
+        theta = atan2(sin(self.warrior.transAngle), -cos(self.warrior.transAngle))
+        target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
 
-        # target = [50 * cos(theta * pi/180), 50 * sin(theta * pi/180)]
-        # targetTheta = atan2(target[1] - self.warrior.position[1], target[0] - self.warrior.position[0])
-        targetTheta = self.warrior.transAngle
-        theta = self.warrior.orientation
-        moveBackwards = bool(abs(targetTheta - self.warrior.orientation) > pi/2)
-        if moveBackwards:
-            theta = roundAngle(self.warrior.orientation + pi)
+        targetTheta = atan2(target[1] - self.warrior.position[1], -(target[0] - self.warrior.position[0]))
+        currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
-        thetaError = roundAngle(targetTheta - theta)
-
-        if moveBackwards:
-            self.warrior.vLeft = -1 - sin(thetaError) + (-1 * tan(thetaError/2))
-            self.warrior.vLeft = saturate(self.warrior.vLeft)
-
-            self.warrior.vRight = -1 + sin(thetaError) + (-1 * tan(-1 * thetaError / 2))
-            self.warrior.vRight = saturate(self.warrior.vRight)
+        if atan2(sin(targetTheta - currentTheta + pi/2), cos(targetTheta - currentTheta + pi/2)) < 0:
+            backward = True
+            m = 1
         else:
-            self.warrior.vLeft = 1 - sin(thetaError) + tan(-1 * thetaError / 2)
-            self.warrior.vLeft = saturate(self.warrior.vLeft)
+            backward = False
+            m = -1
 
-            self.warrior.vRight = 1 + sin(thetaError) + tan(thetaError / 2)
-            self.warrior.vRight = saturate(self.warrior.vRight)
+        if backward:
+            currentTheta = currentTheta + pi
+            currentTheta = atan2(sin(currentTheta), cos(currentTheta))
 
-        return [self.warrior.vLeft, self.warrior.vRight]
+        thetaError = atan2(sin(targetTheta - currentTheta), cos(targetTheta - currentTheta))
+
+        left = m + sin(thetaError)
+        right = m - sin(thetaError)
+
+        left = saturate(left)
+        right = saturate(right)
+
+        left = self.warrior.vMax * left
+        right = self.warrior.vMax * right
+
+        return [left, right]
 
     def positionControl(self):
         """
