@@ -25,7 +25,7 @@ class Eunomia:
 
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
-        self.uvf.updateConstants(radius=6.0, kr=5.9, k0=0.12, dMin=5.0, lDelta=4.5)
+        self.uvf.updateConstants(radius=4.0, kr=3.9, k0=0.12, dMin=4.0, lDelta=4.5)
 
     def run(self, warrior):
         """Main method of action controller
@@ -135,9 +135,10 @@ class Eunomia:
 
         # Se o targetOrientation passado não for um ponto
         if type(self.warrior.targetOrientation) is not tuple:
-            theta = self.warrior.targetOrientation
+            theta = atan2(sin(self.warrior.targetOrientation), -cos(self.warrior.targetOrientation))
+            target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
             del self.warrior.targetOrientation
-            self.warrior.targetOrientation = [50 * cos(theta * pi / 180), 50 * sin(theta * pi / 180)]
+            self.warrior.targetOrientation = target
 
         #  Verificar se existe um 'before' na chamada desse método
         time = None
@@ -148,15 +149,12 @@ class Eunomia:
             self.warrior.vRight = self.warrior.vMax
             self.warrior.vLeft = self.warrior.vMax
 
-            # print("\nwarrior ", list(warrior.position))
-            # print("Target ", list(warrior.target))
-
             self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
                                                          robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
                                                          target=list(self.warrior.target),
-                                                         obstacles=self.warrior.obstacles,
+                                                         obstacles=list(self.warrior.obstacles),
                                                          orientation=self.warrior.targetOrientation)
-            # print("UVF " + str(warrior.transAngle))
+
         else:
             # TODO Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass

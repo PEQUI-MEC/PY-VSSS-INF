@@ -149,7 +149,7 @@ class Move2Goal:
             movement = np.array([cos(theta), sin(theta)])
             movement = np.dot(self.toGame, movement).reshape(2, )
 
-        return atan2(movement[1], movement[0])
+        return atan2(movement[1], -movement[0])
 
 
 class AvoidObstacle:
@@ -234,7 +234,7 @@ class UnivectorField:
     def updateOrientation(self, orientation):
         self.moveField.updateOrientation(orientation)
 
-    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=None):
+    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=[650, 250]):
         if robotPos is not None and robotSpeed is not None:
             self.updateRobot(robotPos, robotSpeed)
         if target is not None:
@@ -247,7 +247,9 @@ class UnivectorField:
         centers = []
         fi_auf = 0.0
         minDistance = self.dMin + 1
+        self.obstacles = None
         if self.obstacles is not None:
+
             for i in range(0, len(self.obstacles)):
                 self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
                 center = self.avoidField.getVirtualPos()
@@ -262,13 +264,13 @@ class UnivectorField:
             fi_auf = self.avoidField.avoid(self.robotPos, vPos=closestCenter, theta=True)
 
         if minDistance <= self.dMin:
+            # print("minDistance: ", minDistance)
             return fi_auf
         else:
             fi_tuf = self.moveField.fi_tuf(self.robotPos)
             # print(":  FiAuf " + str(fi_tuf))
 
             if self.obstacles is not None:
-                # print(":  Existe? ")
                 guass = gaussian(minDistance - self.dMin, self.lDelta)
                 diff = wrap2pi(fi_auf - fi_tuf)
                 return wrap2pi(guass*diff + fi_tuf)
