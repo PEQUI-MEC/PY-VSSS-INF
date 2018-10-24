@@ -149,7 +149,7 @@ class Move2Goal:
             movement = np.array([cos(theta), sin(theta)])
             movement = np.dot(self.toGame, movement).reshape(2, )
 
-        return atan2(movement[1], movement[0])
+        return atan2(movement[1], -movement[0])
 
 
 class AvoidObstacle:
@@ -276,4 +276,4 @@ class UnivectorField:
                 return wrap2pi(guass*diff + fi_tuf)
 
             else:
-                return -pi/2
+                return fi_tuf

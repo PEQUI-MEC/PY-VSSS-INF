@@ -158,7 +158,7 @@ class Eunomia:
 
             # print("\nwarrior ", list(warrior.position))
             # print("Target ", list(warrior.target))
-            self.warrior.target = [640.0, 480.0]
+            self.warrior.target = [0.0, 0.0]
             # print(self.warrior.position)
             # print("\n\n")
             # self.warrior.transAngle = self.warrior.targetOrientation
