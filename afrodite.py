@@ -366,6 +366,10 @@ class Afrodite(QMainWindow):
     def clickedPlay(self):
         self.hades.eventStartGame()
 
+    def keyPressEvent(self, QKeyEvent):
+        if QKeyEvent.key() == QtCore.Qt.Key_Space:
+            self.hades.eventStartGame()
+
     # STRATEGY
 
     # transitions
