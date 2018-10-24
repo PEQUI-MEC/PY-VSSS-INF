@@ -70,7 +70,7 @@ class Hades:
         nextOnCascade.start()  # inicia o processamento no próximo módulo (deve ser a última coisa a ser feita)
 
     def athenaReady(self, strategyInfo):
-        print("\t\tAthena ready")
+        # print("\t\tAthena ready")
 
         # decide qual é o próximo módulo na cascata
         if self.play:
@@ -89,7 +89,7 @@ class Hades:
             self.isCalibrating = True
 
     def zeusReady(self, velocities):
-        print("\t\tZeus ready")
+        # print("\t\tZeus ready")
 
         # decide qual é o próximo módulo na cascata
         if self.play:

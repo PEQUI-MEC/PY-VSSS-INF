@@ -29,6 +29,8 @@ class Afrodite(QMainWindow):
         filename = os.path.join(dirname, 'interface/mainwindow.ui')
         loadUi(filename, self)
 
+        self.image = None
+
         # PLAY BUTTON
         self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
 
@@ -512,12 +514,12 @@ class Afrodite(QMainWindow):
     def setLabelVideoViewFPS(self, fps):
         self.labelVideoViewFPS.setText("FPS: " + str(fps))
 
-    #LoadImage
+    # LoadImage
 
     def updateFrameVideoView(self, image):
         self.image = image
 
-        #Desenhar na tela
+        # desenhar na tela
         if self.checkBoxVideoViewDisableDrawing.isChecked():
             self.drawingImageVideoView()
 
@@ -530,13 +532,13 @@ class Afrodite(QMainWindow):
 
         if len(self.image.shape) == 3:
             if self.image.shape[2] == 4:
-                qformat=QImage.Format_RGBA888
+                qformat = QImage.Format_RGBA888
             else:
-                qformat=QImage.Format_RGB888
+                qformat = QImage.Format_RGB888
 
-        outImage=QImage(self.image, self.image.shape[1], self.image.shape[0], self.image.strides[0], qformat)
+        outImage = QImage(self.image, self.image.shape[1], self.image.shape[0], self.image.strides[0], qformat)
 
-        outImage=outImage.rgbSwapped()
+        outImage = outImage.rgbSwapped()
 
         if window == 1:
             self.graphicsViewVideoViewVideo.setPixmap(QPixmap.fromImage(outImage))
@@ -547,10 +549,10 @@ class Afrodite(QMainWindow):
         print("X:" + str(point.x()) + " | " + "Y:" + str(point.y())) 
 
     def getBallPosition(self):
-        self.cont+=1
-        return (447,self.cont)
+        self.cont += 1
+        return 447, self.cont
 
-    '''-----------------------DESENHO SOBRA A IMAGEM------------------'''
+    '''-----------------------DESENHO SOBRE A IMAGEM------------------'''
 
     def drawingImageVideoView(self):
         #Desenho da Bola

@@ -422,7 +422,7 @@ class Apolo:
 
         self.positions = self.returnData(self.robotPositions,self.advRobotPositions,self.ballPosition)
 
-        print (self.positions)
+        # print(self.positions)
 
         if (self.imageId != -1):
             frame = self.thresholdedImages[self.imageId]
