@@ -60,6 +60,7 @@ class Hades(QThread):
                 velocities = self.zeusRules(commands)
                 self.hermesRules(velocities)
 
+            time.sleep(0.0001)
     # MAIN METHODS
 
     def apoloRules(self):

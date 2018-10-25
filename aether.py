@@ -150,7 +150,7 @@ def loop():
         sim.data.ctrl[9] = convertVelocity(velocities2[1]["vRight"])
         sim.data.ctrl[10] = convertVelocity(velocities2[2]["vLeft"])
         sim.data.ctrl[11] = convertVelocity(velocities2[2]["vRight"])
-        time.sleep(1)
+        time.sleep(0.0001)
 
 
 # PREPARAÇÃO
