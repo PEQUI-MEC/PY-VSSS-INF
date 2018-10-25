@@ -60,12 +60,11 @@ class Apolo:
         2 - Adv
         3 - Green
     '''
-    def resetImageId(self):
-        self.imageId = -1
+    def setHSVThresh(self, hsvThresh, imageId):
+        self.imageId = imageId
 
-    def setHSVThresh(self, hsvThresh, keyword):
-        self.imageId = keyword
-        self.threshList[keyword] = hsvThresh
+        if self.imageId >= 0:
+            self.threshList[imageId] = hsvThresh
 
     def getHSVThresh(self,keyword):
         return self.threshList[keyword]

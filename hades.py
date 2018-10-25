@@ -96,10 +96,6 @@ class Hades(QThread):
         ]
         self.sigPositions.emit(formattedPositions)
 
-        if self.isCalibrating:
-            index = self.afrodite.getHSVIndex()
-            self.apolo.setHSVThresh(self.afrodite.getHSVCalibration(index), index)
-
         self.getFPS()
 
         return positions
@@ -178,12 +174,8 @@ class Hades(QThread):
         print("Hades started") if self.play else print("Hades stopped")
 
     # Camera e Visão
-    def calibrationEvent(self):
-        if self.isCalibrating:
-            self.isCalibrating = False
-            self.apolo.resetImageId()
-        else:
-            self.isCalibrating = True
+    def calibrationEvent(self, imageId, calibration=None):
+        self.apolo.setHSVThresh(calibration, imageId)
 
     def eventStartVision(self, cameraId):
         self.apolo = Apolo(cameraId)
