@@ -132,7 +132,7 @@
      <property name="minimumSize">
       <size>
        <width>500</width>
-       <height>500</height>
+       <height>465</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -154,7 +154,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -185,7 +185,7 @@
          <x>10</x>
          <y>10</y>
          <width>481</width>
-         <height>131</height>
+         <height>71</height>
         </rect>
        </property>
        <property name="title">
@@ -263,121 +263,29 @@
          <string>Start</string>
         </property>
        </widget>
-       <widget class="QLabel" name="labelCaptureDeviceInformationDeviceFixed">
+       <widget class="QPushButton" name="pushButtonCaptureDeviceInformationRefresh">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>77</y>
-          <width>61</width>
-          <height>17</height>
+          <x>340</x>
+          <y>30</y>
+          <width>80</width>
+          <height>25</height>
          </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
         </property>
         <property name="text">
-         <string>Device:</string>
-        </property>
-       </widget>
-       <widget class="Line" name="lineCaptureDeviceInformation">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>60</y>
-          <width>461</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelCaptureDeviceInformationDevice">
-        <property name="geometry">
-         <rect>
-          <x>69</x>
-          <y>77</y>
-          <width>161</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>None</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelCaptureDeviceInformationCardFixed">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>100</y>
-          <width>34</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Card:</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelCaptureDeviceInformationCard">
-        <property name="geometry">
-         <rect>
-          <x>69</x>
-          <y>100</y>
-          <width>161</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>None</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelCaptureDeviceInformationDriverFixed">
-        <property name="geometry">
-         <rect>
-          <x>249</x>
-          <y>77</y>
-          <width>61</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Driver:</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelCaptureDeviceInformationDriver">
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>77</y>
-          <width>161</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>None</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelCaptureDeviceInformationBus">
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>100</y>
-          <width>161</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>None</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labeCaptureDeviceInformationlBusFixed">
-        <property name="geometry">
-         <rect>
-          <x>249</x>
-          <y>100</y>
-          <width>41</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Bus</string>
+         <string>Refresh</string>
         </property>
        </widget>
       </widget>
@@ -385,1234 +293,873 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>150</y>
+         <y>90</y>
          <width>481</width>
-         <height>201</height>
+         <height>241</height>
         </rect>
        </property>
        <property name="title">
         <string>Device Properties</string>
        </property>
-       <widget class="QTabWidget" name="tabWidgetCaptureDeviceProperties">
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesSaturation">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>461</width>
-          <height>161</height>
+          <x>100</x>
+          <y>80</y>
+          <width>51</width>
+          <height>25</height>
          </rect>
         </property>
-        <property name="currentIndex">
-         <number>2</number>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
         </property>
-        <widget class="QWidget" name="tabDevicePorperties">
-         <attribute name="title">
-          <string>Properties</string>
-         </attribute>
-         <widget class="QComboBox" name="comboBoxCaptureDevicePropertiesInput">
-          <property name="geometry">
-           <rect>
-            <x>80</x>
-            <y>10</y>
-            <width>141</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesInput">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>10</y>
-            <width>61</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Input:</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesFormat">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>40</y>
-            <width>61</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Format:</string>
-          </property>
-         </widget>
-         <widget class="QComboBox" name="comboBoxCaptureDevicePropertiesFormat">
-          <property name="geometry">
-           <rect>
-            <x>80</x>
-            <y>40</y>
-            <width>141</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-         </widget>
-         <widget class="QComboBox" name="comboBoxCaptureDevicePropertiesIntervals">
-          <property name="geometry">
-           <rect>
-            <x>80</x>
-            <y>70</y>
-            <width>141</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesInterval">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>70</y>
-            <width>61</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Intervals:</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesStandard">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>100</y>
-            <width>71</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Standard:</string>
-          </property>
-         </widget>
-         <widget class="QComboBox" name="comboBoxCaptureDevicePropertiesFrameSize">
-          <property name="geometry">
-           <rect>
-            <x>310</x>
-            <y>10</y>
-            <width>141</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-         </widget>
-         <widget class="QComboBox" name="comboBoxCaptureDevicePropertiesStandard">
-          <property name="geometry">
-           <rect>
-            <x>80</x>
-            <y>100</y>
-            <width>141</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesFameSize">
-          <property name="geometry">
-           <rect>
-            <x>230</x>
-            <y>10</y>
-            <width>71</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Frame size:</string>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="tabCaptureDevicePropertiesConfig">
-         <attribute name="title">
-          <string>Cam Config</string>
-         </attribute>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesBrightness">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>10</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Brightness</string>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesBrightness">
-          <property name="geometry">
-           <rect>
-            <x>90</x>
-            <y>10</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="readOnly">
-           <bool>false</bool>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesBrightness">
-          <property name="geometry">
-           <rect>
-            <x>150</x>
-            <y>11</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="tracking">
-           <bool>true</bool>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="invertedAppearance">
-           <bool>false</bool>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesContrast">
-          <property name="geometry">
-           <rect>
-            <x>370</x>
-            <y>11</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesContrast">
-          <property name="geometry">
-           <rect>
-            <x>240</x>
-            <y>10</y>
-            <width>61</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Contrast</string>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesContrast">
-          <property name="geometry">
-           <rect>
-            <x>310</x>
-            <y>10</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesSaturation">
-          <property name="geometry">
-           <rect>
-            <x>150</x>
-            <y>41</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>128</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesSaturation">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>40</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Saturation</string>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesSaturation">
-          <property name="geometry">
-           <rect>
-            <x>90</x>
-            <y>40</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>128</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesGain">
-          <property name="geometry">
-           <rect>
-            <x>90</x>
-            <y>70</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>128</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesGain">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>70</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Gain</string>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesGain">
-          <property name="geometry">
-           <rect>
-            <x>150</x>
-            <y>71</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>128</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesHue">
-          <property name="geometry">
-           <rect>
-            <x>240</x>
-            <y>40</y>
-            <width>61</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Hue</string>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesHue">
-          <property name="geometry">
-           <rect>
-            <x>370</x>
-            <y>41</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesHue">
-          <property name="geometry">
-           <rect>
-            <x>310</x>
-            <y>40</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesGamma">
-          <property name="geometry">
-           <rect>
-            <x>240</x>
-            <y>70</y>
-            <width>61</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Gamma</string>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderGamma">
-          <property name="geometry">
-           <rect>
-            <x>370</x>
-            <y>71</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesGamma">
-          <property name="geometry">
-           <rect>
-            <x>310</x>
-            <y>70</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QComboBox" name="comboBoxCaptureDevicePropertiesFrequency">
-          <property name="geometry">
-           <rect>
-            <x>90</x>
-            <y>100</y>
-            <width>141</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesFrequency">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>100</y>
-            <width>70</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>70</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>70</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Frequency</string>
-          </property>
-         </widget>
-         <widget class="QCheckBox" name="checkBoxCaptureDevicePropertiesWhiteBalance">
-          <property name="geometry">
-           <rect>
-            <x>240</x>
-            <y>100</y>
-            <width>211</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>White Balance Temperature</string>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="tabCamConfig1">
-         <attribute name="title">
-          <string>Cam Config</string>
-         </attribute>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesWhiteBalance">
-          <property name="geometry">
-           <rect>
-            <x>280</x>
-            <y>11</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesWhiteBalance">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>10</y>
-            <width>211</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>White Balance Temperature</string>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesWhiteBalance">
-          <property name="geometry">
-           <rect>
-            <x>220</x>
-            <y>10</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesBacklight">
-          <property name="geometry">
-           <rect>
-            <x>280</x>
-            <y>40</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesBacklight">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>39</y>
-            <width>211</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Backlight Compensation</string>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesBacklight">
-          <property name="geometry">
-           <rect>
-            <x>220</x>
-            <y>39</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesExposure">
-          <property name="geometry">
-           <rect>
-            <x>280</x>
-            <y>70</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesEsposure">
-          <property name="geometry">
-           <rect>
-            <x>220</x>
-            <y>69</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesExposure">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>69</y>
-            <width>211</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Exposure (Absolute)</string>
-          </property>
-         </widget>
-         <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesSharpness">
-          <property name="geometry">
-           <rect>
-            <x>280</x>
-            <y>100</y>
-            <width>81</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelCaptureDevicePropertiesSharpness">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>99</y>
-            <width>211</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Sharpness</string>
-          </property>
-         </widget>
-         <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesSharpness">
-          <property name="geometry">
-           <rect>
-            <x>220</x>
-            <y>99</y>
-            <width>51</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-64</number>
-          </property>
-          <property name="maximum">
-           <number>64</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </widget>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesSaturation">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>81</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesSaturation">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>80</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Saturation</string>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesHue">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>81</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesExposure">
+        <property name="geometry">
+         <rect>
+          <x>320</x>
+          <y>110</y>
+          <width>51</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>-7</number>
+        </property>
+        <property name="maximum">
+         <number>-1</number>
+        </property>
+        <property name="value">
+         <number>-1</number>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxCaptureDevicePropertiesFrameSize">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>20</y>
+          <width>141</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <item>
+         <property name="text">
+          <string>640x480</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesContrast">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>50</y>
+          <width>61</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Contrast</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesContrast">
+        <property name="geometry">
+         <rect>
+          <x>320</x>
+          <y>50</y>
+          <width>51</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesGain">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>110</y>
+          <width>51</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>127</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesBrightness">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>50</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Brightness</string>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesBrightness">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>51</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+        <property name="tracking">
+         <bool>true</bool>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesGain">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>110</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Gain</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesHue">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>80</y>
+          <width>61</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Hue</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesHue">
+        <property name="geometry">
+         <rect>
+          <x>320</x>
+          <y>80</y>
+          <width>51</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesBrightness">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>50</y>
+          <width>51</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesExposure">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>110</y>
+          <width>61</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Exposure</string>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesGain">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>111</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesFameSize">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>71</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Frame size:</string>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderExposure">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>111</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesContrast">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>51</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesWhiteBalanceU">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>140</y>
+          <width>51</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>4000</number>
+        </property>
+        <property name="maximum">
+         <number>7000</number>
+        </property>
+        <property name="value">
+         <number>4000</number>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesIsoSpeed">
+        <property name="geometry">
+         <rect>
+          <x>290</x>
+          <y>200</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesWhiteBalanceV">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>170</y>
+          <width>51</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>4000</number>
+        </property>
+        <property name="maximum">
+         <number>7000</number>
+        </property>
+        <property name="value">
+         <number>4000</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesWhiteBalanceV">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>170</y>
+          <width>211</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>White Balance V</string>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesWhiteBalanceU">
+        <property name="geometry">
+         <rect>
+          <x>290</x>
+          <y>141</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>-64</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesIsoSpeed">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>200</y>
+          <width>51</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesWhiteBalanceV">
+        <property name="geometry">
+         <rect>
+          <x>290</x>
+          <y>170</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesIsoSpeed">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>200</y>
+          <width>211</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>ISO Speed</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelCaptureDevicePropertiesWhiteBalance">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>140</y>
+          <width>211</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>White Balance U</string>
+        </property>
        </widget>
       </widget>
       <widget class="QGroupBox" name="groupBoxCaptureWarp">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>360</y>
+         <y>330</y>
          <width>481</width>
          <height>101</height>
         </rect>
@@ -3123,7 +2670,7 @@
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="pageVisionHSVCalibrationMain">
          <widget class="QWidget" name="layoutWidget_8">
@@ -3178,10 +2725,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3256,10 +2803,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3334,10 +2881,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3412,10 +2959,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3490,10 +3037,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3572,10 +3119,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3653,10 +3200,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3734,10 +3281,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3815,10 +3362,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -3896,10 +3443,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4023,10 +3570,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4048,10 +3595,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4101,10 +3648,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4126,10 +3673,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4179,10 +3726,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4204,10 +3751,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4257,10 +3804,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4282,10 +3829,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4335,10 +3882,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4360,10 +3907,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4417,10 +3964,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4442,10 +3989,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4495,10 +4042,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4520,10 +4067,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4573,10 +4120,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4598,10 +4145,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4651,10 +4198,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4676,10 +4223,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4729,10 +4276,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4754,10 +4301,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4853,10 +4400,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4878,10 +4425,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -4931,10 +4478,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -4956,10 +4503,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5009,10 +4556,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5034,10 +4581,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5087,10 +4634,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5112,10 +4659,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5165,10 +4712,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5190,10 +4737,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5247,10 +4794,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5272,10 +4819,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5325,10 +4872,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5350,10 +4897,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5403,10 +4950,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5428,10 +4975,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5481,10 +5028,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5506,10 +5053,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5559,10 +5106,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5584,10 +5131,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5679,14 +5226,17 @@
                  <height>25</height>
                 </size>
                </property>
+               <property name="wrapping">
+                <bool>true</bool>
+               </property>
                <property name="readOnly">
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5708,10 +5258,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5761,10 +5311,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5786,10 +5336,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5839,10 +5389,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5864,10 +5414,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5917,10 +5467,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -5942,10 +5492,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -5995,10 +5545,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -6020,10 +5570,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -6077,10 +5627,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -6102,10 +5652,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -6155,10 +5705,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -6180,10 +5730,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -6233,10 +5783,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -6258,10 +5808,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -6311,10 +5861,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -6336,10 +5886,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -6389,10 +5939,10 @@
                 <bool>false</bool>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="value">
                 <number>0</number>
@@ -6414,10 +5964,10 @@
                 </size>
                </property>
                <property name="minimum">
-                <number>-64</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>64</number>
+                <number>255</number>
                </property>
                <property name="tracking">
                 <bool>true</bool>
@@ -8482,134 +8032,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxCaptureDevicePropertiesWhiteBalance</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesWhiteBalance</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1134</x>
-     <y>348</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1170</x>
-     <y>350</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesWhiteBalance</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesWhiteBalance</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1158</x>
-     <y>337</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1122</x>
-     <y>339</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureDevicePropertiesBacklight</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesBacklight</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1126</x>
-     <y>378</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1163</x>
-     <y>380</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesBacklight</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesBacklight</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1155</x>
-     <y>368</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1122</x>
-     <y>368</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureDevicePropertiesEsposure</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesExposure</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1134</x>
-     <y>408</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1159</x>
-     <y>409</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesExposure</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesEsposure</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1157</x>
-     <y>400</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1115</x>
-     <y>396</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureDevicePropertiesSharpness</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesSharpness</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1131</x>
-     <y>438</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1175</x>
-     <y>441</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesSharpness</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesSharpness</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1158</x>
-     <y>424</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1125</x>
-     <y>425</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>spinBoxRobotSpeedAttack</sender>
    <signal>valueChanged(int)</signal>
    <receiver>horizontalSliderRobotSpeedAttack</receiver>
@@ -10142,6 +9564,102 @@
     <hint type="destinationlabel">
      <x>943</x>
      <y>413</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesWhiteBalanceU</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesWhiteBalanceU</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1134</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1170</x>
+     <y>350</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesWhiteBalanceU</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesWhiteBalanceU</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1158</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1122</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesIsoSpeed</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesIsoSpeed</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1155</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1122</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesIsoSpeed</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesIsoSpeed</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1126</x>
+     <y>378</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1163</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesWhiteBalanceV</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesWhiteBalanceV</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1158</x>
+     <y>424</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1125</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesWhiteBalanceV</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesWhiteBalanceV</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1131</x>
+     <y>438</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1175</x>
+     <y>441</y>
     </hint>
    </hints>
   </connection>

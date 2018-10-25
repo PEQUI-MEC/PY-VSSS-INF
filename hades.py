@@ -174,11 +174,19 @@ class Hades(QThread):
         print("Hades started") if self.play else print("Hades stopped")
 
     # Camera e Visão
+    def getCamCongigs(self):
+        return self.apolo.getCamConfigs()
+
+    def eventCamConfigs(self, newBrightness, newSaturation, newGain, newContrast, newHue,
+                        newExposure, newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed):
+        self.apolo.updateCamConfigs(newBrightness, newSaturation, newGain, newContrast, newHue, newExposure,
+                                    newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed)
+
     def calibrationEvent(self, imageId, calibration=None):
         self.apolo.setHSVThresh(calibration, imageId)
 
     def eventStartVision(self, cameraId):
-        self.apolo = Apolo(cameraId)
+        self.apolo = Apolo(int(cameraId))
 
     def changeCamera(self, cameraId):
         self.apolo.changeCamera(cameraId)
