@@ -92,7 +92,7 @@
 
   <!--BOLA-->
   <worldbody>
-    <body name="ball" pos="0 0 0.022">
+    <body name="ball" pos="-0.28 0.2 0.022">
       <joint type="free" name="Ball"/>
       <inertial pos="0 0 0" mass="46" diaginertia="0.008387134 0.008387134 0.008387134"/>
       <geom conaffinity="1" contype="1" size="0.02135" material="ball_surf" type="sphere"/>
@@ -102,7 +102,7 @@
 
   <!--ROBOS-->
   <worldbody>
-    <body name="robot_01" pos="-0.2 0 0.04">
+    <body name="robot_01" pos="-0.2 -0.2 0.04">
       <joint type="free" name="Robot_01"/>
       <inertial pos="0 0 -0.02" mass="396" diaginertia="0.132 0.2244 0.33"/>
       <geom conaffinity="1" contype="1"  size="0.04 0.03 0.03" rgba="0 0 1 1" type="box"/>

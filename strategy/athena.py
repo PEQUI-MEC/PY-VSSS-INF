@@ -207,7 +207,8 @@ class Athena:
                 if "avoidObstacles" in warrior.command:
                     command["data"]["obstacles"] = []
                     for obstacle in self.warriors:
-                        command["data"]["obstacles"].append(obstacle.position)
+                        if obstacle != warrior:
+                            command["data"]["obstacles"].append(obstacle.position)
                     for obstacle in self.theirWarriors:
                         command["data"]["obstacles"].append(obstacle.position)
                     if "avoidBall" in warrior.command:

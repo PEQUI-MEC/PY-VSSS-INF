@@ -25,7 +25,7 @@ class Eunomia:
 
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
-        self.uvf.updateConstants(radius=4.0, kr=3.9, k0=0.12, dMin=4.0, lDelta=4.5)
+        self.uvf.updateConstants(radius=4.0, kr=3.9, k0=0.12, dMin=20.0, lDelta=4.5)
 
     def run(self, warrior):
         """Main method of action controller
@@ -148,7 +148,6 @@ class Eunomia:
         if time is None:
             self.warrior.vRight = self.warrior.vMax
             self.warrior.vLeft = self.warrior.vMax
-
             self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
                                                          robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
                                                          target=list(self.warrior.target),

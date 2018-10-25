@@ -67,7 +67,7 @@ class Repulsive:
 
         position = np.array(p) - self.origin
         if theta is True:
-            return atan2(position[1], position[0])
+            return atan2(position[1], -position[0])
         else:
             return position
 
@@ -235,6 +235,8 @@ class UnivectorField:
         self.moveField.updateOrientation(orientation)
 
     def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=[650, 250]):
+
+        # print(len(obstacles))
         if robotPos is not None and robotSpeed is not None:
             self.updateRobot(robotPos, robotSpeed)
         if target is not None:
@@ -247,14 +249,17 @@ class UnivectorField:
         centers = []
         fi_auf = 0.0
         minDistance = self.dMin + 1
-        self.obstacles = None
+        # self.obstacles = None
         if self.obstacles is not None:
-
             for i in range(0, len(self.obstacles)):
                 self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
                 center = self.avoidField.getVirtualPos()
+                # print(center)
+                # print("\n\n\n")
                 centers.append(center)
 
+            # print(centers)
+            # print("\n\n\n")
             centers = np.asarray(centers)
             distVect = np.linalg.norm(np.subtract(centers, self.robotPos), axis=1)
             index = np.argmin(distVect)

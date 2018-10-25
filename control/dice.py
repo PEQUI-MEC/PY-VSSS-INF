@@ -84,13 +84,23 @@ class Dice:
         targetTheta = atan2(target[1] - self.warrior.position[1], -(target[0] - self.warrior.position[0]))
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
+        '''  
         if atan2(sin(targetTheta - currentTheta + pi/2), cos(targetTheta - currentTheta + pi/2)) < 0:
+            print("backward")
             backward = True
             m = 1
         else:
             backward = False
             m = -1
-
+        '''
+        if abs(targetTheta - self.warrior.orientation) > pi/2:
+            print("backward")
+            backward = True
+            m = 1
+        else:
+            backward = False
+            m = -1
+        backward = False
         if backward:
             currentTheta = currentTheta + pi
             currentTheta = atan2(sin(currentTheta), cos(currentTheta))
