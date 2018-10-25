@@ -133,6 +133,9 @@ class Zeus:
 
         """
 
+        # print("\n\n\n\n")
+        # print(strategia)
+
         # TODO(Luana) Testar paralelização com um(1) processo para cada robô.
         warriors = []
         if type(strategia) is not list or \
