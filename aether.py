@@ -180,6 +180,7 @@ zeus2.setup(3)
 
 # inicializa o loop dos dados
 loopThread = threading.Thread(target=loop)
+loopThread.daemon = True
 loopThread.start()
 
 while True:
