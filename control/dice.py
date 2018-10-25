@@ -75,6 +75,13 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self):
+        if self.warrior.name == "zezinho":
+            print(self.warrior.backward)
+        if self.warrior.name == "luizinho":
+            print("\t", self.warrior.backward)
+        if self.warrior.name == "huguinho":
+            print("\t\t", self.warrior.backward)
+
         if self.warrior.vMax == 0:
             return [0.0, 0.0]
 
@@ -84,31 +91,30 @@ class Dice:
         targetTheta = atan2(target[1] - self.warrior.position[1], -(target[0] - self.warrior.position[0]))
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
-        '''  
-        if atan2(sin(targetTheta - currentTheta + pi/2), cos(targetTheta - currentTheta + pi/2)) < 0:
-            print("backward")
-            backward = True
-            m = 1
-        else:
-            backward = False
-            m = -1
-        '''
-        if abs(targetTheta - self.warrior.orientation) > pi/2:
-            print("backward")
-            backward = True
-            m = 1
-        else:
-            backward = False
-            m = -1
-        backward = False
-        if backward:
+        if self.warrior.backward:
+            currentTheta = currentTheta + pi
+            currentTheta = atan2(sin(currentTheta), cos(currentTheta))
+
+        if abs(targetTheta - currentTheta) > pi/2:
+            if not self.warrior.backward:
+                self.warrior.countFalseBackward += 1
+                self.warrior.countTrueBackward = 0
+            elif self.warrior.backward:
+                self.warrior.countTrueBackward += 1
+                self.warrior.countFalseBackward = 0
+
+            if self.warrior.countTrueBackward > 2:  # or self.warrior.countFalseBackward > 5:
+                self.warrior.backward = not self.warrior.backward
+                self.warrior.front *= -1
+
+        if self.warrior.backward:
             currentTheta = currentTheta + pi
             currentTheta = atan2(sin(currentTheta), cos(currentTheta))
 
         thetaError = atan2(sin(targetTheta - currentTheta), cos(targetTheta - currentTheta))
 
-        left = m + sin(thetaError)
-        right = m - sin(thetaError)
+        left = self.warrior.front + sin(thetaError)
+        right = self.warrior.front - sin(thetaError)
 
         left = saturate(left)
         right = saturate(right)

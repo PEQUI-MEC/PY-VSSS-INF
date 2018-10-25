@@ -142,9 +142,6 @@ class Zeus:
 
         """
 
-        # print("\n\n\n\n")
-        # print(strategia)
-
         # TODO(Luana) Testar paralelização com um(1) processo para cada robô.
         warriors = []
         if type(strategia) is not list or \
@@ -210,6 +207,15 @@ class Zeus:
             elif strategia[x]["command"] == "stop":
                 warriors[x].vMax = 0
                 warriors[x].before = float(info["before"])
+
+            warriors[x].backward = self.warriors[x].backward
+            warriors[x].front = self.warriors[x].front
+            warriors[x].countTrueBackward = self.warriors[x].countTrueBackward
+            warriors[x].countFalseBackward = self.warriors[x].countFalseBackward
+
+        warriors[0].name = "zezinho"
+        warriors[1].name = "luizinho"
+        warriors[2].name = "huguinho"
 
         return warriors
 
