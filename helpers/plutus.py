@@ -1,4 +1,5 @@
 import json
+import os.path
 
 
 class Plutus:
@@ -7,20 +8,26 @@ class Plutus:
     Responsável por fazer o save/load das configurações do programa
     """
     def __init__(self, file="helpers/quicksave.json"):
-        self.saveFile = None
         self.data = {}
+        self.file = file
+        loadFile = None
 
         try:
-            self.saveFile = open(file, 'w')
+            loadFile = open(file, "r")
         except EnvironmentError:
-            print("Failed to open '" + file + "'")
+            print("File is empty")
 
         try:
-            self.data = json.load(self.saveFile)
-            print("Plutus summoned")
-
+            if loadFile:
+                self.data = json.load(loadFile)
         except json.JSONDecodeError as e:
             print("JSON parse error: " + e.msg)
+            return
+
+        if loadFile is not None:
+            loadFile.close()
+
+        print("Plutus summoned")
 
     def get(self, key):
         if key in self.data:
@@ -29,12 +36,12 @@ class Plutus:
             return None
 
     def set(self, key, value):
-        if self.saveFile is None:
-            return False
-
         self.data[key] = value
+
         try:
-            json.dump(self.data, self.saveFile)
+            saveFile = open(self.file, 'w+')
+            json.dump(self.data, saveFile)
+            saveFile.close()
             return True
         except TypeError:
             print("Error saving to file.")

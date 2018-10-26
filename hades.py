@@ -1,6 +1,6 @@
 import time
 import threading
-import helpers.plutus
+from helpers.plutus import Plutus
 
 from vision import Apolo
 from vision import Ciclope
