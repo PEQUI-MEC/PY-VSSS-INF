@@ -10,8 +10,10 @@ MAIN = 0
 BALL = 1
 ADV = 2
 GREEN = 3
-ROBOT_RADIUS = 250
+ROBOT_RADIUS = 180
+#Alterar para settar a tagAmin na interface
 TAG_AMIN = 400
+#Alterar para settar a ballAmin na interface
 BALL_AMIN = 30
 
 
@@ -20,7 +22,7 @@ class Apolo:
     O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
     Criar função pra retonar a imagem com threshold para fazer a calibração
     """
-    def __init__(self, cameraId):
+    def __init__(self, cameraId = 0):
         self.camera = cv2.VideoCapture(cameraId)
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
@@ -245,7 +247,7 @@ class Apolo:
 
         """
         secondaryTags = [None] * 3
-        linkedSecondaryTags = []
+        linkedSecondaryTags = [None] * 3
 
         robotID = 0
 
@@ -435,8 +437,8 @@ class Apolo:
         # Pega o frame
         frame = self.getFrame()
 
-        # frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
-        # frame = cv2.imread("Tags/newTag.png", cv2.IMREAD_COLOR)
+        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
+        #frame = cv2.imread("Tags/nova90inv2Balls.png", cv2.IMREAD_COLOR)
 
         if frame is None:
             print("Nao há câmeras ou o dispositivo está ocupado")
@@ -518,5 +520,7 @@ class Apolo:
 
         if self.imageId != -1:
             frame = self.thresholdedImages[self.imageId]
+
+        print (self.positions)
 
         return self.positions, frame
