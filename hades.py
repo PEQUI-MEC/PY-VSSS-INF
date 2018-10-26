@@ -1,6 +1,8 @@
-import time
 from PyQt5.QtCore import QThread, pyqtSignal
+import time
 import numpy
+
+from helpers.plutus import Plutus
 
 from vision import Apolo
 from control import Zeus
