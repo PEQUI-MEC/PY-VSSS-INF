@@ -210,12 +210,12 @@ class Zeus:
 
             warriors[x].backward = self.warriors[x].backward
             warriors[x].front = self.warriors[x].front
-            warriors[x].countTrueBackward = self.warriors[x].countTrueBackward
-            warriors[x].countFalseBackward = self.warriors[x].countFalseBackward
+            # warriors[x].countTrueBackward = self.warriors[x].countTrueBackward
+            # warriors[x].countFalseBackward = self.warriors[x].countFalseBackward
 
-        warriors[0].name = "zezinho"
-        warriors[1].name = "luizinho"
-        warriors[2].name = "huguinho"
+        # warriors[0].name = "zezinho"
+        # warriors[1].name = "luizinho"
+        # warriors[2].name = "huguinho"
 
         return warriors
 

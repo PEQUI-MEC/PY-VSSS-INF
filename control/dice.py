@@ -75,13 +75,6 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self):
-        if self.warrior.name == "zezinho":
-            print(self.warrior.backward)
-        if self.warrior.name == "luizinho":
-            print("\t", self.warrior.backward)
-        if self.warrior.name == "huguinho":
-            print("\t\t", self.warrior.backward)
-
         if self.warrior.vMax == 0:
             return [0.0, 0.0]
 
@@ -91,25 +84,29 @@ class Dice:
         targetTheta = atan2(target[1] - self.warrior.position[1], -(target[0] - self.warrior.position[0]))
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
+        # if self.warrior.backward:
+        #    currentTheta = currentTheta + pi
+        #    currentTheta = atan2(sin(currentTheta), cos(currentTheta))
+
+        # if self.warrior.name == "zezinho":
+            # print(self.warrior.backward)
+            # print("Z: ", currentTheta, targetTheta, self.warrior.backward, self.warrior.countFalseBackward,
+            #       self.warrior.countTrueBackward)
+        # if self.warrior.name == "luizinho":
+            # print("\t", self.warrior.backward)
+            # print("L: ", currentTheta, targetTheta, self.warrior.position, self.warrior.targetOrientation, target)
+        # if self.warrior.name == "huguinho":
+            # print("\t\t", self.warrior.backward)
+            # print("H: ", currentTheta, targetTheta, self.warrior.backward, self.warrior.countFalseBackward,
+            #       self.warrior.countTrueBackward)
+
+        #if abs(targetTheta - currentTheta) > pi/2:
+        #   self.warrior.backward = not self.warrior.backward
+        #   self.warrior.front *= -1
+
         if self.warrior.backward:
-            currentTheta = currentTheta + pi
-            currentTheta = atan2(sin(currentTheta), cos(currentTheta))
-
-        if abs(targetTheta - currentTheta) > pi/2:
-            if not self.warrior.backward:
-                self.warrior.countFalseBackward += 1
-                self.warrior.countTrueBackward = 0
-            elif self.warrior.backward:
-                self.warrior.countTrueBackward += 1
-                self.warrior.countFalseBackward = 0
-
-            if self.warrior.countTrueBackward > 2:  # or self.warrior.countFalseBackward > 5:
-                self.warrior.backward = not self.warrior.backward
-                self.warrior.front *= -1
-
-        if self.warrior.backward:
-            currentTheta = currentTheta + pi
-            currentTheta = atan2(sin(currentTheta), cos(currentTheta))
+           currentTheta = currentTheta + pi
+           currentTheta = atan2(sin(currentTheta), cos(currentTheta))
 
         thetaError = atan2(sin(targetTheta - currentTheta), cos(targetTheta - currentTheta))
 

@@ -195,6 +195,7 @@ zeus2.setup(3)
 # inicializa a cascata
 initThread1 = threading.Thread(target=athena1.getTargets, args=[generatePositions(0)])
 initThread2 = threading.Thread(target=athena2.getTargets, args=[generatePositions(1)])
+initThread1.daemon = True
 initThread1.start()
 # initThread2.start() # TODO habilitar quando funcionar
 
