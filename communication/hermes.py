@@ -29,10 +29,9 @@ class Hermes:
         try:
             self.serial = Serial(port, baud, writeTimeout=0)
             self.xbee = XBee(self.serial)
+            print("Hermes is set up")
         except SerialException:
-            print("Error opening xBee connection.")
-
-        print("Hermes is set up")
+            print("In Hermes set up: Error opening xBee connection")
 
     def fly(self, velocities):
         """Main class method
@@ -94,6 +93,17 @@ class Hermes:
 
         """
         self.serial.close()
+
+    def sendMessage(self, robotId, message):
+        for robot in self.robots:
+            if robot["id"] == robotId:
+                if self.xbee is not None:
+                    try:
+                        self.xbee.send("tx", frame='A', command='MY', dest_addr=robot["address"], data=message)
+                    except SerialTimeoutException:
+                        print("Message sending timed out")
+            break
+
 
     @staticmethod
     def isSerial(port):

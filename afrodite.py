@@ -73,6 +73,7 @@ class Afrodite(QMainWindow):
         self.horizontalSliderVisionHSVCalibrationMainHmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationMainSmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationMainVmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
+
         # Ball
         self.horizontalSliderVisionHSVCalibrationBallBlur.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationBallErode.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
@@ -84,7 +85,8 @@ class Afrodite(QMainWindow):
         self.horizontalSliderVisionHSVCalibrationBallHmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationBallSmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationBallVmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
-        # Oponnent
+
+        # Opponent
         self.horizontalSliderVisionHSVCalibrationOpponentBlur.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationOpponentErode.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationOpponentHmin.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
@@ -96,6 +98,7 @@ class Afrodite(QMainWindow):
         self.horizontalSliderVisionHSVCalibrationOpponentHmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationOpponentSmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationOpponentVmax.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
+
         # Green
         self.horizontalSliderVisionHSVCalibrationGreenBlur.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationGreenErode.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
@@ -148,22 +151,16 @@ class Afrodite(QMainWindow):
         self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
 
         # COMMUNICATION
+
         self.pushButtonControlSerialDeviceStart.clicked.connect(self.getPushButtonControlSerialDeviceStart)
         self.pushButtonControlSerialDeviceRefresh.clicked.connect(self.getPushButtonControlSerialDeviceRefresh)
-
         self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
-        self.pushButtonControlSerialSendCommand.clicked.connect(self.getPushButtonControlSerialSendCommand)
         self.updateComboBoxControlSerialDevice()
         self.getComboBoxControlSerialDevice()
-
-        '''
-        # Serial        
+        '''     
         self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
-        
-
         # RobotStatus
         self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
-
         # id
         self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
         self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
@@ -683,15 +680,9 @@ class Afrodite(QMainWindow):
 
     def getPushButtonControlSerialSend(self):
         robotId = self.comboBoxControlSerialRobots.currentText()
-        left = self.lineEditControlSerialSpeedLeft.text()
-        right = self.lineEditControlSerialSpeedRight.text()
-        if robotId is not None and left != "" and right != "":
-            self.hades.eventCreateAndSendMessage(robotId, left, right)
-
-    def getPushButtonControlSerialSendCommand(self):
-        command = self.lineEditControlSerialSendCommand.text()
-        if command != "":
-            self.hades.eventSendMessage(command)
+        message = self.lineEditControlSerialSend.text()
+        if robotId is not None and message != "":
+            self.hades.eventSendMessage(robotId, message)
 
     '''
     def getControlSerialSetSkippedFrames(self):

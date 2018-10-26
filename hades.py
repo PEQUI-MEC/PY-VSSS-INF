@@ -195,6 +195,13 @@ class Hades(QThread):
     def setHSVVision(self, thresholdId):
         self.apolo.setImg(thresholdId)
 
+    # Strategy
+    def eventToggleTransitions(self, state):
+        self.athena.setTransitionsState(state)
+
+    def eventSelectRoles(self, roles):
+        self.athena.setRoles(roles)
+
     # Control
     def eventUpdateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
         self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
@@ -209,20 +216,8 @@ class Hades(QThread):
     def eventStartXbee(self, port):
         self.hermes.setup(port=port)
 
-    def eventCreateAndSendMessage(self, robotId, leftWheel, rightWheel):
-        message = self.hermes.createMessage(robotId, leftWheel, rightWheel)
+    def eventsendMessage(self, robotId, message):
         self.hermes.sendMessage(robotId, message)
-        self.hermes.clearMessages()
-
-    def eventSendMessage(self, message):
-        self.hermes.sendMessage(message)
-
-    # Strategy
-    def eventToggleTransitions(self, state):
-        self.athena.setTransitionsState(state)
-
-    def eventSelectRoles(self, roles):
-        self.athena.setRoles(roles)
 
 
 def timeToFinish(method):

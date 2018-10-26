@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1355</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuBarArquivo">
@@ -6211,13 +6211,13 @@
          <rect>
           <x>10</x>
           <y>60</y>
-          <width>180</width>
+          <width>120</width>
           <height>25</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>120</width>
           <height>25</height>
          </size>
         </property>
@@ -6253,26 +6253,6 @@
          </property>
         </item>
        </widget>
-       <widget class="QLineEdit" name="lineEditControlSerialSpeedLeft">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>60</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEditControlSerialSpeedRight">
-        <property name="geometry">
-         <rect>
-          <x>280</x>
-          <y>60</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
        <widget class="QPushButton" name="pushButtonControlSerialSend">
         <property name="geometry">
          <rect>
@@ -6298,58 +6278,11 @@
          <string>Send</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEditControlSerialSendCommand">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>90</y>
-          <width>180</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>180</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>180</width>
-          <height>16777215</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonControlSerialSendCommand">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>90</y>
-          <width>150</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Send Command</string>
-        </property>
-       </widget>
        <widget class="QPushButton" name="pushButtonControlSerialSetSkippedFrames">
         <property name="geometry">
          <rect>
-          <x>200</x>
-          <y>120</y>
+          <x>280</x>
+          <y>90</y>
           <width>150</width>
           <height>25</height>
          </rect>
@@ -6368,28 +6301,6 @@
         </property>
         <property name="text">
          <string>Set Skipped Frames</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEditControlSerialSetSkippedFrames">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>120</y>
-          <width>180</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>180</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>180</width>
-          <height>16777215</height>
-         </size>
         </property>
        </widget>
        <widget class="QPushButton" name="pushButtonControlSerialDeviceStart">
@@ -6420,8 +6331,8 @@
        <widget class="QLabel" name="labelControlSerialDelayFixed">
         <property name="geometry">
          <rect>
-          <x>360</x>
-          <y>91</y>
+          <x>0</x>
+          <y>120</y>
           <width>70</width>
           <height>25</height>
          </rect>
@@ -6448,7 +6359,7 @@
        <widget class="QLabel" name="labelControlSerialDelay">
         <property name="geometry">
          <rect>
-          <x>360</x>
+          <x>50</x>
           <y>120</y>
           <width>70</width>
           <height>25</height>
@@ -6471,6 +6382,50 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEditControlSerialSend">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>60</y>
+          <width>211</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEditControlSerialSetSkippedFrames">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>90</y>
+          <width>261</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
         </property>
        </widget>
       </widget>
