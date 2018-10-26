@@ -131,12 +131,10 @@ def generatePositions(team):
 
 
 # LOOP PRINCIPAL
-def loop():
+def loopTeam1():
     while True:
         commands1 = athena1.getTargets(generatePositions(0))
-        commands2 = athena2.getTargets(generatePositions(1))
         velocities1 = zeus1.getVelocities(commands1)
-        velocities2 = zeus2.getVelocities(commands2)
 
         sim.data.ctrl[0] = convertVelocity(velocities1[0]["vLeft"])
         sim.data.ctrl[1] = convertVelocity(velocities1[0]["vRight"])
@@ -144,13 +142,19 @@ def loop():
         sim.data.ctrl[3] = convertVelocity(velocities1[1]["vRight"])
         sim.data.ctrl[4] = convertVelocity(velocities1[2]["vLeft"])
         sim.data.ctrl[5] = convertVelocity(velocities1[2]["vRight"])
-        sim.data.ctrl[6] = convertVelocity(velocities2[0]["vLeft"])
-        sim.data.ctrl[7] = convertVelocity(velocities2[0]["vRight"])
-        sim.data.ctrl[8] = convertVelocity(velocities2[1]["vLeft"])
-        sim.data.ctrl[9] = convertVelocity(velocities2[1]["vRight"])
-        sim.data.ctrl[10] = convertVelocity(velocities2[2]["vLeft"])
-        sim.data.ctrl[11] = convertVelocity(velocities2[2]["vRight"])
         time.sleep(0.0001)
+
+
+def loopTeam2():
+    commands2 = athena2.getTargets(generatePositions(1))
+    velocities2 = zeus2.getVelocities(commands2)
+    sim.data.ctrl[6] = convertVelocity(velocities2[0]["vLeft"])
+    sim.data.ctrl[7] = convertVelocity(velocities2[0]["vRight"])
+    sim.data.ctrl[8] = convertVelocity(velocities2[1]["vLeft"])
+    sim.data.ctrl[9] = convertVelocity(velocities2[1]["vRight"])
+    sim.data.ctrl[10] = convertVelocity(velocities2[2]["vLeft"])
+    sim.data.ctrl[11] = convertVelocity(velocities2[2]["vRight"])
+    time.sleep(0.0001)
 
 
 # PREPARAÇÃO
@@ -179,9 +183,12 @@ zeus1.setup(3)
 zeus2.setup(3)
 
 # inicializa o loop dos dados
-loopThread = threading.Thread(target=loop)
-loopThread.daemon = True
-loopThread.start()
+loopThread1 = threading.Thread(target=loopTeam1)
+loopThread2 = threading.Thread(target=loopTeam2)
+loopThread1.daemon = True
+loopThread2.daemon = True
+loopThread1.start()
+loopThread2.start()
 
 while True:
     sim.step()
