@@ -144,6 +144,7 @@ class Afrodite(QMainWindow):
 
         # CONTROL
 
+        # speeds
         self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
         self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
 
@@ -411,7 +412,7 @@ class Afrodite(QMainWindow):
 
     # Warp
     def getPushButtonCaptureWarpWarp(self):
-        self.startWarpCallback()
+        pass
 
     def getPushButtonCaptureWarpReset(self):
         pass

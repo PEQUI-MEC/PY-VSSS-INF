@@ -180,20 +180,24 @@ class Hades(QThread):
 
     def eventCamConfigs(self, newBrightness, newSaturation, newGain, newContrast, newHue,
                         newExposure, newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed):
-        self.apolo.updateCamConfigs(newBrightness, newSaturation, newGain, newContrast, newHue, newExposure,
-                                    newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed)
+        if self.apolo is not None:
+            self.apolo.updateCamConfigs(newBrightness, newSaturation, newGain, newContrast, newHue, newExposure,
+                                        newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed)
 
     def calibrationEvent(self, imageId, calibration=None):
-        self.apolo.setHSVThresh(calibration, imageId)
+        if self.apolo is not None:
+            self.apolo.setHSVThresh(calibration, imageId)
 
     def eventStartVision(self, cameraId):
         self.apolo = Apolo(int(cameraId))
 
     def changeCamera(self, cameraId):
-        self.apolo.changeCamera(cameraId)
+        if self.apolo is not None:
+            self.apolo.changeCamera(cameraId)
 
     def setHSVVision(self, thresholdId):
-        self.apolo.setImg(thresholdId)
+        if self.apolo is not None:
+            self.apolo.setImg(thresholdId)
 
     # Strategy
     def eventToggleTransitions(self, state):
