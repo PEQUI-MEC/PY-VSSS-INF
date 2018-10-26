@@ -1,6 +1,7 @@
 import threading
 from mujoco_py import load_model_from_path, MjSim, MjViewer
 import math
+import time
 import pprint  # pra printar bonitinho
 
 from strategy import Athena
@@ -129,42 +130,27 @@ def generatePositions(team):
     ]
 
 
-# CALLBACKS
-def athena1Ready(strategyInfo):
-    # pp.pprint(strategyInfo)
-    zeusThread = threading.Thread(target=zeus1.getVelocities, args=[strategyInfo])
-    zeusThread.start()
+# LOOP PRINCIPAL
+def loop():
+    while True:
+        commands1 = athena1.getTargets(generatePositions(0))
+        commands2 = athena2.getTargets(generatePositions(1))
+        velocities1 = zeus1.getVelocities(commands1)
+        velocities2 = zeus2.getVelocities(commands2)
 
-
-def athena2Ready(strategyInfo):
-    zeusThread = threading.Thread(target=zeus2.getVelocities, args=[strategyInfo])
-    zeusThread.start()
-
-
-def zeus1Ready(velocities):
-    sim.data.ctrl[0] = convertVelocity(velocities[0]["vLeft"])
-    sim.data.ctrl[1] = convertVelocity(velocities[0]["vRight"])
-    sim.data.ctrl[2] = convertVelocity(velocities[1]["vLeft"])
-    sim.data.ctrl[3] = convertVelocity(velocities[1]["vRight"])
-    sim.data.ctrl[4] = convertVelocity(velocities[2]["vLeft"])
-    sim.data.ctrl[5] = convertVelocity(velocities[2]["vRight"])
-
-    # refaz o ciclo
-    athenaThread = threading.Thread(target=athena1.getTargets, args=[generatePositions(0)])
-    athenaThread.start()
-
-
-def zeus2Ready(velocities):
-    sim.data.ctrl[6] = convertVelocity(velocities[0]["vLeft"])
-    sim.data.ctrl[7] = convertVelocity(velocities[0]["vRight"])
-    sim.data.ctrl[8] = convertVelocity(velocities[1]["vLeft"])
-    sim.data.ctrl[9] = convertVelocity(velocities[1]["vRight"])
-    sim.data.ctrl[10] = convertVelocity(velocities[2]["vLeft"])
-    sim.data.ctrl[11] = convertVelocity(velocities[2]["vRight"])
-
-    # refaz o ciclo
-    athenaThread = threading.Thread(target=athena2.getTargets, args=[generatePositions(1)])
-    athenaThread.start()
+        sim.data.ctrl[0] = convertVelocity(velocities1[0]["vLeft"])
+        sim.data.ctrl[1] = convertVelocity(velocities1[0]["vRight"])
+        sim.data.ctrl[2] = convertVelocity(velocities1[1]["vLeft"])
+        sim.data.ctrl[3] = convertVelocity(velocities1[1]["vRight"])
+        sim.data.ctrl[4] = convertVelocity(velocities1[2]["vLeft"])
+        sim.data.ctrl[5] = convertVelocity(velocities1[2]["vRight"])
+        sim.data.ctrl[6] = convertVelocity(velocities2[0]["vLeft"])
+        sim.data.ctrl[7] = convertVelocity(velocities2[0]["vRight"])
+        sim.data.ctrl[8] = convertVelocity(velocities2[1]["vLeft"])
+        sim.data.ctrl[9] = convertVelocity(velocities2[1]["vRight"])
+        sim.data.ctrl[10] = convertVelocity(velocities2[2]["vLeft"])
+        sim.data.ctrl[11] = convertVelocity(velocities2[2]["vRight"])
+        time.sleep(0.0001)
 
 
 # PREPARAÇÃO
@@ -183,20 +169,19 @@ robot_joints = [
 
 # EXECUÇÃO
 # prepara os módulos
-athena1 = Athena(athena1Ready)
-athena2 = Athena(athena2Ready)
-zeus1 = Zeus(zeus1Ready)
-zeus2 = Zeus(zeus2Ready)
+athena1 = Athena()
+athena2 = Athena()
+zeus1 = Zeus()
+zeus2 = Zeus()
 athena1.setup(3, field_width, field_height, 0.8)
 athena2.setup(3, field_width, field_height, 0.8)
 zeus1.setup(3)
 zeus2.setup(3)
 
-# inicializa a cascata
-initThread1 = threading.Thread(target=athena1.getTargets, args=[generatePositions(0)])
-initThread2 = threading.Thread(target=athena2.getTargets, args=[generatePositions(1)])
-initThread1.start()
-# initThread2.start() # TODO habilitar quando funcionar
+# inicializa o loop dos dados
+loopThread = threading.Thread(target=loop)
+loopThread.daemon = True
+loopThread.start()
 
 while True:
     sim.step()

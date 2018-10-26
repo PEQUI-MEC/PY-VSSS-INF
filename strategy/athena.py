@@ -22,8 +22,7 @@ class Athena:
     tWaitPass = 6
     tKick = 7
 
-    def __init__(self, callback):
-        self.callback = callback
+    def __init__(self):
         self.endless = None
         self.warriors = []
         self.theirWarriors = []
@@ -95,7 +94,6 @@ class Athena:
         self.__selectActions()
 
         commands = self.__generateResponse(self.warriors)
-        self.callback(commands)
         return commands
 
     def __parsePositions(self, positions):
