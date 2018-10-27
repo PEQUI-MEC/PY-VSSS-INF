@@ -1,188 +1,231 @@
 import threading
-from mujoco_py import load_model_from_path, MjSim, MjViewer
+from mujoco_py import load_model_from_path, MjSim
 import math
 import time
-import pprint  # pra printar bonitinho
 
 from strategy import Athena
 from control import Zeus
-
-"""
-Deus do espaço e do paraíso
-Faz a conexão entre o simulador e os módulos do programa
-"""
-
-# DEFINIÇÕES
-field_width = 640
-field_height = 480
-pp = pprint.PrettyPrinter(indent=4)
+from simulator.viewer import Viewer
 
 
-# FUNÇÕES
-def convertPositionX(coord):
-    """Traz o valor pra positivo e multiplica pela proporção (largura máxima)/(posição x máxima)
-
-    Args:
-         coord: Coordenada da posição no mundo da simulação a ser convertida
-
-    Returns:
-        Coordenada da posição na proporção utilizada pela estratégia
+class Aether:
     """
-    return (coord + 0.8083874182591296) * field_width / 1.6167748365182593
-
-
-def convertPositionY(coord):
-    """Traz o valor pra positivo e multiplica pela proporção (altura máxima)/(posição y máxima)
-
-    Args:
-        coord: Coordenada da posição no mundo da simulação a ser convertida
-
-    Returns:
-        Coordenada da posição na proporção utilizada pela estratégia
+    Deus do espaço e do paraíso
+    Faz a conexão entre o simulador e os módulos do programa
     """
-    return (coord + 0.58339083) * field_height / 1.16678166
 
+    def __init__(self):
+        # DEFINIÇÕES
+        self.field_width = 640
+        self.field_height = 480
 
-def convertVelocity(vel):
-    return vel * 10
+        # PREPARAÇÃO
+        model = load_model_from_path("simulator/scene.xml")
+        self.sim = MjSim(model)
+        self.viewer = Viewer(self.sim, self)
+        self.ball_joint = self.sim.model.get_joint_qpos_addr("Ball")[0]
+        self.robot_joints = [
+            self.sim.model.get_joint_qpos_addr("Robot_01")[0],
+            self.sim.model.get_joint_qpos_addr("Robot_02")[0],
+            self.sim.model.get_joint_qpos_addr("Robot_03")[0],
+            self.sim.model.get_joint_qpos_addr("Robot_04")[0],
+            self.sim.model.get_joint_qpos_addr("Robot_05")[0],
+            self.sim.model.get_joint_qpos_addr("Robot_06")[0]
+        ]
 
+        # EXECUÇÃO
+        # prepara os módulos
+        self.enabled = [False, False, False]
+        self.athena1 = Athena()
+        self.athena2 = Athena()
+        self.zeus1 = Zeus()
+        self.zeus2 = Zeus()
+        self.athena1.setup(3, self.field_width, self.field_height, 0.8)
+        self.athena2.setup(3, self.field_width, self.field_height, 0.8)
+        self.zeus1.setup(3)
+        self.zeus2.setup(3)
 
-def generatePositions(team):
-    """Cria o vetor de posições no formato esperado pela estratégia
-    O 'sim.data.qpos' possui, em cada posição, o seguinte:
-        0: pos X
-        1: pos Y
-        2: pos Z
-        3: quat component w
-        4: quat component x
-        5: quat component y
-        6: quat component z
+        # inicializa o loop dos dados
+        loopThread1 = threading.Thread(target=self.loopTeam1)
+        loopThread2 = threading.Thread(target=self.loopTeam2)
+        loopThread1.daemon = True
+        loopThread2.daemon = True
+        loopThread1.start()
+        # loopThread2.start()
 
-    Returns:
-        Vetor de posições no formato correto
-    """
-    r1 = -math.atan2(
-        2 * (
-                sim.data.qpos[robot_joints[3 * team] + 3] * sim.data.qpos[robot_joints[3 * team] + 6] +
-                sim.data.qpos[robot_joints[3 * team] + 4] * sim.data.qpos[robot_joints[3 * team] + 6]
-        ),
-        1 - 2 * (
-                sim.data.qpos[robot_joints[3 * team] + 5] * sim.data.qpos[robot_joints[3 * team] + 5] +
-                sim.data.qpos[robot_joints[3 * team] + 6] * sim.data.qpos[robot_joints[3 * team] + 6]
-        )
-    )
-    r2 = -math.atan2(
-        2 * (
-                sim.data.qpos[robot_joints[1 + 3 * team] + 3] * sim.data.qpos[robot_joints[1 + 3 * team] + 6] +
-                sim.data.qpos[robot_joints[1 + 3 * team] + 4] * sim.data.qpos[robot_joints[1 + 3 * team] + 6]
-        ),
-        1 - 2 * (
-                sim.data.qpos[robot_joints[1 + 3 * team] + 5] * sim.data.qpos[robot_joints[1 + 3 * team] + 5] +
-                sim.data.qpos[robot_joints[1 + 3 * team] + 6] * sim.data.qpos[robot_joints[1 + 3 * team] + 6]
-        )
-    )
-    r3 = -math.atan2(
-        2 * (
-                sim.data.qpos[robot_joints[2 + 3 * team] + 3] * sim.data.qpos[robot_joints[2 + 3 * team] + 6] +
-                sim.data.qpos[robot_joints[2 + 3 * team] + 4] * sim.data.qpos[robot_joints[2 + 3 * team] + 6]
-        ),
-        1 - 2 * (
-                sim.data.qpos[robot_joints[2 + 3 * team] + 5] * sim.data.qpos[robot_joints[2 + 3 * team] + 5] +
-                sim.data.qpos[robot_joints[2 + 3 * team] + 6] * sim.data.qpos[robot_joints[2 + 3 * team] + 6]
-        )
-    )
-    return [
-        [  # robôs aliados
-            {
-                "position": (convertPositionX(sim.data.qpos[robot_joints[3 * team]]),
-                             convertPositionY(sim.data.qpos[robot_joints[3 * team] + 1])),
-                "orientation": r1
-            },
-            {
-                "position": (convertPositionX(sim.data.qpos[robot_joints[1 + 3 * team]]),
-                             convertPositionY(sim.data.qpos[robot_joints[1 + 3 * team] + 1])),
-                "orientation": r2
-            },
-            {
-                "position": (convertPositionX(sim.data.qpos[robot_joints[2 + 3 * team]]),
-                             convertPositionY(sim.data.qpos[robot_joints[2 + 3 * team] + 1])),
-                "orientation": r3
-            }
-        ],
-        [  # robôs adversários
-            {
-                "position": (convertPositionX(sim.data.qpos[robot_joints[(3 + 3 * team) % 6]]),
-                             convertPositionY(sim.data.qpos[robot_joints[(3 + 3 * team) % 6] + 1])),
-            },
-            {
-                "position": (convertPositionX(sim.data.qpos[robot_joints[(4 + 3 * team) % 6]]),
-                             convertPositionY(sim.data.qpos[robot_joints[(4 + 3 * team) % 6] + 1])),
-            },
-            {
-                "position": (convertPositionX(sim.data.qpos[robot_joints[(5 + 3 * team) % 6]]),
-                             convertPositionY(sim.data.qpos[robot_joints[(5 + 3 * team) % 6] + 1])),
-            }
-        ],
-        {  # bola
-            "position": (convertPositionX(sim.data.qpos[ball_joint]),
-                         convertPositionY(sim.data.qpos[ball_joint + 1]))
-        }
-    ]
+    def run(self):
+        while True:
+            self.sim.step()
+            self.viewer.render()
 
+    def loopTeam1(self):
+        while True:
+            positions = self.generatePositions(0)
+            commands1 = self.athena1.getTargets(positions)
+            self.viewer.setInfo("robots", [
+                "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + "{:.2f}".format(
+                    positions[2]["position"][1]),
 
-# LOOP PRINCIPAL
-def loop():
-    while True:
-        commands1 = athena1.getTargets(generatePositions(0))
-        commands2 = athena2.getTargets(generatePositions(1))
-        velocities1 = zeus1.getVelocities(commands1)
-        velocities2 = zeus2.getVelocities(commands2)
+                "[OFF] " if not self.enabled[0] else "X: " + "{:.2f}".format(positions[0][0]["position"][0]) + ", Y: " +
+                                                     "{:.2f}".format(positions[0][0]["position"][1]) + ", O: " +
+                                                     "{:.2f}".format(positions[0][0]["orientation"]) +
+                                                     " C: " + commands1[0]["command"],
 
-        sim.data.ctrl[0] = convertVelocity(velocities1[0]["vLeft"])
-        sim.data.ctrl[1] = convertVelocity(velocities1[0]["vRight"])
-        sim.data.ctrl[2] = convertVelocity(velocities1[1]["vLeft"])
-        sim.data.ctrl[3] = convertVelocity(velocities1[1]["vRight"])
-        sim.data.ctrl[4] = convertVelocity(velocities1[2]["vLeft"])
-        sim.data.ctrl[5] = convertVelocity(velocities1[2]["vRight"])
-        sim.data.ctrl[6] = convertVelocity(velocities2[0]["vLeft"])
-        sim.data.ctrl[7] = convertVelocity(velocities2[0]["vRight"])
-        sim.data.ctrl[8] = convertVelocity(velocities2[1]["vLeft"])
-        sim.data.ctrl[9] = convertVelocity(velocities2[1]["vRight"])
-        sim.data.ctrl[10] = convertVelocity(velocities2[2]["vLeft"])
-        sim.data.ctrl[11] = convertVelocity(velocities2[2]["vRight"])
+                "[OFF] " if not self.enabled[1] else "X: " + "{:.2f}".format(positions[0][1]["position"][0]) + ", Y: " +
+                                                     "{:.2f}".format(positions[0][1]["position"][1]) + ", O: " +
+                                                     "{:.2f}".format(positions[0][1]["orientation"]) +
+                                                     " C: " + commands1[1]["command"],
+
+                "[OFF] " if not self.enabled[2] else "X: " + "{:.2f}".format(positions[0][2]["position"][0]) + ", Y: " +
+                                                     "{:.2f}".format(positions[0][2]["position"][1]) + ", O: " +
+                                                     "{:.2f}".format(positions[0][2]["orientation"]) +
+                                                     " C: " + commands1[2]["command"],
+            ])
+            velocities1 = self.zeus1.getVelocities(commands1)
+
+            if self.enabled[0]:
+                self.sim.data.ctrl[0] = self.convertVelocity(velocities1[0]["vLeft"])
+                self.sim.data.ctrl[1] = self.convertVelocity(velocities1[0]["vRight"])
+            if self.enabled[1]:
+                self.sim.data.ctrl[2] = self.convertVelocity(velocities1[1]["vLeft"])
+                self.sim.data.ctrl[3] = self.convertVelocity(velocities1[1]["vRight"])
+            if self.enabled[2]:
+                self.sim.data.ctrl[4] = self.convertVelocity(velocities1[2]["vLeft"])
+                self.sim.data.ctrl[5] = self.convertVelocity(velocities1[2]["vRight"])
+
+            time.sleep(0.0001)
+
+    def loopTeam2(self):
+        commands2 = self.athena2.getTargets(self.generatePositions(1))
+        velocities2 = self.zeus2.getVelocities(commands2)
+        self.sim.data.ctrl[6] = self.convertVelocity(velocities2[0]["vLeft"])
+        self.sim.data.ctrl[7] = self.convertVelocity(velocities2[0]["vRight"])
+        self.sim.data.ctrl[8] = self.convertVelocity(velocities2[1]["vLeft"])
+        self.sim.data.ctrl[9] = self.convertVelocity(velocities2[1]["vRight"])
+        self.sim.data.ctrl[10] = self.convertVelocity(velocities2[2]["vLeft"])
+        self.sim.data.ctrl[11] = self.convertVelocity(velocities2[2]["vRight"])
         time.sleep(0.0001)
 
+    # FUNÇÕES
+    def moveBall(self, direction):
+        if direction == 0:  # UP
+            self.sim.data.qpos[self.ball_joint + 1] += 0.01
+        elif direction == 1:  # DOWN
+            self.sim.data.qpos[self.ball_joint + 1] -= 0.01
+        elif direction == 2:  # LEFT
+            self.sim.data.qpos[self.ball_joint] -= 0.01
+        elif direction == 3:  # RIGHT
+            self.sim.data.qpos[self.ball_joint] += 0.01
 
-# PREPARAÇÃO
-model = load_model_from_path("simulator/scene.xml")
-sim = MjSim(model)
-viewer = MjViewer(sim)
-ball_joint = sim.model.get_joint_qpos_addr("Ball")[0]
-robot_joints = [
-    sim.model.get_joint_qpos_addr("Robot_01")[0],
-    sim.model.get_joint_qpos_addr("Robot_02")[0],
-    sim.model.get_joint_qpos_addr("Robot_03")[0],
-    sim.model.get_joint_qpos_addr("Robot_04")[0],
-    sim.model.get_joint_qpos_addr("Robot_05")[0],
-    sim.model.get_joint_qpos_addr("Robot_06")[0]
-]
+    def convertPositionX(self, coord):
+        """Traz o valor pra positivo e multiplica pela proporção (largura máxima)/(posição x máxima)
 
-# EXECUÇÃO
-# prepara os módulos
-athena1 = Athena()
-athena2 = Athena()
-zeus1 = Zeus()
-zeus2 = Zeus()
-athena1.setup(3, field_width, field_height, 0.8)
-athena2.setup(3, field_width, field_height, 0.8)
-zeus1.setup(3)
-zeus2.setup(3)
+        Args:
+             coord: Coordenada da posição no mundo da simulação a ser convertida
 
-# inicializa o loop dos dados
-loopThread = threading.Thread(target=loop)
-loopThread.daemon = True
-loopThread.start()
+        Returns:
+            Coordenada da posição na proporção utilizada pela estratégia
+        """
+        return (coord + 0.8083874182591296) * self.field_width / 1.6167748365182593
 
-while True:
-    sim.step()
-    viewer.render()
+    def convertPositionY(self, coord):
+        """Traz o valor pra positivo e multiplica pela proporção (altura máxima)/(posição y máxima)
+
+        Args:
+            coord: Coordenada da posição no mundo da simulação a ser convertida
+
+        Returns:
+            Coordenada da posição na proporção utilizada pela estratégia
+        """
+        return (coord + 0.58339083) * self.field_height / 1.16678166
+
+    @staticmethod
+    def convertVelocity(vel):
+        return vel * 20
+
+    def generatePositions(self, team):
+        """Cria o vetor de posições no formato esperado pela estratégia
+        O 'sim.data.qpos' possui, em cada posição, o seguinte:
+            0: pos X
+            1: pos Y
+            2: pos Z
+            3: quat component w
+            4: quat component x
+            5: quat component y
+            6: quat component z
+
+        Returns:
+            Vetor de posições no formato correto
+        """
+        r1 = -math.atan2(
+            2 * (
+                    self.sim.data.qpos[self.robot_joints[3 * team] + 3] * self.sim.data.qpos[self.robot_joints[3 * team] + 6] +
+                    self.sim.data.qpos[self.robot_joints[3 * team] + 4] * self.sim.data.qpos[self.robot_joints[3 * team] + 6]
+            ),
+            1 - 2 * (
+                    self.sim.data.qpos[self.robot_joints[3 * team] + 5] * self.sim.data.qpos[self.robot_joints[3 * team] + 5] +
+                    self.sim.data.qpos[self.robot_joints[3 * team] + 6] * self.sim.data.qpos[self.robot_joints[3 * team] + 6]
+            )
+        )
+        r2 = -math.atan2(
+            2 * (
+                    self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 3] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6] +
+                    self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 4] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6]
+            ),
+            1 - 2 * (
+                    self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 5] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 5] +
+                    self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6]
+            )
+        )
+        r3 = -math.atan2(
+            2 * (
+                    self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 3] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6] +
+                    self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 4] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6]
+            ),
+            1 - 2 * (
+                    self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 5] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 5] +
+                    self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6]
+            )
+        )
+        return [
+            [  # robôs aliados
+                {
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[3 * team]]),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[3 * team] + 1])),
+                    "orientation": r1
+                },
+                {
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[1 + 3 * team]]),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 1])),
+                    "orientation": r2
+                },
+                {
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[2 + 3 * team]]),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 1])),
+                    "orientation": r3
+                }
+            ],
+            [  # robôs adversários
+                {
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(3 + 3 * team) % 6]]),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(3 + 3 * team) % 6] + 1])),
+                },
+                {
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(4 + 3 * team) % 6]]),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(4 + 3 * team) % 6] + 1])),
+                },
+                {
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(5 + 3 * team) % 6]]),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(5 + 3 * team) % 6] + 1])),
+                }
+            ],
+            {  # bola
+                "position": (self.convertPositionX(self.sim.data.qpos[self.ball_joint]),
+                             self.convertPositionY(self.sim.data.qpos[self.ball_joint + 1]))
+            }
+        ]
+
+
+if __name__ == "__main__":
+    aether = Aether()
+    aether.run()
