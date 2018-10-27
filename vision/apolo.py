@@ -432,7 +432,6 @@ class Apolo:
         return output
 
     # Funçao principal da visao
-    @property
     def run(self):
         """TO DO:
             Identificar qual robo é qual, identificar orientação dos robos
