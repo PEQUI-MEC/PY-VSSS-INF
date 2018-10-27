@@ -18,6 +18,9 @@ class Aether:
         # DEFINIÇÕES
         self.field_width = 640
         self.field_height = 480
+        self.cascadeTime = 0
+        self.cascadeLoops = 1
+        self.cascadeLastTime = 0
 
         # PREPARAÇÃO
         model = load_model_from_path("simulator/scene.xml")
@@ -35,7 +38,7 @@ class Aether:
 
         # EXECUÇÃO
         # prepara os módulos
-        self.enabled = [False, False, False]
+        self.enabled = [True, True, True]
         self.athena1 = Athena()
         self.athena2 = Athena()
         self.zeus1 = Zeus()
@@ -62,7 +65,7 @@ class Aether:
         while True:
             positions = self.generatePositions(0)
             commands1 = self.athena1.getTargets(positions)
-            self.viewer.setInfo("robots", [
+            self.viewer.infos["robots"] = [
                 "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + "{:.2f}".format(
                     positions[2]["position"][1]),
 
@@ -80,7 +83,7 @@ class Aether:
                                                      "{:.2f}".format(positions[0][2]["position"][1]) + ", O: " +
                                                      "{:.2f}".format(positions[0][2]["orientation"]) +
                                                      " C: " + commands1[2]["command"],
-            ])
+            ]
             velocities1 = self.zeus1.getVelocities(commands1)
 
             if self.enabled[0]:
@@ -93,7 +96,11 @@ class Aether:
                 self.sim.data.ctrl[4] = self.convertVelocity(velocities1[2]["vLeft"])
                 self.sim.data.ctrl[5] = self.convertVelocity(velocities1[2]["vRight"])
 
-            time.sleep(0.0001)
+            fps = self.getFPS()
+            if fps is not None:
+                self.viewer.infos["fps"] = fps
+
+            time.sleep(0.026)  # fixa o fps em 30
 
     def loopTeam2(self):
         commands2 = self.athena2.getTargets(self.generatePositions(1))
@@ -105,6 +112,18 @@ class Aether:
         self.sim.data.ctrl[10] = self.convertVelocity(velocities2[2]["vLeft"])
         self.sim.data.ctrl[11] = self.convertVelocity(velocities2[2]["vRight"])
         time.sleep(0.0001)
+
+    # HELPERS
+    def getFPS(self):
+        # calcula o fps e manda pra interface
+        self.cascadeTime += time.time() - self.cascadeLastTime
+        self.cascadeLoops += 1
+        self.cascadeLastTime = time.time()
+        if self.cascadeTime > 1:
+            fps = self.cascadeLoops / self.cascadeTime
+            self.cascadeTime = self.cascadeLoops = 0
+            return "{:.2f}".format(fps)
+        return None
 
     # FUNÇÕES
     def moveBall(self, direction):
@@ -141,7 +160,7 @@ class Aether:
 
     @staticmethod
     def convertVelocity(vel):
-        return vel * 20
+        return vel * 10
 
     def generatePositions(self, team):
         """Cria o vetor de posições no formato esperado pela estratégia
