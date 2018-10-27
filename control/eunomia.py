@@ -3,26 +3,11 @@ from .navigation import UnivectorField
 
 
 class Eunomia:
-    """Action Controller
-
-    Attributes:
-        uvf : Instance of Univector Field class. This class manager all robot navigation.
-    """
-
     def __init__(self):
         self.uvf = UnivectorField()
         self.warrior = None
 
     def setup(self, width=100):
-        """
-
-        Args:
-            width:
-
-        Returns:
-
-        """
-
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
         self.uvf.updateConstants(radius=6.0, kr=0.9, k0=4.12, dMin=80.0, lDelta=4.5)
@@ -148,10 +133,10 @@ class Eunomia:
         if time is None:
             self.warrior.vRight = self.warrior.vMax
             self.warrior.vLeft = self.warrior.vMax
-            self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
+            self.warrior.transAngle = self.uvf.univector(robotPos=self.warrior.position,
                                                          robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
-                                                         target=list(self.warrior.target),
-                                                         obstacles=list(self.warrior.obstacles),
+                                                         target=self.warrior.target,
+                                                         obstacles=self.warrior.obstacles,
                                                          orientation=self.warrior.targetOrientation)
 
         else:
