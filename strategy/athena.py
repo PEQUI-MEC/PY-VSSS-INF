@@ -484,15 +484,15 @@ class Athena:
                 # se ele não se moveu de um ciclo pra cá
                 if warrior.actionTimer <= 0 and distance.euclidean(warrior.position, warrior.lastPosition) < 0.1:
                     # se atingiu o máximo de tempo bloqueado, executa ação de sair
-                    if warrior.lockedTime > 1:
+                    if warrior.lockedTime > 0.3:
                         # print("locked " + str(time.time()))
+                        warrior.tactics = Athena.tSpin  # sobrebrescreve a tática direto
                         if distance.euclidean(warrior.position, self.ball["position"]) < self.endless.robotSize:
-                            warrior.tactics = Athena.tSpin
-                            warrior.actionTimer = 2
+                            warrior.actionTimer = 0.6
                         else:
-                            warrior.tactics = Athena.tUnlock
+                            warrior.tactics = Athena.tUnlock  # sobrebrescreve a tática direto
                             warrior.lockedTime = 0
-                            warrior.actionTimer = 2  # tempo que deverá andar numa direção pra destravar
+                            warrior.actionTimer = 0.6  # tempo que deverá andar numa direção pra destravar
                             self.unlockDirection *= -1  # direção que deverá tentar dessa vez
                     else:
                         warrior.lockedTime += self.deltaTime
@@ -556,9 +556,9 @@ class Athena:
 
                 # escolhe o lado que vai pressionar a bola, dependendo de qual parede ela tá mais perto
                 if self.ball["position"][1] > self.endless.midField[1]:
-                    warrior.command["targetOrientation"] = (self.endless.midField[0], self.endless.height)
+                    warrior.command["targetOrientation"] = math.pi / 2
                 else:
-                    warrior.command["targetOrientation"] = (self.endless.midField[0], 0)
+                    warrior.command["targetOrientation"] = -math.pi / 2
 
             elif warrior.tactics == Athena.tBlock:
                 ballY = self.ball["position"][1]  # !TODO pegar Y composto com a velocidade da bola
@@ -590,9 +590,9 @@ class Athena:
 
                     # se posiciona com uvf para maior precisão
                     if warrior.position[1] > self.endless.midField[1]:
-                        warrior.command["targetOrientation"] = (self.endless.goalieLine, 0)
-                    else:
                         warrior.command["targetOrientation"] = (self.endless.goalieLine, self.endless.height)
+                    else:
+                        warrior.command["targetOrientation"] = (self.endless.goalieLine, 0)
 
                 else:
                     # se já chegou, só conserta a orientação
@@ -625,9 +625,9 @@ class Athena:
 
                     # !TODO verificar se ele está chegando pelo lado certo
                     if warrior.position[1] > self.endless.midField[1]:
-                        warrior.command["targetOrientation"] = (self.endless.goalieLine, 0)
-                    else:
                         warrior.command["targetOrientation"] = (self.endless.goalieLine, self.endless.height)
+                    else:
+                        warrior.command["targetOrientation"] = (self.endless.goalieLine, 0)
 
                 else:
                     warrior.positionLocked = True

@@ -160,7 +160,7 @@ class Aether:
 
     @staticmethod
     def convertVelocity(vel):
-        return vel * 10
+        return vel * 15
 
     def generatePositions(self, team):
         """Cria o vetor de posições no formato esperado pela estratégia
