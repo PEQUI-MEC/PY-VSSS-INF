@@ -10,7 +10,7 @@ class Endless:
 
         # coordenadas
         self.midField = (self.width / 2, self.height / 2)
-        self.goal = (self.width - self.goalSize[0], self.height / 2)
+        self.goal = (self.width, self.height / 2)
         self.ourGoal = (self.goalSize[0], self.height / 2)
 
         # limites

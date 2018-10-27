@@ -152,7 +152,7 @@ class Eunomia:
             self.warrior.transAngle = self.uvf.univector(robotPos=list(self.warrior.position),
                                                          robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
                                                          target=list(self.warrior.target),
-                                                         obstacles=list(self.warrior.obstacles),
+                                                         obstacles=self.warrior.obstacles,
                                                          orientation=self.warrior.targetOrientation)
 
         else:
