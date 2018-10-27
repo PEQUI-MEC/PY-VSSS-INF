@@ -1,54 +1,65 @@
 import sys
-from communication.velocity import Velocity
-from communication.message import Message
-from communication.serialCommunication import SerialCommunication
+from xbee import XBee
+from serial import Serial, SerialException, SerialTimeoutException
 
 
 class Hermes:
 
-    def __init__(self, callback):
-        self.callback = callback
-
-        self.serialCom = SerialCommunication()
-        self.messages = []
+    def __init__(self):
+        self.xbee = None
+        self.serial = None
+        self.robots = [
+            {
+                "id": "C",
+                "address": "\x56\x0D"
+            },
+            {
+                "id": "F",
+                "address": "\x6B\x0D"
+            },
+            {
+                "id": "G",
+                "address": "\x21\x5C"
+            }
+        ]
 
         print("Hermes summoned")
 
     def setup(self, port, baud=115200):
-        print(self.startBee(port, baud))
+        try:
+            self.serial = Serial(port, baud, writeTimeout=0)
+            self.xbee = XBee(self.serial)
+            print("Hermes is set up")
+        except SerialException:
+            print("In Hermes set up: Error opening xBee connection")
 
-        print("Hermes is set up")
-
-    '''
-        #velocities should be received like:
-        [   
-            #robot 1
-            [
-                robot_id,
-                left_wheel_velocity,
-                right_wheel_velocity
-            ],
-            #robot 2
-            [
-                robot_id,
-                left_wheel_velocity,
-                right wheel_velocity
-            ],
-            #robot 3
-            [
-                robot_id
-                left_wheel_velocity
-                right_wheel_velocity
-            ],
-        ]
-    '''
-
-    # TODO Retornar lista de strings com as mensagens enviadas
-    def fly(self, velocities):        
+    def fly(self, velocities):
         """Main class method
             
             Receive velocities and manipulate, invoking create,
             send and clear methods.
+
+            #velocities should be received like:
+            [
+                #robot 1
+                [
+                    robot_id,
+                    left_wheel_velocity,
+                    right_wheel_velocity
+                ],
+                #robot 2
+                [
+                    robot_id,
+                    left_wheel_velocity,
+                    right wheel_velocity
+                ],
+                #robot 3
+                [
+                    robot_id
+                    left_wheel_velocity
+                    right_wheel_velocity
+                ],
+            ]
 
             Args:
                 velocities (vector): All robot velocities
@@ -56,49 +67,19 @@ class Hermes:
             Returns:
 
         """
-        robots = [
-            # robot 1
-            [
-                0,
-                velocities[0]['vLeft'],
-                velocities[0]['vRight']
-            ],
-            # robot 2
-            [
-                1,
-                velocities[1]['vLeft'],
-                velocities[1]['vRight']
-            ],
-            # robot 3
-            [
-                2,
-                velocities[2]['vLeft'],
-                velocities[2]['vRight']
-            ],
-        ]
-        messages = self.createMessages(robots)
 
-        self.sendMessages()
-        self.clearMessages()
-        self.callback(messages)
+        messages = []
+        for i in range(len(velocities)):
+            message = str(velocities[i]["vRight"]) + ";" + str(velocities[i]["vLeft"])
+
+            if self.xbee is not None:
+                try:
+                    self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[i]["address"], data=message)
+                    messages.append(message)
+                except SerialTimeoutException:
+                    print("Message sending timed out")
+
         return messages
-
-    def startBee(self, port, baud):
-        """ Start xBee connection
-
-        Verifies if port is serial, invoking isSerial() and
-        create a xbee connection with serialCommunication method
-        startBee.
-         Args:
-            port (string): Computer serial port
-            baud (int): transmission speed
-         Returns: string containing sucess or failure
-        """
-        if self.isSerial(port):
-            self.xbee = self.serialCom.startBee(port, baud)
-            return "bee started!"
-        else:
-            return "bee was not started :("
 
     def killBee(self):
         """
@@ -111,81 +92,21 @@ class Hermes:
             Returns:
 
         """
-        self.serialCom.killBee()
+        self.serial.close()
 
-    def sendMessages(self):
-        """
-        Send messages
-
-        Use messages vector and call sendMessage() method
-         Args:
-         Returns:
-        """
-        for message in self.messages:
-            self.sendMessage(message.robotId, message.message)
-    
     def sendMessage(self, robotId, message):
-        """
-        Create all messages
+        for robot in self.robots:
+            if robot["id"] == robotId:
+                if self.xbee is not None:
+                    try:
+                        self.xbee.send("tx", frame='A', command='MY', dest_addr=robot["address"], data=message)
+                    except SerialTimeoutException:
+                        print("Message sending timed out")
+            break
 
-        Receives velocities vector and manipulate information creating messages
-        for all robots using createMessage() method.
-        method sendMessage
-         Args:
-             robotId (id): Robot id
-             message (Message): Message object to be sent
-         Returns:
-        """
-        return self.serialCom.sendMessage(robotId, message)
 
-    def createMessages(self, velocities):    
-        """
-        Create a message
-
-        Receives robotId, and both wheels velocity, creating a string and
-        putting into messages vector.
-        Args:
-            velocities
-        Returns: a string containing created message
-        """
-        messages = []
-        for robot in velocities:
-            messages.append(self.createMessage(robot[0], robot[1], robot[2]))
-            # self.createMessage(robot.id, robot.left_wheel, robot.right_wheel)
-
-        return messages
-
-    def createMessage(self, robotId, left_wheel, right_wheel):
-        """
-        Create a message
-
-        Receives robotId, and both wheels velocity, creating a string and
-        putting into messages vector.
-        Args:
-            robotId (id): Robot id
-            left_wheel (float): left wheel velocity
-            right_wheel (float): right wheel velocity
-        Returns: a string containing created message
-        """
-        # TODO trocar código do robô para receber left-right
-        # message = str(left_wheel) + ";" + str(right_wheel)
-        message = str(right_wheel) + ";" + str(left_wheel)
-        self.messages.append(Message(robotId, message))
-        return message
-
-    def clearMessages(self):    
-        """Verifies if is Serial port
-
-        Based on operation system, verifies if port is serial using ttyUSB or COM patterns
-
-        Args:
-
-        Returns: Boolean, true if is serial port
-                          false if is not
-        """
-        self.messages = []
-
-    def isSerial(self, port):
+    @staticmethod
+    def isSerial(port):
         """Verifies if is Serial port
             
             Based on operation system, verifies if port is serial using ttyUSB or COM patterns
