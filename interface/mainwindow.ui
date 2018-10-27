@@ -61,7 +61,6 @@
     <addaction name="separator"/>
     <addaction name="actionLoadConfigs"/>
     <addaction name="actionSaveConfigs"/>
-    <addaction name="actionSaveasConfigs"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -78,6 +77,12 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="minimumSize">
+    <size>
+     <width>4</width>
+     <height>0</height>
+    </size>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -828,7 +833,7 @@
          <string>Frame size:</string>
         </property>
        </widget>
-       <widget class="QSlider" name="horizontalSliderExposure">
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesExposure">
         <property name="geometry">
          <rect>
           <x>380</x>
@@ -2670,7 +2675,7 @@
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="pageVisionHSVCalibrationMain">
          <widget class="QWidget" name="layoutWidget_8">
@@ -2892,7 +2897,7 @@
               </widget>
              </item>
              <item row="2" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationMain">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationMainVmin">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -7872,6 +7877,9 @@
    </property>
   </action>
   <action name="actionSaveasConfigs">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/Icons/Imgs/Save-as.png</normaloff>:/Icons/Imgs/Save-as.png</iconset>
@@ -7881,6 +7889,12 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionExit">
@@ -8149,7 +8163,7 @@
   <connection>
    <sender>spinBoxVisionHSVCalibrationMainVmin</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMain</receiver>
+   <receiver>horizontalSliderVisionHSVCalibrationMainVmin</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -8163,7 +8177,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMain</sender>
+   <sender>horizontalSliderVisionHSVCalibrationMainVmin</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxVisionHSVCalibrationMainVmin</receiver>
    <slot>setValue(int)</slot>
@@ -9781,7 +9795,7 @@
   <connection>
    <sender>spinBoxCaptureDevicePropertiesExposure</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderExposure</receiver>
+   <receiver>horizontalSliderCaptureDevicePropertiesExposure</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9795,7 +9809,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderExposure</sender>
+   <sender>horizontalSliderCaptureDevicePropertiesExposure</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxCaptureDevicePropertiesExposure</receiver>
    <slot>setValue(int)</slot>

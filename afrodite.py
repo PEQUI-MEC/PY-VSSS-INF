@@ -63,7 +63,7 @@ class Afrodite(QMainWindow):
 
         # HSVCalibration
         # Main
-        self.horizontalSliderVisionHSVCalibrationMain.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
+        self.horizontalSliderVisionHSVCalibrationMainVmin.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationMainBlur.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationMainErode.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
         self.horizontalSliderVisionHSVCalibrationMainHmin.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
@@ -170,11 +170,11 @@ class Afrodite(QMainWindow):
 
         # MenuBar - Arquivo
         self.actionExit.triggered.connect(self.actionExitTriggered)
-        '''
         self.actionLoadConfigs.triggered.connect(self.actionLoadConfigsTriggered)
         self.actionSaveConfigs.triggered.connect(self.actionSaveConfigsTriggered)
-        self.actionSaveasConfigs.triggered.connect(self.actionSaveasConfigTriggered)
-        
+        self.loadConfigs(file="quicksave")
+
+        '''        
         # MenuBar - Help
         self.actionRulesVSSS.triggered.connect(self.actionRulesVSSSTriggered)
         self.actionAbout.triggered.connect(self.actionAboutTriggered)
@@ -295,21 +295,139 @@ class Afrodite(QMainWindow):
 
     # MENU BAR
     # MenuBarArquivo
-    '''
+
     def actionLoadConfigsTriggered(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open file', '/', "Json files (*.json)")
-        self.loadConfigCallback()
+        self.loadConfigs()
+
+    def loadConfigs(self, file="save"):
+        self.hades.SetFileSave(file)
+        self.horizontalSliderCaptureDevicePropertiesBrightness.setValue(self.hades.eventLoadConfigs("brightness"))
+        self.horizontalSliderCaptureDevicePropertiesSaturation.setValue(self.hades.eventLoadConfigs("saturation"))
+        self.horizontalSliderCaptureDevicePropertiesGain.setValue(self.hades.eventLoadConfigs("gain"))
+        self.horizontalSliderCaptureDevicePropertiesContrast.setValue(self.hades.eventLoadConfigs("contrast"))
+        self.horizontalSliderCaptureDevicePropertiesHue.setValue(self.hades.eventLoadConfigs("hue"))
+        self.horizontalSliderCaptureDevicePropertiesExposure.setValue(self.hades.eventLoadConfigs("exposure"))
+        self.horizontalSliderCaptureDevicePropertiesWhiteBalanceU.setValue(self.hades.eventLoadConfigs("balanceU"))
+        self.horizontalSliderCaptureDevicePropertiesWhiteBalanceV.setValue(self.hades.eventLoadConfigs("balanceV"))
+        self.horizontalSliderCaptureDevicePropertiesIsoSpeed.setValue(self.hades.eventLoadConfigs("iso"))
+
+        self.comboBoxRobotRobotFunctionsRobot1.setCurrentText(str(self.hades.eventLoadConfigs("robot1")))
+        self.comboBoxRobotRobotFunctionsRobot2.setCurrentText(str(self.hades.eventLoadConfigs("robot2")))
+        self.comboBoxRobotRobotFunctionsRobot3.setCurrentText(str(self.hades.eventLoadConfigs("robot3")))
+
+        self.horizontalSliderVisionHSVCalibrationMainBlur.setValue(self.hades.eventLoadConfigs("mainBlur"))
+        self.horizontalSliderVisionHSVCalibrationMainErode.setValue(self.hades.eventLoadConfigs("mainErode"))
+        self.horizontalSliderVisionHSVCalibrationMainHmin.setValue(self.hades.eventLoadConfigs("mainHmin"))
+        self.horizontalSliderVisionHSVCalibrationMainSmin.setValue(self.hades.eventLoadConfigs("mainSmin"))
+        self.horizontalSliderVisionHSVCalibrationMainVmin.setValue(self.hades.eventLoadConfigs("mainVmin"))
+        self.horizontalSliderVisionHSVCalibrationMainAmin.setValue(self.hades.eventLoadConfigs("mainAmin"))
+        self.horizontalSliderVisionHSVCalibrationMainDilate.setValue(self.hades.eventLoadConfigs("mainDilate"))
+        self.horizontalSliderVisionHSVCalibrationMainHmax.setValue(self.hades.eventLoadConfigs("mainHmax"))
+        self.horizontalSliderVisionHSVCalibrationMainSmax.setValue(self.hades.eventLoadConfigs("mainSmax"))
+        self.horizontalSliderVisionHSVCalibrationMainVmax.setValue(self.hades.eventLoadConfigs("mainVmax"))
+
+        self.horizontalSliderVisionHSVCalibrationGreenBlur.setValue(self.hades.eventLoadConfigs("greenBlur"))
+        self.horizontalSliderVisionHSVCalibrationGreenErode.setValue(self.hades.eventLoadConfigs("greenErode"))
+        self.horizontalSliderVisionHSVCalibrationGreenHmin.setValue(self.hades.eventLoadConfigs("greenHmin"))
+        self.horizontalSliderVisionHSVCalibrationGreenSmin.setValue(self.hades.eventLoadConfigs("greenSmin"))
+        self.horizontalSliderVisionHSVCalibrationGreenVmin.setValue(self.hades.eventLoadConfigs("greenVmin"))
+        self.horizontalSliderVisionHSVCalibrationGreenAmin.setValue(self.hades.eventLoadConfigs("greenAmin"))
+        self.horizontalSliderVisionHSVCalibrationGreenDilate.setValue(self.hades.eventLoadConfigs("greenDilate"))
+        self.horizontalSliderVisionHSVCalibrationGreenHmax.setValue(self.hades.eventLoadConfigs("greenHmax"))
+        self.horizontalSliderVisionHSVCalibrationGreenSmax.setValue(self.hades.eventLoadConfigs("greenSmax"))
+        self.horizontalSliderVisionHSVCalibrationGreenVmax.setValue(self.hades.eventLoadConfigs("greenVmax"))
+
+        self.horizontalSliderVisionHSVCalibrationBallBlur.setValue(self.hades.eventLoadConfigs("ballBlur"))
+        self.horizontalSliderVisionHSVCalibrationBallErode.setValue(self.hades.eventLoadConfigs("ballErode"))
+        self.horizontalSliderVisionHSVCalibrationBallHmin.setValue(self.hades.eventLoadConfigs("ballHmin"))
+        self.horizontalSliderVisionHSVCalibrationBallSmin.setValue(self.hades.eventLoadConfigs("ballSmin"))
+        self.horizontalSliderVisionHSVCalibrationBallVmin.setValue(self.hades.eventLoadConfigs("ballVmin"))
+        self.horizontalSliderVisionHSVCalibrationBallAmin.setValue(self.hades.eventLoadConfigs("ballAmin"))
+        self.horizontalSliderVisionHSVCalibrationBallDilate.setValue(self.hades.eventLoadConfigs("ballDilate"))
+        self.horizontalSliderVisionHSVCalibrationBallHmax.setValue(self.hades.eventLoadConfigs("ballHmax"))
+        self.horizontalSliderVisionHSVCalibrationBallSmax.setValue(self.hades.eventLoadConfigs("ballSmax"))
+        self.horizontalSliderVisionHSVCalibrationBallVmax.setValue(self.hades.eventLoadConfigs("ballVmax"))
+
+        self.horizontalSliderVisionHSVCalibrationOpponentBlur.setValue(self.hades.eventLoadConfigs("oppBlur"))
+        self.horizontalSliderVisionHSVCalibrationOpponentErode.setValue(self.hades.eventLoadConfigs("oppErode"))
+        self.horizontalSliderVisionHSVCalibrationOpponentHmin.setValue(self.hades.eventLoadConfigs("oppHmin"))
+        self.horizontalSliderVisionHSVCalibrationOpponentSmin.setValue(self.hades.eventLoadConfigs("oppSmin"))
+        self.horizontalSliderVisionHSVCalibrationOpponentVmin.setValue(self.hades.eventLoadConfigs("oppVmin"))
+        self.horizontalSliderVisionHSVCalibrationOpponentAmin.setValue(self.hades.eventLoadConfigs("oppAmin"))
+        self.horizontalSliderVisionHSVCalibrationOpponentDilate.setValue(self.hades.eventLoadConfigs("oppDilate"))
+        self.horizontalSliderVisionHSVCalibrationOpponentHmax.setValue(self.hades.eventLoadConfigs("oppHmax"))
+        self.horizontalSliderVisionHSVCalibrationOpponentSmax.setValue(self.hades.eventLoadConfigs("oppSmax"))
+        self.horizontalSliderVisionHSVCalibrationOpponentVmax.setValue(self.hades.eventLoadConfigs("oppVmax"))
 
     def actionSaveConfigsTriggered(self):
-        # TODO falta implementar o save
-        self.saveConfigCallback()
+        self.saveConfigs()
 
-    def actionSaveasConfigTriggered(self):
-        QFileDialog.getSaveFileNames(self, 'Save as file', '/',"Json files (*.json)")
-        pass
-    '''
+    def saveConfigs(self, file="save"):
+        self.hades.SetFileSave(file)
+        value = {
+            "brightness": self.horizontalSliderCaptureDevicePropertiesBrightness.value(),
+            "saturation": self.horizontalSliderCaptureDevicePropertiesSaturation.value(),
+            "gain": self.horizontalSliderCaptureDevicePropertiesGain.value(),
+            "contrast": self.horizontalSliderCaptureDevicePropertiesContrast.value(),
+            "hue": self.horizontalSliderCaptureDevicePropertiesHue.value(),
+            "exposure": self.horizontalSliderCaptureDevicePropertiesExposure.value(),
+            "balanceU": self.horizontalSliderCaptureDevicePropertiesWhiteBalanceU.value(),
+            "balanceV": self.horizontalSliderCaptureDevicePropertiesWhiteBalanceV.value(),
+            "iso": self.horizontalSliderCaptureDevicePropertiesIsoSpeed.value(),
+
+            "robot1": self.comboBoxRobotRobotFunctionsRobot1.currentText(),
+            "robot2": self.comboBoxRobotRobotFunctionsRobot2.currentText(),
+            "robot3": self.comboBoxRobotRobotFunctionsRobot3.currentText(),
+
+            "mainBlur": self.horizontalSliderVisionHSVCalibrationMainBlur.value(),
+            "mainErode": self.horizontalSliderVisionHSVCalibrationMainErode.value(),
+            "mainHmin": self.horizontalSliderVisionHSVCalibrationMainHmin.value(),
+            "mainSmin": self.horizontalSliderVisionHSVCalibrationMainSmin.value(),
+            "mainVmin": self.horizontalSliderVisionHSVCalibrationMainVmin.value(),
+            "mainAmin": self.horizontalSliderVisionHSVCalibrationMainAmin.value(),
+            "mainDilate": self.horizontalSliderVisionHSVCalibrationMainDilate.value(),
+            "mainHmax": self.horizontalSliderVisionHSVCalibrationMainHmax.value(),
+            "mainSmax": self.horizontalSliderVisionHSVCalibrationMainSmax.value(),
+            "mainVmax": self.horizontalSliderVisionHSVCalibrationMainVmax.value(),
+
+            "greenBlur": self.horizontalSliderVisionHSVCalibrationGreenBlur.value(),
+            "greenErode": self.horizontalSliderVisionHSVCalibrationGreenErode.value(),
+            "greenHmin": self.horizontalSliderVisionHSVCalibrationGreenHmin.value(),
+            "greenSmin": self.horizontalSliderVisionHSVCalibrationGreenSmin.value(),
+            "greenVmin": self.horizontalSliderVisionHSVCalibrationGreenVmin.value(),
+            "greenAmin": self.horizontalSliderVisionHSVCalibrationGreenAmin.value(),
+            "greenDilate": self.horizontalSliderVisionHSVCalibrationGreenDilate.value(),
+            "greenHmax": self.horizontalSliderVisionHSVCalibrationGreenHmax.value(),
+            "greenSmax": self.horizontalSliderVisionHSVCalibrationGreenSmax.value(),
+            "greenVmax": self.horizontalSliderVisionHSVCalibrationGreenVmax.value(),
+
+            "ballBlur": self.horizontalSliderVisionHSVCalibrationBallBlur.value(),
+            "ballErode": self.horizontalSliderVisionHSVCalibrationBallErode.value(),
+            "ballHmin": self.horizontalSliderVisionHSVCalibrationBallHmin.value(),
+            "ballSmin": self.horizontalSliderVisionHSVCalibrationBallSmin.value(),
+            "ballVmin": self.horizontalSliderVisionHSVCalibrationBallVmin.value(),
+            "ballAmin": self.horizontalSliderVisionHSVCalibrationBallAmin.value(),
+            "ballDilate": self.horizontalSliderVisionHSVCalibrationBallDilate.value(),
+            "ballHmax": self.horizontalSliderVisionHSVCalibrationBallHmax.value(),
+            "ballSmax": self.horizontalSliderVisionHSVCalibrationBallSmax.value(),
+            "ballVmax": self.horizontalSliderVisionHSVCalibrationBallVmax.value(),
+
+            "oppBlur": self.horizontalSliderVisionHSVCalibrationOpponentBlur.value(),
+            "oppErode": self.horizontalSliderVisionHSVCalibrationOpponentErode.value(),
+            "oppHmin": self.horizontalSliderVisionHSVCalibrationOpponentHmin.value(),
+            "oppSmin": self.horizontalSliderVisionHSVCalibrationOpponentSmin.value(),
+            "oppVmin": self.horizontalSliderVisionHSVCalibrationOpponentVmin.value(),
+            "oppAmin": self.horizontalSliderVisionHSVCalibrationOpponentAmin.value(),
+            "oppDilate": self.horizontalSliderVisionHSVCalibrationOpponentDilate.value(),
+            "oppHmax": self.horizontalSliderVisionHSVCalibrationOpponentHmax.value(),
+            "oppSmax": self.horizontalSliderVisionHSVCalibrationOpponentSmax.value(),
+            "oppVmax": self.horizontalSliderVisionHSVCalibrationOpponentVmax.value()
+        }
+
+        self.hades.eventSaveConfigs(value)
 
     def actionExitTriggered(self):
+        self.saveConfigs(file="quicksave")
         return self.close()
 
     # MenuBarHelp
@@ -581,7 +699,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
-        self.hades.calibrationEvent(current, ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin))
+        self.hades.eventCalibration(current, ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin))
 
     def getPushButtonVisionHSVCalibrationSwap(self):
         stringAux = self.labelVisionHSVCalibrationSwap.text()

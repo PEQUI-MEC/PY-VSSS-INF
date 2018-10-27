@@ -7,19 +7,24 @@ class Plutus:
     Deus grego da riqueza, o que *guarda* coisas valiosas
     Responsável por fazer o save/load das configurações do programa
     """
-    def __init__(self, file="helpers/quicksave.json"):
-        self.data = {}
-        self.file = file
-        loadFile = None
+    def __init__(self):
+        self.file = None
+        print("Plutus summoned")
 
+    def setFile(self, file):
+        self.file = "helpers/" + file + ".json"
+
+    def get(self, key):
+        loadFile = None
+        data = {}
         try:
-            loadFile = open(file, "r")
+            loadFile = open(self.file, "r")
         except EnvironmentError:
             print("File is empty")
 
         try:
             if loadFile:
-                self.data = json.load(loadFile)
+                data = json.load(loadFile)
         except json.JSONDecodeError as e:
             print("JSON parse error: " + e.msg)
             return
@@ -27,20 +32,33 @@ class Plutus:
         if loadFile is not None:
             loadFile.close()
 
-        print("Plutus summoned")
-
-    def get(self, key):
-        if key in self.data:
-            return self.data[key]
+        if key in data:
+            return data[key]
         else:
             return None
 
     def set(self, key, value):
-        self.data[key] = value
+        data = {}
+        try:
+            loadFile = open(self.file, "r")
+        except EnvironmentError:
+            print("File is empty")
+
+        try:
+            if loadFile:
+                data = json.load(loadFile)
+        except json.JSONDecodeError as e:
+            print("JSON parse error: " + e.msg)
+            return
+
+        if loadFile is not None:
+            loadFile.close()
+
+        data[key] = value
 
         try:
             saveFile = open(self.file, 'w+')
-            json.dump(self.data, saveFile)
+            json.dump(data, saveFile)
             saveFile.close()
             return True
         except TypeError:

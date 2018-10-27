@@ -24,6 +24,8 @@ class Hades(QThread):
         self.zeus = Zeus()
         self.hermes = Hermes()
 
+        self.plutus = Plutus()
+
         self.play = False
         self.isCalibrating = False
 
@@ -176,6 +178,21 @@ class Hades(QThread):
         self.play = not self.play
         print("Hades started") if self.play else print("Hades stopped")
 
+    def SetFileSave(self, file):
+        self.plutus.setFile(file)
+
+    def eventSaveConfigs(self, value):
+        for key in value:
+            self.plutus.set(key, value[key])
+        print("Save configs")
+
+    def eventLoadConfigs(self, key):
+        value = self.plutus.get(key)
+        if value is not None:
+            return value
+        else:
+            return 0
+
     # Camera e Visão
     def getCamCongigs(self):
         return self.apolo.getCamConfigs()
@@ -186,7 +203,7 @@ class Hades(QThread):
             self.apolo.updateCamConfigs(newBrightness, newSaturation, newGain, newContrast, newHue, newExposure,
                                         newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed)
 
-    def calibrationEvent(self, imageId, calibration=None):
+    def eventCalibration(self, imageId, calibration=None):
         if self.apolo is not None:
             self.apolo.setHSVThresh(calibration, imageId)
 
