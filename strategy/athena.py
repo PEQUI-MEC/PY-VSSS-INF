@@ -480,7 +480,7 @@ class Athena:
                 if warrior.actionTimer <= 0 and distance.euclidean(warrior.position, warrior.lastPosition) < 0.1:
                     # se atingiu o máximo de tempo bloqueado, executa ação de sair
                     if warrior.lockedTime > 36000:
-                        print("locked " + str(time.time()))
+                        # print("locked " + str(time.time()))
                         if distance.euclidean(warrior.position, self.ball["position"]) < self.endless.robotSize:
                             warrior.tactics = Athena.tSpin
                             warrior.actionTimer = 360000
@@ -494,7 +494,7 @@ class Athena:
 
                 # se ele começou a se mover, mas para sair do bloqueio, continua a mesma ação
                 elif warrior.actionTimer > 0:
-                    print("unlocking " + str(time.time()))
+                    # print("unlocking " + str(time.time()))
                     warrior.actionTimer -= self.deltaTime
 
                 # se ele deve estar parado ou está andando, o reseta o lockedTime
