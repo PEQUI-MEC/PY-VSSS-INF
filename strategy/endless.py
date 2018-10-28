@@ -10,18 +10,19 @@ class Endless:
 
         # coordenadas
         self.midField = (self.width / 2, self.height / 2)
-        self.goal = (self.width - self.goalSize[0], self.height / 2)
+        self.goal = (self.width, self.height / 2)
+        self.pastGoal = (self.width + self.areaSize[0], self.height / 2)
         self.ourGoal = (self.goalSize[0], self.height / 2)
 
         # limites
-        self.corner = self.width - self.goalSize[0] - self.areaSize[0]
-        self.ourCorner = self.goalSize[0] + self.areaSize[0]
-        self.goalTop = self.height / 2 - self.goalSize[1] / 2
-        self.goalBottom = self.height / 2 + self.goalSize[1] / 2
-        self.areaTop = self.height / 2 - self.areaSize[1] / 2
-        self.areaBottom = self.height / 2 + self.areaSize[1] / 2
-        self.goalieLine = self.goalSize[0] + self.robotSize
-        self.areaLine = self.goalSize[0] + self.areaSize[0] + self.robotSize
+        self.corner = self.width - self.goalSize[0] - self.areaSize[0]  # em X
+        self.ourCorner = self.goalSize[0] - self.areaSize[0]  # em X
+        self.goalTop = self.height / 2 + self.goalSize[1] / 2  # em Y
+        self.goalBottom = self.height / 2 - self.goalSize[1] / 2  # em Y
+        self.areaTop = self.height / 2 + self.areaSize[1] / 2  # em Y
+        self.areaBottom = self.height / 2 - self.areaSize[1] / 2  # em Y
+        self.goalieLine = self.goalSize[0] + self.robotSize  # em X
+        self.areaLine = self.goalSize[0] + self.areaSize[0] + self.robotSize  # em X
 
         print("Endless is set up.")
 
