@@ -94,35 +94,17 @@ class Viewer(MjViewer):
         elif action == glfw.RELEASE:
             # toggles robots on or off
             if key == glfw.KEY_1:
-                if mods == glfw.MOD_SHIFT:
-                    self.aether.toggleRobot(0)
-                else:
-                    self.aether.enabled[0] = not self.aether.enabled[0]
+                self.aether.toggleRobot(0, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_2:
-                if mods == glfw.MOD_SHIFT:
-                    self.aether.toggleRobot(1)
-                else:
-                    self.aether.enabled[1] = not self.aether.enabled[1]
+                self.aether.toggleRobot(1, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_3:
-                if mods == glfw.MOD_SHIFT:
-                    self.aether.toggleRobot(2)
-                else:
-                    self.aether.enabled[2] = not self.aether.enabled[2]
+                self.aether.toggleRobot(2, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_4:
-                if mods == glfw.MOD_SHIFT:
-                    self.aether.toggleRobot(3)
-                else:
-                    self.aether.enabled[3] = not self.aether.enabled[3]
+                self.aether.toggleRobot(3, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_5:
-                if mods == glfw.MOD_SHIFT:
-                    self.aether.toggleRobot(4)
-                else:
-                    self.aether.enabled[4] = not self.aether.enabled[4]
+                self.aether.toggleRobot(4, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_6:
-                if mods == glfw.MOD_SHIFT:
-                    self.aether.toggleRobot(5)
-                else:
-                    self.aether.enabled[5] = not self.aether.enabled[5]
+                self.aether.toggleRobot(5, mods == glfw.MOD_SHIFT)
 
             # default [modified] calls
             elif key == glfw.KEY_TAB:  # Switches cameras.
