@@ -120,7 +120,7 @@ class Move2Goal:
         theta = atan2(self.x[1], self.x[0])
         self.y = [-sin(theta), cos(theta)]
 
-        print("X: ", self.x, " theta: ", theta, " y: ", self.y)
+        # print("X: ", self.x, " theta: ", theta, " y: ", self.y)
         self.toGame = np.array([self.x, self.y]).T
         self.toUnivector = np.linalg.inv(self.toGame)
 

@@ -215,7 +215,7 @@ class Athena:
                             command["data"]["obstacles"].append(obstacle.position)
                     for obstacle in self.theirWarriors:
                         command["data"]["obstacles"].append(obstacle.position)
-                    if "avoidBall" in warrior.command:
+                    if warrior.position[0] > self.ball["position"][0] in warrior.command:
                         command["data"]["obstacles"].append(self.ball["position"])
 
             elif warrior.command["type"] == "lookAt":
