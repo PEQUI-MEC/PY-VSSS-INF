@@ -136,7 +136,14 @@ class Aether:
         elif direction == 3:  # RIGHT
             self.sim.data.qpos[self.ball_joint] += 0.01
 
-    def convertPositionX(self, coord):
+    def toggleRobot(self, robotId):
+        if self.sim.data.qpos[self.robot_joints[robotId] + 1] == 1:
+            self.enabled[robotId] = True
+            self.sim.data.qpos[self.robot_joints[robotId] + 1] = 0
+        else:
+            self.enabled[robotId] = False
+            self.sim.data.qpos[self.robot_joints[robotId] + 1] = 1
+
         """Traz o valor pra positivo e multiplica pela proporção (largura máxima)/(posição x máxima)
 
         Args:

@@ -15,7 +15,7 @@ class Viewer(MjViewer):
 
     def _create_full_overlay(self):
         if "ball" in self.infos:
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["ball"][0], "Ball Pose")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["ball"], "Ball Pose")
 
         if "robots1" in self.infos:
             self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][0], "Robot [1]")
@@ -93,17 +93,35 @@ class Viewer(MjViewer):
         elif action == glfw.RELEASE:
             # toggles robots on or off
             if key == glfw.KEY_1:
-                self.aether.enabled[0] = not self.aether.enabled[0]
+                if mods == glfw.MOD_SHIFT:
+                    self.aether.toggleRobot(0)
+                else:
+                    self.aether.enabled[0] = not self.aether.enabled[0]
             elif key == glfw.KEY_2:
-                self.aether.enabled[1] = not self.aether.enabled[1]
+                if mods == glfw.MOD_SHIFT:
+                    self.aether.toggleRobot(1)
+                else:
+                    self.aether.enabled[1] = not self.aether.enabled[1]
             elif key == glfw.KEY_3:
-                self.aether.enabled[2] = not self.aether.enabled[2]
+                if mods == glfw.MOD_SHIFT:
+                    self.aether.toggleRobot(2)
+                else:
+                    self.aether.enabled[2] = not self.aether.enabled[2]
             elif key == glfw.KEY_4:
-                self.aether.enabled[3] = not self.aether.enabled[3]
+                if mods == glfw.MOD_SHIFT:
+                    self.aether.toggleRobot(3)
+                else:
+                    self.aether.enabled[3] = not self.aether.enabled[3]
             elif key == glfw.KEY_5:
-                self.aether.enabled[4] = not self.aether.enabled[4]
+                if mods == glfw.MOD_SHIFT:
+                    self.aether.toggleRobot(4)
+                else:
+                    self.aether.enabled[4] = not self.aether.enabled[4]
             elif key == glfw.KEY_6:
-                self.aether.enabled[5] = not self.aether.enabled[5]
+                if mods == glfw.MOD_SHIFT:
+                    self.aether.toggleRobot(5)
+                else:
+                    self.aether.enabled[5] = not self.aether.enabled[5]
 
             # default [modified] calls
             elif key == glfw.KEY_TAB:  # Switches cameras.
