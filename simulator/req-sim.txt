@@ -16,4 +16,6 @@
 # -r other-requirement-file.txt
 
 numpy
+glfw
+imageio
 mujoco-py<1.50.2,>=1.50.1
