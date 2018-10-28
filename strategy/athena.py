@@ -189,9 +189,11 @@ class Athena:
         """
         response = []
         for warrior in warriors:
-            command = {}
+            command = {
+                "robotLetter": warrior.robotID
+            }
+
             if warrior.command["type"] == "goTo":
-                command["robotLetter"] = warrior.robotID
                 command["command"] = "goTo"
                 command["data"] = {}
                 command["data"]["pose"] = {
