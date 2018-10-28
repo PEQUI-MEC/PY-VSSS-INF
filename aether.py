@@ -129,7 +129,11 @@ class Aether:
         return None
 
     # FUNÇÕES
-    def moveBall(self, direction):
+    def moveBall(self, direction, keepVel=False):
+        if not keepVel:
+            for i in range(6):
+                self.sim.data.qvel[self.ball_joint + i] = 0
+
         if direction == 0:  # UP
             self.sim.data.qpos[self.ball_joint + 1] += 0.01
         elif direction == 1:  # DOWN
@@ -193,7 +197,7 @@ class Aether:
         Returns:
             Vetor de posições no formato correto
         """
-        r1 = -math.atan2(
+        r1 = math.pi * team -math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[3 * team] + 3] * self.sim.data.qpos[self.robot_joints[3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[3 * team] + 4] * self.sim.data.qpos[self.robot_joints[3 * team] + 6]
@@ -203,7 +207,7 @@ class Aether:
                     self.sim.data.qpos[self.robot_joints[3 * team] + 6] * self.sim.data.qpos[self.robot_joints[3 * team] + 6]
             )
         )
-        r2 = -math.atan2(
+        r2 = math.pi * team -math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 3] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 4] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6]
@@ -213,7 +217,7 @@ class Aether:
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6]
             )
         )
-        r3 = -math.atan2(
+        r3 = math.pi * team -math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 3] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 4] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6]

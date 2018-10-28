@@ -78,17 +78,18 @@ class Viewer(MjViewer):
             self.sim.data.solver_iter + 1))
 
         self.add_overlay(const.GRID_TOPLEFT, "Move Ball: [UP], [DOWN], [RIGHT], [LEFT]", "")
+        self.add_overlay(const.GRID_TOPLEFT, "    (Shift keeps velocity)", "")
 
     def key_callback(self, window, key, scancode, action, mods):
         if action == glfw.REPEAT or action == glfw.PRESS:
             if key == glfw.KEY_UP:
-                self.aether.moveBall(0)
+                self.aether.moveBall(0, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_DOWN:
-                self.aether.moveBall(1)
+                self.aether.moveBall(1, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_LEFT:
-                self.aether.moveBall(2)
+                self.aether.moveBall(2, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_RIGHT:
-                self.aether.moveBall(3)
+                self.aether.moveBall(3, mods == glfw.MOD_SHIFT)
 
         elif action == glfw.RELEASE:
             # toggles robots on or off
