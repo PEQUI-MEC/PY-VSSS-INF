@@ -177,7 +177,7 @@ class Hades(QThread):
         print("Hades started") if self.play else print("Hades stopped")
 
     # Camera e Visão
-    def getCamCongigs(self):
+    def getCamConfigs(self):
         return self.apolo.getCamConfigs()
 
     def eventCamConfigs(self, newBrightness, newSaturation, newGain, newContrast, newHue,

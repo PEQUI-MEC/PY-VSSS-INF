@@ -42,9 +42,24 @@ class Apolo:
         self.setHSVThresh(((120, 250), (0, 250), (0, 250)), ADV)
         self.setHSVThresh(((69, 70), (0, 255), (0, 255)), GREEN)
 
+        self.setWarpPoints((0,0),(640,0),(0,480),(640,480))
+
         self.imageId = -1
 
         print("Apolo summoned")
+
+    def setWarpPoints(self, pt1, pt2, pt3, pt4):
+        shape = np.float32([pt1,pt2,pt3,pt4])
+        plot = np.float32([[0,0],[640,0],[0,480],[640,480]])
+        self.perspective = cv2.getPerspectiveTransform(shape,plot)
+
+
+    def preProcess(self,frame):
+        # make blur
+        # make erode
+        # make dilate
+        return frame
+
 
     def changeCamera(self, cameraId):
         self.camera.release()
@@ -60,7 +75,7 @@ class Apolo:
                self.camera.get(cv2.CAP_PROP_HUE), \
                self.camera.get(cv2.CAP_PROP_EXPOSURE), \
                self.camera.get(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U), \
-               self.camera.get(cv2.CAP_PROP_WHITE_BALANCE_RED_V), \
+               self.camera.get(cv2.CAP_PRAvançadoOP_WHITE_BALANCE_RED_V), \
                self.camera.get(cv2.CAP_PROP_ISO_SPEED)
 
     def updateCamConfigs(self, newBrightness, newSaturation, newGain, newContrast, newHue,
@@ -446,6 +461,8 @@ class Apolo:
         if frame is None:
             print("Nao há câmeras ou o dispositivo está ocupado")
             return None
+
+        frame = cv2.warpPerspective(frame,self.perspective,(640,480))
 
         # Transforma de BRG para HSV
         frameHSV = self.getHSVFrame(frame)
