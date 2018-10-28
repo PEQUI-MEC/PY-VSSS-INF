@@ -551,7 +551,10 @@ class Afrodite(QMainWindow):
 
     # HSVCalibration
     def callHadesCalibEvent(self, current):
-        if current == 0:
+        if current == -1:
+            self.hades.calibrationEvent(current)
+            return None
+        elif current == 0:
             Hmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationMainSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationMainVmin.value()
@@ -587,7 +590,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        else:  # current == 3
+        elif current == 3:
             Hmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationGreenSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
@@ -598,6 +601,7 @@ class Afrodite(QMainWindow):
             Vmax = self.spinBoxVisionHSVCalibrationGreenVmax.value()
             Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
+
 
         self.hades.calibrationEvent(current, ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin))
 
@@ -611,10 +615,11 @@ class Afrodite(QMainWindow):
     def getPushButtonVisionHSVCalibrationEdit(self):
         if self.stackedWidgetVisionHSVCalibration.isEnabled():
             self.stackedWidgetVisionHSVCalibration.setEnabled(False)
+            self.callHadesCalibEvent(-1)
         else:
             self.stackedWidgetVisionHSVCalibration.setEnabled(True)
+            self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex())
 
-        self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex())
 
     def getPushButtonVisionHSVCalibrationNext(self):
         current = self.stackedWidgetVisionHSVCalibration.currentIndex()
