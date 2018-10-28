@@ -118,7 +118,6 @@ class Afrodite(QMainWindow):
 
         # Capture
         # DeviceInformation
-        self.pushButtonCaptureDeviceInformationRefresh.setEnabled(False)
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
         self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.getPushButtonCaptureDeviceInformationRefresh)
         self.updateComboBoxCaptureDeviceInformation()
@@ -331,11 +330,11 @@ class Afrodite(QMainWindow):
         cameraId = self.comboBoxCaptureDeviceInformation.currentText()
         self.hades.eventStartVision(cameraId)
         self.pushButtonCaptureDeviceInformationStart.setEnabled(False)
-        self.pushButtonCaptureDeviceInformationRefresh.setEnabled(True)
+        self.pushButtonCaptureDeviceInformationRefresh.setEnabled(False)
 
     def getPushButtonCaptureDeviceInformationRefresh(self):
         self.updateComboBoxCaptureDeviceInformation()
-        self.pushButtonCaptureDeviceInformationStart.setEnabled(True)
+        # self.pushButtonCaptureDeviceInformationStart.setEnabled(True)
 
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):
