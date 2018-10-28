@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1355</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuBarArquivo">
@@ -154,7 +154,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -1779,7 +1779,7 @@
           <x>9</x>
           <y>60</y>
           <width>461</width>
-          <height>91</height>
+          <height>97</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
@@ -2223,7 +2223,7 @@
           <x>9</x>
           <y>60</y>
           <width>461</width>
-          <height>60</height>
+          <height>62</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayourRobotID">
@@ -2267,6 +2267,9 @@
                <width>140</width>
                <height>25</height>
               </size>
+             </property>
+             <property name="text">
+              <string>A</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -2316,6 +2319,9 @@
                <height>25</height>
               </size>
              </property>
+             <property name="text">
+              <string>B</string>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -2364,6 +2370,9 @@
                <height>25</height>
               </size>
              </property>
+             <property name="text">
+              <string>C</string>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -2401,7 +2410,7 @@
           <x>70</x>
           <y>30</y>
           <width>341</width>
-          <height>62</height>
+          <height>86</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayoutVisionVideoCapture">
@@ -2679,7 +2688,7 @@
             <x>10</x>
             <y>30</y>
             <width>441</width>
-            <height>153</height>
+            <height>177</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationMain">
@@ -3527,7 +3536,7 @@
             <x>10</x>
             <y>30</y>
             <width>441</width>
-            <height>153</height>
+            <height>177</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationBall">
@@ -4357,7 +4366,7 @@
             <x>10</x>
             <y>30</y>
             <width>441</width>
-            <height>153</height>
+            <height>177</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationOpponent">
@@ -5187,7 +5196,7 @@
             <x>10</x>
             <y>30</y>
             <width>441</width>
-            <height>153</height>
+            <height>177</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationGreen">
