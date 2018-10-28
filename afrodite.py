@@ -164,10 +164,12 @@ class Afrodite(QMainWindow):
         self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
         # RobotStatus
         self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
+        '''
+
         # id
         self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
         self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
-        '''
+
         # MENUBAR
 
         # MenuBar - Arquivo
@@ -515,7 +517,15 @@ class Afrodite(QMainWindow):
         self.lineEditRobotIDRobot2.setEnabled(False)
         self.lineEditRobotIDRobot3.setEnabled(False)
 
-        return self.lineEditRobotIDRobot1.text(), self.lineEditRobotIDRobot2.text(), self.lineEditRobotIDRobot3.text()
+        # return self.lineEditRobotIDRobot1.text(), self.lineEditRobotIDRobot2.text(), self.lineEditRobotIDRobot3.text()
+
+        robotLetter = [
+            self.lineEditRobotIDRobot1.text().upper(),
+            self.lineEditRobotIDRobot2.text().upper(),
+            self.lineEditRobotIDRobot3.text().upper()
+        ]
+
+        self.hades.changeRobotLetters(robotLetter)
 
     # VISION TAB
 

@@ -200,7 +200,8 @@ class Hades(QThread):
     #         self.apolo = None
 
     def changeRobotLetters(self, robotLetters):
-        self.apolo.changeLetters(robotLetters)
+        if self.apolo is not None:
+            self.apolo.changeLetters(robotLetters)
 
     def changeCamera(self, cameraId):
         if self.apolo is not None:
