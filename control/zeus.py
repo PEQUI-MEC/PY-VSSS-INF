@@ -258,5 +258,5 @@ class Zeus:
                 "vRight": velocities[2][1]
             }
         ]
-
+        print(strategia)
         return output

@@ -31,10 +31,9 @@ class Apolo:
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
 
-        self.robotPositions = [(0, 0, 0, '', True), (0, 0, 0, '', True), (0, 0, 0, '', True)]
+        self.robotPositions = [(0, 0, 0, True), (0, 0, 0, True), (0, 0, 0, True)]
         self.ballPosition = [0, 0]
         self.advRobotPositions = [(0, 0), (0, 0), (0, 0)]
-        self.positions = self.returnData(self.robotPositions, self.advRobotPositions, self.ballPosition)
 
         # Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28, 30), (0, 255), (0, 255)), MAIN)
@@ -44,7 +43,14 @@ class Apolo:
 
         self.imageId = -1
 
-        self.robotLetter = [None] * 3
+        self.robotLetter = ['A', 'B', 'C']
+
+        self.positions = self.returnData(
+            self.robotPositions,
+            self.advRobotPositions,
+            self.ballPosition,
+            self.robotLetter
+        )
 
         print("Apolo summoned")
 
@@ -397,24 +403,24 @@ class Apolo:
 
     # Pega os dados dos robos, da bola e dos adversarios e coloca no formato que a Athena requer
     @staticmethod
-    def returnData(robotList, robotAdvList, ball):
+    def returnData(robotList, robotAdvList, ball, robotLetter):
         output = [
             [
                 # OurRobots
                 {
                     "position": (robotList[0][0], robotList[0][1]),
                     "orientation": robotList[0][2],
-                    "robotLetter": robotList[0][3]
+                    "robotLetter": robotLetter[0]
                 },
                 {
                     "position": (robotList[1][0], robotList[1][1]),
                     "orientation": robotList[1][2],
-                    "robotLetter": robotList[1][3]
+                    "robotLetter": robotLetter[1]
                 },
                 {
                     "position": (robotList[2][0], robotList[2][1]),
                     "orientation": robotList[2][2],
-                    "robotLetter": robotList[2][3]
+                    "robotLetter": robotLetter[2]
                 }
             ],
             [
@@ -482,7 +488,7 @@ class Apolo:
                     if len(linkedSecondaryTags[i][1]) == 2:
                         orientation = self.findRobotOrientation(linkedSecondaryTags[i][0], linkedSecondaryTags[i][1])
                         tempRobotPosition[i] = [linkedSecondaryTags[i][0][0], linkedSecondaryTags[i][0][1], orientation,
-                                                self.robotLetter[0], True]
+                                                True]
                     elif len(linkedSecondaryTags[i][1]) == 4:
                         tag1 = [linkedSecondaryTags[i][1][0], linkedSecondaryTags[i][1][1]]
                         tag2 = [linkedSecondaryTags[i][1][2], linkedSecondaryTags[i][1][3]]
@@ -491,7 +497,7 @@ class Apolo:
 
                         orientation = self.findRobotOrientation(linkedSecondaryTags[i][0], interestSecondaryTag)
                         tempRobotPosition[i] = [linkedSecondaryTags[i][0][0], linkedSecondaryTags[i][0][1], orientation,
-                                                self.robotLetter[1], True]
+                                                True]
                     elif len(linkedSecondaryTags[i][1]) == 6:
                         tag1 = [linkedSecondaryTags[i][1][0], linkedSecondaryTags[i][1][1]]
                         tag2 = [linkedSecondaryTags[i][1][2], linkedSecondaryTags[i][1][3]]
@@ -512,7 +518,7 @@ class Apolo:
 
                         orientation = self.findRobotOrientation(linkedSecondaryTags[i][0], interestSecondaryTag)
                         tempRobotPosition[i] = [linkedSecondaryTags[i][0][0], linkedSecondaryTags[i][0][1], orientation,
-                                                self.robotLetter[2], True]
+                                                True]
             except:
                 pass
 
@@ -533,7 +539,12 @@ class Apolo:
                 self.advRobotPositions[i] = tempAdvRobots[i]
 
         # Modela os dados para o formato que a Athena recebe e retorna
-        self.positions = self.returnData(self.robotPositions, self.advRobotPositions, self.ballPosition)
+        self.positions = self.returnData(
+            self.robotPositions,
+            self.advRobotPositions,
+            self.ballPosition,
+            self.robotLetter
+        )
 
         # print(self.positions)
 
@@ -541,5 +552,4 @@ class Apolo:
             frame = self.thresholdedImages[self.imageId]
 
         # print(self.positions)
-
         return self.positions, frame

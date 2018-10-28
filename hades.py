@@ -56,6 +56,8 @@ class Hades(QThread):
         while True:
             # visão
             positions = self.apoloRules()
+            # if positions is not None:
+            #     print(positions[0][0]["robotLetter"])
 
             if self.play:
                 commands = self.athenaRules(positions)

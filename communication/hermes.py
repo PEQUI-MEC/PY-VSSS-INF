@@ -64,6 +64,7 @@ class Hermes:
 
             if self.xbee is not None:
                 try:
+                    print(velocities[i])
                     self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
                     messages.append(message)
                 except SerialTimeoutException:
@@ -87,6 +88,7 @@ class Hermes:
     def sendMessage(self, robotId, message):
         if self.xbee is not None:
             try:
+                print(robotId)
                 self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
             except SerialTimeoutException:
                 print("Message sending timed out")
