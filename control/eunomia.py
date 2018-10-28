@@ -10,7 +10,7 @@ class Eunomia:
     def setup(self, width=100):
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
-        self.uvf.updateConstants(radius=6.0, kr=0.9, k0=4.12, dMin=80.0, lDelta=4.5)
+        self.uvf.updateConstants(radius=6.0, kr=0.9, k0=4.12, dMin=60.0, lDelta=4.5)
 
     def run(self, warrior):
         """Main method of action controller
