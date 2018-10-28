@@ -445,10 +445,9 @@ class Apolo:
 
     # Função altera a sequencia das letras dos robos
     def changeLetters(self, robotLetter):
-        if robotLetter is None:
-            return None
-        else:
+        if robotLetter is not None:
             self.robotLetter = robotLetter
+        return self.robotLetter
 
     # Funçao principal da visao
     def run(self):

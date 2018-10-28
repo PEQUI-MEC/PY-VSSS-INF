@@ -87,15 +87,15 @@ class Hades(QThread):
         formattedPositions = [
             [
                 positions[0][0]["position"],
-                positions[0][0]["orientation"],
+                positions[0][0]["orientation"]
             ],
             [
                 positions[0][1]["position"],
-                positions[0][1]["orientation"],
+                positions[0][1]["orientation"]
             ],
             [
                 positions[0][2]["position"],
-                positions[0][2]["orientation"],
+                positions[0][2]["orientation"]
             ],
             positions[2]["position"]
         ]
@@ -203,7 +203,8 @@ class Hades(QThread):
 
     def changeRobotLetters(self, robotLetters):
         if self.apolo is not None:
-            self.apolo.changeLetters(robotLetters)
+            return self.apolo.changeLetters(robotLetters)
+        return ["A", "B", "C"]
 
     def changeCamera(self, cameraId):
         if self.apolo is not None:

@@ -517,15 +517,18 @@ class Afrodite(QMainWindow):
         self.lineEditRobotIDRobot2.setEnabled(False)
         self.lineEditRobotIDRobot3.setEnabled(False)
 
-        # return self.lineEditRobotIDRobot1.text(), self.lineEditRobotIDRobot2.text(), self.lineEditRobotIDRobot3.text()
-
         robotLetter = [
             self.lineEditRobotIDRobot1.text().upper(),
             self.lineEditRobotIDRobot2.text().upper(),
             self.lineEditRobotIDRobot3.text().upper()
         ]
 
-        self.hades.changeRobotLetters(robotLetter)
+        changedLetters = self.hades.changeRobotLetters(robotLetter)
+        if changedLetters is not None:
+            self.lineEditRobotIDRobot1.setText(changedLetters[0])
+            self.lineEditRobotIDRobot2.setText(changedLetters[1])
+            self.lineEditRobotIDRobot3.setText(changedLetters[2])
+
 
     # VISION TAB
 
