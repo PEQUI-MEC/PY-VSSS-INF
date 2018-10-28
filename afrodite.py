@@ -182,6 +182,10 @@ class Afrodite(QMainWindow):
 
         print("Afrodite summoned")
 
+    def closeEvent(self, QCloseEvent):
+        self.saveConfigs(file="quicksave")
+        QCloseEvent.accept()
+
     '''
     def mouseReleaseEvent(self, QMouseEvent):
            print('(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')')           
