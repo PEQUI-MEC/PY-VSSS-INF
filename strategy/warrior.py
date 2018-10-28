@@ -4,6 +4,7 @@ class Warrior:
         self.defaultVel = defaultVel
         self.maxVel = 1.4
 
+        self.velEstimated = 0
         self.lastPosition = (0, 0)
         self.position = (0, 0)
         self.orientation = 0

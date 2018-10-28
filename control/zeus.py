@@ -176,6 +176,7 @@ class Zeus:
 
                 if "obstacles" in info:
                     warriors[x].obstacles = info["obstacles"]
+                    warriors[x].obstaclesSpeed = info["obstaclesSpeed"]
 
             elif strategia[x]["command"] == "spin":
                 warriors[x].action.append(info["direction"])

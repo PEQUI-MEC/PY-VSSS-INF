@@ -120,7 +120,7 @@ class Move2Goal:
         theta = atan2(self.x[1], self.x[0])
         self.y = [-sin(theta), cos(theta)]
 
-        print("X: ", self.x, " theta: ", theta, " y: ", self.y)
+        # print("X: ", self.x, " theta: ", theta, " y: ", self.y)
         self.toGame = np.array([self.x, self.y]).T
         self.toUnivector = np.linalg.inv(self.toGame)
 
@@ -239,7 +239,7 @@ class UnivectorField:
     def updateOrientation(self, orientation):
         self.moveField.updateOrientation(orientation)
 
-    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=[650, 250]):
+    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=None, orientation=[650, 250]):
         if robotPos is not None and robotSpeed is not None:
             self.updateRobot(robotPos, robotSpeed)
         if target is not None:
@@ -247,6 +247,8 @@ class UnivectorField:
         if orientation is not None:
             self.updateOrientation(orientation)
         if obstacles is not None:
+            if ostaclesSpeed is None:
+                ostaclesSpeed = [0.0, 0.0]
             self.updateObstacles(obstacles, ostaclesSpeed)
 
         centers = []
@@ -254,7 +256,7 @@ class UnivectorField:
         minDistance = self.dMin + 1
         if self.obstacles is not None:
             for i in range(0, len(self.obstacles)):
-                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
+                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
                 center = self.avoidField.getVirtualPos()
                 centers.append(center)
 

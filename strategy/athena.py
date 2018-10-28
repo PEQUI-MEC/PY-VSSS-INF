@@ -29,6 +29,7 @@ class Athena:
         self.endless = None
         self.warriors = []
         self.theirWarriors = []
+        self.theirWarriorsLastPos = []
         self.ball = {
             "position": (0, 0),
             "velocity": 0
@@ -103,7 +104,8 @@ class Athena:
         return commands
 
     def __parsePositions(self, positions):
-        if type(positions) is not list or type(positions[0]) is not list or type(positions[1]) is not list or type(positions[2]) is not dict:
+        if type(positions) is not list or type(positions[0]) is not list or type(positions[1]) is not list \
+                or type(positions[2]) is not dict:
             raise ValueError("Invalid positions object received.")
 
         if len(positions) is not 3:  # allies, enemies and ball
@@ -118,6 +120,13 @@ class Athena:
                 raise ValueError("Invalid value for our warriors received.")
 
             self.warriors[i].setup(positions[0][i]["position"], positions[0][i]["orientation"])
+            self.warriors[i].velEstimated = \
+                distance.euclidean(self.warriors[i].position, self.warriors[i].lastPosition) / self.deltaTime
+            # print("Warrior: ", self.warriors[i].velEstimated)
+
+        self.theirWarriorsLastPos = []
+        for i in range(0, len(self.theirWarriors)):
+            self.theirWarriorsLastPos.append(self.theirWarriors[i].position)
 
         self.theirWarriors = []
         for i in range(0, len(positions[1])):
@@ -126,6 +135,15 @@ class Athena:
 
             self.theirWarriors.append(Warrior())
             self.theirWarriors[i].setup(positions[1][i]["position"])
+
+        for i in range(0, len(self.theirWarriors)):
+            dist = []
+            for x in range(0, len(self.theirWarriorsLastPos)):
+                dist.append(distance.euclidean(self.theirWarriors[i].position, self.theirWarriorsLastPos[x]))
+
+            if len(dist) > 0:
+                self.theirWarriors[i].velEstimated = min(dist) / self.deltaTime
+                # print("Enemie: ", self.theirWarriors[i].velEstimated)
 
         self.ball = {
             "position": positions[2]["position"],
@@ -210,11 +228,14 @@ class Athena:
 
                 if "avoidObstacles" in warrior.command:
                     command["data"]["obstacles"] = []
+                    command["data"]["obstaclesSpeed"] = []
                     for obstacle in self.warriors:
                         if obstacle != warrior:
                             command["data"]["obstacles"].append(obstacle.position)
+                            command["data"]["obstaclesSpeed"].append([obstacle.velEstimated, obstacle.velEstimated])
                     for obstacle in self.theirWarriors:
                         command["data"]["obstacles"].append(obstacle.position)
+                        command["data"]["obstaclesSpeed"].append([obstacle.velEstimated, obstacle.velEstimated])
                     if "avoidBall" in warrior.command:
                         command["data"]["obstacles"].append(self.ball["position"])
 

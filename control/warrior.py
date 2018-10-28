@@ -19,6 +19,7 @@ class Warrior(Structure):
         self.targetOrientation = None
 
         self.obstacles = None
+        self.obstaclesSpeed = None
 
         self.action = []
 
