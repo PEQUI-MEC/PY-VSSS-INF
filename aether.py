@@ -38,7 +38,7 @@ class Aether:
 
         # EXECUÇÃO
         # prepara os módulos
-        self.enabled = [True] * 6
+        self.enabled = [False] * 6  # [False, False, False, True, True, True]
         self.athena = [
             Athena(),
             Athena()
@@ -67,10 +67,24 @@ class Aether:
 
     def loopTeam(self, team):
         while True:
+            # executa nossos módulos
             positions = self.generatePositions(team)
             commands = self.athena[team].getTargets(positions)
-            self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + "{:.2f}".format(
-                    positions[2]["position"][1])
+            velocities = self.zeus[team].getVelocities(commands)
+            # aplica resultados na simulação
+            if self.enabled[0 + 3 * team]:
+                self.sim.data.ctrl[0 + 6 * team] = self.convertVelocity(velocities[0]["vLeft"])
+                self.sim.data.ctrl[1 + 6 * team] = self.convertVelocity(velocities[0]["vRight"])
+            if self.enabled[1 + 3 * team]:
+                self.sim.data.ctrl[2 + 6 * team] = self.convertVelocity(velocities[1]["vLeft"])
+                self.sim.data.ctrl[3 + 6 * team] = self.convertVelocity(velocities[1]["vRight"])
+            if self.enabled[2 + 3 * team]:
+                self.sim.data.ctrl[4 + 6 * team] = self.convertVelocity(velocities[2]["vLeft"])
+                self.sim.data.ctrl[5 + 6 * team] = self.convertVelocity(velocities[2]["vRight"])
+
+            # mostra resultados
+            self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + \
+                                        "{:.2f}".format(positions[2]["position"][1])
 
             self.viewer.infos["robots" + str(team + 1)] = [
                 "[OFF] " if not self.enabled[0 + 3 * team] else "X: " + "{:.2f}".format(positions[0][0]["position"][0])
@@ -94,17 +108,6 @@ class Aether:
                                                                 "{:.2f}".format(positions[0][2]["orientation"]) +
                                                                 " C: " + commands[2]["command"],
             ]
-            velocities = self.zeus[team].getVelocities(commands)
-
-            if self.enabled[0 + 3 * team]:
-                self.sim.data.ctrl[0 + 6 * team] = self.convertVelocity(velocities[0]["vLeft"])
-                self.sim.data.ctrl[1 + 6 * team] = self.convertVelocity(velocities[0]["vRight"])
-            if self.enabled[1 + 3 * team]:
-                self.sim.data.ctrl[2 + 6 * team] = self.convertVelocity(velocities[1]["vLeft"])
-                self.sim.data.ctrl[3 + 6 * team] = self.convertVelocity(velocities[1]["vRight"])
-            if self.enabled[2 + 3 * team]:
-                self.sim.data.ctrl[4 + 6 * team] = self.convertVelocity(velocities[2]["vLeft"])
-                self.sim.data.ctrl[5 + 6 * team] = self.convertVelocity(velocities[2]["vRight"])
 
             if team == 0:
                 fps = self.getFPS()
@@ -144,6 +147,7 @@ class Aether:
             self.enabled[robotId] = False
             self.sim.data.qpos[self.robot_joints[robotId] + 1] = 1
 
+    def convertPositionX(self, coord, team):
         """Traz o valor pra positivo e multiplica pela proporção (largura máxima)/(posição x máxima)
 
         Args:
@@ -152,9 +156,12 @@ class Aether:
         Returns:
             Coordenada da posição na proporção utilizada pela estratégia
         """
-        return (coord + 0.8083874182591296) * self.field_width / 1.6167748365182593
+        if team == 0:
+            return (coord + 0.8083874182591296) * self.field_width / 1.6167748365182593
+        else:
+            return -(coord - 0.8083874182591296) * self.field_width / 1.6167748365182593
 
-    def convertPositionY(self, coord):
+    def convertPositionY(self, coord, team):
         """Traz o valor pra positivo e multiplica pela proporção (altura máxima)/(posição y máxima)
 
         Args:
@@ -163,7 +170,10 @@ class Aether:
         Returns:
             Coordenada da posição na proporção utilizada pela estratégia
         """
-        return (coord + 0.58339083) * self.field_height / 1.16678166
+        if team == 0:
+            return (coord + 0.58339083) * self.field_height / 1.16678166
+        else:
+            return -(coord - 0.58339083) * self.field_height / 1.16678166
 
     @staticmethod
     def convertVelocity(vel):
@@ -216,38 +226,38 @@ class Aether:
         return [
             [  # robôs aliados
                 {
-                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[3 * team]]),
-                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[3 * team] + 1])),
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[3 * team]], team),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[3 * team] + 1], team)),
                     "orientation": r1
                 },
                 {
-                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[1 + 3 * team]]),
-                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 1])),
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[1 + 3 * team]], team),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 1], team)),
                     "orientation": r2
                 },
                 {
-                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[2 + 3 * team]]),
-                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 1])),
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[2 + 3 * team]], team),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 1], team)),
                     "orientation": r3
                 }
             ],
             [  # robôs adversários
                 {
-                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(3 + 3 * team) % 6]]),
-                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(3 + 3 * team) % 6] + 1])),
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(3 + 3 * team) % 6]], team),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(3 + 3 * team) % 6] + 1], team)),
                 },
                 {
-                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(4 + 3 * team) % 6]]),
-                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(4 + 3 * team) % 6] + 1])),
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(4 + 3 * team) % 6]], team),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(4 + 3 * team) % 6] + 1], team)),
                 },
                 {
-                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(5 + 3 * team) % 6]]),
-                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(5 + 3 * team) % 6] + 1])),
+                    "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[(5 + 3 * team) % 6]], team),
+                                 self.convertPositionY(self.sim.data.qpos[self.robot_joints[(5 + 3 * team) % 6] + 1], team)),
                 }
             ],
             {  # bola
-                "position": (self.convertPositionX(self.sim.data.qpos[self.ball_joint]),
-                             self.convertPositionY(self.sim.data.qpos[self.ball_joint + 1]))
+                "position": (self.convertPositionX(self.sim.data.qpos[self.ball_joint], team),
+                             self.convertPositionY(self.sim.data.qpos[self.ball_joint + 1], team))
             }
         ]
 
