@@ -484,15 +484,15 @@ class Athena:
                 # se ele não se moveu de um ciclo pra cá
                 if warrior.actionTimer <= 0 and distance.euclidean(warrior.position, warrior.lastPosition) < 0.1:
                     # se atingiu o máximo de tempo bloqueado, executa ação de sair
-                    if warrior.lockedTime > 0.3:
+                    if warrior.lockedTime > 0.5:
                         # print("locked " + str(time.time()))
-                        warrior.tactics = Athena.tSpin  # sobrebrescreve a tática direto
                         if distance.euclidean(warrior.position, self.ball["position"]) < self.endless.robotSize:
-                            warrior.actionTimer = 0.6
+                            warrior.tactics = Athena.tSpin  # sobrebrescreve a tática direto
+                            warrior.actionTimer = 1
                         else:
                             warrior.tactics = Athena.tUnlock  # sobrebrescreve a tática direto
                             warrior.lockedTime = 0
-                            warrior.actionTimer = 0.6  # tempo que deverá andar numa direção pra destravar
+                            warrior.actionTimer = 1  # tempo que deverá andar numa direção pra destravar
                             self.unlockDirection *= -1  # direção que deverá tentar dessa vez
                     else:
                         warrior.lockedTime += self.deltaTime
