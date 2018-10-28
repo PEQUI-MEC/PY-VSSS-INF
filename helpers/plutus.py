@@ -15,8 +15,8 @@ class Plutus:
         self.file = "helpers/" + file + ".json"
 
     def get(self, key):
-        loadFile = None
         data = {}
+        loadFile = None
         try:
             loadFile = open(self.file, "r")
         except EnvironmentError:
@@ -39,6 +39,7 @@ class Plutus:
 
     def set(self, key, value):
         data = {}
+        loadFile = None
         try:
             loadFile = open(self.file, "r")
         except EnvironmentError:
