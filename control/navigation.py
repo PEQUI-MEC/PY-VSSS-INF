@@ -67,14 +67,14 @@ class Repulsive:
 
         position = np.array(p) - self.origin
         if theta is True:
-            return atan2(position[1], position[0])
+            return atan2(position[1], -position[0])
         else:
             return position
 
 
 class Move2Goal:
 
-    def __init__(self, kr=None, radius=None, attackGoal=1, rotation=True):
+    def __init__(self, kr=None, radius=None, orientation=1, rotation=True):
         self.kr = kr
         self.radius = radius
 
@@ -82,7 +82,7 @@ class Move2Goal:
 
         self.x = None
         self.y = None
-        self.attackGoal = attackGoal
+        self.orientation = orientation
         self.rotation = rotation
         self.toUnivector = None
         self.toGame = None
@@ -104,18 +104,23 @@ class Move2Goal:
         self.attackGoal = np.array(orientation)
 
     def buildAxis(self):
-        if type(self.attackGoal) != type(int) and self.rotation is True:
-            self.x = np.array(self.attackGoal - self.origin, dtype=np.float32)
+        if type(self.orientation) != type(int) and self.rotation is True:
+            self.x = np.array(self.orientation - self.origin, dtype=np.float32)
         else:
-            if self.attackGoal == 1:
+            if self.orientation == 1:
                 self.x = [1.0, 0.0]
             else:
                 self.x = [-1.0, 0.0]
 
-        self.x /= -np.linalg.norm(self.x)
+        if self.x[0] == 0 and self.x[1] == 0:
+            self.x = [-0.0, -0.0]
+        else:
+            self.x /= -np.linalg.norm(self.x)
+
         theta = atan2(self.x[1], self.x[0])
         self.y = [-sin(theta), cos(theta)]
 
+        print("X: ", self.x, " theta: ", theta, " y: ", self.y)
         self.toGame = np.array([self.x, self.y]).T
         self.toUnivector = np.linalg.inv(self.toGame)
 
@@ -247,9 +252,7 @@ class UnivectorField:
         centers = []
         fi_auf = 0.0
         minDistance = self.dMin + 1
-        self.obstacles = None
         if self.obstacles is not None:
-
             for i in range(0, len(self.obstacles)):
                 self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
                 center = self.avoidField.getVirtualPos()
@@ -264,11 +267,9 @@ class UnivectorField:
             fi_auf = self.avoidField.avoid(self.robotPos, vPos=closestCenter, theta=True)
 
         if minDistance <= self.dMin:
-            # print("minDistance: ", minDistance)
             return fi_auf
         else:
             fi_tuf = self.moveField.fi_tuf(self.robotPos)
-            # print(":  FiAuf " + str(fi_tuf))
 
             if self.obstacles is not None:
                 guass = gaussian(minDistance - self.dMin, self.lDelta)

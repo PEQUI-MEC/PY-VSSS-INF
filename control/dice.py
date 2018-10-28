@@ -1,16 +1,7 @@
-from math import sqrt, pow, atan2, pi, fmod, sin, tan, cos
+from math import atan2, pi, fmod, sin, cos
 
 
 def roundAngle(angle):
-    """
-
-    Args:
-        angle:
-
-    Returns:
-
-    """
-
     theta = fmod(angle,  2 * pi)
 
     if theta > pi:
@@ -22,15 +13,6 @@ def roundAngle(angle):
 
 
 def saturate(value):
-    """
-
-    Args:
-        value:
-
-    Returns:
-
-    """
-
     if value > 1:
         value = 1
     elif value < -1:
@@ -40,28 +22,11 @@ def saturate(value):
 
 
 class Dice:
-    """
-    Attributes:
-        warrior:
-        maxThetaError (float):
-    """
-
     def __init__(self):
         self.warrior = None
-        self.maxThetaError = roundAngle(20.0*pi/180)
 
     def run(self, warrior):
-        """
-
-        Args:
-            warrior:
-
-        Returns:
-
-        """
-
         self.warrior = warrior
-        self.warrior.vMax = round(self.warrior.vMax * 100) / 100
 
         if warrior.cmdType == "VECTOR":
             return self.vectorControl()
@@ -75,7 +40,7 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self):
-        if self.warrior.vMax == 0:
+        if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0]
 
         theta = atan2(sin(self.warrior.transAngle), -cos(self.warrior.transAngle))
@@ -84,21 +49,10 @@ class Dice:
         targetTheta = atan2(target[1] - self.warrior.position[1], -(target[0] - self.warrior.position[0]))
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
-        if atan2(sin(targetTheta - currentTheta + pi/2), cos(targetTheta - currentTheta + pi/2)) < 0:
-            backward = True
-            m = 1
-        else:
-            backward = False
-            m = -1
-
-        if backward:
-            currentTheta = currentTheta + pi
-            currentTheta = atan2(sin(currentTheta), cos(currentTheta))
-
         thetaError = atan2(sin(targetTheta - currentTheta), cos(targetTheta - currentTheta))
 
-        left = m + sin(thetaError)
-        right = m - sin(thetaError)
+        left = self.warrior.front + sin(thetaError)
+        right = self.warrior.front - sin(thetaError)
 
         left = saturate(left)
         right = saturate(right)
@@ -109,9 +63,6 @@ class Dice:
         return [left, right]
 
     def positionControl(self):
-        """
-        Returns:
-        """
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0]
 
@@ -120,20 +71,20 @@ class Dice:
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
         if atan2(sin(targetTheta - currentTheta + pi/2), cos(targetTheta - currentTheta + pi/2)) < 0:
-            backward = True
-            m = 1
+            self.warrior.backward = True
+            self.warrior.front = 1
         else:
-            backward = False
-            m = -1
+            self.warrior.backward = False
+            self.warrior.front = -1
 
-        if backward:
+        if self.warrior.backward:
             currentTheta = currentTheta + pi
             currentTheta = atan2(sin(currentTheta), cos(currentTheta))
 
         thetaError = atan2(sin(targetTheta - currentTheta), cos(targetTheta - currentTheta))
 
-        left = m + sin(thetaError)
-        right = m - sin(thetaError)
+        left = self.warrior.front + sin(thetaError)
+        right = self.warrior.front - sin(thetaError)
 
         left = saturate(left)
         right = saturate(right)
@@ -144,11 +95,7 @@ class Dice:
         return [left, right]
 
     def orientationControl(self):
-        """
-        Returns:
-        """
         targetTheta = self.warrior.targetOrientation
-
         theta = self.warrior.orientation
 
         # É necessário girar se estiver com a 'traseira' de frente pro alvo? (Se sim, não usar o if abaixo)
@@ -163,13 +110,7 @@ class Dice:
         self.warrior.vLeft = saturate(0.8 * thetaError)
         self.warrior.vRight = saturate(-0.8 * thetaError)
 
-        return [float(self.warrior.vLeft * self.warrior.vMax),
-                float(self.warrior.vRight * self.warrior.vMax)]
+        return [self.warrior.vLeft * self.warrior.vMax, self.warrior.vRight * self.warrior.vMax]
 
     def speedControl(self):
-        """
-        Returns:
-        """
-
-        return [float(round(self.warrior.vLeft * 100) / 100),
-                float(round(self.warrior.vRight * 100) / 100)]
+        return [self.warrior.vLeft, self.warrior.vRight]
