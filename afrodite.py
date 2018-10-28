@@ -42,6 +42,7 @@ class Afrodite(QMainWindow):
         self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
 
         # VISION
+        self.cameraIsRunning = False
 
         # Capture
         self.pushButtonVisionVideoCapturePictureNameSave.clicked.connect(
@@ -118,6 +119,7 @@ class Afrodite(QMainWindow):
         # Capture
         # DeviceInformation
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
+        self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.getPushButtonCaptureDeviceInformationRefresh)
         self.updateComboBoxCaptureDeviceInformation()
 
         # Warp
@@ -325,8 +327,18 @@ class Afrodite(QMainWindow):
 
     # DeviceInformation
     def getPushButtonCaptureDeviceInformationStart(self):
-        cameraId = self.comboBoxCaptureDeviceInformation.currentText()
-        self.hades.eventStartVision(cameraId)
+        if self.pushButtonCaptureDeviceInformationStart.isEnabled():
+            cameraId = self.comboBoxCaptureDeviceInformation.currentText()
+            self.hades.eventStartVision(cameraId)
+            self.pushButtonCaptureDeviceInformationStart.setEnabled(False)
+
+    def getPushButtonCaptureDeviceInformationRefresh(self):
+        self.hades.eventStopVision()
+        self.updateComboBoxCaptureDeviceInformation()
+        if self.pushButtonCaptureDeviceInformationStart.isEnabled():
+            pass
+        else:
+            self.pushButtonCaptureDeviceInformationStart.setEnabled(True)
 
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):

@@ -31,7 +31,7 @@ class Apolo:
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
 
-        self.robotPositions = [(0, 0, 0, True), (0, 0, 0, True), (0, 0, 0, True)]
+        self.robotPositions = [(0, 0, 0, '', True), (0, 0, 0, '', True), (0, 0, 0, '', True)]
         self.ballPosition = [0, 0]
         self.advRobotPositions = [(0, 0), (0, 0), (0, 0)]
         self.positions = self.returnData(self.robotPositions, self.advRobotPositions, self.ballPosition)
@@ -44,6 +44,8 @@ class Apolo:
 
         self.imageId = -1
 
+        self.robotLetter = [None] * 3
+
         print("Apolo summoned")
 
     def changeCamera(self, cameraId):
@@ -51,6 +53,9 @@ class Apolo:
         self.camera = cv2.VideoCapture(cameraId)
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+    def closeCamera(self):
+        self.camera.release()
 
     def getCamConfigs(self):
         return self.camera.get(cv2.CAP_PROP_BRIGHTNESS), \
@@ -243,13 +248,11 @@ class Apolo:
             robotList:
             secondaryTagsList:
             robotRadius:
-
         Returns:
 
         """
         secondaryTags = [None] * 3
         linkedSecondaryTags = [None] * 3
-
         robotID = 0
 
         for i in robotList:
@@ -400,15 +403,18 @@ class Apolo:
                 # OurRobots
                 {
                     "position": (robotList[0][0], robotList[0][1]),
-                    "orientation": robotList[0][2]
+                    "orientation": robotList[0][2],
+                    "robotLetter": robotList[0][3]
                 },
                 {
                     "position": (robotList[1][0], robotList[1][1]),
-                    "orientation": robotList[1][2]
+                    "orientation": robotList[1][2],
+                    "robotLetter": robotList[1][3]
                 },
                 {
                     "position": (robotList[2][0], robotList[2][1]),
-                    "orientation": robotList[2][2]
+                    "orientation": robotList[2][2],
+                    "robotLetter": robotList[2][3]
                 }
             ],
             [
@@ -430,6 +436,13 @@ class Apolo:
         ]
 
         return output
+
+    # Função altera a sequencia das letras dos robos
+    def changeLetters(self, robotLetter):
+        if robotLetter is None:
+            return None
+        else:
+            self.robotLetter = robotLetter
 
     # Funçao principal da visao
     def run(self):
@@ -469,7 +482,7 @@ class Apolo:
                     if len(linkedSecondaryTags[i][1]) == 2:
                         orientation = self.findRobotOrientation(linkedSecondaryTags[i][0], linkedSecondaryTags[i][1])
                         tempRobotPosition[i] = [linkedSecondaryTags[i][0][0], linkedSecondaryTags[i][0][1], orientation,
-                                                True]
+                                                self.robotLetter[0], True]
                     elif len(linkedSecondaryTags[i][1]) == 4:
                         tag1 = [linkedSecondaryTags[i][1][0], linkedSecondaryTags[i][1][1]]
                         tag2 = [linkedSecondaryTags[i][1][2], linkedSecondaryTags[i][1][3]]
@@ -478,7 +491,7 @@ class Apolo:
 
                         orientation = self.findRobotOrientation(linkedSecondaryTags[i][0], interestSecondaryTag)
                         tempRobotPosition[i] = [linkedSecondaryTags[i][0][0], linkedSecondaryTags[i][0][1], orientation,
-                                                True]
+                                                self.robotLetter[1], True]
                     elif len(linkedSecondaryTags[i][1]) == 6:
                         tag1 = [linkedSecondaryTags[i][1][0], linkedSecondaryTags[i][1][1]]
                         tag2 = [linkedSecondaryTags[i][1][2], linkedSecondaryTags[i][1][3]]
@@ -499,7 +512,7 @@ class Apolo:
 
                         orientation = self.findRobotOrientation(linkedSecondaryTags[i][0], interestSecondaryTag)
                         tempRobotPosition[i] = [linkedSecondaryTags[i][0][0], linkedSecondaryTags[i][0][1], orientation,
-                                                True]
+                                                self.robotLetter[2], True]
             except:
                 pass
 
@@ -527,6 +540,6 @@ class Apolo:
         if self.imageId != -1:
             frame = self.thresholdedImages[self.imageId]
 
-        print(self.positions)
+        # print(self.positions)
 
         return self.positions, frame
