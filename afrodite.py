@@ -118,6 +118,7 @@ class Afrodite(QMainWindow):
 
         # Capture
         # DeviceInformation
+        self.pushButtonCaptureDeviceInformationRefresh.setEnabled(False)
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
         self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.getPushButtonCaptureDeviceInformationRefresh)
         self.updateComboBoxCaptureDeviceInformation()
@@ -327,24 +328,20 @@ class Afrodite(QMainWindow):
 
     # DeviceInformation
     def getPushButtonCaptureDeviceInformationStart(self):
-        if self.pushButtonCaptureDeviceInformationStart.isEnabled():
-            cameraId = self.comboBoxCaptureDeviceInformation.currentText()
-            self.hades.eventStartVision(cameraId)
-            self.pushButtonCaptureDeviceInformationStart.setEnabled(False)
+        cameraId = self.comboBoxCaptureDeviceInformation.currentText()
+        self.hades.eventStartVision(cameraId)
+        self.pushButtonCaptureDeviceInformationStart.setEnabled(False)
+        self.pushButtonCaptureDeviceInformationRefresh.setEnabled(True)
 
     def getPushButtonCaptureDeviceInformationRefresh(self):
-        self.hades.eventStopVision()
         self.updateComboBoxCaptureDeviceInformation()
-        if self.pushButtonCaptureDeviceInformationStart.isEnabled():
-            pass
-        else:
-            self.pushButtonCaptureDeviceInformationStart.setEnabled(True)
+        self.pushButtonCaptureDeviceInformationStart.setEnabled(True)
 
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):
         cams = []
         try:
-            for i in range(0, 3):
+            for i in range(0, 2):
                 cam = cv2.VideoCapture(i)
                 if cam.isOpened():
                     cams.append(str(i))  # 'CAM' + str(i)

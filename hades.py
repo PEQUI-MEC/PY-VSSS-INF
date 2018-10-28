@@ -193,11 +193,11 @@ class Hades(QThread):
     def eventStartVision(self, cameraId):
         self.apolo = Apolo(int(cameraId))
 
-    def eventStopVision(self):
-        self.apolo.closeCamera()
-        self.apolo = None
-        # self.changeCamera(cameraId)
-        # pass
+    # refresh não funciona; programa fechando
+    # def eventStopVision(self):
+    #     if self.apolo is not None:
+    #         self.apolo.closeCamera()
+    #         self.apolo = None
 
     def changeRobotLetters(self, robotLetters):
         self.apolo.changeLetters(robotLetters)
