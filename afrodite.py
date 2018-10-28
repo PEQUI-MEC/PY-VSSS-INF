@@ -42,6 +42,7 @@ class Afrodite(QMainWindow):
         self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
 
         # VISION
+        self.cameraIsRunning = False
 
         # Capture
         self.pushButtonVisionVideoCapturePictureNameSave.clicked.connect(
@@ -118,6 +119,7 @@ class Afrodite(QMainWindow):
         # Capture
         # DeviceInformation
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
+        self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.getPushButtonCaptureDeviceInformationRefresh)
         self.updateComboBoxCaptureDeviceInformation()
 
         # Warp
@@ -162,10 +164,12 @@ class Afrodite(QMainWindow):
         self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
         # RobotStatus
         self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
+        '''
+
         # id
         self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
         self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
-        '''
+
         # MENUBAR
 
         # MenuBar - Arquivo
@@ -449,12 +453,18 @@ class Afrodite(QMainWindow):
     def getPushButtonCaptureDeviceInformationStart(self):
         cameraId = self.comboBoxCaptureDeviceInformation.currentText()
         self.hades.eventStartVision(cameraId)
+        self.pushButtonCaptureDeviceInformationStart.setEnabled(False)
+        self.pushButtonCaptureDeviceInformationRefresh.setEnabled(False)
+
+    def getPushButtonCaptureDeviceInformationRefresh(self):
+        self.updateComboBoxCaptureDeviceInformation()
+        # self.pushButtonCaptureDeviceInformationStart.setEnabled(True)
 
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):
         cams = []
         try:
-            for i in range(0, 3):
+            for i in range(0, 2):
                 cam = cv2.VideoCapture(i)
                 if cam.isOpened():
                     cams.append(str(i))  # 'CAM' + str(i)
@@ -629,7 +639,18 @@ class Afrodite(QMainWindow):
         self.lineEditRobotIDRobot2.setEnabled(False)
         self.lineEditRobotIDRobot3.setEnabled(False)
 
-        return self.lineEditRobotIDRobot1.text(), self.lineEditRobotIDRobot2.text(), self.lineEditRobotIDRobot3.text()
+        robotLetter = [
+            self.lineEditRobotIDRobot1.text().upper(),
+            self.lineEditRobotIDRobot2.text().upper(),
+            self.lineEditRobotIDRobot3.text().upper()
+        ]
+
+        changedLetters = self.hades.changeRobotLetters(robotLetter)
+        if changedLetters is not None:
+            self.lineEditRobotIDRobot1.setText(changedLetters[0])
+            self.lineEditRobotIDRobot2.setText(changedLetters[1])
+            self.lineEditRobotIDRobot3.setText(changedLetters[2])
+
 
     # VISION TAB
 

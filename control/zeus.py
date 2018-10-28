@@ -83,7 +83,7 @@ class Zeus:
         """
 
         self.warriors = self.getWarriors(strategia)
-        velocities = self.generateOutput(self.controlRoutine())
+        velocities = self.generateOutput(self.controlRoutine(), strategia)
         return velocities
 
     def getWarriors(self, strategia):
@@ -229,7 +229,7 @@ class Zeus:
 
         return velocities
 
-    def generateOutput(self, velocities):
+    def generateOutput(self, velocities, strategia):
         """Generation of output data
 
         This method generates list of dictionaries with the speeds of each robot.
@@ -244,17 +244,19 @@ class Zeus:
 
         output = [
             {
+                "robotLetter": strategia[0]["robotLetter"],
                 "vLeft": velocities[0][0],
                 "vRight": velocities[0][1]
             },
             {
+                "robotLetter": strategia[1]["robotLetter"],
                 "vLeft": velocities[1][0],
                 "vRight": velocities[1][1]
             },
             {
+                "robotLetter": strategia[2]["robotLetter"],
                 "vLeft": velocities[2][0],
                 "vRight": velocities[2][1]
             }
         ]
-
         return output

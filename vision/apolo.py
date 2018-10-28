@@ -34,7 +34,6 @@ class Apolo:
         self.robotPositions = [(0, 0, 0, True), (0, 0, 0, True), (0, 0, 0, True)]
         self.ballPosition = [0, 0]
         self.advRobotPositions = [(0, 0), (0, 0), (0, 0)]
-        self.positions = self.returnData(self.robotPositions, self.advRobotPositions, self.ballPosition)
 
         # Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28, 30), (0, 255), (0, 255)), MAIN)
@@ -44,6 +43,15 @@ class Apolo:
 
         self.imageId = -1
 
+        self.robotLetter = ['A', 'B', 'C']
+
+        self.positions = self.returnData(
+            self.robotPositions,
+            self.advRobotPositions,
+            self.ballPosition,
+            self.robotLetter
+        )
+
         print("Apolo summoned")
 
     def changeCamera(self, cameraId):
@@ -51,6 +59,9 @@ class Apolo:
         self.camera = cv2.VideoCapture(cameraId)
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+    def closeCamera(self):
+        self.camera.release()
 
     def getCamConfigs(self):
         return self.camera.get(cv2.CAP_PROP_BRIGHTNESS), \
@@ -243,13 +254,11 @@ class Apolo:
             robotList:
             secondaryTagsList:
             robotRadius:
-
         Returns:
 
         """
         secondaryTags = [None] * 3
         linkedSecondaryTags = [None] * 3
-
         robotID = 0
 
         for i in robotList:
@@ -394,21 +403,24 @@ class Apolo:
 
     # Pega os dados dos robos, da bola e dos adversarios e coloca no formato que a Athena requer
     @staticmethod
-    def returnData(robotList, robotAdvList, ball):
+    def returnData(robotList, robotAdvList, ball, robotLetter):
         output = [
             [
                 # OurRobots
                 {
                     "position": (robotList[0][0], robotList[0][1]),
-                    "orientation": robotList[0][2]
+                    "orientation": robotList[0][2],
+                    "robotLetter": robotLetter[0]
                 },
                 {
                     "position": (robotList[1][0], robotList[1][1]),
-                    "orientation": robotList[1][2]
+                    "orientation": robotList[1][2],
+                    "robotLetter": robotLetter[1]
                 },
                 {
                     "position": (robotList[2][0], robotList[2][1]),
-                    "orientation": robotList[2][2]
+                    "orientation": robotList[2][2],
+                    "robotLetter": robotLetter[2]
                 }
             ],
             [
@@ -430,6 +442,12 @@ class Apolo:
         ]
 
         return output
+
+    # Função altera a sequencia das letras dos robos
+    def changeLetters(self, robotLetter):
+        if robotLetter is not None:
+            self.robotLetter = robotLetter
+        return self.robotLetter
 
     # Funçao principal da visao
     def run(self):
@@ -520,13 +538,17 @@ class Apolo:
                 self.advRobotPositions[i] = tempAdvRobots[i]
 
         # Modela os dados para o formato que a Athena recebe e retorna
-        self.positions = self.returnData(self.robotPositions, self.advRobotPositions, self.ballPosition)
+        self.positions = self.returnData(
+            self.robotPositions,
+            self.advRobotPositions,
+            self.ballPosition,
+            self.robotLetter
+        )
 
         # print(self.positions)
 
         if self.imageId != -1:
             frame = self.thresholdedImages[self.imageId]
 
-        print(self.positions)
-
+        # print(self.positions)
         return self.positions, frame

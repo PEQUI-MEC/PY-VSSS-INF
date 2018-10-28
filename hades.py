@@ -58,6 +58,8 @@ class Hades(QThread):
         while True:
             # visão
             positions = self.apoloRules()
+            # if positions is not None:
+            #     print(positions[0][0]["robotLetter"])
 
             if self.play:
                 commands = self.athenaRules(positions)
@@ -209,6 +211,17 @@ class Hades(QThread):
 
     def eventStartVision(self, cameraId):
         self.apolo = Apolo(int(cameraId))
+
+    # refresh não funciona; programa fechando
+    # def eventStopVision(self):
+    #     if self.apolo is not None:
+    #         self.apolo.closeCamera()
+    #         self.apolo = None
+
+    def changeRobotLetters(self, robotLetters):
+        if self.apolo is not None:
+            return self.apolo.changeLetters(robotLetters)
+        return ["A", "B", "C"]
 
     def changeCamera(self, cameraId):
         if self.apolo is not None:
