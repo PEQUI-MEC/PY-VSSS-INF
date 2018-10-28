@@ -14,11 +14,18 @@ class Viewer(MjViewer):
         glfw.set_key_callback(self.window, self.key_callback)
 
     def _create_full_overlay(self):
-        if "robots" in self.infos:
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots"][0], "Ball Pose")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots"][1], "Robot [1]")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots"][2], "Robot [2]")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots"][3], "Robot [3]")
+        if "ball" in self.infos:
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["ball"][0], "Ball Pose")
+
+        if "robots1" in self.infos:
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][0], "Robot [1]")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][1], "Robot [2]")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][2], "Robot [3]")
+
+        if "robots2" in self.infos:
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][0], "Robot [4]")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][1], "Robot [5]")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][2], "Robot [6]")
 
         if "fps" in self.infos:
             self.add_overlay(const.GRID_BOTTOMLEFT, "Team 1 FPS", self.infos["fps"])
@@ -91,6 +98,12 @@ class Viewer(MjViewer):
                 self.aether.enabled[1] = not self.aether.enabled[1]
             elif key == glfw.KEY_3:
                 self.aether.enabled[2] = not self.aether.enabled[2]
+            elif key == glfw.KEY_4:
+                self.aether.enabled[3] = not self.aether.enabled[3]
+            elif key == glfw.KEY_5:
+                self.aether.enabled[4] = not self.aether.enabled[4]
+            elif key == glfw.KEY_6:
+                self.aether.enabled[5] = not self.aether.enabled[5]
 
             # default [modified] calls
             elif key == glfw.KEY_TAB:  # Switches cameras.

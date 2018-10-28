@@ -38,80 +38,80 @@ class Aether:
 
         # EXECUÇÃO
         # prepara os módulos
-        self.enabled = [True, True, True]
-        self.athena1 = Athena()
-        self.athena2 = Athena()
-        self.zeus1 = Zeus()
-        self.zeus2 = Zeus()
-        self.athena1.setup(3, self.field_width, self.field_height, 0.8)
-        self.athena2.setup(3, self.field_width, self.field_height, 0.8)
-        self.zeus1.setup(3)
-        self.zeus2.setup(3)
+        self.enabled = [True] * 6
+        self.athena = [
+            Athena(),
+            Athena()
+        ]
+        self.zeus = [
+            Zeus(),
+            Zeus()
+        ]
+        self.athena[0].setup(3, self.field_width, self.field_height, 0.8)
+        self.athena[1].setup(3, self.field_width, self.field_height, 0.8)
+        self.zeus[0].setup(3)
+        self.zeus[1].setup(3)
 
         # inicializa o loop dos dados
-        loopThread1 = threading.Thread(target=self.loopTeam1)
-        loopThread2 = threading.Thread(target=self.loopTeam2)
+        loopThread1 = threading.Thread(target=self.loopTeam, args=[0])
+        loopThread2 = threading.Thread(target=self.loopTeam, args=[1])
         loopThread1.daemon = True
         loopThread2.daemon = True
         loopThread1.start()
-        # loopThread2.start()
+        loopThread2.start()
 
     def run(self):
         while True:
             self.sim.step()
             self.viewer.render()
 
-    def loopTeam1(self):
+    def loopTeam(self, team):
         while True:
-            positions = self.generatePositions(0)
-            commands1 = self.athena1.getTargets(positions)
-            self.viewer.infos["robots"] = [
-                "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + "{:.2f}".format(
-                    positions[2]["position"][1]),
+            positions = self.generatePositions(team)
+            commands = self.athena[team].getTargets(positions)
+            self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + "{:.2f}".format(
+                    positions[2]["position"][1])
 
-                "[OFF] " if not self.enabled[0] else "X: " + "{:.2f}".format(positions[0][0]["position"][0]) + ", Y: " +
-                                                     "{:.2f}".format(positions[0][0]["position"][1]) + ", O: " +
-                                                     "{:.2f}".format(positions[0][0]["orientation"]) +
-                                                     " C: " + commands1[0]["command"],
+            self.viewer.infos["robots" + str(team + 1)] = [
+                "[OFF] " if not self.enabled[0 + 3 * team] else "X: " + "{:.2f}".format(positions[0][0]["position"][0])
+                                                                + ", Y: " +
+                                                                "{:.2f}".format(positions[0][0]["position"][1]) +
+                                                                ", O: " +
+                                                                "{:.2f}".format(positions[0][0]["orientation"]) +
+                                                                " C: " + commands[0]["command"],
 
-                "[OFF] " if not self.enabled[1] else "X: " + "{:.2f}".format(positions[0][1]["position"][0]) + ", Y: " +
-                                                     "{:.2f}".format(positions[0][1]["position"][1]) + ", O: " +
-                                                     "{:.2f}".format(positions[0][1]["orientation"]) +
-                                                     " C: " + commands1[1]["command"],
+                "[OFF] " if not self.enabled[1 + 3 * team] else "X: " + "{:.2f}".format(positions[0][1]["position"][0])
+                                                                + ", Y: " +
+                                                                "{:.2f}".format(positions[0][1]["position"][1]) +
+                                                                ", O: " +
+                                                                "{:.2f}".format(positions[0][1]["orientation"]) +
+                                                                " C: " + commands[1]["command"],
 
-                "[OFF] " if not self.enabled[2] else "X: " + "{:.2f}".format(positions[0][2]["position"][0]) + ", Y: " +
-                                                     "{:.2f}".format(positions[0][2]["position"][1]) + ", O: " +
-                                                     "{:.2f}".format(positions[0][2]["orientation"]) +
-                                                     " C: " + commands1[2]["command"],
+                "[OFF] " if not self.enabled[2 + 3 * team] else "X: " + "{:.2f}".format(positions[0][2]["position"][0])
+                                                                + ", Y: " +
+                                                                "{:.2f}".format(positions[0][2]["position"][1]) +
+                                                                ", O: " +
+                                                                "{:.2f}".format(positions[0][2]["orientation"]) +
+                                                                " C: " + commands[2]["command"],
             ]
-            velocities1 = self.zeus1.getVelocities(commands1)
+            velocities = self.zeus[team].getVelocities(commands)
 
-            if self.enabled[0]:
-                self.sim.data.ctrl[0] = self.convertVelocity(velocities1[0]["vLeft"])
-                self.sim.data.ctrl[1] = self.convertVelocity(velocities1[0]["vRight"])
-            if self.enabled[1]:
-                self.sim.data.ctrl[2] = self.convertVelocity(velocities1[1]["vLeft"])
-                self.sim.data.ctrl[3] = self.convertVelocity(velocities1[1]["vRight"])
-            if self.enabled[2]:
-                self.sim.data.ctrl[4] = self.convertVelocity(velocities1[2]["vLeft"])
-                self.sim.data.ctrl[5] = self.convertVelocity(velocities1[2]["vRight"])
+            if self.enabled[0 + 3 * team]:
+                self.sim.data.ctrl[0 + 6 * team] = self.convertVelocity(velocities[0]["vLeft"])
+                self.sim.data.ctrl[1 + 6 * team] = self.convertVelocity(velocities[0]["vRight"])
+            if self.enabled[1 + 3 * team]:
+                self.sim.data.ctrl[2 + 6 * team] = self.convertVelocity(velocities[1]["vLeft"])
+                self.sim.data.ctrl[3 + 6 * team] = self.convertVelocity(velocities[1]["vRight"])
+            if self.enabled[2 + 3 * team]:
+                self.sim.data.ctrl[4 + 6 * team] = self.convertVelocity(velocities[2]["vLeft"])
+                self.sim.data.ctrl[5 + 6 * team] = self.convertVelocity(velocities[2]["vRight"])
 
-            fps = self.getFPS()
-            if fps is not None:
-                self.viewer.infos["fps"] = fps
+            if team == 0:
+                fps = self.getFPS()
+                if fps is not None:
+                    self.viewer.infos["fps"] = fps
 
-            time.sleep(0.026)  # fixa o fps em 30
-
-    def loopTeam2(self):
-        commands2 = self.athena2.getTargets(self.generatePositions(1))
-        velocities2 = self.zeus2.getVelocities(commands2)
-        self.sim.data.ctrl[6] = self.convertVelocity(velocities2[0]["vLeft"])
-        self.sim.data.ctrl[7] = self.convertVelocity(velocities2[0]["vRight"])
-        self.sim.data.ctrl[8] = self.convertVelocity(velocities2[1]["vLeft"])
-        self.sim.data.ctrl[9] = self.convertVelocity(velocities2[1]["vRight"])
-        self.sim.data.ctrl[10] = self.convertVelocity(velocities2[2]["vLeft"])
-        self.sim.data.ctrl[11] = self.convertVelocity(velocities2[2]["vRight"])
-        time.sleep(0.0001)
+            time.sleep(0.026)  # TODO fixar o fps em 30 independente de desempenho
 
     # HELPERS
     def getFPS(self):
