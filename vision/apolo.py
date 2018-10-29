@@ -42,7 +42,7 @@ class Apolo:
         self.setHSVThresh(((69, 70), (0, 255), (0, 255)), GREEN)
 
         self.imageId = -1
-
+        self.invertImage = False
         self.robotLetter = ['A', 'B', 'C']
 
         self.positions = self.returnData(
@@ -88,10 +88,16 @@ class Apolo:
         # adicionar cv2.CAP_PROP_APERTURE, cv2.CAP_PROP_AUTO_EXPOSURE, cv2.CAP_PROP_BACKLIGHT, cv2.CAP_PROP_AUTOFOCUS,
         # cv2.CAP_PROP_GAMMA
 
+    def setInvertImage(self, state):
+        self.invertImage = state
+        return state
+
     def getFrame(self):
         frame = None
         if self.camera.isOpened():
             _, frame = self.camera.read()
+            if self.invertImage:
+                cv2.flip(frame, -1, frame)
 
         return frame
 

@@ -1361,7 +1361,7 @@
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>130</x>
+          <x>70</x>
           <y>11</y>
           <width>191</width>
           <height>41</height>
@@ -1435,6 +1435,19 @@
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QCheckBox" name="checkBoxInvertImage">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>20</y>
+          <width>111</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Invert Image</string>
+        </property>
        </widget>
       </widget>
      </widget>
