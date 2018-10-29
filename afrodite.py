@@ -25,10 +25,10 @@ class Afrodite(QMainWindow):
 
         self.hades = hades.Hades()
         self.hades.setup()
-        self.hades.sigFps.connect(self.setLabelVideoViewFPS)
+        self.hades.sigFps.connect(self.setLabelPlayFPS)
         self.hades.sigDraw.connect(self.updateObjectsToDraw)
         self.hades.sigDisplay.connect(self.updateFrameVideoView)
-        self.hades.sigPositions.connect(self.updateLabelVideoViewPositions)
+        self.hades.sigPositions.connect(self.updateLabelPlayPositions)
         self.hades.start()
 
         dirname = os.path.dirname(__file__)
@@ -131,8 +131,8 @@ class Afrodite(QMainWindow):
         self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(self.toggleTransitions)
 
         # roles
-        self.pushButtonRobotRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
-        self.pushButtonRobotRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
+        self.pushButtonStrategyRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
+        self.pushButtonStrategyRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
         '''
         # formation load
@@ -149,7 +149,7 @@ class Afrodite(QMainWindow):
         self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
 
         # pid test
-        self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
+        self.pushButtonComunicationRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
 
         # COMMUNICATION
 
@@ -197,28 +197,28 @@ class Afrodite(QMainWindow):
 
     # VideoView
     # Positions
-    def updateLabelVideoViewPositions(self, positions):
-        self.labelVideoViewPositionsRobot1.setText(
+    def updateLabelPlayPositions(self, positions):
+        self.labelPlayPositionsRobot1.setText(
             "(" + str(positions[0][0][0]) + ", " + str(positions[0][0][1]) + ", " +
             str(positions[0][1]) + " rad)")
-        self.labelVideoViewPositionsRobot2.setText(
+        self.labelPlayPositionsRobot2.setText(
             "(" + str(positions[1][0][0]) + ", " + str(positions[1][0][1]) + ", " +
             str(positions[1][1]) + " rad)")
-        self.labelVideoViewPositionsRobot3.setText(
+        self.labelPlayPositionsRobot3.setText(
             "(" + str(positions[2][0][0]) + ", " + str(positions[2][0][1]) + ", " +
             str(positions[2][1]) + " rad)")
-        self.labelVideoViewPositionsBall.setText("(" + str(positions[3][0]) + ", " + str(positions[3][1]) + ")")
+        self.labelPlayPositionsBall.setText("(" + str(positions[3][0]) + ", " + str(positions[3][1]) + ")")
 
     # FPS
-    def setLabelVideoViewFPS(self, fps):
-        self.labelVideoViewFPS.setText("FPS: " + str(fps))
+    def setLabelPlayFPS(self, fps):
+        self.labelVPlayFPS.setText(str(fps))
 
     # LoadImage
     def updateFrameVideoView(self, image):
         self.image = image
 
         # desenhar na tela
-        if not self.checkBoxVideoViewDisableDrawing.isChecked():
+        if not self.checkBoxPlayDisableDrawing.isChecked():
             self.drawImageVideoView()
 
         self.displayImageVideoView(1)
@@ -620,12 +620,12 @@ class Afrodite(QMainWindow):
 
     # PIDTest
     def getPushButtonControlRobotFunctionsPIDTest(self):
-        if self.pushButtonControlRobotFunctionsPIDTest.palette().button().color().name() == '#efefef':
-            self.pushButtonControlRobotFunctionsPIDTest.setStyleSheet('background-color:#ff0000')
+        if self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#efefef':
+            self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#ff0000')
             self.hades.enablePIDTest()
 
-        elif self.pushButtonControlRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
-            self.pushButtonControlRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
+        elif self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
+            self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
             self.hades.disablePIDTest()
 
     def startSerialConnection(self):
