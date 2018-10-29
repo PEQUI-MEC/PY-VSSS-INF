@@ -228,6 +228,10 @@ class Hades(QThread):
             return self.apolo.changeLetters(robotLetters)
         return ["A", "B", "C"]
 
+    def closeCamera(self):
+        if self.apolo is not None:
+            self.apolo.closeCamera()
+
     def changeCamera(self, cameraId):
         if self.apolo is not None:
             self.apolo.changeCamera(cameraId)

@@ -191,6 +191,7 @@ class Afrodite(QMainWindow):
     def closeEvent(self, QCloseEvent):
         self.saveConfigs(file="quicksave")
         QCloseEvent.accept()
+        self.hades.exit()
 
     '''
     def mouseReleaseEvent(self, QMouseEvent):
