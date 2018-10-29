@@ -125,7 +125,6 @@ class Athena:
             self.warriors[i].setup(positions[0][i]["robotLetter"], positions[0][i]["position"], positions[0][i]["orientation"])
             self.warriors[i].velEstimated = \
                 distance.euclidean(self.warriors[i].position, self.warriors[i].lastPosition) / self.deltaTime
-            # print("Warrior: ", self.warriors[i].velEstimated)
 
         self.theirWarriorsLastPos = []
         for i in range(0, len(self.theirWarriors)):
@@ -147,7 +146,6 @@ class Athena:
 
             if len(dist) > 0:
                 self.theirWarriors[i].velEstimated = min(dist) / self.deltaTime
-                # print("Enemie: ", self.theirWarriors[i].velEstimated)
 
         self.ball = {
             "position": positions[2]["position"],

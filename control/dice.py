@@ -49,6 +49,13 @@ class Dice:
         targetTheta = atan2(target[1] - self.warrior.position[1], -(target[0] - self.warrior.position[0]))
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
+        if atan2(sin(targetTheta - currentTheta + pi / 2), cos(targetTheta - currentTheta + pi / 2)) < 0:
+            self.warrior.backward = True
+            self.warrior.front = 1
+        else:
+            self.warrior.backward = False
+            self.warrior.front = -1
+
         thetaError = atan2(sin(targetTheta - currentTheta), cos(targetTheta - currentTheta))
 
         left = self.warrior.front + sin(thetaError)

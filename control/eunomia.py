@@ -10,7 +10,7 @@ class Eunomia:
     def setup(self, width=100):
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
-        self.uvf.updateConstants(radius=6.0, kr=0.9, k0=4.12, dMin=80.0, lDelta=4.5)
+        self.uvf.updateConstants(radius=6.0, kr=0.9, k0=4.12, dMin=20.0, lDelta=4.5)
 
     def run(self, warrior):
         """Main method of action controller
@@ -129,6 +129,11 @@ class Eunomia:
         time = None
         # if warrior.before is not None:
         #   time = warrior.before
+
+        # Backwards
+        if self.warrior.backward:
+            self.warrior.orientation = self.warrior.orientation + pi
+            self.warrior.orientation = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
         if time is None:
             self.warrior.vRight = self.warrior.vMax
