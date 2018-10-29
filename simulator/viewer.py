@@ -14,11 +14,18 @@ class Viewer(MjViewer):
         glfw.set_key_callback(self.window, self.key_callback)
 
     def _create_full_overlay(self):
-        if "robots" in self.infos:
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots"][0], "Ball Pose")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots"][1], "Robot [1]")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots"][2], "Robot [2]")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots"][3], "Robot [3]")
+        if "ball" in self.infos:
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["ball"], "Ball Pose")
+
+        if "robots1" in self.infos:
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][0], "Robot [1]")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][1], "Robot [2]")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][2], "Robot [3]")
+
+        if "robots2" in self.infos:
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][0], "Robot [4]")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][1], "Robot [5]")
+            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][2], "Robot [6]")
 
         if "fps" in self.infos:
             self.add_overlay(const.GRID_BOTTOMLEFT, "Team 1 FPS", self.infos["fps"])
@@ -71,26 +78,33 @@ class Viewer(MjViewer):
             self.sim.data.solver_iter + 1))
 
         self.add_overlay(const.GRID_TOPLEFT, "Move Ball: [UP], [DOWN], [RIGHT], [LEFT]", "")
+        self.add_overlay(const.GRID_TOPLEFT, "    (Shift keeps velocity)", "")
 
     def key_callback(self, window, key, scancode, action, mods):
         if action == glfw.REPEAT or action == glfw.PRESS:
             if key == glfw.KEY_UP:
-                self.aether.moveBall(0)
+                self.aether.moveBall(0, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_DOWN:
-                self.aether.moveBall(1)
+                self.aether.moveBall(1, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_LEFT:
-                self.aether.moveBall(2)
+                self.aether.moveBall(2, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_RIGHT:
-                self.aether.moveBall(3)
+                self.aether.moveBall(3, mods == glfw.MOD_SHIFT)
 
         elif action == glfw.RELEASE:
             # toggles robots on or off
             if key == glfw.KEY_1:
-                self.aether.enabled[0] = not self.aether.enabled[0]
+                self.aether.toggleRobot(0, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_2:
-                self.aether.enabled[1] = not self.aether.enabled[1]
+                self.aether.toggleRobot(1, mods == glfw.MOD_SHIFT)
             elif key == glfw.KEY_3:
-                self.aether.enabled[2] = not self.aether.enabled[2]
+                self.aether.toggleRobot(2, mods == glfw.MOD_SHIFT)
+            elif key == glfw.KEY_4:
+                self.aether.toggleRobot(3, mods == glfw.MOD_SHIFT)
+            elif key == glfw.KEY_5:
+                self.aether.toggleRobot(4, mods == glfw.MOD_SHIFT)
+            elif key == glfw.KEY_6:
+                self.aether.toggleRobot(5, mods == glfw.MOD_SHIFT)
 
             # default [modified] calls
             elif key == glfw.KEY_TAB:  # Switches cameras.

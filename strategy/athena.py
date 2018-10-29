@@ -221,7 +221,7 @@ class Athena:
                             command["data"]["obstacles"].append(obstacle.position)
                     for obstacle in self.theirWarriors:
                         command["data"]["obstacles"].append(obstacle.position)
-                    if "avoidBall" in warrior.command:
+                    if warrior.position[0] > self.ball["position"][0] in warrior.command:
                         command["data"]["obstacles"].append(self.ball["position"])
 
             elif warrior.command["type"] == "lookAt":
@@ -656,9 +656,15 @@ class Athena:
                 warrior.command["targetVelocity"] = warrior.maxVel  # TODO verificar se é melhor defaultVel
 
                 if self.ball["position"][1] > warrior.position[1]:
-                    warrior.command["spinDirection"] = "clockwise"
+                    if self.ball["position"][0] < warrior.position[0]:
+                        warrior.command["spinDirection"] = "counter"
+                    else:
+                        warrior.command["spinDirection"] = "clockwise"
                 else:
-                    warrior.command["spinDirection"] = "counter"
+                    if self.ball["position"][0] < warrior.position[0]:
+                        warrior.command["spinDirection"] = "clockwise"
+                    else:
+                        warrior.command["spinDirection"] = "counter"
 
             elif warrior.tactics == Athena.tWaitPass:
                 # TODO verificar se é bom dividir o mid e atk verticalmente no campo
