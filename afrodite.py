@@ -39,7 +39,7 @@ class Afrodite(QMainWindow):
         self.objectsToDraw = {}
 
         # PLAY BUTTON
-        self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
+        self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
 
         # VISION
 
