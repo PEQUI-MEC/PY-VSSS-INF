@@ -196,6 +196,11 @@ class Hades(QThread):
             return 0
 
     # Camera e Visão
+    def eventInvertImage(self, state):
+        if self.apolo is not None:
+            return self.apolo.setInvertImage(state)
+        return False
+
     def getCamCongigs(self):
         return self.apolo.getCamConfigs()
 
@@ -222,6 +227,10 @@ class Hades(QThread):
         if self.apolo is not None:
             return self.apolo.changeLetters(robotLetters)
         return ["A", "B", "C"]
+
+    def closeCamera(self):
+        if self.apolo is not None:
+            self.apolo.closeCamera()
 
     def changeCamera(self, cameraId):
         if self.apolo is not None:
