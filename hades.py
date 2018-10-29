@@ -196,6 +196,11 @@ class Hades(QThread):
             return 0
 
     # Camera e Visão
+    def eventInvertImage(self, state):
+        if self.apolo is not None:
+            return self.apolo.setInvertImage(state)
+        return False
+
     def getCamCongigs(self):
         return self.apolo.getCamConfigs()
 

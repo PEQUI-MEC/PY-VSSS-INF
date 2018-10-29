@@ -123,6 +123,8 @@ class Afrodite(QMainWindow):
         self.updateComboBoxCaptureDeviceInformation()
 
         # Warp
+        self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
+
         self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
         self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
         self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
@@ -543,6 +545,9 @@ class Afrodite(QMainWindow):
         )
 
     # Warp
+    def toggleInvertImage(self):
+        self.checkBoxInvertImage.setChecked(self.hades.eventInvertImage(self.checkBoxInvertImage.isChecked()))
+
     def getPushButtonCaptureWarpWarp(self):
         pass
 
