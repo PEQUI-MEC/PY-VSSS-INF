@@ -241,17 +241,20 @@ class Aether:
                 {
                     "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[3 * team]], team),
                                  self.convertPositionY(self.sim.data.qpos[self.robot_joints[3 * team] + 1], team)),
-                    "orientation": r1
+                    "orientation": r1,
+                    "robotLetter": "A"
                 },
                 {
                     "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[1 + 3 * team]], team),
                                  self.convertPositionY(self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 1], team)),
-                    "orientation": r2
+                    "orientation": r2,
+                    "robotLetter": "B"
                 },
                 {
                     "position": (self.convertPositionX(self.sim.data.qpos[self.robot_joints[2 + 3 * team]], team),
                                  self.convertPositionY(self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 1], team)),
-                    "orientation": r3
+                    "orientation": r3,
+                    "robotLetter": "C"
                 }
             ],
             [  # robôs adversários

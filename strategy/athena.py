@@ -62,14 +62,17 @@ class Athena:
                     {
                         "position": (x, y)
                         "orientation": orientação
+                        "robotLetter": letra do robô
                     },
                     {
                         "position": (x, y)
                         "orientation": orientação
+                        "robotLetter": letra do robô
                     },
                     {
                         "position": (x, y)
                         "orientation": orientação
+                        "robotLetter": letra do robô
                     }
                 ],
                 [ # robôs adversários
@@ -117,7 +120,7 @@ class Athena:
             if type(positions[0][i]) is not dict:
                 raise ValueError("Invalid value for our warriors received.")
 
-            self.warriors[i].setup(positions[0][i]["position"], positions[0][i]["orientation"])
+            self.warriors[i].setup(positions[0][i]["robotLetter"], positions[0][i]["position"], positions[0][i]["orientation"])
 
         self.theirWarriors = []
         for i in range(0, len(positions[1])):
@@ -125,7 +128,7 @@ class Athena:
                 raise ValueError("Invalid value for our warriors received.")
 
             self.theirWarriors.append(Warrior())
-            self.theirWarriors[i].setup(positions[1][i]["position"])
+            self.theirWarriors[i].setup('z', positions[1][i]["position"])
 
         self.ball = {
             "position": positions[2]["position"],
@@ -186,7 +189,10 @@ class Athena:
         """
         response = []
         for warrior in warriors:
-            command = {}
+            command = {
+                "robotLetter": warrior.robotID
+            }
+
             if warrior.command["type"] == "goTo":
                 command["command"] = "goTo"
                 command["data"] = {}

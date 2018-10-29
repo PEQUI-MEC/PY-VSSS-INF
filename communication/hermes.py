@@ -8,21 +8,11 @@ class Hermes:
     def __init__(self):
         self.xbee = None
         self.serial = None
-        self.robots = [
-            {
-                "id": "C",
-                "address": "\x56\x0D"
-            },
-            {
-                "id": "F",
-                "address": "\x6B\x0D"
-            },
-            {
-                "id": "G",
-                "address": "\x21\x5C"
-            }
-        ]
-
+        self.robots = {
+            "A": "\x56\x0D",
+            "B": "\x6B\x0D",
+            "C": "\x21\x5C"
+        }
         print("Hermes summoned")
 
     def setup(self, port, baud=115200):
@@ -74,11 +64,15 @@ class Hermes:
 
             if self.xbee is not None:
                 try:
-                    self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[i]["address"], data=message)
+                    self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
                     messages.append(message)
+                    # print(velocities[i]["robotLetter"] + ": " + message)
                 except SerialTimeoutException:
-                    print("Message sending timed out")
+                    print("[Hermes]: Message sending timed out")
+                except KeyError:
+                    print("[Hermes]: We don't know the address for robot '" + velocities[i]["robotLetter"] + "'")
 
+        print()
         return messages
 
     def killBee(self):
@@ -95,15 +89,12 @@ class Hermes:
         self.serial.close()
 
     def sendMessage(self, robotId, message):
-        for robot in self.robots:
-            if robot["id"] == robotId:
-                if self.xbee is not None:
-                    try:
-                        self.xbee.send("tx", frame='A', command='MY', dest_addr=robot["address"], data=message)
-                    except SerialTimeoutException:
-                        print("Message sending timed out")
-            break
-
+        if self.xbee is not None:
+            try:
+                # print(robotId)
+                self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
+            except SerialTimeoutException:
+                print("Message sending timed out")
 
     @staticmethod
     def isSerial(port):

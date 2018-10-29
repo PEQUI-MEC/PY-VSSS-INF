@@ -4,6 +4,7 @@ class Warrior:
         self.defaultVel = defaultVel
         self.maxVel = 1.4
 
+        self.robotID = "A"
         self.lastPosition = (0, 0)
         self.position = (0, 0)
         self.orientation = 0
@@ -16,7 +17,8 @@ class Warrior:
 
         self.command = {}
 
-    def setup(self, position, orientation=0):
+    def setup(self, robotID, position, orientation=0):
+        self.robotID = robotID
         self.lastPosition = self.position
         self.position = position
         self.orientation = orientation
