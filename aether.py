@@ -83,9 +83,6 @@ class Aether:
                 self.sim.data.ctrl[5 + 6 * team] = self.convertVelocity(velocities[2]["vRight"])
 
             # mostra resultados
-            self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + \
-                                        "{:.2f}".format(positions[2]["position"][1])
-
             self.viewer.infos["robots" + str(team + 1)] = [
                 "[OFF] " if not self.enabled[0 + 3 * team] else "X: " + "{:.2f}".format(positions[0][0]["position"][0])
                                                                 + ", Y: " +
@@ -110,6 +107,9 @@ class Aether:
             ]
 
             if team == 0:
+                self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + \
+                                            "{:.2f}".format(positions[2]["position"][1])
+
                 fps = self.getFPS()
                 if fps is not None:
                     self.viewer.infos["fps"] = fps
