@@ -308,6 +308,8 @@ class Apolo:
         Como na imagem o Y cresce pra baixo, então é necessário inverter, ficando entao yInicial - yFinal
         
         '''
+        if distance == 0:
+            distance = 1
 
         relativePosition = [(secondaryTagPosition[0] - robotPos[0]) / distance,
                             (robotPos[1] - secondaryTagPosition[1]) / distance]
