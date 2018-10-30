@@ -199,7 +199,7 @@ class Afrodite(QMainWindow):
             self.pushButtonPlayStart.setIcon(icon)
 
     def keyPressEvent(self, QKeyEvent):
-        if QKeyEvent.key() == QtCore.Qt.Key_Space:
+        if QKeyEvent.key() == QtCore.Qt.Key_Space and self.pushButtonPlayStart.isEnabled():
             self.clickedPlay()
 
     def clickedConnect(self):
