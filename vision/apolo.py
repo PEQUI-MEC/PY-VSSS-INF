@@ -56,21 +56,16 @@ class Apolo:
                self.camera.get(cv2.CAP_PROP_CONTRAST), \
                self.camera.get(cv2.CAP_PROP_HUE), \
                self.camera.get(cv2.CAP_PROP_EXPOSURE), \
-               self.camera.get(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U), \
-               self.camera.get(cv2.CAP_PROP_WHITE_BALANCE_RED_V), \
-               self.camera.get(cv2.CAP_PROP_ISO_SPEED)
+               self.camera.get(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U)
 
-    def updateCamConfigs(self, newBrightness, newSaturation, newGain, newContrast, newHue,
-                         newExposure, newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed):
+    def updateCamConfigs(self, newBrightness, newSaturation, newGain, newContrast,
+                         newExposure, newWhiteBalance):
         self.camera.set(cv2.CAP_PROP_BRIGHTNESS, newBrightness)
         self.camera.set(cv2.CAP_PROP_SATURATION, newSaturation)
         self.camera.set(cv2.CAP_PROP_GAIN, newGain)
         self.camera.set(cv2.CAP_PROP_CONTRAST, newContrast)
-        self.camera.set(cv2.CAP_PROP_HUE, newHue)
         self.camera.set(cv2.CAP_PROP_EXPOSURE, newExposure)
-        self.camera.set(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U, newWhiteBalanceU)
-        self.camera.set(cv2.CAP_PROP_WHITE_BALANCE_RED_V, newWhiteBalanceV)
-        self.camera.set(cv2.CAP_PROP_ISO_SPEED, newIsoSpeed)
+        self.camera.set(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U, newWhiteBalance)
         # adicionar cv2.CAP_PROP_APERTURE, cv2.CAP_PROP_AUTO_EXPOSURE, cv2.CAP_PROP_BACKLIGHT, cv2.CAP_PROP_AUTOFOCUS,
         # cv2.CAP_PROP_GAMMA
 

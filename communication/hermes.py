@@ -30,8 +30,11 @@ class Hermes:
             self.serial = Serial(port, baud, writeTimeout=0)
             self.xbee = XBee(self.serial)
             print("Hermes is set up")
+            return True
         except SerialException:
             print("In Hermes set up: Error opening xBee connection")
+            
+        return False
 
     def fly(self, velocities):
         """Main class method

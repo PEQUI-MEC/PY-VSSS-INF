@@ -3,16 +3,13 @@ import sys
 import os
 import cv2  # Somente para testes
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import pyqtSlot, QTimer
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMenuBar, QDockWidget, QCheckBox, QStackedWidget, \
-    QFileDialog, QGroupBox
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import QImage, QPixmap, QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
-from datetime import datetime
-import interface.icons_rc
-import serial, glob
+import serial
+import glob
 import serial.tools.list_ports as list_ports
 import hades
 
@@ -44,20 +41,12 @@ class Afrodite(QMainWindow):
         # VISION
 
         # Capture
-        self.pushButtonVisionVideoCapturePictureNameSave.clicked.connect(
-            self.getPushButtonVisionVideoCapturePictureNameSave)
-        self.pushButtonVisionVideoCaptureVideoNameSave.clicked.connect(
-            self.getPushButtonVisionVideoCaptureVideoNameSave)
-
         self.spinBoxCaptureDevicePropertiesBrightness.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesSaturation.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesGain.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesContrast.valueChanged.connect(self.camConfigsChanged)
-        self.spinBoxCaptureDevicePropertiesHue.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesExposure.valueChanged.connect(self.camConfigsChanged)
-        self.spinBoxCaptureDevicePropertiesWhiteBalanceU.valueChanged.connect(self.camConfigsChanged)
-        self.spinBoxCaptureDevicePropertiesWhiteBalanceV.valueChanged.connect(self.camConfigsChanged)
-        self.spinBoxCaptureDevicePropertiesIsoSpeed.valueChanged.connect(self.camConfigsChanged)
+        self.spinBoxCaptureDevicePropertiesWhiteBalance.valueChanged.connect(self.camConfigsChanged)
 
         # ModeView
 
@@ -189,11 +178,17 @@ class Afrodite(QMainWindow):
 
     # PLAY BUTTON
     def clickedPlay(self):
-        self.hades.eventStartGame()
+        icon = QIcon()
+        if self.hades.eventStartGame():
+            icon.addPixmap(QPixmap('interface/Imgs/Pause.png'))
+            self.pushButtonPlayStart.setIcon(icon)
+        else:
+            icon.addPixmap(QPixmap('interface/Imgs/Play.png'))
+            self.pushButtonPlayStart.setIcon(icon)
 
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Space:
-            self.hades.eventStartGame()
+            self.clickedPlay()
 
     # VideoView
     # Positions
@@ -326,7 +321,19 @@ class Afrodite(QMainWindow):
     # DeviceInformation
     def getPushButtonCaptureDeviceInformationStart(self):
         cameraId = self.comboBoxCaptureDeviceInformation.currentText()
-        self.hades.eventStartVision(cameraId)
+        enable = self.hades.eventStartVision(cameraId)
+
+        self.groupBoxCaptureDeviceInformation.setEnabled(not enable)
+        self.groupBoxCaptureDeviceProperties.setEnabled(enable)
+        self.groupBoxCaptureWarp.setEnabled(enable)
+
+        if enable:
+            self.labelCameraState.setText("<font color='green'>Online</font>")
+            if "Online" in self.labelCommunicationState.text():
+                self.pushButtonPlayStart.setEnabled(True)
+                self.groupBoxStrategyFormation.setEnabled(True)
+        else:
+            self.labelCameraState.setText("Error")
 
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):
@@ -387,27 +394,21 @@ class Afrodite(QMainWindow):
             self.spinBoxCaptureDevicePropertiesSaturation.value(),
             self.spinBoxCaptureDevicePropertiesGain.value(),
             self.spinBoxCaptureDevicePropertiesContrast.value(),
-            self.spinBoxCaptureDevicePropertiesHue.value(),
             self.spinBoxCaptureDevicePropertiesExposure.value(),
-            self.spinBoxCaptureDevicePropertiesWhiteBalanceU.value(),
-            self.spinBoxCaptureDevicePropertiesWhiteBalanceV.value(),
-            self.spinBoxCaptureDevicePropertiesIsoSpeed.value()
+            self.spinBoxCaptureDevicePropertiesWhiteBalance.value()
         )
 
     def initCamConfigs(self):
         newBrightness, newSaturation, newGain, newContrast, \
-        newHue, newExposure, newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed = self.hades.getCameraConfigs()
+        newExposure, newWhiteBalance = self.hades.getCameraConfigs()
 
         self.hades.eventCamConfigs(
             self.spinBoxCaptureDevicePropertiesBrightness.value(newBrightness),
             self.spinBoxCaptureDevicePropertiesSaturation.value(newSaturation),
             self.spinBoxCaptureDevicePropertiesGain.value(newGain),
             self.spinBoxCaptureDevicePropertiesContrast.value(newContrast),
-            self.spinBoxCaptureDevicePropertiesHue.value(newHue),
             self.spinBoxCaptureDevicePropertiesExposure.value(newExposure),
-            self.spinBoxCaptureDevicePropertiesWhiteBalanceU.value(newWhiteBalanceU),
-            self.spinBoxCaptureDevicePropertiesWhiteBalanceV.value(newWhiteBalanceV),
-            self.spinBoxCaptureDevicePropertiesIsoSpeed.value(newIsoSpeed)
+            self.spinBoxCaptureDevicePropertiesWhiteBalanceU.value(newWhiteBalance)
         )
 
     # Warp
@@ -430,22 +431,22 @@ class Afrodite(QMainWindow):
 
     # role
     def clickEditRoles(self):
-        self.pushButtonRobotRobotFunctionsEdit.setEnabled(False)
-        self.pushButtonRobotRobotFunctionsDone.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot1.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot2.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot3.setEnabled(True)
+        self.pushButtonStrategyRobotFunctionsEdit.setEnabled(False)
+        self.pushButtonStrategyRobotFunctionsDone.setEnabled(True)
+        self.comboBoxStrategyRobotFunctionsRobot1.setEnabled(True)
+        self.comboBoxStrategyRobotFunctionsRobot2.setEnabled(True)
+        self.comboBoxStrategyRobotFunctionsRobot3.setEnabled(True)
 
     def clickDoneRoles(self):
-        self.pushButtonRobotRobotFunctionsEdit.setEnabled(True)
-        self.pushButtonRobotRobotFunctionsDone.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot1.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot2.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot3.setEnabled(False)
+        self.pushButtonStrategyRobotFunctionsEdit.setEnabled(True)
+        self.pushButtonStrategyRobotFunctionsDone.setEnabled(False)
+        self.comboBoxStrategyRobotFunctionsRobot1.setEnabled(False)
+        self.comboBoxStrategyRobotFunctionsRobot2.setEnabled(False)
+        self.comboBoxStrategyRobotFunctionsRobot3.setEnabled(False)
 
-        self.hades.eventSelectRoles([self.comboBoxRobotRobotFunctionsRobot1.currentText(),
-                                     self.comboBoxRobotRobotFunctionsRobot2.currentText(),
-                                     self.comboBoxRobotRobotFunctionsRobot3.currentText()])
+        self.hades.eventSelectRoles([self.comboBoxStrategyRobotFunctionsRobot1.currentText(),
+                                     self.comboBoxStrategyRobotFunctionsRobot2.currentText(),
+                                     self.comboBoxStrategyRobotFunctionsRobot3.currentText()])
 
     # speeds
     def getPushButtonRobotSpeedEdit(self):
@@ -517,12 +518,6 @@ class Afrodite(QMainWindow):
 
     def getVisionVideoCaptureVideoName(self):
         return self.lineEditVisionVideoCaptureVideoName.text()
-
-    def getPushButtonVisionVideoCapturePictureNameSave(self):
-        pass
-
-    def getPushButtonVisionVideoCaptureVideoNameSave(self):
-        pass
 
     # ModeView
     def getVisionModeViewSelectMode(self):
@@ -646,7 +641,19 @@ class Afrodite(QMainWindow):
     # Serial
     def getPushButtonControlSerialDeviceStart(self):
         device = self.getComboBoxControlSerialDevice()
-        self.hades.eventStartXbee(device)
+        enable = self.hades.eventStartXbee(device)
+
+        self.groupComunicationSerialDevice.setEnabled(not enable)
+        self.groupComunicationSerial.setEnabled(enable)
+        self.groupBoxPlayRobotStatus.setEnabled(enable)
+
+        if enable:
+            self.labelCommunicationState.setText("<font color='green'>Online</font>")
+            if "Online" in self.labelCameraState.text():
+                self.pushButtonPlayStart.setEnabled(True)
+                self.groupBoxStrategyFormation.setEnabled(True)
+        else:
+            self.labelCommunicationState.setText("Error")
 
     def updateComboBoxControlSerialDevice(self):
         if sys.platform.startswith('win'):
