@@ -3,16 +3,14 @@ import sys
 import os
 import cv2  # Somente para testes
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import pyqtSlot, QTimer
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMenuBar, QDockWidget, QCheckBox, QStackedWidget, \
-    QFileDialog, QGroupBox
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import QImage, QPixmap, QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
-from datetime import datetime
+import serial
+import glob
 import interface.icons_rc
-import serial, glob
 import serial.tools.list_ports as list_ports
 import hades
 
@@ -25,10 +23,10 @@ class Afrodite(QMainWindow):
 
         self.hades = hades.Hades()
         self.hades.setup()
-        self.hades.sigFps.connect(self.setLabelVideoViewFPS)
+        self.hades.sigFps.connect(self.setLabelPlayFPS)
         self.hades.sigDraw.connect(self.updateObjectsToDraw)
         self.hades.sigDisplay.connect(self.updateFrameVideoView)
-        self.hades.sigPositions.connect(self.updateLabelVideoViewPositions)
+        self.hades.sigPositions.connect(self.updateLabelPlayPositions)
         self.hades.start()
 
         dirname = os.path.dirname(__file__)
@@ -38,27 +36,20 @@ class Afrodite(QMainWindow):
         self.image = None
         self.objectsToDraw = {}
 
-        # PLAY BUTTON
-        self.pushButtonVideoViewStart.clicked.connect(self.clickedPlay)
+        # PLAY
+        self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
+        self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
 
         # VISION
         self.cameraIsRunning = False
 
         # Capture
-        self.pushButtonVisionVideoCapturePictureNameSave.clicked.connect(
-            self.getPushButtonVisionVideoCapturePictureNameSave)
-        self.pushButtonVisionVideoCaptureVideoNameSave.clicked.connect(
-            self.getPushButtonVisionVideoCaptureVideoNameSave)
-
         self.spinBoxCaptureDevicePropertiesBrightness.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesSaturation.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesGain.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesContrast.valueChanged.connect(self.camConfigsChanged)
-        self.spinBoxCaptureDevicePropertiesHue.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesExposure.valueChanged.connect(self.camConfigsChanged)
-        self.spinBoxCaptureDevicePropertiesWhiteBalanceU.valueChanged.connect(self.camConfigsChanged)
-        self.spinBoxCaptureDevicePropertiesWhiteBalanceV.valueChanged.connect(self.camConfigsChanged)
-        self.spinBoxCaptureDevicePropertiesIsoSpeed.valueChanged.connect(self.camConfigsChanged)
+        self.spinBoxCaptureDevicePropertiesWhiteBalance.valueChanged.connect(self.camConfigsChanged)
 
         # ModeView
 
@@ -119,7 +110,7 @@ class Afrodite(QMainWindow):
         # Capture
         # DeviceInformation
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
-        self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.getPushButtonCaptureDeviceInformationRefresh)
+        self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.updateComboBoxCaptureDeviceInformation)
         self.updateComboBoxCaptureDeviceInformation()
 
         # Warp
@@ -135,8 +126,8 @@ class Afrodite(QMainWindow):
         self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(self.toggleTransitions)
 
         # roles
-        self.pushButtonRobotRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
-        self.pushButtonRobotRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
+        self.pushButtonStrategyRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
+        self.pushButtonStrategyRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
         '''
         # formation load
@@ -153,7 +144,7 @@ class Afrodite(QMainWindow):
         self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
 
         # pid test
-        self.pushButtonControlRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
+        self.pushButtonComunicationRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
 
         # COMMUNICATION
 
@@ -200,36 +191,55 @@ class Afrodite(QMainWindow):
 
     # PLAY BUTTON
     def clickedPlay(self):
-        self.hades.eventStartGame()
+        icon = QIcon()
+        if self.hades.eventStartGame():
+            icon.addPixmap(QPixmap('interface/Imgs/Pause.png'))
+            self.pushButtonPlayStart.setIcon(icon)
+        else:
+            icon.addPixmap(QPixmap('interface/Imgs/Play.png'))
+            self.pushButtonPlayStart.setIcon(icon)
 
     def keyPressEvent(self, QKeyEvent):
-        if QKeyEvent.key() == QtCore.Qt.Key_Space:
-            self.hades.eventStartGame()
+        if QKeyEvent.key() == QtCore.Qt.Key_Space and self.pushButtonPlayStart.isEnabled():
+            self.clickedPlay()
+
+    def clickedConnect(self):
+        lastCamera = self.comboBoxCaptureDeviceInformation.itemText(self.comboBoxCaptureDeviceInformation.count() - 1)
+        if lastCamera:
+            self.comboBoxCaptureDeviceInformation.setCurrentText(lastCamera)
+            self.getPushButtonCaptureDeviceInformationStart()
+
+        lastComm = self.comboBoxControlSerialDevice.itemText(self.comboBoxControlSerialDevice.count() - 1)
+        if lastComm:
+            self.comboBoxControlSerialDevice.setCurrentText(lastComm)
+            self.getPushButtonControlSerialDeviceStart()
+
+        self.pushButtonPlayConnect.setEnabled(False)
 
     # VideoView
     # Positions
-    def updateLabelVideoViewPositions(self, positions):
-        self.labelVideoViewPositionsRobot1.setText(
+    def updateLabelPlayPositions(self, positions):
+        self.labelPlayPositionsRobot1.setText(
             "(" + str(positions[0][0][0]) + ", " + str(positions[0][0][1]) + ", " +
             str(positions[0][1]) + " rad)")
-        self.labelVideoViewPositionsRobot2.setText(
+        self.labelPlayPositionsRobot2.setText(
             "(" + str(positions[1][0][0]) + ", " + str(positions[1][0][1]) + ", " +
             str(positions[1][1]) + " rad)")
-        self.labelVideoViewPositionsRobot3.setText(
+        self.labelPlayPositionsRobot3.setText(
             "(" + str(positions[2][0][0]) + ", " + str(positions[2][0][1]) + ", " +
             str(positions[2][1]) + " rad)")
-        self.labelVideoViewPositionsBall.setText("(" + str(positions[3][0]) + ", " + str(positions[3][1]) + ")")
+        self.labelPlayPositionsBall.setText("(" + str(positions[3][0]) + ", " + str(positions[3][1]) + ")")
 
     # FPS
-    def setLabelVideoViewFPS(self, fps):
-        self.labelVideoViewFPS.setText("FPS: " + str(fps))
+    def setLabelPlayFPS(self, fps):
+        self.labelPlayFPSValue.setText(str(fps))
 
     # LoadImage
     def updateFrameVideoView(self, image):
         self.image = image
 
         # desenhar na tela
-        if not self.checkBoxVideoViewDisableDrawing.isChecked():
+        if not self.checkBoxPlayDisableDrawing.isChecked():
             self.drawImageVideoView()
 
         self.displayImageVideoView(1)
@@ -316,15 +326,22 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureDevicePropertiesSaturation.setValue(self.hades.eventLoadConfigs("saturation"))
         self.horizontalSliderCaptureDevicePropertiesGain.setValue(self.hades.eventLoadConfigs("gain"))
         self.horizontalSliderCaptureDevicePropertiesContrast.setValue(self.hades.eventLoadConfigs("contrast"))
-        self.horizontalSliderCaptureDevicePropertiesHue.setValue(self.hades.eventLoadConfigs("hue"))
+        self.horizontalSliderCaptureDevicePropertiesSharpness.setValue(self.hades.eventLoadConfigs("sharpness"))
+        self.horizontalSliderCaptureDevicePropertiesWhiteBalance.setValue(self.hades.eventLoadConfigs("balance"))
+        self.checkBoxCaptureDevicePropertiesWhiteBalanceAuto.setChecked(self.hades.eventLoadConfigs("balanceauto"))
+        self.horizontalSliderCaptureDevicePropertiesZoom.setValue(self.hades.eventLoadConfigs("zoom"))
         self.horizontalSliderCaptureDevicePropertiesExposure.setValue(self.hades.eventLoadConfigs("exposure"))
-        self.horizontalSliderCaptureDevicePropertiesWhiteBalanceU.setValue(self.hades.eventLoadConfigs("balanceU"))
-        self.horizontalSliderCaptureDevicePropertiesWhiteBalanceV.setValue(self.hades.eventLoadConfigs("balanceV"))
-        self.horizontalSliderCaptureDevicePropertiesIsoSpeed.setValue(self.hades.eventLoadConfigs("iso"))
+        self.horizontalSliderCaptureDevicePropertiesExposureAuto.setValue(self.hades.eventLoadConfigs("exposureauto"))
+        self.checkBoxCaptureDevicePropertiesExposureAutoPriority.\
+            setChecked(self.hades.eventLoadConfigs("exposureautopriority"))
+        self.horizontalSliderCaptureDevicePropertiesTilt.setValue(self.hades.eventLoadConfigs("tilt"))
+        self.horizontalSliderCaptureDevicePropertiesPan.setValue(self.hades.eventLoadConfigs("pan"))
+        self.horizontalSliderCaptureDevicePropertiesFocus.setValue(self.hades.eventLoadConfigs("focus"))
+        self.checkBoxCaptureDevicePropertiesFocusAuto.setChecked(self.hades.eventLoadConfigs("focusauto"))
 
-        self.comboBoxRobotRobotFunctionsRobot1.setCurrentText(str(self.hades.eventLoadConfigs("robot1")))
-        self.comboBoxRobotRobotFunctionsRobot2.setCurrentText(str(self.hades.eventLoadConfigs("robot2")))
-        self.comboBoxRobotRobotFunctionsRobot3.setCurrentText(str(self.hades.eventLoadConfigs("robot3")))
+        self.comboBoxStrategyRobotFunctionsRobot1.setCurrentText(str(self.hades.eventLoadConfigs("robot1")))
+        self.comboBoxStrategyRobotFunctionsRobot2.setCurrentText(str(self.hades.eventLoadConfigs("robot2")))
+        self.comboBoxStrategyRobotFunctionsRobot3.setCurrentText(str(self.hades.eventLoadConfigs("robot3")))
 
         self.horizontalSliderVisionHSVCalibrationMainBlur.setValue(self.hades.eventLoadConfigs("mainBlur"))
         self.horizontalSliderVisionHSVCalibrationMainErode.setValue(self.hades.eventLoadConfigs("mainErode"))
@@ -380,15 +397,21 @@ class Afrodite(QMainWindow):
             "saturation": self.horizontalSliderCaptureDevicePropertiesSaturation.value(),
             "gain": self.horizontalSliderCaptureDevicePropertiesGain.value(),
             "contrast": self.horizontalSliderCaptureDevicePropertiesContrast.value(),
-            "hue": self.horizontalSliderCaptureDevicePropertiesHue.value(),
+            "sharpness": self.horizontalSliderCaptureDevicePropertiesSharpness.value(),
+            "balance": self.horizontalSliderCaptureDevicePropertiesWhiteBalance.value(),
+            "balanceAuto": self.checkBoxCaptureDevicePropertiesWhiteBalanceAuto.isChecked(),
+            "zoom": self.horizontalSliderCaptureDevicePropertiesZoom.value(),
             "exposure": self.horizontalSliderCaptureDevicePropertiesExposure.value(),
-            "balanceU": self.horizontalSliderCaptureDevicePropertiesWhiteBalanceU.value(),
-            "balanceV": self.horizontalSliderCaptureDevicePropertiesWhiteBalanceV.value(),
-            "iso": self.horizontalSliderCaptureDevicePropertiesIsoSpeed.value(),
+            "exposureauto": self.horizontalSliderCaptureDevicePropertiesExposureAuto.value(),
+            "exposureautopriority": self.checkBoxCaptureDevicePropertiesExposureAutoPriority.isChecked(),
+            "tilt": self.horizontalSliderCaptureDevicePropertiesTilt.value(),
+            "pan": self.horizontalSliderCaptureDevicePropertiesPan.value(),
+            "focus": self.horizontalSliderCaptureDevicePropertiesFocus.value(),
+            "focusauto": self.checkBoxCaptureDevicePropertiesFocusAuto.isChecked(),
 
-            "robot1": self.comboBoxRobotRobotFunctionsRobot1.currentText(),
-            "robot2": self.comboBoxRobotRobotFunctionsRobot2.currentText(),
-            "robot3": self.comboBoxRobotRobotFunctionsRobot3.currentText(),
+            "robot1": self.comboBoxStrategyRobotFunctionsRobot1.currentText(),
+            "robot2": self.comboBoxStrategyRobotFunctionsRobot2.currentText(),
+            "robot3": self.comboBoxStrategyRobotFunctionsRobot3.currentText(),
 
             "mainBlur": self.horizontalSliderVisionHSVCalibrationMainBlur.value(),
             "mainErode": self.horizontalSliderVisionHSVCalibrationMainErode.value(),
@@ -455,13 +478,20 @@ class Afrodite(QMainWindow):
     # DeviceInformation
     def getPushButtonCaptureDeviceInformationStart(self):
         cameraId = self.comboBoxCaptureDeviceInformation.currentText()
-        self.hades.eventStartVision(cameraId)
-        self.pushButtonCaptureDeviceInformationStart.setEnabled(False)
-        self.pushButtonCaptureDeviceInformationRefresh.setEnabled(False)
+        enable = self.hades.eventStartVision(cameraId)
 
-    def getPushButtonCaptureDeviceInformationRefresh(self):
-        self.updateComboBoxCaptureDeviceInformation()
-        # self.pushButtonCaptureDeviceInformationStart.setEnabled(True)
+        self.groupBoxCaptureDeviceInformation.setEnabled(not enable)
+        self.groupBoxCaptureDeviceProperties.setEnabled(enable)
+        self.groupBoxCaptureWarp.setEnabled(enable)
+        self.checkBoxPlayDisableDrawing.setEnabled(enable)
+
+        if enable:
+            self.labelCameraState.setText("<font color='green'>Online</font>")
+            if "Online" in self.labelCommunicationState.text():
+                self.pushButtonPlayStart.setEnabled(True)
+                self.groupBoxStrategyFormation.setEnabled(True)
+        else:
+            self.labelCameraState.setText("Error")
 
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):
@@ -515,6 +545,7 @@ class Afrodite(QMainWindow):
         return self.comboBoxCaptureDevicePropertiesFrameSize.currentText()
 
     # CamConfig
+    # TODO pegar e setar esses valores corretamente
     def camConfigsChanged(self):
         # self.comboBoxCaptureDevicePropertiesFrameSize.currentText()
         self.hades.eventCamConfigs(
@@ -522,27 +553,21 @@ class Afrodite(QMainWindow):
             self.spinBoxCaptureDevicePropertiesSaturation.value(),
             self.spinBoxCaptureDevicePropertiesGain.value(),
             self.spinBoxCaptureDevicePropertiesContrast.value(),
-            self.spinBoxCaptureDevicePropertiesHue.value(),
             self.spinBoxCaptureDevicePropertiesExposure.value(),
-            self.spinBoxCaptureDevicePropertiesWhiteBalanceU.value(),
-            self.spinBoxCaptureDevicePropertiesWhiteBalanceV.value(),
-            self.spinBoxCaptureDevicePropertiesIsoSpeed.value()
+            self.spinBoxCaptureDevicePropertiesWhiteBalance.value()
         )
 
     def initCamConfigs(self):
         newBrightness, newSaturation, newGain, newContrast, \
-        newHue, newExposure, newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed = self.hades.getCameraConfigs()
+        newExposure, newWhiteBalance = self.hades.getCameraConfigs()
 
         self.hades.eventCamConfigs(
             self.spinBoxCaptureDevicePropertiesBrightness.value(newBrightness),
             self.spinBoxCaptureDevicePropertiesSaturation.value(newSaturation),
             self.spinBoxCaptureDevicePropertiesGain.value(newGain),
             self.spinBoxCaptureDevicePropertiesContrast.value(newContrast),
-            self.spinBoxCaptureDevicePropertiesHue.value(newHue),
             self.spinBoxCaptureDevicePropertiesExposure.value(newExposure),
-            self.spinBoxCaptureDevicePropertiesWhiteBalanceU.value(newWhiteBalanceU),
-            self.spinBoxCaptureDevicePropertiesWhiteBalanceV.value(newWhiteBalanceV),
-            self.spinBoxCaptureDevicePropertiesIsoSpeed.value(newIsoSpeed)
+            self.spinBoxCaptureDevicePropertiesWhiteBalance.value(newWhiteBalance)
         )
 
     # Warp
@@ -568,22 +593,22 @@ class Afrodite(QMainWindow):
 
     # role
     def clickEditRoles(self):
-        self.pushButtonRobotRobotFunctionsEdit.setEnabled(False)
-        self.pushButtonRobotRobotFunctionsDone.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot1.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot2.setEnabled(True)
-        self.comboBoxRobotRobotFunctionsRobot3.setEnabled(True)
+        self.pushButtonStrategyRobotFunctionsEdit.setEnabled(False)
+        self.pushButtonStrategyRobotFunctionsDone.setEnabled(True)
+        self.comboBoxStrategyRobotFunctionsRobot1.setEnabled(True)
+        self.comboBoxStrategyRobotFunctionsRobot2.setEnabled(True)
+        self.comboBoxStrategyRobotFunctionsRobot3.setEnabled(True)
 
     def clickDoneRoles(self):
-        self.pushButtonRobotRobotFunctionsEdit.setEnabled(True)
-        self.pushButtonRobotRobotFunctionsDone.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot1.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot2.setEnabled(False)
-        self.comboBoxRobotRobotFunctionsRobot3.setEnabled(False)
+        self.pushButtonStrategyRobotFunctionsEdit.setEnabled(True)
+        self.pushButtonStrategyRobotFunctionsDone.setEnabled(False)
+        self.comboBoxStrategyRobotFunctionsRobot1.setEnabled(False)
+        self.comboBoxStrategyRobotFunctionsRobot2.setEnabled(False)
+        self.comboBoxStrategyRobotFunctionsRobot3.setEnabled(False)
 
-        self.hades.eventSelectRoles([self.comboBoxRobotRobotFunctionsRobot1.currentText(),
-                                     self.comboBoxRobotRobotFunctionsRobot2.currentText(),
-                                     self.comboBoxRobotRobotFunctionsRobot3.currentText()])
+        self.hades.eventSelectRoles([self.comboBoxStrategyRobotFunctionsRobot1.currentText(),
+                                     self.comboBoxStrategyRobotFunctionsRobot2.currentText(),
+                                     self.comboBoxStrategyRobotFunctionsRobot3.currentText()])
 
     # speeds
     def getPushButtonRobotSpeedEdit(self):
@@ -667,12 +692,6 @@ class Afrodite(QMainWindow):
     def getVisionVideoCaptureVideoName(self):
         return self.lineEditVisionVideoCaptureVideoName.text()
 
-    def getPushButtonVisionVideoCapturePictureNameSave(self):
-        pass
-
-    def getPushButtonVisionVideoCaptureVideoNameSave(self):
-        pass
-
     # ModeView
     def getVisionModeViewSelectMode(self):
         if self.radioButtonVisionModeViewOriginal.isChecked():
@@ -695,30 +714,6 @@ class Afrodite(QMainWindow):
             Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
 
         elif current == 1:
-            Hmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
-            Smin = self.spinBoxVisionHSVCalibrationBallSmin.value()
-            Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
-            Erode = self.spinBoxVisionHSVCalibrationBallErode.value()
-            Blur = self.spinBoxVisionHSVCalibrationBallBlur.value()
-            Hmax = self.spinBoxVisionHSVCalibrationBallHmax.value()
-            Smax = self.spinBoxVisionHSVCalibrationBallSmax.value()
-            Vmax = self.spinBoxVisionHSVCalibrationBallVmax.value()
-            Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
-            Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
-
-        elif current == 2:
-            Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
-            Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
-            Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
-            Erode = self.spinBoxVisionHSVCalibrationOpponentErode.value()
-            Blur = self.spinBoxVisionHSVCalibrationOpponentBlur.value()
-            Hmax = self.spinBoxVisionHSVCalibrationOpponentHmax.value()
-            Smax = self.spinBoxVisionHSVCalibrationOpponentSmax.value()
-            Vmax = self.spinBoxVisionHSVCalibrationOpponentVmax.value()
-            Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
-            Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
-
-        else:  # current == 3
             Hmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationGreenSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
@@ -730,20 +725,78 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
+        elif current == 2:
+            Hmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
+            Smin = self.spinBoxVisionHSVCalibrationBallSmin.value()
+            Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
+            Erode = self.spinBoxVisionHSVCalibrationBallErode.value()
+            Blur = self.spinBoxVisionHSVCalibrationBallBlur.value()
+            Hmax = self.spinBoxVisionHSVCalibrationBallHmax.value()
+            Smax = self.spinBoxVisionHSVCalibrationBallSmax.value()
+            Vmax = self.spinBoxVisionHSVCalibrationBallVmax.value()
+            Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
+            Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
+
+        else:  # current = 3
+            Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
+            Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
+            Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
+            Erode = self.spinBoxVisionHSVCalibrationOpponentErode.value()
+            Blur = self.spinBoxVisionHSVCalibrationOpponentBlur.value()
+            Hmax = self.spinBoxVisionHSVCalibrationOpponentHmax.value()
+            Smax = self.spinBoxVisionHSVCalibrationOpponentSmax.value()
+            Vmax = self.spinBoxVisionHSVCalibrationOpponentVmax.value()
+            Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
+            Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
+
         self.hades.eventCalibration(current, ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin))
 
     def getPushButtonVisionHSVCalibrationSwap(self):
-        stringAux = self.labelVisionHSVCalibrationSwap.text()
-        self.labelVisionHSVCalibrationSwap.setText(self.pushButtonVisionHSVCalibrationSwap.text())
-        self.pushButtonVisionHSVCalibrationSwap.setText(stringAux)
+        Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
+        Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
+        Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
+        Erode = self.spinBoxVisionHSVCalibrationOpponentErode.value()
+        Blur = self.spinBoxVisionHSVCalibrationOpponentBlur.value()
+        Hmax = self.spinBoxVisionHSVCalibrationOpponentHmax.value()
+        Smax = self.spinBoxVisionHSVCalibrationOpponentSmax.value()
+        Vmax = self.spinBoxVisionHSVCalibrationOpponentVmax.value()
+        Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
+        Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        return self.pushButtonVisionHSVCalibrationSwap.text()
+        self.spinBoxVisionHSVCalibrationOpponentHmin.setValue(self.spinBoxVisionHSVCalibrationMainHmin.value())
+        self.spinBoxVisionHSVCalibrationOpponentSmin.setValue(self.spinBoxVisionHSVCalibrationMainSmin.value())
+        self.spinBoxVisionHSVCalibrationOpponentVmin.setValue(self.spinBoxVisionHSVCalibrationMainVmin.value())
+        self.spinBoxVisionHSVCalibrationOpponentErode.setValue(self.spinBoxVisionHSVCalibrationMainErode.value())
+        self.spinBoxVisionHSVCalibrationOpponentBlur.setValue(self.spinBoxVisionHSVCalibrationMainBlur.value())
+        self.spinBoxVisionHSVCalibrationOpponentHmax.setValue(self.spinBoxVisionHSVCalibrationMainHmax.value())
+        self.spinBoxVisionHSVCalibrationOpponentSmax.setValue(self.spinBoxVisionHSVCalibrationMainSmax.value())
+        self.spinBoxVisionHSVCalibrationOpponentVmax.setValue(self.spinBoxVisionHSVCalibrationMainVmax.value())
+        self.spinBoxVisionHSVCalibrationOpponentDilate.setValue(self.spinBoxVisionHSVCalibrationMainDilate.value())
+        self.spinBoxVisionHSVCalibrationOpponentAmin.setValue(self.spinBoxVisionHSVCalibrationMainAmin.value())
+
+        self.horizontalSliderVisionHSVCalibrationMainBlur.setValue(Blur)
+        self.horizontalSliderVisionHSVCalibrationMainErode.setValue(Erode)
+        self.horizontalSliderVisionHSVCalibrationMainHmin.setValue(Hmin)
+        self.horizontalSliderVisionHSVCalibrationMainSmin.setValue(Smin)
+        self.horizontalSliderVisionHSVCalibrationMainVmin.setValue(Vmin)
+        self.horizontalSliderVisionHSVCalibrationMainAmin.setValue(Amin)
+        self.horizontalSliderVisionHSVCalibrationMainDilate.setValue(Dilate)
+        self.horizontalSliderVisionHSVCalibrationMainHmax.setValue(Hmax)
+        self.horizontalSliderVisionHSVCalibrationMainSmax.setValue(Smax)
+        self.horizontalSliderVisionHSVCalibrationMainVmax.setValue(Vmax)
+
+        # atualiza os valores do apolo para o main e oponente
+        print("HSV Swapped Main<->Opponent")
+        self.callHadesCalibEvent(0)
+        self.callHadesCalibEvent(3)
 
     def getPushButtonVisionHSVCalibrationEdit(self):
-        if self.stackedWidgetVisionHSVCalibration.isEnabled():
-            self.stackedWidgetVisionHSVCalibration.setEnabled(False)
-        else:
-            self.stackedWidgetVisionHSVCalibration.setEnabled(True)
+        enable = not self.stackedWidgetVisionHSVCalibration.isEnabled()
+
+        self.pushButtonVisionHSVCalibrationEdit.setText("Done" if enable else "Edit")
+        self.stackedWidgetVisionHSVCalibration.setEnabled(enable)
+        self.pushButtonVisionHSVCalibrationPrev.setEnabled(enable)
+        self.pushButtonVisionHSVCalibrationNext.setEnabled(enable)
 
         self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex())
 
@@ -769,17 +822,13 @@ class Afrodite(QMainWindow):
 
     # PIDTest
     def getPushButtonControlRobotFunctionsPIDTest(self):
-        if self.pushButtonControlRobotFunctionsPIDTest.palette().button().color().name() == '#efefef':
-            self.pushButtonControlRobotFunctionsPIDTest.setStyleSheet('background-color:#ff0000')
+        if self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#efefef':
+            self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#ff0000')
             self.hades.enablePIDTest()
 
-        elif self.pushButtonControlRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
-            self.pushButtonControlRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
+        elif self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
+            self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
             self.hades.disablePIDTest()
-
-    def startSerialConnection(self):
-        port = self.comboBoxControlSerialDevice.currentText()
-        self.hades.eventStartXbee(port)
 
     def sendWheelVelocities(self):
         # TODO robotId = getControlSerialRobots()
@@ -795,7 +844,19 @@ class Afrodite(QMainWindow):
     # Serial
     def getPushButtonControlSerialDeviceStart(self):
         device = self.getComboBoxControlSerialDevice()
-        self.hades.eventStartXbee(device)
+        enable = self.hades.eventStartXbee(device)
+
+        self.groupComunicationSerialDevice.setEnabled(not enable)
+        self.groupComunicationSerial.setEnabled(enable)
+        self.pushButtonPlayRobotStatusRobotUpdate.setEnabled(enable)
+
+        if enable:
+            self.labelCommunicationState.setText("<font color='green'>Online</font>")
+            if "Online" in self.labelCameraState.text():
+                self.pushButtonPlayStart.setEnabled(True)
+                self.groupBoxStrategyFormation.setEnabled(True)
+        else:
+            self.labelCommunicationState.setText("Error")
 
     def updateComboBoxControlSerialDevice(self):
         if sys.platform.startswith('win'):
