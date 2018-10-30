@@ -38,8 +38,9 @@ class Afrodite(QMainWindow):
         # PLAY
         self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
         self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
-
+        self.pushButtonPlayConnect.clicked.connect(self.changeRecordFlag)
         # VISION
+        self.recordFlag = False
         self.cameraIsRunning = False
 
         # Capture
@@ -214,6 +215,12 @@ class Afrodite(QMainWindow):
             self.getPushButtonControlSerialDeviceStart()
 
         self.pushButtonPlayConnect.setEnabled(False)
+
+    def changeRecordFlag(self):
+        if self.recordFlag = False:
+            self.recordFlag = True
+        else:
+            self.recordFlag = False
 
     # VideoView
     # Positions
