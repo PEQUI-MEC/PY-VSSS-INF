@@ -268,7 +268,6 @@ class UnivectorField:
 
             fi_auf = self.avoidField.avoid(self.robotPos, vPos=closestCenter, theta=True)
 
-        # print("minDistance: ", minDistance)
         if minDistance <= self.dMin:
             return fi_auf
         else:

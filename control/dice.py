@@ -46,11 +46,13 @@ class Dice:
         theta = atan2(sin(self.warrior.transAngle), -cos(self.warrior.transAngle))
         target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
 
-        targetTheta = atan2(target[1] - self.warrior.position[1], -(target[0] - self.warrior.position[0]))
+        targetTheta = atan2((target[1] - self.warrior.position[1]) * 1.3 / 480,
+                            -(target[0] - self.warrior.position[0]) * 1.5 / 640)
         # currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
         currentTheta = self.warrior.orientation
 
-        if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
+        if abs(targetTheta - currentTheta) > pi / 2:
+        #if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
             self.warrior.backward = True
             self.warrior.front = 1
         else:
@@ -72,9 +74,9 @@ class Dice:
         left = self.warrior.vMax * left
         right = self.warrior.vMax * right
 
-        if self.warrior.name == "luisinho":
+        # if self.warrior.name == "huguinho":
             # print(self.warrior.position)
-            print("Orientation: ", self.warrior.orientation, "Current: ", currentTheta, " Target: ", targetTheta)
+            # print("Orientation: ", self.warrior.orientation, "Current: ", currentTheta, " Target: ", targetTheta, target)
 
         return [left, right]
 
