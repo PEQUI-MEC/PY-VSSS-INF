@@ -247,8 +247,8 @@ class UnivectorField:
         if orientation is not None:
             self.updateOrientation(orientation)
         if obstacles is not None:
-            if ostaclesSpeed is None:
-                ostaclesSpeed = [0.0, 0.0]
+            # if ostaclesSpeed is None:
+            ostaclesSpeed = [0.0, 0.0]
             self.updateObstacles(obstacles, ostaclesSpeed)
 
         centers = []
@@ -256,7 +256,7 @@ class UnivectorField:
         minDistance = self.dMin + 1
         if self.obstacles is not None:
             for i in range(0, len(self.obstacles)):
-                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
+                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
                 center = self.avoidField.getVirtualPos()
                 centers.append(center)
 
@@ -268,6 +268,7 @@ class UnivectorField:
 
             fi_auf = self.avoidField.avoid(self.robotPos, vPos=closestCenter, theta=True)
 
+        # print("minDistance: ", minDistance)
         if minDistance <= self.dMin:
             return fi_auf
         else:

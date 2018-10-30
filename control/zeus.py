@@ -203,6 +203,10 @@ class Zeus:
             warriors[x].backward = self.warriors[x].backward
             warriors[x].front = self.warriors[x].front
 
+        warriors[0].name = "luisinho"
+        warriors[1].name = "zezinho"
+        warriors[2].name = "huguinho"
+
         return warriors
 
     def controlRoutine(self):

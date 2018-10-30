@@ -4,6 +4,8 @@ from ctypes import Structure
 class Warrior(Structure):
 
     def __init__(self):
+        self.name = None
+
         self.front = -1
         self.backward = False
 

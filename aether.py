@@ -48,17 +48,17 @@ class Aether:
             Zeus()
         ]
         self.athena[0].setup(3, self.field_width, self.field_height, 0.8)
-        self.athena[1].setup(3, self.field_width, self.field_height, 0.8)
+        # self.athena[1].setup(3, self.field_width, self.field_height, 0.8)
         self.zeus[0].setup(3)
-        self.zeus[1].setup(3)
+        # self.zeus[1].setup(3)
 
         # inicializa o loop dos dados
         loopThread1 = threading.Thread(target=self.loopTeam, args=[0])
-        loopThread2 = threading.Thread(target=self.loopTeam, args=[1])
+        # loopThread2 = threading.Thread(target=self.loopTeam, args=[1])
         loopThread1.daemon = True
-        loopThread2.daemon = True
+        # loopThread2.daemon = True
         loopThread1.start()
-        loopThread2.start()
+        # loopThread2.start()
 
     def run(self):
         while True:
@@ -71,6 +71,7 @@ class Aether:
             positions = self.generatePositions(team)
             commands = self.athena[team].getTargets(positions)
             velocities = self.zeus[team].getVelocities(commands)
+            # print(positions[0][2]["position"])
             # aplica resultados na simulação
             if self.enabled[0 + 3 * team]:
                 self.sim.data.ctrl[0 + 6 * team] = self.convertVelocity(velocities[0]["vLeft"])

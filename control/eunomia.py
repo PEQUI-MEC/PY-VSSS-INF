@@ -10,7 +10,7 @@ class Eunomia:
     def setup(self, width=100):
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
-        self.uvf.updateConstants(radius=6.0, kr=0.9, k0=4.12, dMin=50.0, lDelta=4.5)
+        self.uvf.updateConstants(radius=6.0, kr=0.9, k0=4.12, dMin=80.0, lDelta=4.5)
 
     def run(self, warrior):
         """Main method of action controller
@@ -131,9 +131,26 @@ class Eunomia:
         #   time = warrior.before
 
         # Backwards
+
+        '''
+        targetTheta = atan2(self.warrior.targetOrientation[1] - self.warrior.position[1],
+                            -(self.warrior.targetOrientation[0] - self.warrior.position[0]))
+        currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
+        if atan2(sin(targetTheta - currentTheta + pi / 2), cos(targetTheta - currentTheta + pi / 2)) < 0:
+            self.warrior.backward = True
+            self.warrior.front = 1
+            # currentTheta = currentTheta + pi
+            # currentTheta = atan2(sin(currentTheta), cos(currentTheta))
+
+        else:
+            self.warrior.backward = False
+            self.warrior.front = -1
+
         if self.warrior.backward:
-            self.warrior.orientation = self.warrior.orientation + pi
+            self.warrior.orientation = currentTheta + pi
             self.warrior.orientation = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
+        '''
+        # print("Obs speed: ", self.warrior.obstaclesSpeed)
 
         if time is None:
             self.warrior.vRight = self.warrior.vMax
