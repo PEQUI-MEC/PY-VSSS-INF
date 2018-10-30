@@ -131,23 +131,23 @@ class Eunomia:
         #   time = warrior.before
 
         # Backwards
-
         '''
         targetTheta = atan2(self.warrior.targetOrientation[1] - self.warrior.position[1],
                             -(self.warrior.targetOrientation[0] - self.warrior.position[0]))
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
-        if atan2(sin(targetTheta - currentTheta + pi / 2), cos(targetTheta - currentTheta + pi / 2)) < 0:
+        # currentTheta = self.warrior.orientation
+        if atan2(sin(targetTheta - currentTheta + pi/2), cos(targetTheta - currentTheta + pi/2)) < 0:
             self.warrior.backward = True
             self.warrior.front = 1
-            # currentTheta = currentTheta + pi
-            # currentTheta = atan2(sin(currentTheta), cos(currentTheta))
-
         else:
             self.warrior.backward = False
             self.warrior.front = -1
 
         if self.warrior.backward:
-            self.warrior.orientation = currentTheta + pi
+            self.warrior.orientation = self.warrior.orientation + pi
+            self.warrior.orientation = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
+        else:
+            self.warrior.orientation = self.warrior.orientation - pi
             self.warrior.orientation = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
         '''
         # print("Obs speed: ", self.warrior.obstaclesSpeed)
