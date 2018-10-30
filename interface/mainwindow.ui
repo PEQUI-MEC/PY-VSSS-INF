@@ -86,7 +86,6 @@
    </attribute>
    <addaction name="actionLoadConfigs"/>
    <addaction name="actionSaveConfigs"/>
-   <addaction name="actionSaveasConfigs"/>
   </widget>
   <widget class="QDockWidget" name="dockWidgetVideoView">
    <property name="enabled">
@@ -285,9 +284,9 @@
       <widget class="QGroupBox" name="groupBoxPlayRobotStatus">
        <property name="geometry">
         <rect>
-         <x>440</x>
+         <x>410</x>
          <y>20</y>
-         <width>151</width>
+         <width>181</width>
          <height>101</height>
         </rect>
        </property>
@@ -308,7 +307,7 @@
          <rect>
           <x>10</x>
           <y>60</y>
-          <width>130</width>
+          <width>161</width>
           <height>25</height>
          </rect>
         </property>
@@ -327,7 +326,7 @@
          <rect>
           <x>10</x>
           <y>30</y>
-          <width>130</width>
+          <width>161</width>
           <height>25</height>
          </rect>
         </property>
@@ -751,7 +750,7 @@
         <rect>
          <x>10</x>
          <y>20</y>
-         <width>421</width>
+         <width>391</width>
          <height>101</height>
         </rect>
        </property>
@@ -763,13 +762,13 @@
          <rect>
           <x>10</x>
           <y>30</y>
-          <width>240</width>
+          <width>211</width>
           <height>25</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>240</width>
+          <width>100</width>
           <height>25</height>
          </size>
         </property>
@@ -783,7 +782,7 @@
        <widget class="QPushButton" name="pushButtonStrategyFormationDelete">
         <property name="geometry">
          <rect>
-          <x>340</x>
+          <x>310</x>
           <y>30</y>
           <width>70</width>
           <height>25</height>
@@ -808,7 +807,7 @@
        <widget class="QPushButton" name="pushButtonStrategyFormationLoad">
         <property name="geometry">
          <rect>
-          <x>260</x>
+          <x>230</x>
           <y>30</y>
           <width>70</width>
           <height>25</height>
@@ -835,13 +834,13 @@
          <rect>
           <x>10</x>
           <y>60</y>
-          <width>240</width>
+          <width>211</width>
           <height>25</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>240</width>
+          <width>100</width>
           <height>0</height>
          </size>
         </property>
@@ -858,7 +857,7 @@
        <widget class="QPushButton" name="pushButtonStrategyFormationSave">
         <property name="geometry">
          <rect>
-          <x>340</x>
+          <x>310</x>
           <y>60</y>
           <width>70</width>
           <height>25</height>
@@ -883,7 +882,7 @@
        <widget class="QPushButton" name="pushButtonStrategyFormationCreate">
         <property name="geometry">
          <rect>
-          <x>260</x>
+          <x>230</x>
           <y>60</y>
           <width>70</width>
           <height>25</height>
@@ -913,7 +912,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>120</y>
+         <y>130</y>
          <width>581</width>
          <height>171</height>
         </rect>
@@ -1041,21 +1040,43 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QLabel" name="labelPlayRobotFunctions">
+            <widget class="QLabel" name="labelPlayLastMessageRobot_2">
              <property name="minimumSize">
+              <size>
+               <width>60</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>70</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Robot</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelPlayLastMessageRobot1Fixed">
+             <property name="minimumSize">
+              <size>
+               <width>60</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize">
               <size>
                <width>80</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>35</height>
+               <height>25</height>
               </size>
              </property>
              <property name="text">
-              <string>Function</string>
+              <string>1</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -1063,21 +1084,21 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labelPlayRobotFunctionsRobot1Function">
+            <widget class="QLabel" name="labelPlayLastMessageRobot2Fixed">
              <property name="minimumSize">
               <size>
-               <width>91</width>
+               <width>60</width>
                <height>25</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>91</width>
+               <width>80</width>
                <height>25</height>
               </size>
              </property>
              <property name="text">
-              <string>Function</string>
+              <string>2</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -1085,43 +1106,21 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labelPlayRobotFunctionsRobot2Function">
+            <widget class="QLabel" name="labelPlayLastMessageRobot3Fixed">
              <property name="minimumSize">
               <size>
-               <width>91</width>
+               <width>60</width>
                <height>25</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>91</width>
+               <width>80</width>
                <height>25</height>
               </size>
              </property>
              <property name="text">
-              <string>Function</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="labelPlayRobotFunctionsRobot3Function">
-             <property name="minimumSize">
-              <size>
-               <width>91</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>91</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Function</string>
+              <string>3</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -1214,6 +1213,98 @@
              </property>
              <property name="text">
               <string>(0, 0, 0 rad)</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QLabel" name="labelPlayRobotFunctions">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Function</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelPlayRobotFunctionsRobot1Function">
+             <property name="minimumSize">
+              <size>
+               <width>91</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>91</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Goalkeeper</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelPlayRobotFunctionsRobot2Function">
+             <property name="minimumSize">
+              <size>
+               <width>91</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>91</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Goalkeeper</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelPlayRobotFunctionsRobot3Function">
+             <property name="minimumSize">
+              <size>
+               <width>91</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>91</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Goalkeeper</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -7575,7 +7666,7 @@ Message</string>
          <x>10</x>
          <y>100</y>
          <width>571</width>
-         <height>91</height>
+         <height>101</height>
         </rect>
        </property>
        <property name="title">
@@ -7585,7 +7676,7 @@ Message</string>
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>20</y>
+          <y>30</y>
           <width>120</width>
           <height>25</height>
          </rect>
@@ -7632,7 +7723,7 @@ Message</string>
         <property name="geometry">
          <rect>
           <x>490</x>
-          <y>20</y>
+          <y>30</y>
           <width>70</width>
           <height>25</height>
          </rect>
@@ -7657,7 +7748,7 @@ Message</string>
         <property name="geometry">
          <rect>
           <x>120</x>
-          <y>50</y>
+          <y>60</y>
           <width>150</width>
           <height>31</height>
          </rect>
@@ -7682,7 +7773,7 @@ Message</string>
         <property name="geometry">
          <rect>
           <x>140</x>
-          <y>20</y>
+          <y>30</y>
           <width>341</width>
           <height>25</height>
          </rect>
@@ -7704,7 +7795,7 @@ Message</string>
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>50</y>
+          <y>60</y>
           <width>100</width>
           <height>31</height>
          </rect>
@@ -7732,7 +7823,7 @@ Message</string>
         <property name="geometry">
          <rect>
           <x>430</x>
-          <y>50</y>
+          <y>60</y>
           <width>131</width>
           <height>31</height>
          </rect>
@@ -7746,7 +7837,7 @@ Message</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>200</y>
+         <y>210</y>
          <width>571</width>
          <height>171</height>
         </rect>
@@ -8112,6 +8203,9 @@ Message</string>
    </property>
   </action>
   <action name="actionSaveasConfigs">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/Icons/Imgs/Save-as.png</normaloff>:/Icons/Imgs/Save-as.png</iconset>
