@@ -10,6 +10,7 @@ from PyQt5.uic import loadUi
 
 import serial
 import glob
+import interface.icons_rc
 import serial.tools.list_ports as list_ports
 import hades
 
