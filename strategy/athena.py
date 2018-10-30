@@ -15,15 +15,15 @@ class Athena:
     sDanger = 5
     sHoly = 6
 
-    tCatch = 0
-    tCatchSideways = 1
-    tBlock = 2
-    tBlockOpening = 3
-    tPush = 4
-    tSpin = 5
-    tWaitPass = 6
-    tKick = 7
-    tUnlock = 8
+    tCatch = "catch"
+    tCatchSideways = "catchsideways"
+    tBlock = "block"
+    tBlockOpening = "blockopening"
+    tPush = "push"
+    tSpin = "spin"
+    tWaitPass = "wait"
+    tKick = "kick"
+    tUnlock = "unlock"
 
     def __init__(self):
         self.endless = None
@@ -190,7 +190,8 @@ class Athena:
         response = []
         for warrior in warriors:
             command = {
-                "robotLetter": warrior.robotID
+                "robotLetter": warrior.robotID,
+                "tactics": warrior.tactics
             }
 
             if warrior.command["type"] == "goTo":
@@ -489,7 +490,8 @@ class Athena:
             # se ele não _deve_ estar parado
             if not warrior.positionLocked:
                 # se ele não se moveu de um ciclo pra cá
-                if warrior.actionTimer <= 0 and distance.euclidean(warrior.position, warrior.lastPosition) < 0.1:
+                if warrior.actionTimer <= 0 and \
+                        distance.euclidean(warrior.position, warrior.lastPosition) < 10 * self.deltaTime:
                     # se atingiu o máximo de tempo bloqueado, executa ação de sair
                     if warrior.lockedTime > 0.5:
                         # print("locked " + str(time.time()))

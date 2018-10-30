@@ -14,60 +14,51 @@ class Viewer(MjViewer):
         glfw.set_key_callback(self.window, self.key_callback)
 
     def _create_full_overlay(self):
+        # TOP LEFT
+
         if "ball" in self.infos:
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["ball"], "Ball Pose")
+            self.add_overlay(const.GRID_TOPLEFT, "Ball Pose", self.infos["ball"])
 
         if "robots1" in self.infos:
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][0], "Robot [1]")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][1], "Robot [2]")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots1"][2], "Robot [3]")
+            self.add_overlay(const.GRID_TOPLEFT, "Robot [1]", self.infos["robots1"][0])
+            self.add_overlay(const.GRID_TOPLEFT, "Robot [2]", self.infos["robots1"][1])
+            self.add_overlay(const.GRID_TOPLEFT, "Robot [3]", self.infos["robots1"][2])
 
         if "robots2" in self.infos:
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][0], "Robot [4]")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][1], "Robot [5]")
-            self.add_overlay(const.GRID_TOPRIGHT, self.infos["robots2"][2], "Robot [6]")
+            self.add_overlay(const.GRID_TOPLEFT, "Robot [4]", self.infos["robots2"][0])
+            self.add_overlay(const.GRID_TOPLEFT, "Robot [5]", self.infos["robots2"][1])
+            self.add_overlay(const.GRID_TOPLEFT, "Robot [6]", self.infos["robots2"][2])
 
-        if "fps" in self.infos:
-            self.add_overlay(const.GRID_BOTTOMLEFT, "Team 1 FPS", self.infos["fps"])
+        # TOP RIGHT
 
-        if self._render_every_frame:
-            self.add_overlay(const.GRID_TOPLEFT, "", "")
-        else:
-            self.add_overlay(const.GRID_TOPLEFT, "Run speed = %.3f x real time" %
-                             self._run_speed, "[S]lower, [F]aster")
-        self.add_overlay(
-            const.GRID_TOPLEFT, "Ren[d]er every frame", "Off" if self._render_every_frame else "On")
-        self.add_overlay(const.GRID_TOPLEFT, "Switch camera (#cams = %d)" % (self._ncam + 1),
-                                             "[Tab] (camera ID = %d)" % self.cam.fixedcamid)
-        self.add_overlay(const.GRID_TOPLEFT, "[C]ontact forces", "Off" if self.vopt.flags[
-                         10] == 1 else "On")
-        self.add_overlay(
-            const.GRID_TOPLEFT, "Referenc[e] frames", "Off" if self.vopt.frame == 1 else "On")
-        self.add_overlay(const.GRID_TOPLEFT,
-                         "T[r]ansparent", "On" if self._transparent else "Off")
         if self._paused is not None:
             if not self._paused:
-                self.add_overlay(const.GRID_TOPLEFT, "Stop", "[Space]")
+                self.add_overlay(const.GRID_TOPRIGHT, "Stop", "[Space]")
             else:
-                self.add_overlay(const.GRID_TOPLEFT, "Start", "[Space]")
-            self.add_overlay(const.GRID_TOPLEFT,
+                self.add_overlay(const.GRID_TOPRIGHT, "Start", "[Space]")
+            self.add_overlay(const.GRID_TOPRIGHT,
                              "Advance simulation by one step", "[P]")
-        self.add_overlay(const.GRID_TOPLEFT, "[H]ide Menu", "")
-        if self._record_video:
-            ndots = int(7 * (time.time() % 1))
-            dots = ("." * ndots) + (" " * (6 - ndots))
-            self.add_overlay(const.GRID_TOPLEFT,
-                             "Record [V]ideo (On) " + dots, "")
+        if self._render_every_frame:
+            self.add_overlay(const.GRID_TOPRIGHT, "", "")
         else:
-            self.add_overlay(const.GRID_TOPLEFT, "Record [V]ideo (Off) ", "")
-        if self._video_idx > 0:
-            fname = self._video_path % (self._video_idx - 1)
-            self.add_overlay(const.GRID_TOPLEFT, "   saved as %s" % fname, "")
+            self.add_overlay(const.GRID_TOPRIGHT, "Run speed = %.3f x real time" %
+                             self._run_speed, "[S]lower, [F]aster")
+        self.add_overlay(
+            const.GRID_TOPRIGHT, "Ren[d]er every frame", "Off" if self._render_every_frame else "On")
+        self.add_overlay(const.GRID_TOPRIGHT, "Switch camera (#cams = %d)" % (self._ncam + 1),
+                                              "[Tab] (camera ID = %d)" % self.cam.fixedcamid)
+        self.add_overlay(const.GRID_TOPRIGHT, "[C]ontact forces", "Off" if self.vopt.flags[
+                         10] == 1 else "On")
+        self.add_overlay(
+            const.GRID_TOPRIGHT, "Referenc[e] frames", "Off" if self.vopt.frame == 1 else "On")
+        self.add_overlay(const.GRID_TOPRIGHT,
+                         "T[r]ansparent", "On" if self._transparent else "Off")
 
-        self.add_overlay(const.GRID_TOPLEFT, "Cap[t]ure frame", "")
-        if self._image_idx > 0:
-            fname = self._image_path % (self._image_idx - 1)
-            self.add_overlay(const.GRID_TOPLEFT, "   saved as %s" % fname, "")
+        # BOTTOM LEFT
+
+        if "fps" in self.infos:
+            self.add_overlay(const.GRID_BOTTOMLEFT, "Team FPS", self.infos["fps"])
+
         if self._record_video:
             extra = " (while video is not recorded)"
         else:
@@ -77,8 +68,28 @@ class Viewer(MjViewer):
         self.add_overlay(const.GRID_BOTTOMLEFT, "Solver iterations", str(
             self.sim.data.solver_iter + 1))
 
-        self.add_overlay(const.GRID_TOPLEFT, "Move Ball: [UP], [DOWN], [RIGHT], [LEFT]", "")
-        self.add_overlay(const.GRID_TOPLEFT, "    (Shift keeps velocity)", "")
+        # BOTTOM RIGHT
+
+        self.add_overlay(const.GRID_BOTTOMRIGHT, "[H]ide Menu", "")
+
+        self.add_overlay(const.GRID_BOTTOMRIGHT, "Cap[t]ure frame", "")
+        if self._image_idx > 0:
+            fname = self._image_path % (self._image_idx - 1)
+            self.add_overlay(const.GRID_BOTTOMRIGHT, "   saved as %s" % fname, "")
+
+        if self._record_video:
+            ndots = int(7 * (time.time() % 1))
+            dots = ("." * ndots) + (" " * (6 - ndots))
+            self.add_overlay(const.GRID_BOTTOMRIGHT,
+                             "Record [V]ideo (On) " + dots, "")
+        else:
+            self.add_overlay(const.GRID_BOTTOMRIGHT, "Record [V]ideo (Off) ", "")
+        if self._video_idx > 0:
+            fname = self._video_path % (self._video_idx - 1)
+            self.add_overlay(const.GRID_BOTTOMRIGHT, "   saved as %s" % fname, "")
+
+        self.add_overlay(const.GRID_BOTTOMRIGHT, "Move Ball: [U], [D], [R], [L]", "")
+        self.add_overlay(const.GRID_BOTTOMRIGHT, "    (Shift keeps velocity)", "")
 
     def key_callback(self, window, key, scancode, action, mods):
         if action == glfw.REPEAT or action == glfw.PRESS:
@@ -117,6 +128,8 @@ class Viewer(MjViewer):
                 self._hide_overlay = not self._hide_overlay
             elif key == glfw.KEY_SPACE and self._paused is not None:  # stops simulation.
                 self._paused = not self._paused
+                self.aether.startStop(self._paused)
+
             # Advances simulation by one step.
             elif key == glfw.KEY_P and self._paused is not None:
                 self._advance_by_one_step = True
