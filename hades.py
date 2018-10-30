@@ -24,6 +24,8 @@ class Hades(QThread):
         self.zeus = Zeus()
         self.hermes = Hermes()
 
+        self.plutus = Plutus()
+
         self.play = False
         self.isCalibrating = False
 
@@ -56,6 +58,8 @@ class Hades(QThread):
         while True:
             # visão
             positions = self.apoloRules()
+            # if positions is not None:
+            #     print(positions[0][0]["robotLetter"])
 
             if self.play:
                 commands = self.athenaRules(positions)
@@ -177,7 +181,27 @@ class Hades(QThread):
         print("Hades started") if self.play else print("Hades stopped")
         return self.play
 
+    def SetFileSave(self, file):
+        self.plutus.setFile(file)
+
+    def eventSaveConfigs(self, value):
+        for key in value:
+            self.plutus.set(key, value[key])
+        print("Save configs")
+
+    def eventLoadConfigs(self, key):
+        value = self.plutus.get(key)
+        if value is not None:
+            return value
+        else:
+            return 0
+
     # Camera e Visão
+    def eventInvertImage(self, state):
+        if self.apolo is not None:
+            return self.apolo.setInvertImage(state)
+        return False
+
     def getCamCongigs(self):
         return self.apolo.getCamConfigs()
 
@@ -187,7 +211,7 @@ class Hades(QThread):
             self.apolo.updateCamConfigs(newBrightness, newSaturation, newGain, newContrast, newExposure,
                                         newWhiteBalance)
 
-    def calibrationEvent(self, imageId, calibration=None):
+    def eventCalibration(self, imageId, calibration=None):
         if self.apolo is not None:
             self.apolo.setHSVThresh(calibration, imageId)
 
@@ -197,6 +221,21 @@ class Hades(QThread):
             return True
         except:
             return False
+
+    # refresh não funciona; programa fechando
+    # def eventStopVision(self):
+    #     if self.apolo is not None:
+    #         self.apolo.closeCamera()
+    #         self.apolo = None
+
+    def changeRobotLetters(self, robotLetters):
+        if self.apolo is not None:
+            return self.apolo.changeLetters(robotLetters)
+        return ["A", "B", "C"]
+
+    def closeCamera(self):
+        if self.apolo is not None:
+            self.apolo.closeCamera()
 
     def changeCamera(self, cameraId):
         if self.apolo is not None:

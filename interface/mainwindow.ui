@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1390</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuBarArquivo">
@@ -216,7 +216,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -271,9 +271,6 @@
        </property>
       </widget>
       <widget class="QGroupBox" name="groupBoxPlayRobotStatus">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="geometry">
         <rect>
          <x>440</x>
@@ -289,9 +286,31 @@
         </size>
        </property>
        <property name="title">
-        <string>Robot Status</string>
+        <string>Actions</string>
        </property>
        <widget class="QPushButton" name="pushButtonPlayRobotStatusRobotUpdate">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>130</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Update Robot Status</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonPlayConnect">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -307,7 +326,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Update</string>
+         <string>Connect Devices</string>
         </property>
        </widget>
       </widget>
@@ -316,7 +335,7 @@
         <rect>
          <x>209</x>
          <y>290</y>
-         <width>391</width>
+         <width>381</width>
          <height>151</height>
         </rect>
        </property>
@@ -340,15 +359,24 @@
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>377</width>
-          <height>129</height>
+          <width>361</width>
+          <height>121</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
          <item row="1" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <property name="spacing">
             <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
            </property>
            <item>
             <widget class="QLabel" name="labelPlayDelayFixed">
@@ -365,10 +393,10 @@
               </size>
              </property>
              <property name="text">
-              <string>XBee Delay</string>
+              <string>XBee Delay:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -390,7 +418,7 @@
               <string>XX ms</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -401,8 +429,14 @@
            <property name="spacing">
             <number>2</number>
            </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
+           </property>
            <item>
-            <widget class="QLabel" name="labelVPlayFPS">
+            <widget class="QLabel" name="labelPlayFPS">
              <property name="minimumSize">
               <size>
                <width>40</width>
@@ -411,7 +445,7 @@
              </property>
              <property name="maximumSize">
               <size>
-               <width>10</width>
+               <width>200</width>
                <height>25</height>
               </size>
              </property>
@@ -422,12 +456,12 @@
               <string>FPS:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labelVPlayFPS_6">
+            <widget class="QLabel" name="labelPlayFPSValue">
              <property name="minimumSize">
               <size>
                <width>50</width>
@@ -447,7 +481,7 @@
               <string>XX</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -457,6 +491,12 @@
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <property name="spacing">
             <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
            </property>
            <item>
             <widget class="QLabel" name="labelCamera">
@@ -479,7 +519,7 @@
               <string>Camera:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -487,7 +527,7 @@
             <widget class="QLabel" name="labelCameraState">
              <property name="minimumSize">
               <size>
-               <width>120</width>
+               <width>30</width>
                <height>25</height>
               </size>
              </property>
@@ -516,7 +556,7 @@
               <string>Offline</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -526,6 +566,12 @@
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <property name="spacing">
             <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
            </property>
            <item>
             <widget class="QLabel" name="labelCommunication">
@@ -548,7 +594,7 @@
               <string>Communication:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -582,7 +628,7 @@
               <string>Offline</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -592,6 +638,15 @@
           <layout class="QHBoxLayout" name="horizontalLayout_11">
            <property name="spacing">
             <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="labelPlayPositionsBallFixed">
@@ -608,10 +663,10 @@
               </size>
              </property>
              <property name="text">
-              <string>Ball</string>
+              <string>Ball:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -633,7 +688,7 @@
               <string>(-1,-1,0)</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -641,6 +696,9 @@
          </item>
          <item row="0" column="0">
           <widget class="QCheckBox" name="checkBoxPlayDisableDrawing">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -649,7 +707,7 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>10</width>
              <height>25</height>
             </size>
            </property>
@@ -2116,7 +2174,7 @@ Message</string>
          <string>Frame size:</string>
         </property>
        </widget>
-       <widget class="QSlider" name="horizontalSliderExposure">
+       <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesExposure">
         <property name="geometry">
          <rect>
           <x>180</x>
@@ -2933,7 +2991,7 @@ Message</string>
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="pageVisionHSVCalibrationMain">
          <widget class="QWidget" name="layoutWidget_8">
@@ -2941,7 +2999,7 @@ Message</string>
            <rect>
             <x>10</x>
             <y>30</y>
-            <width>441</width>
+            <width>541</width>
             <height>157</height>
            </rect>
           </property>
@@ -3155,7 +3213,7 @@ Message</string>
               </widget>
              </item>
              <item row="2" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationMain">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationMainVmin">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -3757,7 +3815,7 @@ Message</string>
          <widget class="QLabel" name="labelVisionHSVCalibrationMain">
           <property name="geometry">
            <rect>
-            <x>210</x>
+            <x>10</x>
             <y>0</y>
             <width>50</width>
             <height>25</height>
@@ -3779,1667 +3837,7 @@ Message</string>
            <string>Main</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="pageVisionHSVCalibrationBall">
-         <widget class="QWidget" name="layoutWidget_10">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>441</width>
-            <height>157</height>
-           </rect>
-          </property>
-          <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationBall">
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationBall_2">
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallHmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Hmin</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallHmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallHmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallSmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Smin</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallSmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallSmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallVmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Vmin</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallVmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallVmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallErode">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Erode</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallErode">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallErode">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallBlur">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Blur</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallBlur">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallBlur">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="0" column="1">
-            <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationBall_3">
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallHmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Hmax</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallHmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallHmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallSmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Smax</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallSmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallSmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallVmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Vmax</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallVmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallVmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallDilate">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Dilate</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallDilate">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallDilate">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationBallAmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Amin</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallAmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallAmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QLabel" name="labelVisionHSVCalibrationBallBall">
-          <property name="geometry">
-           <rect>
-            <x>210</x>
-            <y>0</y>
-            <width>50</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Ball</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="pageVisionHSVCalibrationOpponent">
-         <widget class="QWidget" name="layoutWidget_11">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>441</width>
-            <height>157</height>
-           </rect>
-          </property>
-          <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationOpponent">
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationOpponent_2">
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentHmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Hmin</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentHmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentHmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentSmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Smin</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentSmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentSmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentVmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Vmin</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentVmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentVmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="labelErode">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Erode</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentErode">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentErode">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentBlur">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Blur</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentBlur">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentBlur">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="0" column="1">
-            <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationOpponent_3">
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentHmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Hmax</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentHmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentHmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentSmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Smax</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentSmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentSmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentVmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Vmax</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentVmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentVmax">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentDilate">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Dilate</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentDilate">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentDilate">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentAmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Amin</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentAmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
-              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentAmin">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>255</number>
-               </property>
-               <property name="tracking">
-                <bool>true</bool>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="invertedAppearance">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QLabel" name="labelVisionHSVCalibrationOpponentOpponent">
-          <property name="geometry">
-           <rect>
-            <x>190</x>
-            <y>0</y>
-            <width>80</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>80</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Opponent</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
          </widget>
         </widget>
@@ -5449,7 +3847,7 @@ Message</string>
            <rect>
             <x>10</x>
             <y>30</y>
-            <width>441</width>
+            <width>541</width>
             <height>157</height>
            </rect>
           </property>
@@ -6276,6 +4674,1666 @@ Message</string>
           </property>
          </widget>
         </widget>
+        <widget class="QWidget" name="pageVisionHSVCalibrationBall">
+         <widget class="QWidget" name="layoutWidget_10">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>541</width>
+            <height>157</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationBall">
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationBall_2">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallHmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Hmin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallHmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallHmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallSmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Smin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallSmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallSmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallVmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Vmin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallVmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallVmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallErode">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Erode</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallErode">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallErode">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallBlur">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Blur</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallBlur">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallBlur">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="1">
+            <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationBall_3">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallHmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Hmax</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallHmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallHmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallSmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Smax</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallSmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallSmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallVmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Vmax</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallVmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallVmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallDilate">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Dilate</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallDilate">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallDilate">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationBallAmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Amin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationBallAmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationBallAmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QLabel" name="labelVisionHSVCalibrationBallBall">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>0</y>
+            <width>50</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Ball</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="pageVisionHSVCalibrationOpponent">
+         <widget class="QWidget" name="layoutWidget_11">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>541</width>
+            <height>157</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationOpponent">
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationOpponent_2">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentHmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Hmin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentHmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentHmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentSmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Smin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentSmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentSmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentVmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Vmin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentVmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentVmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelErode">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Erode</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentErode">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentErode">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentBlur">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Blur</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentBlur">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentBlur">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="1">
+            <layout class="QGridLayout" name="gridLayoutVisionHSVCalibrationOpponent_3">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentHmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Hmax</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentHmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentHmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentSmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Smax</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentSmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentSmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentVmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Vmax</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentVmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentVmax">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentDilate">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Dilate</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentDilate">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentDilate">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelVisionHSVCalibrationOpponentAmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Amin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="spinBoxVisionHSVCalibrationOpponentAmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QSlider" name="horizontalSliderVisionHSVCalibrationOpponentAmin">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QLabel" name="labelVisionHSVCalibrationOpponentOpponent">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>0</y>
+            <width>80</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Opponent</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </widget>
        </widget>
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
@@ -6287,25 +6345,6 @@ Message</string>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QPushButton" name="pushButtonVisionHSVCalibrationSwap">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Adv &lt;-&gt; Main</string>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QPushButton" name="pushButtonVisionHSVCalibrationEdit">
            <property name="minimumSize">
@@ -6327,6 +6366,9 @@ Message</string>
          </item>
          <item>
           <widget class="QPushButton" name="pushButtonVisionHSVCalibrationPrev">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -6346,6 +6388,9 @@ Message</string>
          </item>
          <item>
           <widget class="QPushButton" name="pushButtonVisionHSVCalibrationNext">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -6360,6 +6405,25 @@ Message</string>
            </property>
            <property name="text">
             <string>Next</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonVisionHSVCalibrationSwap">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Main &lt;-&gt; Opponent</string>
            </property>
           </widget>
          </item>
@@ -6628,6 +6692,19 @@ Message</string>
            </property>
            <property name="text">
             <string>Adjust</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QCheckBox" name="checkBoxInvertImage">
+           <property name="maximumSize">
+            <size>
+             <width>110</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Invert Image</string>
            </property>
           </widget>
          </item>
@@ -7676,7 +7753,7 @@ Message</string>
        <property name="title">
         <string>ID</string>
        </property>
-       <widget class="QPushButton" name="pushButtonComunicationIDEdit">
+       <widget class="QPushButton" name="pushButtonRobotIDEdit">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -7701,7 +7778,7 @@ Message</string>
          <string>Edit</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButtonComunicationIDDone">
+       <widget class="QPushButton" name="pushButtonRobotIDDone">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -7742,7 +7819,7 @@ Message</string>
          <item>
           <layout class="QVBoxLayout" name="verticalLayoutRobotIDRobot1">
            <item>
-            <widget class="QLabel" name="labelComunicationIDRobot1">
+            <widget class="QLabel" name="labelRobotIDRobot1">
              <property name="minimumSize">
               <size>
                <width>10</width>
@@ -7764,7 +7841,7 @@ Message</string>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEditComunicationIDRobot1">
+            <widget class="QLineEdit" name="lineEditRobotIDRobot1">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -7780,6 +7857,9 @@ Message</string>
                <height>25</height>
               </size>
              </property>
+             <property name="text">
+              <string>A</string>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -7790,7 +7870,7 @@ Message</string>
          <item>
           <layout class="QVBoxLayout" name="verticalLayoutRobotIDRobot2">
            <item>
-            <widget class="QLabel" name="labelComunicationIDRobot2">
+            <widget class="QLabel" name="labelRobotIDRobot2">
              <property name="minimumSize">
               <size>
                <width>10</width>
@@ -7812,7 +7892,7 @@ Message</string>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEditComunicationIDRobot2">
+            <widget class="QLineEdit" name="lineEditRobotIDRobot2">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -7828,6 +7908,9 @@ Message</string>
                <height>25</height>
               </size>
              </property>
+             <property name="text">
+              <string>B</string>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -7838,7 +7921,7 @@ Message</string>
          <item>
           <layout class="QVBoxLayout" name="verticalLayoutRobotIDRobot3">
            <item>
-            <widget class="QLabel" name="labelComunicationIDRobot3">
+            <widget class="QLabel" name="labelRobotIDRobot3">
              <property name="minimumSize">
               <size>
                <width>10</width>
@@ -7860,7 +7943,7 @@ Message</string>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEditComunicationIDRobot3">
+            <widget class="QLineEdit" name="lineEditRobotIDRobot3">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -7875,6 +7958,9 @@ Message</string>
                <width>300</width>
                <height>25</height>
               </size>
+             </property>
+             <property name="text">
+              <string>C</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -8206,7 +8292,7 @@ Message</string>
   <connection>
    <sender>spinBoxVisionHSVCalibrationMainVmin</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMain</receiver>
+   <receiver>horizontalSliderVisionHSVCalibrationMainVmin</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -8220,7 +8306,7 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMain</sender>
+   <sender>horizontalSliderVisionHSVCalibrationMainVmin</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxVisionHSVCalibrationMainVmin</receiver>
    <slot>setValue(int)</slot>
@@ -9710,7 +9796,7 @@ Message</string>
   <connection>
    <sender>spinBoxCaptureDevicePropertiesExposure</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderExposure</receiver>
+   <receiver>horizontalSliderCaptureDevicePropertiesExposure</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9724,7 +9810,7 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderExposure</sender>
+   <sender>horizontalSliderCaptureDevicePropertiesExposure</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxCaptureDevicePropertiesExposure</receiver>
    <slot>setValue(int)</slot>
