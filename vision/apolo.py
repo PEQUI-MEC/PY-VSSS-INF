@@ -10,7 +10,7 @@ MAIN = 0
 GREEN = 1
 BALL = 2
 ADV = 3
-ROBOT_RADIUS = 180
+ROBOT_RADIUS = 230 # Lembrar de alterar esse valor
 
 
 class Apolo:
@@ -234,14 +234,14 @@ class Apolo:
         return advRobotsPositionList
 
     @staticmethod
-    def inSphere(robotPosition, secondaryTagPosition, robotRadius):
+    def inSphere(robotPosition, secondaryTagPosition):
         if abs(robotPosition[0] - secondaryTagPosition[0]) + abs(
-                robotPosition[1] - secondaryTagPosition[1]) <= robotRadius:
+                robotPosition[1] - secondaryTagPosition[1]) <= ROBOT_RADIUS:
             return True
         else:
             return False
 
-    def linkTags(self, robotList, secondaryTagsList, robotRadius):
+    def linkTags(self, robotList, secondaryTagsList):
         """
         Linka as tags secundarias às suas respectivas tags Principais
         Args:
@@ -258,10 +258,10 @@ class Apolo:
         for i in robotList:
             if i != (-1, -1, -1):
                 auxTagList = list()
-                for j in secondaryTagsList:
-                    if self.inSphere(i, j, robotRadius):
-                        auxTagList.extend(j)
 
+                for j in secondaryTagsList:
+                    if self.inSphere(i, j):
+                        auxTagList.extend(j)
                 secondaryTags[robotID] = auxTagList
 
             robotID += 1
@@ -275,6 +275,8 @@ class Apolo:
 
             elif len(secondaryTags[i]) == 6:
                 linkedSecondaryTags[2] = [robotList[i], secondaryTags[i]]
+
+        #print(linkedSecondaryTags)
 
         return linkedSecondaryTags
 
@@ -404,17 +406,17 @@ class Apolo:
             [
                 # OurRobots
                 {
-                    "position": (robotList[0][0], robotList[0][1]),
+                    "position": (robotList[0][0], HEIGHT - robotList[0][1]),
                     "orientation": robotList[0][2],
                     "robotLetter": robotLetter[0]
                 },
                 {
-                    "position": (robotList[1][0], robotList[1][1]),
+                    "position": (robotList[1][0], HEIGHT - robotList[1][1]),
                     "orientation": robotList[1][2],
                     "robotLetter": robotLetter[1]
                 },
                 {
-                    "position": (robotList[2][0], robotList[2][1]),
+                    "position": (robotList[2][0], HEIGHT - robotList[2][1]),
                     "orientation": robotList[2][2],
                     "robotLetter": robotLetter[2]
                 }
@@ -452,10 +454,10 @@ class Apolo:
         """
 
         # Pega o frame
-        #frame = self.getFrame()
+        frame = self.getFrame()
 
-        frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
-        # frame = cv2.imread("Tags/nova90inv2Balls.png", cv2.IMREAD_COLOR)
+        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
+        #frame = cv2.imread("Tags/nova90inv2Balls.png", cv2.IMREAD_COLOR)
 
         if frame is None:
             print("Nao há câmeras ou o dispositivo está ocupado")
@@ -471,11 +473,15 @@ class Apolo:
         # Procura os robos
         tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN])
 
+        #print(tempRobotPosition)
+
         # Procura as tags Secundarias
         secondaryTagsList = self.findSecondaryTags(self.thresholdedImages[GREEN])
 
+        #print(secondaryTagsList)
+
         # Organiza as tags secundarias para corresponderem à ordem das tags primarias
-        linkedSecondaryTags = self.linkTags(tempRobotPosition, secondaryTagsList, ROBOT_RADIUS)
+        linkedSecondaryTags = self.linkTags(tempRobotPosition, secondaryTagsList)
 
         for i in range(0, 3, 1):
             try:
@@ -541,10 +547,8 @@ class Apolo:
             self.robotLetter
         )
 
-        # print(self.positions)
-
         if self.imageId != -1:
             frame = self.thresholdedImages[self.imageId]
 
-        print(self.positions)
+        #print(self.positions)
         return self.positions, frame

@@ -221,6 +221,7 @@ class Hades(QThread):
     def eventStartVision(self, cameraId):
         try:
             self.apolo = Apolo(int(cameraId))
+            #self.apolo = Apolo(0)
             return True
         except:
             return False
