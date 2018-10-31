@@ -59,7 +59,8 @@ class Afrodite(QMainWindow):
         self.warpMatriz = [[0,0],[0,0],[0,0],[0,0]]
         self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
         self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
-
+        self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
+        self.spinBoxCaptureWarpOffsetRight.valueChanged.connect(self.warpOffsetChanged)
 
         self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
         self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
@@ -600,12 +601,12 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
 
         self.warpCount = 0
-        self.warpMatriz = [[0,0],[640,0],[0,480],[640,480]]
+        self.warpMatriz = [[0,0],[640,0],[640,480],[0,480]]
         self.hades.eventWarp(self.warpMatriz)
 
     def getPushButtonCaptureWarpAdjust(self):
         self.pushButtonCaptureWarpAdjust.setEnabled(False)
-        enable = not self.pushButtonCaptureWarpAdjust.isEnabled()
+        enable = self.pushButtonCaptureWarpAdjust.isEnabled()
 
         self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
         self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
@@ -613,31 +614,27 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
         self.pushButtonCaptureWarpWarp.setEnabled(True)
 
-    def getCaptureWarpOffsetLeft(self):
-        pass
-
-    def getCaptureWarpOffsetRight(self):
-        pass
+    def warpOffsetChanged(self):
+        self.hades.eventWarpOffsetChanged(
+            self.spinBoxCaptureWarpOffsetLeft.value(),
+            self.spinBoxCaptureWarpOffsetRight.value(),
+        )
 
     def getPosWarp(self, event):
         if not self.pushButtonCaptureWarpWarp.isEnabled():
             if self.groupBoxCaptureWarp.isEnabled():
-                self.getPosEvent(event) 
+                px = event.pos().x()
+                py = event.pos().y()
 
-    def getPosEvent(self, event):
-        px = event.pos().x()
-        py = event.pos().y()
-
-        self.callHadesWarpEvent(px,py)
-
-        #print ('(',str(x), ',', str(y), ')')
+                self.callHadesWarpEvent(px,py) 
 
     def callHadesWarpEvent(self, px, py):
+        print(self.warpCount)
         if self.warpCount < 4:
             self.warpMatriz[self.warpCount][0] = px
             self.warpMatriz[self.warpCount][1] = py
 
-            #print(self.warpMatriz[self.warpCount])
+            print(self.warpMatriz[self.warpCount])
             self.warpCount+=1
 
             if self.warpCount == 4:

@@ -34,14 +34,14 @@ class Apolo:
         self.robotPositions = [(0, 0, 0, True), (0, 0, 0, True), (0, 0, 0, True)]
         self.ballPosition = [0, 0]
         self.advRobotPositions = [(0, 0), (0, 0), (0, 0)]
-
+    
         # Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28, 30), (0, 255), (0, 255)), MAIN)
         self.setHSVThresh(((120, 250), (0, 250), (0, 250)), BALL)
         self.setHSVThresh(((120, 250), (0, 250), (0, 250)), ADV)
         self.setHSVThresh(((69, 70), (0, 255), (0, 255)), GREEN)
 
-        self.setWarpPoints((0,0),(640,0),(0,480),(640,480))
+        self.setWarpPoints((0,0),(640,0),(640,480),(0,480))
 
         self.imageId = -1
         self.invertImage = False
@@ -57,9 +57,12 @@ class Apolo:
         print("Apolo summoned")
 
     def setWarpPoints(self, pt1, pt2, pt3, pt4):
-        shape = np.float32([pt1,pt2,pt3,pt4])
+        shape = np.float32([pt1,pt2,pt4,pt3])
         plot = np.float32([[0,0],[640,0],[0,480],[640,480]])
         self.perspective = cv2.getPerspectiveTransform(shape,plot)
+
+    def setWarpOffset(self, offsetLeft, offsetRight):
+        print(offsetLeft, offsetRight)
 
 
     def preProcess(self,frame):
