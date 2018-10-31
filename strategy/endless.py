@@ -1,7 +1,7 @@
 class Endless:
 
     def __setup(self):
-        self.pixelMeterRatio = self.width / 1.70 # o campo tem 1m 70cm
+        self.pixelMeterRatio = self.width / 1.70  # o campo tem 1m 70cm
 
         # tamanhos
         self.robotSize = round(0.08 * self.pixelMeterRatio)

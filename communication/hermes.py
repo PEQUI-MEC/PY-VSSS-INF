@@ -75,7 +75,6 @@ class Hermes:
                 except KeyError:
                     print("[Hermes]: We don't know the address for robot '" + velocities[i]["robotLetter"] + "'")
 
-        print()
         return messages
 
     def killBee(self):
