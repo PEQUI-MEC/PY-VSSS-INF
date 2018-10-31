@@ -699,9 +699,9 @@ class Afrodite(QMainWindow):
         else:
             return "Split"
 
-    # HSVCalibration
-    def callHadesCalibEvent(self, current):
-        if current == 0:
+    #GetHSVValues
+    def getHSVValues(self, id):
+        if id == 0:
             Hmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationMainSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationMainVmin.value()
@@ -713,7 +713,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
 
-        elif current == 1:
+        elif id == 1:
             Hmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationGreenSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
@@ -725,7 +725,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
-        elif current == 2:
+        elif id == 2:
             Hmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationBallSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
@@ -737,7 +737,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
 
-        else:  # current = 3
+        elif id == 3:  # current = 3
             Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
@@ -749,41 +749,131 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        self.hades.eventCalibration(current, ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin))
+        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
+
+    def setHSVValues(self, id, hsvCalib):
+        if id == 0:
+            # Main
+            # Setta o slider
+            self.horizontalSliderVisionHSVCalibrationMainHmin.setValue(hsvCalib[0][0])  # HMin
+            self.horizontalSliderVisionHSVCalibrationMainHmax.setValue(hsvCalib[0][1])  # HMax
+            self.horizontalSliderVisionHSVCalibrationMainSmin.setValue(hsvCalib[1][0])  # SMin
+            self.horizontalSliderVisionHSVCalibrationMainSmax.setValue(hsvCalib[1][1])  # SMax
+            self.horizontalSliderVisionHSVCalibrationMainVmin.setValue(hsvCalib[2][0])  # VMin
+            self.horizontalSliderVisionHSVCalibrationMainVmax.setValue(hsvCalib[2][1])  # VMax
+            self.horizontalSliderVisionHSVCalibrationMainErode.setValue(hsvCalib[3])  # Erode
+            self.horizontalSliderVisionHSVCalibrationMainBlur.setValue(hsvCalib[4])  # Blur
+            self.horizontalSliderVisionHSVCalibrationMainDilate.setValue(hsvCalib[5])  # Dilate
+            self.horizontalSliderVisionHSVCalibrationMainAmin.setValue(hsvCalib[6])  # Amin
+
+            # Setta a spinbox
+
+            self.spinBoxVisionHSVCalibrationMainHmin.setValue(hsvCalib[0][0])  # HMin
+            self.spinBoxVisionHSVCalibrationMainHmax.setValue(hsvCalib[0][1])  # HMax
+            self.spinBoxVisionHSVCalibrationMainSmin.setValue(hsvCalib[1][0])  # SMin
+            self.spinBoxVisionHSVCalibrationMainSmax.setValue(hsvCalib[1][1])  # SMax
+            self.spinBoxVisionHSVCalibrationMainVmin.setValue(hsvCalib[2][0])  # VMin
+            self.spinBoxVisionHSVCalibrationMainVmax.setValue(hsvCalib[2][1])  # VMax
+            self.spinBoxVisionHSVCalibrationMainErode.setValue(hsvCalib[3])  # Erode
+            self.spinBoxVisionHSVCalibrationMainBlur.setValue(hsvCalib[4])  # Blur
+            self.spinBoxVisionHSVCalibrationMainDilate.setValue(hsvCalib[5])  # Dilate
+            self.spinBoxVisionHSVCalibrationMainAmin.setValue(hsvCalib[6])  # Amin
+
+        elif id == 1:
+            # Green
+            # Setta o slider
+            self.horizontalSliderVisionHSVCalibrationGreenHmin.setValue(hsvCalib[0][0])  # HMin
+            self.horizontalSliderVisionHSVCalibrationGreenHmax.setValue(hsvCalib[0][1])  # HMax
+            self.horizontalSliderVisionHSVCalibrationGreenSmin.setValue(hsvCalib[1][0])  # SMin
+            self.horizontalSliderVisionHSVCalibrationGreenSmax.setValue(hsvCalib[1][1])  # SMax
+            self.horizontalSliderVisionHSVCalibrationGreenVmin.setValue(hsvCalib[2][0])  # VMin
+            self.horizontalSliderVisionHSVCalibrationGreenVmax.setValue(hsvCalib[2][1])  # VMax
+            self.horizontalSliderVisionHSVCalibrationGreenErode.setValue(hsvCalib[3])  # Erode
+            self.horizontalSliderVisionHSVCalibrationGreenBlur.setValue(hsvCalib[4])  # Blur
+            self.horizontalSliderVisionHSVCalibrationGreenDilate.setValue(hsvCalib[5])  # Dilate
+            self.horizontalSliderVisionHSVCalibrationGreenAmin.setValue(hsvCalib[6])  # Amin
+
+            # Setta a spinbox
+
+            self.spinBoxVisionHSVCalibrationGreenHmin.setValue(hsvCalib[0][0])  # HMin
+            self.spinBoxVisionHSVCalibrationGreenHmax.setValue(hsvCalib[0][1])  # HMax
+            self.spinBoxVisionHSVCalibrationGreenSmin.setValue(hsvCalib[1][0])  # SMin
+            self.spinBoxVisionHSVCalibrationGreenSmax.setValue(hsvCalib[1][1])  # SMax
+            self.spinBoxVisionHSVCalibrationGreenVmin.setValue(hsvCalib[2][0])  # VMin
+            self.spinBoxVisionHSVCalibrationGreenVmax.setValue(hsvCalib[2][1])  # VMax
+            self.spinBoxVisionHSVCalibrationGreenErode.setValue(hsvCalib[3])  # Erode
+            self.spinBoxVisionHSVCalibrationGreenBlur.setValue(hsvCalib[4])  # Blur
+            self.spinBoxVisionHSVCalibrationGreenDilate.setValue(hsvCalib[5])  # Dilate
+            self.spinBoxVisionHSVCalibrationGreenAmin.setValue(hsvCalib[6])  # Amin
+
+        elif id == 2:
+            # Ball
+            # Setta o slider
+            self.horizontalSliderVisionHSVCalibrationBallHmin.setValue(hsvCalib[0][0])  # HMin
+            self.horizontalSliderVisionHSVCalibrationBallHmax.setValue(hsvCalib[0][1])  # HMax
+            self.horizontalSliderVisionHSVCalibrationBallSmin.setValue(hsvCalib[1][0])  # SMin
+            self.horizontalSliderVisionHSVCalibrationBallSmax.setValue(hsvCalib[1][1])  # SMax
+            self.horizontalSliderVisionHSVCalibrationBallVmin.setValue(hsvCalib[2][0])  # VMin
+            self.horizontalSliderVisionHSVCalibrationBallVmax.setValue(hsvCalib[2][1])  # VMax
+            self.horizontalSliderVisionHSVCalibrationBallErode.setValue(hsvCalib[3])  # Erode
+            self.horizontalSliderVisionHSVCalibrationBallBlur.setValue(hsvCalib[4])  # Blur
+            self.horizontalSliderVisionHSVCalibrationBallDilate.setValue(hsvCalib[5])  # Dilate
+            self.horizontalSliderVisionHSVCalibrationBallAmin.setValue(hsvCalib[6])  # Amin
+
+            # Setta a spinbox
+
+            self.spinBoxVisionHSVCalibrationBallHmin.setValue(hsvCalib[0][0])  # HMin
+            self.spinBoxVisionHSVCalibrationBallHmax.setValue(hsvCalib[0][1])  # HMax
+            self.spinBoxVisionHSVCalibrationBallSmin.setValue(hsvCalib[1][0])  # SMin
+            self.spinBoxVisionHSVCalibrationBallSmax.setValue(hsvCalib[1][1])  # SMax
+            self.spinBoxVisionHSVCalibrationBallVmin.setValue(hsvCalib[2][0])  # VMin
+            self.spinBoxVisionHSVCalibrationBallVmax.setValue(hsvCalib[2][1])  # VMax
+            self.spinBoxVisionHSVCalibrationBallErode.setValue(hsvCalib[3])  # Erode
+            self.spinBoxVisionHSVCalibrationBallBlur.setValue(hsvCalib[4])  # Blur
+            self.spinBoxVisionHSVCalibrationBallDilate.setValue(hsvCalib[5])  # Dilate
+            self.spinBoxVisionHSVCalibrationBallAmin.setValue(hsvCalib[6])  # Amin
+
+        elif id == 3:  # current = 3
+            # Opponent
+            # Setta o slider
+            self.horizontalSliderVisionHSVCalibrationOpponentHmin.setValue(hsvCalib[0][0])  # HMin
+            self.horizontalSliderVisionHSVCalibrationOpponentHmax.setValue(hsvCalib[0][1])  # HMax
+            self.horizontalSliderVisionHSVCalibrationOpponentSmin.setValue(hsvCalib[1][0])  # SMin
+            self.horizontalSliderVisionHSVCalibrationOpponentSmax.setValue(hsvCalib[1][1])  # SMax
+            self.horizontalSliderVisionHSVCalibrationOpponentVmin.setValue(hsvCalib[2][0])  # VMin
+            self.horizontalSliderVisionHSVCalibrationOpponentVmax.setValue(hsvCalib[2][1])  # VMax
+            self.horizontalSliderVisionHSVCalibrationOpponentErode.setValue(hsvCalib[3])  # Erode
+            self.horizontalSliderVisionHSVCalibrationOpponentBlur.setValue(hsvCalib[4])  # Blur
+            self.horizontalSliderVisionHSVCalibrationOpponentDilate.setValue(hsvCalib[5])  # Dilate
+            self.horizontalSliderVisionHSVCalibrationOpponentAmin.setValue(hsvCalib[6])  # Amin
+
+            # Setta a spinbox
+
+            self.spinBoxVisionHSVCalibrationOpponentHmin.setValue(hsvCalib[0][0])  # HMin
+            self.spinBoxVisionHSVCalibrationOpponentHmax.setValue(hsvCalib[0][1])  # HMax
+            self.spinBoxVisionHSVCalibrationOpponentSmin.setValue(hsvCalib[1][0])  # SMin
+            self.spinBoxVisionHSVCalibrationOpponentSmax.setValue(hsvCalib[1][1])  # SMax
+            self.spinBoxVisionHSVCalibrationOpponentVmin.setValue(hsvCalib[2][0])  # VMin
+            self.spinBoxVisionHSVCalibrationOpponentVmax.setValue(hsvCalib[2][1])  # VMax
+            self.spinBoxVisionHSVCalibrationOpponentErode.setValue(hsvCalib[3])  # Erode
+            self.spinBoxVisionHSVCalibrationOpponentBlur.setValue(hsvCalib[4])  # Blur
+            self.spinBoxVisionHSVCalibrationOpponentDilate.setValue(hsvCalib[5])  # Dilate
+            self.spinBoxVisionHSVCalibrationOpponentAmin.setValue(hsvCalib[6])  # Amin
+
+    # HSVCalibration
+    def callHadesCalibEvent(self, tagId):
+        hsvValue = None
+
+        if tagId != -1:
+            hsvValue = self.getHSVValues(tagId)
+
+        self.hades.eventCalibration(tagId, hsvValue)
 
     def getPushButtonVisionHSVCalibrationSwap(self):
-        Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
-        Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
-        Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
-        Erode = self.spinBoxVisionHSVCalibrationOpponentErode.value()
-        Blur = self.spinBoxVisionHSVCalibrationOpponentBlur.value()
-        Hmax = self.spinBoxVisionHSVCalibrationOpponentHmax.value()
-        Smax = self.spinBoxVisionHSVCalibrationOpponentSmax.value()
-        Vmax = self.spinBoxVisionHSVCalibrationOpponentVmax.value()
-        Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
-        Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
+        hsvTemp = self.getHSVValues(3)
 
-        self.spinBoxVisionHSVCalibrationOpponentHmin.setValue(self.spinBoxVisionHSVCalibrationMainHmin.value())
-        self.spinBoxVisionHSVCalibrationOpponentSmin.setValue(self.spinBoxVisionHSVCalibrationMainSmin.value())
-        self.spinBoxVisionHSVCalibrationOpponentVmin.setValue(self.spinBoxVisionHSVCalibrationMainVmin.value())
-        self.spinBoxVisionHSVCalibrationOpponentErode.setValue(self.spinBoxVisionHSVCalibrationMainErode.value())
-        self.spinBoxVisionHSVCalibrationOpponentBlur.setValue(self.spinBoxVisionHSVCalibrationMainBlur.value())
-        self.spinBoxVisionHSVCalibrationOpponentHmax.setValue(self.spinBoxVisionHSVCalibrationMainHmax.value())
-        self.spinBoxVisionHSVCalibrationOpponentSmax.setValue(self.spinBoxVisionHSVCalibrationMainSmax.value())
-        self.spinBoxVisionHSVCalibrationOpponentVmax.setValue(self.spinBoxVisionHSVCalibrationMainVmax.value())
-        self.spinBoxVisionHSVCalibrationOpponentDilate.setValue(self.spinBoxVisionHSVCalibrationMainDilate.value())
-        self.spinBoxVisionHSVCalibrationOpponentAmin.setValue(self.spinBoxVisionHSVCalibrationMainAmin.value())
-
-        self.horizontalSliderVisionHSVCalibrationMainBlur.setValue(Blur)
-        self.horizontalSliderVisionHSVCalibrationMainErode.setValue(Erode)
-        self.horizontalSliderVisionHSVCalibrationMainHmin.setValue(Hmin)
-        self.horizontalSliderVisionHSVCalibrationMainSmin.setValue(Smin)
-        self.horizontalSliderVisionHSVCalibrationMainVmin.setValue(Vmin)
-        self.horizontalSliderVisionHSVCalibrationMainAmin.setValue(Amin)
-        self.horizontalSliderVisionHSVCalibrationMainDilate.setValue(Dilate)
-        self.horizontalSliderVisionHSVCalibrationMainHmax.setValue(Hmax)
-        self.horizontalSliderVisionHSVCalibrationMainSmax.setValue(Smax)
-        self.horizontalSliderVisionHSVCalibrationMainVmax.setValue(Vmax)
+        self.setHSVValues(3, self.getHSVValues(0))  # Posição 3 é referente ao HSV do Oponente
+        self.setHSVValues(0, hsvTemp)  # Posição 0 é referente ao HSV da Main
 
         # atualiza os valores do apolo para o main e oponente
         print("HSV Swapped Main<->Opponent")
@@ -798,22 +888,19 @@ class Afrodite(QMainWindow):
         self.pushButtonVisionHSVCalibrationPrev.setEnabled(enable)
         self.pushButtonVisionHSVCalibrationNext.setEnabled(enable)
 
-        self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex())
+        self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex() if enable else -1)
 
     def getPushButtonVisionHSVCalibrationNext(self):
-        current = self.stackedWidgetVisionHSVCalibration.currentIndex()
-        self.stackedWidgetVisionHSVCalibration.setCurrentIndex((current + 1) % 4)
+        current = (self.stackedWidgetVisionHSVCalibration.currentIndex() + 1) % 4
+        self.stackedWidgetVisionHSVCalibration.setCurrentIndex((current))
 
         self.callHadesCalibEvent(current)
 
     def getPushButtonVisionHSVCalibrationPrev(self):
-        current = self.stackedWidgetVisionHSVCalibration.currentIndex()
-        if current > 0:
-            self.stackedWidgetVisionHSVCalibration.setCurrentIndex(current - 1)
-        else:
-            self.stackedWidgetVisionHSVCalibration.setCurrentIndex(3)
+        current = (self.stackedWidgetVisionHSVCalibration.currentIndex() - 1) % 4
+        self.stackedWidgetVisionHSVCalibration.setCurrentIndex(current)
 
-            self.callHadesCalibEvent(current)
+        self.callHadesCalibEvent(current)
 
     def visionHSVCalibrationSliderChanged(self):
         self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex())
