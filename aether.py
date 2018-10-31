@@ -53,12 +53,16 @@ class Aether:
         self.zeus[1].setup(3)
 
         # inicializa o loop dos dados
-        loopThread1 = threading.Thread(target=self.loopTeam, args=[0])
-        loopThread2 = threading.Thread(target=self.loopTeam, args=[1])
-        loopThread1.daemon = True
-        loopThread2.daemon = True
-        loopThread1.start()
-        loopThread2.start()
+        self.pause = False
+        self.loopThread1 = threading.Thread(target=self.loopTeam, args=[0])
+        self.loopThread2 = threading.Thread(target=self.loopTeam, args=[1])
+        self.loopThread1.daemon = True
+        self.loopThread2.daemon = True
+        self.loopThread1.start()
+        self.loopThread2.start()
+
+        self.showInfos(0)
+        self.showInfos(1)
 
     def run(self):
         while True:
@@ -67,6 +71,11 @@ class Aether:
 
     def loopTeam(self, team):
         while True:
+            time.sleep(0.026)
+
+            if self.pause or \
+                    (not self.enabled[3 * team] and not self.enabled[3 * team + 1] and not self.enabled[3 * team + 2]):
+                continue
             # executa nossos módulos
             positions = self.generatePositions(team)
             commands = self.athena[team].getTargets(positions)
@@ -83,40 +92,52 @@ class Aether:
                 self.sim.data.ctrl[5 + 6 * team] = self.convertVelocity(velocities[2]["vRight"])
 
             # mostra resultados
-            self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + \
-                                        "{:.2f}".format(positions[2]["position"][1])
-
-            self.viewer.infos["robots" + str(team + 1)] = [
-                "[OFF] " if not self.enabled[0 + 3 * team] else "X: " + "{:.2f}".format(positions[0][0]["position"][0])
-                                                                + ", Y: " +
-                                                                "{:.2f}".format(positions[0][0]["position"][1]) +
-                                                                ", O: " +
-                                                                "{:.2f}".format(positions[0][0]["orientation"]) +
-                                                                " C: " + commands[0]["command"],
-
-                "[OFF] " if not self.enabled[1 + 3 * team] else "X: " + "{:.2f}".format(positions[0][1]["position"][0])
-                                                                + ", Y: " +
-                                                                "{:.2f}".format(positions[0][1]["position"][1]) +
-                                                                ", O: " +
-                                                                "{:.2f}".format(positions[0][1]["orientation"]) +
-                                                                " C: " + commands[1]["command"],
-
-                "[OFF] " if not self.enabled[2 + 3 * team] else "X: " + "{:.2f}".format(positions[0][2]["position"][0])
-                                                                + ", Y: " +
-                                                                "{:.2f}".format(positions[0][2]["position"][1]) +
-                                                                ", O: " +
-                                                                "{:.2f}".format(positions[0][2]["orientation"]) +
-                                                                " C: " + commands[2]["command"],
-            ]
-
-            if team == 0:
-                fps = self.getFPS()
-                if fps is not None:
-                    self.viewer.infos["fps"] = fps
-
-            time.sleep(0.026)  # TODO fixar o fps em 30 independente de desempenho
+            self.showInfos(team, positions, commands)
 
     # HELPERS
+    def showInfos(self, team, positions=None, commands=None):
+        infos = []
+
+        for i in range(3):
+            if self.enabled[i + 3 * team] and positions and commands:
+                robot = "X: " + "{:.1f}".format(positions[0][i]["position"][0])
+                robot += ", Y: " + "{:.1f}".format(positions[0][i]["position"][1])
+                robot += ", O: " + "{:.1f}".format(positions[0][i]["orientation"])
+                robot += ", T: " + commands[i]["tactics"]
+                robot += ", C: " + commands[i]["command"]
+                if commands[i]["command"] == "lookAt":
+                    if type(commands[i]["data"]["target"]) is tuple:
+                        robot += "(" + "{:.1f}".format(commands[i]["data"]["target"][0]) + ", "
+                        robot += "{:.1f}".format(commands[i]["data"]["target"][1]) + ")"
+                    else:
+                        robot += "(" + "{:.1f}".format(commands[i]["data"]["target"]) + ")"
+                elif commands[i]["command"] == "goTo":
+                    robot += "(" + "{:.1f}".format(commands[i]["data"]["target"]["position"][0]) + ", "
+                    robot += "{:.1f}".format(commands[i]["data"]["target"]["position"][1]) + ", "
+
+                    if type(commands[i]["data"]["target"]["orientation"]) is tuple:
+                        robot += "(" + "{:.1f}".format(commands[i]["data"]["target"]["orientation"][0]) + ", "
+                        robot += "{:.1f}".format(commands[i]["data"]["target"]["orientation"][1]) + ") )"
+                    else:
+                        robot += "{:.1f}".format(commands[i]["data"]["target"]["orientation"]) + ")"
+                elif commands[i]["command"] == "spin":
+                    robot += "(" + commands[i]["data"]["direction"] + ")"
+
+            else:
+                robot = "[OFF]"
+
+            infos.append(robot)
+
+        self.viewer.infos["robots" + str(team + 1)] = infos
+
+        if team == 0:
+            if positions:
+                self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + \
+                                            "{:.2f}".format(positions[2]["position"][1])
+                fps = self.getFPS()
+                if fps:
+                    self.viewer.infos["fps"] = fps
+
     def getFPS(self):
         # calcula o fps e manda pra interface
         self.cascadeTime += time.time() - self.cascadeLastTime
@@ -129,6 +150,18 @@ class Aether:
         return None
 
     # FUNÇÕES
+    def reset(self):
+        for i in range(6):
+            self.enabled[i] = False
+
+        self.showInfos(0)
+        self.showInfos(1)
+        self.sim.reset()
+        self.viewer._paused = False
+
+    def startStop(self, pause):
+        self.pause = pause
+
     def moveBall(self, direction, keepVel=False):
         if not keepVel:
             for i in range(6):
@@ -160,12 +193,14 @@ class Aether:
         else:
             self.enabled[robotId] = True
 
+        self.showInfos(0 if robotId < 3 else 1)
+
     def convertPositionX(self, coord, team):
         """Traz o valor pra positivo e multiplica pela proporção (largura máxima)/(posição x máxima)
 
         Args:
              coord: Coordenada da posição no mundo da simulação a ser convertida
-
+             team: Time que está pedindo a conversão (0 ou 1)
         Returns:
             Coordenada da posição na proporção utilizada pela estratégia
         """
@@ -179,6 +214,7 @@ class Aether:
 
         Args:
             coord: Coordenada da posição no mundo da simulação a ser convertida
+            team: Time que está pedindo a conversão (0 ou 1)
 
         Returns:
             Coordenada da posição na proporção utilizada pela estratégia
@@ -190,7 +226,7 @@ class Aether:
 
     @staticmethod
     def convertVelocity(vel):
-        return vel * 15
+        return vel * 20
 
     def generatePositions(self, team):
         """Cria o vetor de posições no formato esperado pela estratégia
@@ -206,7 +242,7 @@ class Aether:
         Returns:
             Vetor de posições no formato correto
         """
-        r1 = math.pi * team -math.atan2(
+        r1 = math.pi * team - math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[3 * team] + 3] * self.sim.data.qpos[self.robot_joints[3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[3 * team] + 4] * self.sim.data.qpos[self.robot_joints[3 * team] + 6]
@@ -216,7 +252,7 @@ class Aether:
                     self.sim.data.qpos[self.robot_joints[3 * team] + 6] * self.sim.data.qpos[self.robot_joints[3 * team] + 6]
             )
         )
-        r2 = math.pi * team -math.atan2(
+        r2 = math.pi * team - math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 3] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 4] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6]
@@ -226,7 +262,7 @@ class Aether:
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6]
             )
         )
-        r3 = math.pi * team -math.atan2(
+        r3 = math.pi * team - math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 3] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 4] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6]
@@ -281,4 +317,3 @@ class Aether:
 if __name__ == "__main__":
     aether = Aether()
     aether.run()
-

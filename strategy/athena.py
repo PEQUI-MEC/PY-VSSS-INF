@@ -15,21 +15,23 @@ class Athena:
     sDanger = 5
     sHoly = 6
 
-    tCatch = 0
-    tCatchSideways = 1
-    tBlock = 2
-    tBlockOpening = 3
-    tPush = 4
-    tSpin = 5
-    tWaitPass = 6
-    tKick = 7
-    tUnlock = 8
+    tCatch = "catch"
+    tCatchSideways = "catchsideways"
+    tBlock = "block"
+    tBlockOpening = "blockopening"
+    tPush = "push"
+    tSpin = "spin"
+    tWaitPass = "wait"
+    tKick = "kick"
+    tUnlock = "unlock"
 
     def __init__(self):
         self.endless = None
         self.warriors = []
         self.theirWarriors = []
+        self.theirWarriorsLastPos = []
         self.ball = {
+            "lastPosition": (0, 0),
             "position": (0, 0),
             "velocity": 0
         }
@@ -106,7 +108,8 @@ class Athena:
         return commands
 
     def __parsePositions(self, positions):
-        if type(positions) is not list or type(positions[0]) is not list or type(positions[1]) is not list or type(positions[2]) is not dict:
+        if type(positions) is not list or type(positions[0]) is not list or type(positions[1]) is not list \
+                or type(positions[2]) is not dict:
             raise ValueError("Invalid positions object received.")
 
         if len(positions) is not 3:  # allies, enemies and ball
@@ -121,6 +124,13 @@ class Athena:
                 raise ValueError("Invalid value for our warriors received.")
 
             self.warriors[i].setup(positions[0][i]["robotLetter"], positions[0][i]["position"], positions[0][i]["orientation"])
+            self.warriors[i].velEstimated = \
+                distance.euclidean(self.warriors[i].position, self.warriors[i].lastPosition) / self.deltaTime
+            self.warriors[i].velEstimated /= self.endless.pixelMeterRatio
+
+        self.theirWarriorsLastPos = []
+        for i in range(0, len(self.theirWarriors)):
+            self.theirWarriorsLastPos.append(self.theirWarriors[i].position)
 
         self.theirWarriors = []
         for i in range(0, len(positions[1])):
@@ -130,10 +140,19 @@ class Athena:
             self.theirWarriors.append(Warrior())
             self.theirWarriors[i].setup('z', positions[1][i]["position"])
 
-        self.ball = {
-            "position": positions[2]["position"],
-            "velocity": 0  # !TODO calcular velocidade da bola
-        }
+        for i in range(0, len(self.theirWarriors)):
+            dist = []
+            for x in range(0, len(self.theirWarriorsLastPos)):
+                dist.append(distance.euclidean(self.theirWarriors[i].position, self.theirWarriorsLastPos[x]))
+
+            if len(dist) > 0:
+                self.theirWarriors[i].velEstimated = min(dist) / self.deltaTime
+                self.theirWarriors[i].velEstimated /= self.endless.pixelMeterRatio
+
+        self.ball["lastPosition"] = self.ball["position"]
+        self.ball["position"] = positions[2]["position"]
+        self.ball["velocity"] = distance.euclidean(self.ball["position"], self.ball["lastPosition"]) / self.deltaTime
+        self.ball["velocity"] /= self.endless.pixelMeterRatio
 
         return positions
 
@@ -190,7 +209,8 @@ class Athena:
         response = []
         for warrior in warriors:
             command = {
-                "robotLetter": warrior.robotID
+                "robotLetter": warrior.robotID,
+                "tactics": warrior.tactics
             }
 
             if warrior.command["type"] == "goTo":
@@ -216,11 +236,15 @@ class Athena:
 
                 if "avoidObstacles" in warrior.command:
                     command["data"]["obstacles"] = []
+                    command["data"]["obstaclesSpeed"] = []
                     for obstacle in self.warriors:
                         if obstacle != warrior:
                             command["data"]["obstacles"].append(obstacle.position)
+                            command["data"]["obstaclesSpeed"].append([obstacle.velEstimated, obstacle.velEstimated])
                     for obstacle in self.theirWarriors:
                         command["data"]["obstacles"].append(obstacle.position)
+                        command["data"]["obstaclesSpeed"].append([obstacle.velEstimated, obstacle.velEstimated])
+
                     if warrior.position[0] > self.ball["position"][0] in warrior.command:
                         command["data"]["obstacles"].append(self.ball["position"])
 
@@ -489,7 +513,8 @@ class Athena:
             # se ele não _deve_ estar parado
             if not warrior.positionLocked:
                 # se ele não se moveu de um ciclo pra cá
-                if warrior.actionTimer <= 0 and distance.euclidean(warrior.position, warrior.lastPosition) < 0.1:
+                if warrior.actionTimer <= 0 and \
+                        distance.euclidean(warrior.position, warrior.lastPosition) < 10 * self.deltaTime:
                     # se atingiu o máximo de tempo bloqueado, executa ação de sair
                     if warrior.lockedTime > 0.5:
                         # print("locked " + str(time.time()))
@@ -559,7 +584,7 @@ class Athena:
                 warrior.command["type"] = "goTo"
                 warrior.command["target"] = self.ball["position"]
                 warrior.command["targetVelocity"] = warrior.defaultVel
-                warrior.command["avoidObstacles"] = "por favor"
+                warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
 
                 # escolhe o lado que vai pressionar a bola, dependendo de qual parede ela tá mais perto
                 if self.ball["position"][1] > self.endless.midField[1]:
@@ -593,7 +618,7 @@ class Athena:
                     # se está longe do alvo, vai até ele
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
-                    warrior.command["avoidObstacles"] = "por favor"
+                    warrior.command["avoidObstacles"] = "se não for pedir demais..."
 
                     # se posiciona com uvf para maior precisão
                     if warrior.position[1] > self.endless.midField[1]:
@@ -628,7 +653,7 @@ class Athena:
                 if distance.euclidean(warrior.position, target) > self.endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
-                    warrior.command["avoidObstacles"] = "por favor"
+                    warrior.command["avoidObstacles"] = "por favor, nunca te pedi nada irmão"
 
                     # !TODO verificar se ele está chegando pelo lado certo
                     if warrior.position[1] > self.endless.midField[1]:
@@ -679,7 +704,7 @@ class Athena:
                 if distance.euclidean(warrior.position, target) > self.endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
-                    warrior.command["avoidObstacles"] = "por favor"
+                    warrior.command["avoidObstacles"] = "mas é claro, chefia"
                     warrior.command["targetOrientation"] = self.ball["position"]
                 else:
                     warrior.positionLocked = True
