@@ -89,7 +89,7 @@ class Aether:
                 self.sim.data.ctrl[5 + 6 * team] = self.convertVelocity(velocities[2]["vRight"])
 
             # mostra resultados
-            self.showRobotsInfo(positions, commands, team)
+            self.showRobotsInfo(team, positions, commands)
 
             if team == 0:
                 self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + \
@@ -99,7 +99,7 @@ class Aether:
                     self.viewer.infos["fps"] = fps
 
     # HELPERS
-    def showRobotsInfo(self, positions, commands, team):
+    def showRobotsInfo(self, team, positions=None, commands=None):
         infos = []
 
         for i in range(3):
@@ -124,6 +124,9 @@ class Aether:
                         robot += "{:.1f}".format(commands[i]["data"]["target"]["orientation"][1]) + ") )"
                     else:
                         robot += "{:.1f}".format(commands[i]["data"]["target"]["orientation"]) + ")"
+                elif commands[i]["command"] == "spin":
+                    robot += "(" + commands[i]["data"]["direction"] + ")"
+
             else:
                 robot = "[OFF]"
 
@@ -143,6 +146,15 @@ class Aether:
         return None
 
     # FUNÇÕES
+    def reset(self):
+        for i in range(6):
+            self.enabled[i] = False
+
+        self.showRobotsInfo(0)
+        self.showRobotsInfo(1)
+        self.sim.reset()
+        self.viewer._paused = False
+
     def startStop(self, pause):
         self.pause = pause
 
@@ -182,7 +194,7 @@ class Aether:
 
         Args:
              coord: Coordenada da posição no mundo da simulação a ser convertida
-
+             team: Time que está pedindo a conversão (0 ou 1)
         Returns:
             Coordenada da posição na proporção utilizada pela estratégia
         """
@@ -196,6 +208,7 @@ class Aether:
 
         Args:
             coord: Coordenada da posição no mundo da simulação a ser convertida
+            team: Time que está pedindo a conversão (0 ou 1)
 
         Returns:
             Coordenada da posição na proporção utilizada pela estratégia
@@ -223,7 +236,7 @@ class Aether:
         Returns:
             Vetor de posições no formato correto
         """
-        r1 = math.pi * team -math.atan2(
+        r1 = math.pi * team - math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[3 * team] + 3] * self.sim.data.qpos[self.robot_joints[3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[3 * team] + 4] * self.sim.data.qpos[self.robot_joints[3 * team] + 6]
@@ -233,7 +246,7 @@ class Aether:
                     self.sim.data.qpos[self.robot_joints[3 * team] + 6] * self.sim.data.qpos[self.robot_joints[3 * team] + 6]
             )
         )
-        r2 = math.pi * team -math.atan2(
+        r2 = math.pi * team - math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 3] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 4] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6]
@@ -243,7 +256,7 @@ class Aether:
                     self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6] * self.sim.data.qpos[self.robot_joints[1 + 3 * team] + 6]
             )
         )
-        r3 = math.pi * team -math.atan2(
+        r3 = math.pi * team - math.atan2(
             2 * (
                     self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 3] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6] +
                     self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 4] * self.sim.data.qpos[self.robot_joints[2 + 3 * team] + 6]

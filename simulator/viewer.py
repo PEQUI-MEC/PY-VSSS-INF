@@ -38,6 +38,9 @@ class Viewer(MjViewer):
                 self.add_overlay(const.GRID_TOPRIGHT, "Start", "[Space]")
             self.add_overlay(const.GRID_TOPRIGHT,
                              "Advance simulation by one step", "[P]")
+
+        self.add_overlay(const.GRID_TOPRIGHT, "Reset Simulation", "[Backspace]")
+
         if self._render_every_frame:
             self.add_overlay(const.GRID_TOPRIGHT, "", "")
         else:
@@ -119,8 +122,7 @@ class Viewer(MjViewer):
 
             # default [modified] calls
             elif key == glfw.KEY_BACKSPACE:
-                # TODO resetar a simulação
-                pass
+                self.aether.reset()
 
             elif key == glfw.KEY_TAB:  # Switches cameras.
                 self.cam.fixedcamid += 1
