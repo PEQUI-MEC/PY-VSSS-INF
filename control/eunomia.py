@@ -140,7 +140,6 @@ class Eunomia:
                                                          obstacles=self.warrior.obstacles,
                                                          ostaclesSpeed=self.warrior.obstaclesSpeed,
                                                          orientation=self.warrior.targetOrientation)
-
         else:
             # TODO Fazer verificação se é possível realizar o trajeto com o tempo requisitado
             pass
