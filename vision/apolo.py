@@ -44,7 +44,7 @@ class Apolo:
         self.setWarpPoints((0,0),(640,0),(0,480),(640,480))
 
         self.imageId = -1
-
+        self.invertImage = False
         self.robotLetter = ['A', 'B', 'C']
 
         self.positions = self.returnData(
@@ -85,28 +85,29 @@ class Apolo:
                self.camera.get(cv2.CAP_PROP_CONTRAST), \
                self.camera.get(cv2.CAP_PROP_HUE), \
                self.camera.get(cv2.CAP_PROP_EXPOSURE), \
-               self.camera.get(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U), \
-               self.camera.get(cv2.CAP_PRAvançadoOP_WHITE_BALANCE_RED_V), \
-               self.camera.get(cv2.CAP_PROP_ISO_SPEED)
+               self.camera.get(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U)
 
-    def updateCamConfigs(self, newBrightness, newSaturation, newGain, newContrast, newHue,
-                         newExposure, newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed):
+    def updateCamConfigs(self, newBrightness, newSaturation, newGain, newContrast,
+                         newExposure, newWhiteBalance):
         self.camera.set(cv2.CAP_PROP_BRIGHTNESS, newBrightness)
         self.camera.set(cv2.CAP_PROP_SATURATION, newSaturation)
         self.camera.set(cv2.CAP_PROP_GAIN, newGain)
         self.camera.set(cv2.CAP_PROP_CONTRAST, newContrast)
-        self.camera.set(cv2.CAP_PROP_HUE, newHue)
         self.camera.set(cv2.CAP_PROP_EXPOSURE, newExposure)
-        self.camera.set(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U, newWhiteBalanceU)
-        self.camera.set(cv2.CAP_PROP_WHITE_BALANCE_RED_V, newWhiteBalanceV)
-        self.camera.set(cv2.CAP_PROP_ISO_SPEED, newIsoSpeed)
+        self.camera.set(cv2.CAP_PROP_WHITE_BALANCE_BLUE_U, newWhiteBalance)
         # adicionar cv2.CAP_PROP_APERTURE, cv2.CAP_PROP_AUTO_EXPOSURE, cv2.CAP_PROP_BACKLIGHT, cv2.CAP_PROP_AUTOFOCUS,
         # cv2.CAP_PROP_GAMMA
+
+    def setInvertImage(self, state):
+        self.invertImage = state
+        return state
 
     def getFrame(self):
         frame = None
         if self.camera.isOpened():
             _, frame = self.camera.read()
+            if self.invertImage:
+                cv2.flip(frame, -1, frame)
 
         return frame
 
@@ -322,6 +323,8 @@ class Apolo:
         Como na imagem o Y cresce pra baixo, então é necessário inverter, ficando entao yInicial - yFinal
         
         '''
+        if distance == 0:
+            distance = 1
 
         relativePosition = [(secondaryTagPosition[0] - robotPos[0]) / distance,
                             (robotPos[1] - secondaryTagPosition[1]) / distance]
@@ -460,10 +463,9 @@ class Apolo:
 
     # Função altera a sequencia das letras dos robos
     def changeLetters(self, robotLetter):
-        if robotLetter is None:
-            return None
-        else:
+        if robotLetter is not None:
             self.robotLetter = robotLetter
+        return self.robotLetter
 
     # Funçao principal da visao
     def run(self):

@@ -176,6 +176,7 @@ class Zeus:
 
                 if "obstacles" in info:
                     warriors[x].obstacles = info["obstacles"]
+                    warriors[x].obstaclesSpeed = info["obstaclesSpeed"]
 
             elif strategia[x]["command"] == "spin":
                 warriors[x].action.append(info["direction"])
@@ -201,6 +202,10 @@ class Zeus:
 
             warriors[x].backward = self.warriors[x].backward
             warriors[x].front = self.warriors[x].front
+
+        warriors[0].name = "luisinho"
+        warriors[1].name = "zezinho"
+        warriors[2].name = "huguinho"
 
         return warriors
 
@@ -248,15 +253,14 @@ class Zeus:
                 "vRight": velocities[0][1]
             },
             {
-                "robotLetter": strategia[0]["robotLetter"],
+                "robotLetter": strategia[1]["robotLetter"],
                 "vLeft": velocities[1][0],
                 "vRight": velocities[1][1]
             },
             {
-                "robotLetter": strategia[0]["robotLetter"],
+                "robotLetter": strategia[2]["robotLetter"],
                 "vLeft": velocities[2][0],
                 "vRight": velocities[2][1]
             }
         ]
-        print(strategia)
         return output

@@ -239,7 +239,7 @@ class UnivectorField:
     def updateOrientation(self, orientation):
         self.moveField.updateOrientation(orientation)
 
-    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=[0.0, 0.0], orientation=[650, 250]):
+    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=None, orientation=[650, 250]):
         if robotPos is not None and robotSpeed is not None:
             self.updateRobot(robotPos, robotSpeed)
         if target is not None:
@@ -247,6 +247,8 @@ class UnivectorField:
         if orientation is not None:
             self.updateOrientation(orientation)
         if obstacles is not None:
+            # if ostaclesSpeed is None:
+            ostaclesSpeed = [0.0, 0.0]
             self.updateObstacles(obstacles, ostaclesSpeed)
 
         centers = []

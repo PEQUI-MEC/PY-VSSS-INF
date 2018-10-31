@@ -24,6 +24,8 @@ class Hades(QThread):
         self.zeus = Zeus()
         self.hermes = Hermes()
 
+        self.plutus = Plutus()
+
         self.play = False
         self.isCalibrating = False
 
@@ -177,23 +179,48 @@ class Hades(QThread):
     def eventStartGame(self):
         self.play = not self.play
         print("Hades started") if self.play else print("Hades stopped")
+        return self.play
+
+    def SetFileSave(self, file):
+        self.plutus.setFile(file)
+
+    def eventSaveConfigs(self, value):
+        for key in value:
+            self.plutus.set(key, value[key])
+        print("Save configs")
+
+    def eventLoadConfigs(self, key):
+        value = self.plutus.get(key)
+        if value is not None:
+            return value
+        else:
+            return 0
 
     # Camera e Visão
-    def getCamConfigs(self):
+    def eventInvertImage(self, state):
+        if self.apolo is not None:
+            return self.apolo.setInvertImage(state)
+        return False
+
+    def getCamCongigs(self):
         return self.apolo.getCamConfigs()
 
-    def eventCamConfigs(self, newBrightness, newSaturation, newGain, newContrast, newHue,
-                        newExposure, newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed):
+    def eventCamConfigs(self, newBrightness, newSaturation, newGain, newContrast,
+                        newExposure, newWhiteBalance):
         if self.apolo is not None:
-            self.apolo.updateCamConfigs(newBrightness, newSaturation, newGain, newContrast, newHue, newExposure,
-                                        newWhiteBalanceU, newWhiteBalanceV, newIsoSpeed)
+            self.apolo.updateCamConfigs(newBrightness, newSaturation, newGain, newContrast, newExposure,
+                                        newWhiteBalance)
 
-    def calibrationEvent(self, imageId, calibration=None):
+    def eventCalibration(self, imageId, calibration=None):
         if self.apolo is not None:
             self.apolo.setHSVThresh(calibration, imageId)
 
     def eventStartVision(self, cameraId):
-        self.apolo = Apolo(int(cameraId))
+        try:
+            self.apolo = Apolo(int(cameraId))
+            return True
+        except:
+            return False
 
     # refresh não funciona; programa fechando
     # def eventStopVision(self):
@@ -203,7 +230,12 @@ class Hades(QThread):
 
     def changeRobotLetters(self, robotLetters):
         if self.apolo is not None:
-            self.apolo.changeLetters(robotLetters)
+            return self.apolo.changeLetters(robotLetters)
+        return ["A", "B", "C"]
+
+    def closeCamera(self):
+        if self.apolo is not None:
+            self.apolo.closeCamera()
 
     def changeCamera(self, cameraId):
         if self.apolo is not None:
@@ -232,7 +264,7 @@ class Hades(QThread):
 
     # Communication
     def eventStartXbee(self, port):
-        self.hermes.setup(port=port)
+        return self.hermes.setup(port=port)
 
     def eventsendMessage(self, robotId, message):
         self.hermes.sendMessage(robotId, message)

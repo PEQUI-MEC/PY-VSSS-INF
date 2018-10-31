@@ -1,12 +1,12 @@
 class Endless:
 
     def __setup(self):
-        pixelMeterRatio = self.width / 1.70 # o campo tem 1m 70cm
+        self.pixelMeterRatio = self.width / 1.70 # o campo tem 1m 70cm
 
         # tamanhos
-        self.robotSize = round(0.08 * pixelMeterRatio)
-        self.goalSize = (round(0.1 * pixelMeterRatio), round(0.4 * pixelMeterRatio))
-        self.areaSize = (round(0.15 * pixelMeterRatio), round(0.7 * pixelMeterRatio))
+        self.robotSize = round(0.08 * self.pixelMeterRatio)
+        self.goalSize = (round(0.1 * self.pixelMeterRatio), round(0.4 * self.pixelMeterRatio))
+        self.areaSize = (round(0.15 * self.pixelMeterRatio), round(0.7 * self.pixelMeterRatio))
 
         # coordenadas
         self.midField = (self.width / 2, self.height / 2)

@@ -9,9 +9,9 @@ class Hermes:
         self.xbee = None
         self.serial = None
         self.robots = {
-            "C": "\x56\x0D",
-            "F": "\x6B\x0D",
-            "G": "\x21\x5C"
+            "A": "\x56\x0D",
+            "B": "\x6B\x0D",
+            "C": "\x21\x5C"
         }
         print("Hermes summoned")
 
@@ -20,8 +20,11 @@ class Hermes:
             self.serial = Serial(port, baud, writeTimeout=0)
             self.xbee = XBee(self.serial)
             print("Hermes is set up")
+            return True
         except SerialException:
             print("In Hermes set up: Error opening xBee connection")
+            
+        return False
 
     def fly(self, velocities):
         """Main class method
@@ -64,12 +67,15 @@ class Hermes:
 
             if self.xbee is not None:
                 try:
-                    print(velocities[i])
                     self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
                     messages.append(message)
+                    # print(velocities[i]["robotLetter"] + ": " + message)
                 except SerialTimeoutException:
-                    print("Message sending timed out")
+                    print("[Hermes]: Message sending timed out")
+                except KeyError:
+                    print("[Hermes]: We don't know the address for robot '" + velocities[i]["robotLetter"] + "'")
 
+        print()
         return messages
 
     def killBee(self):
@@ -88,7 +94,7 @@ class Hermes:
     def sendMessage(self, robotId, message):
         if self.xbee is not None:
             try:
-                print(robotId)
+                # print(robotId)
                 self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
             except SerialTimeoutException:
                 print("Message sending timed out")
