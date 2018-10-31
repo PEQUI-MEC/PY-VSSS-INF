@@ -5,8 +5,9 @@ class Endless:
 
         # tamanhos
         self.robotSize = round(0.08 * self.pixelMeterRatio)
+        self.robotRadius = self.robotSize / 2
         self.goalSize = (round(0.1 * self.pixelMeterRatio), round(0.4 * self.pixelMeterRatio))
-        self.areaSize = (round(0.15 * self.pixelMeterRatio), round(0.7 * self.pixelMeterRatio))
+        self.areaSize = (round(0.15 * self.pixelMeterRatio), round(0.8 * self.pixelMeterRatio))
 
         # coordenadas
         self.midField = (self.width / 2, self.height / 2)
@@ -15,8 +16,10 @@ class Endless:
         self.ourGoal = (self.goalSize[0], self.height / 2)
 
         # limites
+        self.topSide = self.height - self.robotSize
+        self.bottomSide = self.robotSize
         self.corner = self.width - self.goalSize[0] - self.areaSize[0]  # em X
-        self.ourCorner = self.goalSize[0] - self.areaSize[0]  # em X
+        self.ourCorner = self.areaSize[0]  # em X
         self.goalTop = self.height / 2 + self.goalSize[1] / 2  # em Y
         self.goalBottom = self.height / 2 - self.goalSize[1] / 2  # em Y
         self.areaTop = self.height / 2 + self.areaSize[1] / 2  # em Y
