@@ -12,14 +12,6 @@ enemyColor = (0, 255, 255)
 ballColor = (31, 136, 246)
 pathColor = (255, 0, 255)
 
-globalBallPos = None
-
-RADIUS = 6.0
-KR = 1.9
-K0 = 0.12
-DMIN = 5.0
-LDELTA = 4.5
-
 
 def getObstacle():
     return np.array([random.randint(0, w-1), -random.randint(0, h-1)])
@@ -110,18 +102,18 @@ def drawPath(img, start, end, univetField):
     return True, None
 
 
-if __name__ == "__main__":
+def main(radius=6.0, kr=0.9, k0=0.12, dmin=20.0, lDelta=4.5):
     imgField = cv2.imread('vss-field.jpg')
     imgField2 = np.copy(imgField)
 
     robot = getRobot()
-    globalBallPos = ball = getBall()
+    ball = getBall()
 
     drawRobot(imgField2, robot)
     drawBall(imgField2, cm2pixel(ball))
 
     univetField = navigation.UnivectorField()
-    univetField.updateConstants(RADIUS, KR, K0, DMIN, LDELTA)
+    univetField.updateConstants(radius, kr, k0, dmin, lDelta)
     univetField.updateTarget(ball)
 
     drawField(imgField2, univetField)
@@ -131,3 +123,7 @@ if __name__ == "__main__":
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     del univetField
+
+
+if __name__ == "__main__":
+    main()

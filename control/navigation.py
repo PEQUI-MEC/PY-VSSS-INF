@@ -18,9 +18,9 @@ def wrap2pi(theta):
 
 
 class HyperbolicSpiral:
-    def __init__(self, kr, radius):
-        self.kr = kr
-        self.radius = radius
+    def __init__(self):
+        self.kr = None
+        self.radius = None
         self.origin = None
 
     def updateParams(self, kr, radius):
@@ -74,20 +74,20 @@ class Repulsive:
 
 class Move2Goal:
 
-    def __init__(self, kr=None, radius=None, orientation=1, rotation=True):
-        self.kr = kr
-        self.radius = radius
+    def __init__(self):
+        self.kr = None
+        self.radius = None
 
         self.origin = None
 
         self.x = None
         self.y = None
-        self.orientation = orientation
-        self.rotation = rotation
+        self.orientation = 1
+        self.rotation = True
         self.toUnivector = None
         self.toGame = None
 
-        self.hyperSpiral = HyperbolicSpiral(self.kr, self.radius)
+        self.hyperSpiral = HyperbolicSpiral()
 
     def updateParams(self, kr, radius):
         self.kr = kr
@@ -101,10 +101,10 @@ class Move2Goal:
         self.buildAxis()
 
     def updateOrientation(self, orientation):
-        self.attackGoal = np.array(orientation)
+        self.orientation = np.array(orientation)
 
     def buildAxis(self):
-        if type(self.orientation) != type(int) and self.rotation is True:
+        if type(self.orientation) != int and self.rotation is True:
             self.x = np.array(self.orientation - self.origin, dtype=np.float32)
         else:
             if self.orientation == 1:
@@ -117,11 +117,14 @@ class Move2Goal:
         else:
             self.x /= -np.linalg.norm(self.x)
 
-        theta = atan2(self.x[1], self.x[0])
-        self.y = [-sin(theta), cos(theta)]
+        theta = atan2(self.x[1], -self.x[0])
+        self.y = [sin(theta), cos(theta)]
 
-        # print("X: ", self.x, " theta: ", theta, " y: ", self.y)
-        self.toGame = np.array([self.x, self.y]).T
+        print("X: ", self.x, " theta: ", theta, " y: ", self.y)
+        self.toGame = np.array([self.x, self.y])
+        a, b = self.toGame.shape
+        i = np.eye(a, a)
+        self.toGame = np.linalg.lstsq(self.toGame, i)[0]
         self.toUnivector = np.linalg.inv(self.toGame)
 
     def fi_tuf(self, p):
@@ -159,11 +162,11 @@ class Move2Goal:
 
 class AvoidObstacle:
     def __init__(self):
+        self.repulsive = Repulsive()
         self.obstaclePos = None
         self.obstacleSpeed = None
         self.robotPos = None
         self.robotSpeed = None
-        self.repulsive = Repulsive()
         self.k0 = None
 
     def updateParam(self, k0):
@@ -205,7 +208,6 @@ class UnivectorField:
 
         self.obstacles = None
         self.obstaclesSpeed = None
-        self.targetPos = None
         self.robotPos = None
         self.robotSpeed = None
 
@@ -230,7 +232,6 @@ class UnivectorField:
 
     def updateTarget(self, targetPos):
         self.moveField.updateOrigin(targetPos)
-        self.targetPos = np.array(targetPos)
 
     def updateObstacles(self, obstacles, obstacleSpeeds):
         self.obstacles = np.array(obstacles)
