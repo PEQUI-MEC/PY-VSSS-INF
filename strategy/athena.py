@@ -13,7 +13,6 @@ class Athena:
     sPush = 3
     sPass = 4
     sDanger = 5
-    sHoly = 6
 
     tCatch = "catch"
     tCatchSideways = "catchsideways"
@@ -298,7 +297,6 @@ class Athena:
                 - push: bola está na frente de todos os aliados e no campo aliado
                 - pass: bola está atrás do atk, na frente do mid e no campo aliado
                 - danger: bola está atrás do atk e do mid e no campo aliado
-                - holyshit: bola está atrás de todos os aliados e no campo aliado
         """
         avaliableWarriors = self.warriors.copy()
 
@@ -346,8 +344,7 @@ class Athena:
             else:
                 self.globalState = Athena.sDanger
 
-        else:
-            self.globalState = Athena.sHoly
+        # estado Holy Shit não existe mais, é considerado o ourCorner
 
     def __selectTactics(self):
         """
@@ -428,14 +425,6 @@ class Athena:
             # goleiro fica em posição real da bola
             tGk = Athena.tBlock  # !TODO fazer goleiro sair na bola quando possível
 
-        elif self.globalState == Athena.sHoly:
-            # atacante volta rápido pra posição de saída de bola
-            tAtk = Athena.tCatchSideways
-            # mid bloqueia outros jogadores
-            tMid = Athena.tCatchSideways
-            # goleiro tenta dar a volta na bola o mais rápido possível, passando por dentro do gol
-            tGk = Athena.tCatch
-
         # situações especiais
 
         # se a bola tá muito próxima ao nosso gol em x
@@ -451,8 +440,7 @@ class Athena:
                 tGk = Athena.tBlock
 
             # se a bola tá dentro da área, mas sem tanto risco
-            elif self.endless.goalTop > ballY > self.endless.goalBottom and \
-                    ballX > self.gk.position[0] + self.endless.robotSize / 2:
+            elif self.endless.goalTop > ballY > self.endless.goalBottom:
                 # responsabilidade do goleiro dar um "chega pra lá"
                 tGk = Athena.tPush
                 # atk marca a área vulnerável enquanto goleiro avança (pode até trocar)
@@ -516,6 +504,11 @@ class Athena:
                 tMid = Athena.tKick  # !TODO pensar em outras situações pra forçar o chute
                 # atacante vai pra posição de sobra
                 tAtk = Athena.tWaitPass
+
+        # ações específicas de cada papel
+        # gk
+        if distance.euclidean(self.gk.position, self.ball["position"]) < self.endless.robotSize * 1.2:
+            tGk = Athena.tSpin
 
         # verifica se algum robô está travado
         for warrior in self.warriors:
@@ -626,7 +619,7 @@ class Athena:
                     else:
                         target = (targetX, ballY)
 
-                if distance.euclidean(warrior.position, target) > self.endless.robotRadius:
+                if distance.euclidean(warrior.position, target) > self.endless.robotSize:
                     # se está longe do alvo, vai até ele
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
@@ -662,7 +655,7 @@ class Athena:
                 else:
                     target = (targetX, targetY)
 
-                if distance.euclidean(warrior.position, target) > self.endless.robotRadius:
+                if distance.euclidean(warrior.position, target) > self.endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
                     warrior.command["avoidObstacles"] = "por favor, nunca te pedi nada irmão"
@@ -724,7 +717,7 @@ class Athena:
 
                 target = (targetX, self.endless.midField[1])
 
-                if distance.euclidean(warrior.position, target) > self.endless.robotRadius:
+                if distance.euclidean(warrior.position, target) > self.endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
                     warrior.command["avoidObstacles"] = "mas é claro, chefia"
