@@ -61,6 +61,9 @@ class Aether:
         self.loopThread1.start()
         self.loopThread2.start()
 
+        self.showInfos(0)
+        self.showInfos(1)
+
     def run(self):
         while True:
             self.sim.step()
@@ -89,21 +92,14 @@ class Aether:
                 self.sim.data.ctrl[5 + 6 * team] = self.convertVelocity(velocities[2]["vRight"])
 
             # mostra resultados
-            self.showRobotsInfo(team, positions, commands)
-
-            if team == 0:
-                self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + \
-                                            "{:.2f}".format(positions[2]["position"][1])
-                fps = self.getFPS()
-                if fps is not None:
-                    self.viewer.infos["fps"] = fps
+            self.showInfos(team, positions, commands)
 
     # HELPERS
-    def showRobotsInfo(self, team, positions=None, commands=None):
+    def showInfos(self, team, positions=None, commands=None):
         infos = []
 
         for i in range(3):
-            if self.enabled[i + 3 * team]:
+            if self.enabled[i + 3 * team] and positions and commands:
                 robot = "X: " + "{:.1f}".format(positions[0][i]["position"][0])
                 robot += ", Y: " + "{:.1f}".format(positions[0][i]["position"][1])
                 robot += ", O: " + "{:.1f}".format(positions[0][i]["orientation"])
@@ -134,6 +130,14 @@ class Aether:
 
         self.viewer.infos["robots" + str(team + 1)] = infos
 
+        if team == 0:
+            if positions:
+                self.viewer.infos["ball"] = "X: " + "{:.2f}".format(positions[2]["position"][0]) + ", Y: " + \
+                                            "{:.2f}".format(positions[2]["position"][1])
+                fps = self.getFPS()
+                if fps:
+                    self.viewer.infos["fps"] = fps
+
     def getFPS(self):
         # calcula o fps e manda pra interface
         self.cascadeTime += time.time() - self.cascadeLastTime
@@ -150,8 +154,8 @@ class Aether:
         for i in range(6):
             self.enabled[i] = False
 
-        self.showRobotsInfo(0)
-        self.showRobotsInfo(1)
+        self.showInfos(0)
+        self.showInfos(1)
         self.sim.reset()
         self.viewer._paused = False
 
@@ -188,6 +192,8 @@ class Aether:
             self.sim.data.ctrl[robotId] = self.sim.data.ctrl[robotId + 1] = 0
         else:
             self.enabled[robotId] = True
+
+        self.showInfos(0 if robotId < 3 else 1)
 
     def convertPositionX(self, coord, team):
         """Traz o valor pra positivo e multiplica pela proporção (largura máxima)/(posição x máxima)
