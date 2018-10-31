@@ -1,4 +1,5 @@
 from math import atan2, pi, fmod, sin, cos
+import time
 
 
 def roundAngle(angle):
@@ -48,11 +49,9 @@ class Dice:
 
         targetTheta = atan2((target[1] - self.warrior.position[1]) * 1.3 / 480,
                             -(target[0] - self.warrior.position[0]) * 1.5 / 640)
-        # currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
-        currentTheta = self.warrior.orientation
+        currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
-        if abs(targetTheta - currentTheta) > pi / 2:
-        #if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
+        if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
             self.warrior.backward = True
             self.warrior.front = 1
         else:
@@ -61,7 +60,7 @@ class Dice:
 
         if self.warrior.backward:
             currentTheta = currentTheta + pi
-            currentTheta = atan2(sin(currentTheta), cos(currentTheta))
+            currentTheta = atan2(sin(currentTheta), -cos(currentTheta))
 
         thetaError = atan2(sin(targetTheta - currentTheta), -cos(targetTheta - currentTheta))
 
@@ -75,8 +74,9 @@ class Dice:
         right = self.warrior.vMax * right
 
         # if self.warrior.name == "huguinho":
+            # print(self.warrior.backward)
             # print(self.warrior.position)
-            # print("Orientation: ", self.warrior.orientation, "Current: ", currentTheta, " Target: ", targetTheta, target)
+            # print("Current: ", currentTheta, " Target: ", targetTheta, target, "TransAngle: ", self.warrior.transAngle)
 
         return [left, right]
 
