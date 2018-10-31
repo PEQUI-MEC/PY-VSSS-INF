@@ -70,7 +70,8 @@ class Aether:
         while True:
             time.sleep(0.026)
 
-            if self.pause:
+            if self.pause or \
+                    (not self.enabled[3 * team] and not self.enabled[3 * team + 1] and not self.enabled[3 * team + 2]):
                 continue
             # executa nossos módulos
             positions = self.generatePositions(team)
@@ -206,7 +207,7 @@ class Aether:
 
     @staticmethod
     def convertVelocity(vel):
-        return vel * 15
+        return vel * 20
 
     def generatePositions(self, team):
         """Cria o vetor de posições no formato esperado pela estratégia

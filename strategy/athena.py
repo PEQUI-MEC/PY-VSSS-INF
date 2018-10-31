@@ -31,6 +31,7 @@ class Athena:
         self.theirWarriors = []
         self.theirWarriorsLastPos = []
         self.ball = {
+            "lastPosition": (0, 0),
             "position": (0, 0),
             "velocity": 0
         }
@@ -126,12 +127,10 @@ class Athena:
             self.warriors[i].velEstimated = \
                 distance.euclidean(self.warriors[i].position, self.warriors[i].lastPosition) / self.deltaTime
             self.warriors[i].velEstimated /= self.endless.pixelMeterRatio
-            # print("Warriors: ", self.warriors[i].velEstimated)
 
         self.theirWarriorsLastPos = []
         for i in range(0, len(self.theirWarriors)):
             self.theirWarriorsLastPos.append(self.theirWarriors[i].position)
-
 
         self.theirWarriors = []
         for i in range(0, len(positions[1])):
@@ -149,12 +148,11 @@ class Athena:
             if len(dist) > 0:
                 self.theirWarriors[i].velEstimated = min(dist) / self.deltaTime
                 self.theirWarriors[i].velEstimated /= self.endless.pixelMeterRatio
-                # print("Enemies: ", self.theirWarriors[i].velEstimated)
 
-        self.ball = {
-            "position": positions[2]["position"],
-            "velocity": 0  # !TODO calcular velocidade da bola
-        }
+        self.ball["lastPosition"] = self.ball["position"]
+        self.ball["position"] = positions[2]["position"]
+        self.ball["velocity"] = distance.euclidean(self.ball["position"], self.ball["lastPosition"]) / self.deltaTime
+        self.ball["velocity"] /= self.endless.pixelMeterRatio
 
         return positions
 
@@ -586,7 +584,7 @@ class Athena:
                 warrior.command["type"] = "goTo"
                 warrior.command["target"] = self.ball["position"]
                 warrior.command["targetVelocity"] = warrior.defaultVel
-                warrior.command["avoidObstacles"] = "por favor"
+                warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
 
                 # escolhe o lado que vai pressionar a bola, dependendo de qual parede ela tá mais perto
                 if self.ball["position"][1] > self.endless.midField[1]:
@@ -620,7 +618,7 @@ class Athena:
                     # se está longe do alvo, vai até ele
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
-                    warrior.command["avoidObstacles"] = "por favor"
+                    warrior.command["avoidObstacles"] = "se não for pedir demais..."
 
                     # se posiciona com uvf para maior precisão
                     if warrior.position[1] > self.endless.midField[1]:
@@ -655,7 +653,7 @@ class Athena:
                 if distance.euclidean(warrior.position, target) > self.endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
-                    warrior.command["avoidObstacles"] = "por favor"
+                    warrior.command["avoidObstacles"] = "por favor, nunca te pedi nada irmão"
 
                     # !TODO verificar se ele está chegando pelo lado certo
                     if warrior.position[1] > self.endless.midField[1]:
@@ -706,7 +704,7 @@ class Athena:
                 if distance.euclidean(warrior.position, target) > self.endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
-                    warrior.command["avoidObstacles"] = "por favor"
+                    warrior.command["avoidObstacles"] = "mas é claro, chefia"
                     warrior.command["targetOrientation"] = self.ball["position"]
                 else:
                     warrior.positionLocked = True

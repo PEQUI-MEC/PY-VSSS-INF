@@ -118,6 +118,10 @@ class Viewer(MjViewer):
                 self.aether.toggleRobot(5, mods == glfw.MOD_SHIFT)
 
             # default [modified] calls
+            elif key == glfw.KEY_BACKSPACE:
+                # TODO resetar a simulação
+                pass
+
             elif key == glfw.KEY_TAB:  # Switches cameras.
                 self.cam.fixedcamid += 1
                 self.cam.type = const.CAMERA_FIXED
