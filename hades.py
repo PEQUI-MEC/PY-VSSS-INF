@@ -195,6 +195,8 @@ class Hades(QThread):
             return value
         else:
             return 0
+    def eventWarp(self, warpMatriz):
+        return self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
 
     # Camera e Visão
     def eventInvertImage(self, state):

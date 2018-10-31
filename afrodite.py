@@ -8,6 +8,7 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
+import numpy as np
 import serial
 import glob
 import interface.icons_rc
@@ -51,7 +52,18 @@ class Afrodite(QMainWindow):
         self.spinBoxCaptureDevicePropertiesExposure.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesWhiteBalance.valueChanged.connect(self.camConfigsChanged)
 
-        # ModeView
+        # VideoView
+        # Vision
+        # Warp
+        self.warpCount = 0
+        self.warpMatriz = [[0,0],[0,0],[0,0],[0,0]]
+        self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
+        self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
+
+
+        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
+        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
+        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
 
         # HSVCalibration
         # Main
@@ -112,13 +124,6 @@ class Afrodite(QMainWindow):
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
         self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.updateComboBoxCaptureDeviceInformation)
         self.updateComboBoxCaptureDeviceInformation()
-
-        # Warp
-        self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
-
-        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
-        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
-        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
 
         # STRATEGY
 
@@ -185,10 +190,10 @@ class Afrodite(QMainWindow):
         self.hades.exit()
 
     '''
+    #Pega somente os pontos da tela sem o flutuante
     def mouseReleaseEvent(self, QMouseEvent):
-           print('(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')')           
+           print('(', QMouseEvent.pos().x(), ', ', QMouseEvent.pos().y(), ')')
     '''
-
     # PLAY BUTTON
     def clickedPlay(self):
         icon = QIcon()
@@ -216,7 +221,6 @@ class Afrodite(QMainWindow):
 
         self.pushButtonPlayConnect.setEnabled(False)
 
-    # VideoView
     # Positions
     def updateLabelPlayPositions(self, positions):
         self.labelPlayPositionsRobot1.setText(
@@ -483,6 +487,7 @@ class Afrodite(QMainWindow):
         self.groupBoxCaptureDeviceInformation.setEnabled(not enable)
         self.groupBoxCaptureDeviceProperties.setEnabled(enable)
         self.groupBoxCaptureWarp.setEnabled(enable)
+
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
 
         if enable:
@@ -574,14 +579,39 @@ class Afrodite(QMainWindow):
     def toggleInvertImage(self):
         self.checkBoxInvertImage.setChecked(self.hades.eventInvertImage(self.checkBoxInvertImage.isChecked()))
 
+    #
     def getPushButtonCaptureWarpWarp(self):
+        self.pushButtonCaptureWarpWarp.setEnabled(False)
+        enable = not self.pushButtonCaptureWarpWarp.isEnabled()
+
+        self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
+        self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
+        self.pushButtonCaptureWarpAdjust.setEnabled(enable)
+
+    def callApoloWarpEvent(self):
         pass
 
     def getPushButtonCaptureWarpReset(self):
-        pass
+        self.spinBoxCaptureWarpOffsetLeft.setValue(0)
+        self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
+        self.spinBoxCaptureWarpOffsetRight.setValue(0)
+        self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
+
+        self.warpCount = 0
+        self.warpMatriz = [[0,0],[640,0],[0,480],[640,480]]
+        self.hades.eventWarp(self.warpMatriz)
 
     def getPushButtonCaptureWarpAdjust(self):
-        pass
+        self.pushButtonCaptureWarpAdjust.setEnabled(False)
+        enable = not self.pushButtonCaptureWarpAdjust.isEnabled()
+
+        self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
+        self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
+        self.pushButtonCaptureWarpWarp.setEnabled(True)
 
     def getCaptureWarpOffsetLeft(self):
         pass
@@ -589,8 +619,31 @@ class Afrodite(QMainWindow):
     def getCaptureWarpOffsetRight(self):
         pass
 
-    # ROBOT TAB
+    def getPosWarp(self, event):
+        if not self.pushButtonCaptureWarpWarp.isEnabled():
+            if self.groupBoxCaptureWarp.isEnabled():
+                self.getPosEvent(event) 
 
+    def getPosEvent(self, event):
+        px = event.pos().x()
+        py = event.pos().y()
+
+        self.callHadesWarpEvent(px,py)
+
+        #print ('(',str(x), ',', str(y), ')')
+
+    def callHadesWarpEvent(self, px, py):
+        if self.warpCount < 4:
+            self.warpMatriz[self.warpCount][0] = px
+            self.warpMatriz[self.warpCount][1] = py
+
+            #print(self.warpMatriz[self.warpCount])
+            self.warpCount+=1
+
+            if self.warpCount == 4:
+                self.hades.eventWarp(self.warpMatriz)
+
+    # ROBOT TAB
     # role
     def clickEditRoles(self):
         self.pushButtonStrategyRobotFunctionsEdit.setEnabled(False)
