@@ -39,7 +39,7 @@ class Afrodite(QMainWindow):
         # PLAY
         self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
         self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
-        self.pushButtonPlayConnect.clicked.connect(self.changeRecordFlag)
+        self.pushButtonPlayConnect.clicked.connect(self.record)
         # VISION
         self.recordFlag = False
         self.cameraIsRunning = False
@@ -217,11 +217,12 @@ class Afrodite(QMainWindow):
 
         self.pushButtonPlayConnect.setEnabled(False)
 
-    def changeRecordFlag(self):
-        if self.recordFlag = False:
+    def record(self):
+        if self.recordFlag == False:
             self.recordFlag = True
-        else:
+        else:   
             self.recordFlag = False
+        self.hades.eventRecordVideo('teste', self.recordFlag) #nome será gerado de outras maneiras depois
 
     # VideoView
     # Positions
@@ -469,6 +470,9 @@ class Afrodite(QMainWindow):
 
     def actionExitTriggered(self):
         self.saveConfigs(file="quicksave")
+        if self.recordFlag == True:
+            self.record() # end video writing
+
         return self.close()
 
     # MenuBarHelp

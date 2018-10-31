@@ -28,6 +28,9 @@ class Apolo:
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
+        self.videoOutput = None
+        self.fourcc = None
+
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
 
@@ -555,3 +558,14 @@ class Apolo:
 
         # print(self.positions)
         return self.positions, frame
+
+    def createVideo(self, videoName):
+        self.fourcc = VideoWriter_fourcc(*'MP4V')
+        self.videoOutput = VideoWriter(videoName + ".mp4", fourcc, 20.0, (640,480))
+
+    def writeFrame(self, frame):
+        frame = cv2.flip(frame,0)
+        self.videoOutput.write(frame)
+
+    def stopVideo(self):
+        videoOutput.release()
