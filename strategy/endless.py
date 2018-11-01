@@ -34,4 +34,3 @@ class Endless:
         self.height = height
 
         self.__setup()
-
