@@ -45,6 +45,7 @@ class Athena:
         self.unlockDirection = -1
         self.deltaTime = time.time()
         self.lastTime = time.time()
+        self.spiral = 1.0
         print("Athena summoned")
 
     def setup(self, numRobots, width, height, defaultVel):
@@ -215,6 +216,7 @@ class Athena:
             if warrior.command["type"] == "goTo":
                 command["command"] = "goTo"
                 command["data"] = {}
+                command["data"]["spiral"] = self.spiral
                 command["data"]["pose"] = {
                     "position": warrior.position,
                     "orientation": warrior.orientation
@@ -583,6 +585,13 @@ class Athena:
                 warrior.command["targetOrientation"] = self.endless.pastGoal
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "por favor"
+                if warrior.position[1] >= 400:
+                    self.spiral = ((self.endless.height+30) - warrior.position[1]) / 100.0
+
+                elif warrior.position[1] < 80:
+                    self.spiral = (warrior.position[1]+30) / 100.0
+                else:
+                    self.spiral = 1.0
 
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados
@@ -734,7 +743,8 @@ class Athena:
             elif warrior.tactics == Athena.tKick:
                 # vai pra cima com tudo, sem desviar de obstáculos
                 warrior.command["type"] = "goTo"
-                warrior.command["target"] = self.ball["position"]
+                # warrior.command["target"] = self.ball["position"]
+                warrior.command["target"] = self.endless.goal
                 warrior.command["targetOrientation"] = self.endless.pastGoal
                 warrior.command["targetVelocity"] = warrior.maxVel
 

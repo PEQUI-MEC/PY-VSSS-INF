@@ -6,6 +6,8 @@ class Warrior(Structure):
     def __init__(self):
         self.name = None
 
+        self.spiral = None
+
         self.front = -1
         self.backward = False
 

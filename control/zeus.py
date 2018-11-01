@@ -160,6 +160,7 @@ class Zeus:
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
+                warriors[x].spiral = info["spiral"]
                 warriors[x].position = info["pose"]["position"]
                 warriors[x].orientation = info["pose"]["orientation"]
 
