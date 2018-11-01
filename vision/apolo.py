@@ -565,7 +565,8 @@ class Apolo:
         self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 30.0, (640, 480))
 
     def writeFrame(self, frame):
-        self.videoOutput.write(frame)
+        if videoOutput is not None:
+            self.videoOutput.write(frame)
 
     def stopVideo(self):
         self.videoOutput.release()
