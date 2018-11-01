@@ -84,7 +84,7 @@ class Hades(QThread):
 
         positions, frame = self.apolo.run()
 
-        if self.recordFlag == True:
+        if self.recordFlag:
             self.writeFrame(frame)
         
         # atualiza o vídeo na interface

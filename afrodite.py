@@ -39,8 +39,8 @@ class Afrodite(QMainWindow):
         # PLAY
         self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
         self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
-        self.pushButtonPlayStart.clicked.connect(self.record)  # A gravação será feita aqui
-        self.pushButtonPlayConnect.clicked.connect(self.record)  # Para testar a gravação
+        # self.pushButtonPlayStart.clicked.connect(self.record)  # A gravação será feita aqui
+        # self.pushButtonPlayConnect.clicked.connect(self.record)  # Para testar a gravação
 
         # VISION
         self.recordFlag = False
@@ -195,6 +195,7 @@ class Afrodite(QMainWindow):
     # PLAY BUTTON
     def clickedPlay(self):
         icon = QIcon()
+        self.record()
         if self.hades.eventStartGame():
             icon.addPixmap(QPixmap('interface/Imgs/Pause.png'))
             self.pushButtonPlayStart.setIcon(icon)
@@ -220,12 +221,14 @@ class Afrodite(QMainWindow):
         self.pushButtonPlayConnect.setEnabled(False)
 
     def record(self):
-        if self.recordFlag == False:
+        if not self.recordFlag:
             self.recordFlag = True
         else:   
             self.recordFlag = False
 
-        self.hades.eventRecordVideo(self.recordFlag) #nome será gerado de outras maneiras depois
+        print(self.recordFlag)
+
+        self.hades.eventRecordVideo(self.recordFlag)  # nome será gerado de outras maneiras depois
 
     # VideoView
     # Positions
