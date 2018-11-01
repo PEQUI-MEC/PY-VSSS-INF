@@ -46,6 +46,8 @@ class Apolo:
         self.imageId = -1
         self.invertImage = False
         self.robotLetter = ['A', 'B', 'C']
+        self.warpGoal = False
+        self.warpMatrizGoal = [[0,0],[0,0],[0,0],[0,0]]
 
         self.positions = self.returnData(
             self.robotPositions,
@@ -60,6 +62,21 @@ class Apolo:
         shape = np.float32([pt1,pt2,pt4,pt3])
         plot = np.float32([[0,0],[640,0],[0,480],[640,480]])
         self.perspective = cv2.getPerspectiveTransform(shape,plot)
+
+    def setWarpGoalMatriz(self, warpMatrix):
+        self.warpMatrizGoal = warpMatrix
+
+    def setWarpGoalState(self, state):
+        self.warpGoal = state
+
+    def warpGoalFrame(self, frame):
+        pt1, pt2, pt3, pt4 = self.warpMatrizGoal[0], self.warpMatrizGoal[1], self.warpMatrizGoal[2], self.warpMatrizGoal[3]
+        cv2.rectangle(frame, (0,0), (pt1[0],pt1[1]), (0, 0, 0), -1)
+        cv2.rectangle(frame, (pt2[0], 0), (640, pt2[1]), (0, 0, 0), -1)
+        cv2.rectangle(frame, (0, pt4[1]), (pt4[0], 480), (0, 0, 0), -1)
+        cv2.rectangle(frame, (pt3[0], pt3[1]), (640, 480), (0, 0, 0), -1)
+
+        return frame
 
     def setWarpOffset(self, offsetLeft, offsetRight):
         print(offsetLeft, offsetRight)
@@ -487,6 +504,10 @@ class Apolo:
             return None
 
         frame = cv2.warpPerspective(frame,self.perspective,(640,480))
+
+        #WarpGoal
+        if self.warpGoal:
+            frame = self.warpGoalFrame(frame)
 
         # Transforma de BRG para HSV
         frameHSV = self.getHSVFrame(frame)

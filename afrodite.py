@@ -291,6 +291,7 @@ class Afrodite(QMainWindow):
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
         }
         """
+        #cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
@@ -591,9 +592,6 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
         self.pushButtonCaptureWarpAdjust.setEnabled(enable)
 
-    def callApoloWarpEvent(self):
-        pass
-
     def getPushButtonCaptureWarpReset(self):
         self.spinBoxCaptureWarpOffsetLeft.setValue(0)
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
@@ -603,6 +601,7 @@ class Afrodite(QMainWindow):
         self.warpCount = 0
         self.warpMatriz = [[0,0],[640,0],[640,480],[0,480]]
         self.hades.eventWarp(self.warpMatriz)
+        self.hades.eventWarpGoal(False)
 
     def getPushButtonCaptureWarpAdjust(self):
         self.pushButtonCaptureWarpAdjust.setEnabled(False)
@@ -625,20 +624,34 @@ class Afrodite(QMainWindow):
             if self.groupBoxCaptureWarp.isEnabled():
                 px = event.pos().x()
                 py = event.pos().y()
-
-                self.callHadesWarpEvent(px,py) 
+                
+                if self.warpCount < 4:
+                    self.callHadesWarpEvent(px,py)
+                elif self.warpCount >= 4 and self.warpCount < 8:
+                    self.callHadesWarpGoalEvent(px,py)   
 
     def callHadesWarpEvent(self, px, py):
         print(self.warpCount)
-        if self.warpCount < 4:
-            self.warpMatriz[self.warpCount][0] = px
-            self.warpMatriz[self.warpCount][1] = py
+        self.warpMatriz[self.warpCount][0] = px
+        self.warpMatriz[self.warpCount][1] = py
 
-            print(self.warpMatriz[self.warpCount])
-            self.warpCount+=1
+        print(self.warpMatriz[self.warpCount])
+        self.warpCount+=1
 
-            if self.warpCount == 4:
-                self.hades.eventWarp(self.warpMatriz)
+        if self.warpCount == 4:
+            self.hades.eventWarp(self.warpMatriz)
+
+    def callHadesWarpGoalEvent(self, px, py):
+        print(self.warpCount)
+        self.warpMatriz[self.warpCount%4][0] = px
+        self.warpMatriz[self.warpCount%4][1] = py
+
+        print(self.warpMatriz[self.warpCount%4])
+        self.warpCount+=1
+
+        if self.warpCount == 8:
+            self.hades.eventWarpGoal(True)
+            self.hades.eventWarpGoalMatriz(self.warpMatriz)
 
     # ROBOT TAB
     # role

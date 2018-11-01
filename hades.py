@@ -203,7 +203,7 @@ class Hades(QThread):
             return self.apolo.setInvertImage(state)
         return False
 
-    def getCamCongigs(self):
+    def getCameraConfigs(self):
         return self.apolo.getCamConfigs()
 
     def eventCamConfigs(self, newBrightness, newSaturation, newGain, newContrast,
@@ -246,8 +246,18 @@ class Hades(QThread):
         if self.apolo is not None:
             self.apolo.setImg(thresholdId)
 
+    #Warp
     def eventWarp(self, warpMatriz):
-        return self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
+        self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
+
+    #WarpGoal
+    def eventWarpGoalMatriz(self, warpMatriz):
+        return self.apolo.setWarpGoalMatriz(warpMatriz)
+
+    def eventWarpGoal(self, state):
+        return self.apolo.setWarpGoalState(state)
+
+    #Offset
 
     def eventWarpOffsetChanged(self, offsetLeft, offsetRight):
         self.apolo.setWarpOffset(offsetLeft, offsetRight)
