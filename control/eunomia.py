@@ -16,9 +16,8 @@ class Eunomia:
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
         # self.uvf.updateConstants(radius=6.0, kr=0.9, k0=0.12, dMin=20.0, lDelta=4.5)
-        self.radius = 8.0
-        self.kr = 0.9
-        # self.kr = 4.9
+        self.radius = 50.0
+        self.kr = 5.9  # 0.9
         self.k0 = 0.12
         self.dMin = 20.0
         self.lDelta = 4.5

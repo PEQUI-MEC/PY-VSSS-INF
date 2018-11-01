@@ -43,7 +43,7 @@ class Athena:
         self.gkOffset = self.midOffset = 0
 
         self.globalState = "push"
-        self.transitionsEnabled = True
+        self.transitionsEnabled = False
         self.roles = ["gk", "mid", "atk"]
         self.unlockDirection = 1
         self.deltaTime = time.time()
@@ -630,13 +630,19 @@ class Athena:
                 warrior.command["targetOrientation"] = self.endless.pastGoal
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "por favor"
-                if warrior.position[1] >= 400:
-                    self.spiral = ((self.endless.height+30) - warrior.position[1]) / 100.0
 
+                if warrior.position[1] >= 400:
+                    print("Perto do canto superior ", self.spiral)
+                    self.spiral = 0.06
                 elif warrior.position[1] < 80:
-                    self.spiral = (warrior.position[1]+30) / 100.0
-                else:
+                    print("Perto do canto inferiror ", self.spiral)
+                    self.spiral = 0.06
+                elif distance.euclidean(warrior.position[0], self.ball["position"][0]) > 200:
+                    print("Longe da bola ", self.spiral)
                     self.spiral = 1.0
+                else:
+                    print("Normal ", self.spiral)
+                    self.spiral = 0.1
 
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados

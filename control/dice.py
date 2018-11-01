@@ -74,7 +74,7 @@ class Dice:
         right = self.warrior.vMax * right
 
         # if self.warrior.name == "huguinho":
-            # print(self.warrior.backward)
+            # print(self.warrior.spiral)
             # print(self.warrior.position)
             # print("Current: ", currentTheta, " Target: ", targetTheta, target, "TransAngle: ", self.warrior.transAngle)
 
