@@ -228,7 +228,7 @@
   </worldbody>
 
   <worldbody>
-    <body name="robot_03" pos="-0.08 0 0.04" axisangle="0 0 1 3.14159265359">
+    <body name="robot_03" pos="-0.065 0.015 0.04" axisangle="0 0 1 2.9">
       <joint type="free" name="Robot_03"/>
       <inertial pos="0 0 -0.02" mass="500" diaginertia="0.132 0.2244 0.33"/>
       <geom conaffinity="1" contype="1"  size="0.04 0.03 0.03" rgba="0 0 1 1" type="box"/>

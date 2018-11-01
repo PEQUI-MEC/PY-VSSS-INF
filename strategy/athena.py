@@ -202,6 +202,7 @@ class Athena:
                         "orientation": θ radianos
                     },
                     "target": θ radianos | (x, y)
+                    "velocity": X m/s
                 }
             }
             - {
@@ -261,6 +262,9 @@ class Athena:
                     "position": warrior.position,
                     "orientation": warrior.orientation
                 }
+
+                if "targetVelocity" in warrior.command:
+                    command["data"]["velocity"] = warrior.command["targetVelocity"]
 
                 if "targetOrientation" in warrior.command:
                     command["data"]["target"] = warrior.command["targetOrientation"]
@@ -395,8 +399,7 @@ class Athena:
             # se o ângulo do robô com a bola e da bola com o gol é bom, se o atk tá atrás da bola e se tá perto dela
             if distance.euclidean(self.ball["position"], self.atk.position) < self.endless.spinSize:
                 if hasKickAngle:
-                    self.atk.tactics = Athena.tKick
-                    self.atk.actionTimer = 1
+                    tAtk = Athena.tKick
                 else:
                     tAtk = Athena.tSpin
             else:
@@ -557,7 +560,7 @@ class Athena:
                         else:
                             warrior.tactics = Athena.tUnlock  # sobrebrescreve a tática direto
                             warrior.lockedTime = 0
-                            warrior.actionTimer = 0.5  # tempo que deverá andar numa direção pra destravar
+                            warrior.actionTimer = 0.8  # tempo que deverá andar numa direção pra destravar
                             self.unlockDirection *= -1  # direção que deverá tentar dessa vez
                     else:
                         warrior.lockedTime += self.deltaTime
