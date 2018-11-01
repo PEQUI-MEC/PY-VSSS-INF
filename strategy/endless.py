@@ -5,6 +5,7 @@ class Endless:
 
         # tamanhos
         self.robotSize = round(0.08 * self.pixelMeterRatio)
+        self.spinSize = self.robotSize * 1.2
         self.robotRadius = self.robotSize / 2
         self.goalSize = (round(0.1 * self.pixelMeterRatio), round(0.4 * self.pixelMeterRatio))
         self.areaSize = (round(0.15 * self.pixelMeterRatio), round(0.8 * self.pixelMeterRatio))
@@ -34,4 +35,3 @@ class Endless:
         self.height = height
 
         self.__setup()
-
