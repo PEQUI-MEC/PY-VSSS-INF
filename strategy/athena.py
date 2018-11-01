@@ -42,6 +42,9 @@ class Athena:
 
         self.gkOffset = self.midOffset = 0
 
+        # angulo da bola com o gol
+        self.ballGoal = 0
+
         self.globalState = "push"
         self.transitionsEnabled = True
         self.roles = ["gk", "mid", "atk"]
@@ -309,6 +312,33 @@ class Athena:
                 - pass: bola está atrás do atk, na frente do mid e no campo aliado
                 - danger: bola está atrás do atk e do mid e no campo aliado
         """
+
+        # verifica os ângulos dos robôs, bola e gols
+
+        ballX = self.ball["position"][0]
+        ballY = self.ball["position"][1]
+        # angulo da bola com o gol
+        self.ballGoal = math.atan2(self.endless.goal[1] - ballY, (self.endless.pastGoal[0] - ballX))
+
+        for i in range(len(self.warriors)):
+            # angulo do robô com a bola
+            self.warriors[i].robotBall = math.atan2(ballY - self.warriors[i].position[1],
+                                                    (ballX - self.warriors[i].position[0]))
+            # angulo entre as retas robo->bola e bola->gol
+            self.warriors[i].robotBallGoal = math.atan2(math.sin(self.warriors[i].robotBall - self.ballGoal),
+                                                    math.cos(self.warriors[i].robotBall - self.ballGoal))
+            # orientação do robô em relação ao gol
+            self.warriors[i].robotGoal = abs(
+                geometry.roundAngle(
+                    math.atan2(self.endless.pastGoal[1] - self.warriors[i].position[1],
+                               -(self.endless.pastGoal[0] - self.warriors[i].position[0]))
+                )
+            )
+
+            self.warriors[i].hasKickAngle = abs(self.warriors[i].robotBallGoal) < math.pi / 4 and \
+                                            (self.warriors[i].robotGoal < math.pi / 4 or
+                                             self.warriors[i].robotGoal > 3 * math.pi / 4)
+
         avaliableWarriors = self.warriors.copy()
 
         if self.transitionsEnabled:
@@ -381,24 +411,9 @@ class Athena:
         # usa o estado global pra agir
 
         if self.globalState == Athena.sAdvance:
-            # angulo do robô com a bola
-            robotBall = math.atan2(ballY - self.atk.position[1], (ballX - self.atk.position[0]))
-            # angulo da bola com o gol
-            ballGoal = math.atan2(self.endless.goal[1] - ballY, (self.endless.goal[0] - ballX))
-            # angulo entre as retas robo->bola e bola->gol
-            robotBallGoal = math.atan2(math.sin(robotBall - ballGoal), math.cos(robotBall - ballGoal))
-            # orientação do robô em relação ao gol
-            robotGoal = abs(
-                geometry.roundAngle(
-                    math.atan2(self.endless.goal[1] - self.atk.position[1],
-                               -(self.endless.goal[0] - self.atk.position[0]))
-                )
-            )
-            hasKickAngle = abs(robotBallGoal) < math.pi / 4 and (robotGoal < math.pi / 4 or robotGoal > 3 * math.pi / 4)
-
             # se o ângulo do robô com a bola e da bola com o gol é bom, se o atk tá atrás da bola e se tá perto dela
             if distance.euclidean(self.ball["position"], self.atk.position) < self.endless.spinSize:
-                if hasKickAngle:
+                if self.atk.hasKickAngle:
                     tAtk = Athena.tKick
                 else:
                     tAtk = Athena.tSpin
