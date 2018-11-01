@@ -1,6 +1,7 @@
 # coding=utf-8
 import math
 import time
+from helpers import geometry
 from scipy.spatial import distance
 from strategy.endless import Endless
 from strategy.warrior import Warrior
@@ -44,7 +45,7 @@ class Athena:
         self.globalState = "push"
         self.transitionsEnabled = True
         self.roles = ["gk", "mid", "atk"]
-        self.unlockDirection = -1
+        self.unlockDirection = 1
         self.deltaTime = time.time()
         self.lastTime = time.time()
         print("Athena summoned")
@@ -370,14 +371,28 @@ class Athena:
         tAtk = tMid = tGk = None
 
         # usa o estado global pra agir
-        robotBall = math.pi - abs(math.atan2(ballY - self.atk.position[1], -(ballX - self.atk.position[0])))
-        ballGoal = math.pi - abs(math.atan2(self.endless.goal[1] - ballY, -(self.endless.goal[0] - ballX)))
+
         if self.globalState == Athena.sAdvance:
+            # angulo do robô com a bola
+            robotBall = math.atan2(ballY - self.atk.position[1], (ballX - self.atk.position[0]))
+            # angulo da bola com o gol
+            ballGoal = math.atan2(self.endless.goal[1] - ballY, (self.endless.goal[0] - ballX))
+            # angulo entre as retas robo->bola e bola->gol
+            robotBallGoal = math.atan2(math.sin(robotBall - ballGoal), math.cos(robotBall - ballGoal))
+            # orientação do robô em relação ao gol
+            robotGoal = abs(
+                geometry.roundAngle(
+                    math.atan2(self.endless.goal[1] - self.atk.position[1],
+                               -(self.endless.goal[0] - self.atk.position[0]))
+                )
+            )
+            hasKickAngle = abs(robotBallGoal) < math.pi / 4 and (robotGoal < math.pi / 4 or robotGoal > 3 * math.pi / 4)
+
             # se o ângulo do robô com a bola e da bola com o gol é bom, se o atk tá atrás da bola e se tá perto dela
-            if distance.euclidean(self.ball["position"], self.atk.position) < self.endless.robotSize:
-                if abs(robotBall - ballGoal) < math.pi and self.atk.position[0] < ballX:
-                    print("opaaa" + str(time.time()))
-                    tAtk = Athena.tKick
+            if distance.euclidean(self.ball["position"], self.atk.position) < self.endless.spinSize:
+                if hasKickAngle:
+                    self.atk.tactics = Athena.tKick
+                    self.atk.actionTimer = 1
                 else:
                     tAtk = Athena.tSpin
             else:
@@ -430,8 +445,9 @@ class Athena:
             # mid volta rápido pra recuperar a bola
             tMid = Athena.tBlockOpening
             # goleiro fica em posição real da bola
-            if distance.euclidean(self.atk.position, self.ball["position"]) > 2 * self.endless.robotSize and \
-                    distance.euclidean(self.mid.position, self.ball["position"]) > 2 * self.endless.robotSize:
+            if ballX < self.endless.width / 4 and \
+                    distance.euclidean(self.atk.position, self.ball["position"]) > 3 * self.endless.robotSize and \
+                    distance.euclidean(self.mid.position, self.ball["position"]) > 3 * self.endless.robotSize:
                 tGk = Athena.tCatchSideways
             else:
                 tGk = Athena.tBlock
@@ -482,8 +498,8 @@ class Athena:
                 tMid = Athena.tWaitPass
 
                 # se a bola tá perto do atacante
-                if distance.euclidean(self.ball["position"], self.atk.position) < self.endless.robotSize:
-                    # atacante gira !TODO analisar se compensa ele levar a bola pro mid
+                if distance.euclidean(self.ball["position"], self.atk.position) < self.endless.spinSize:
+                    # atacante gira
                     tAtk = Athena.tSpin
                 else:
                     # atacante busca a bola com uvf
