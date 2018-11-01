@@ -250,7 +250,7 @@ class UnivectorField:
             fi_auf = self.avoidField.avoid(self.robotPos, vPos=closestCenter, theta=True)
 
         if minDistance <= self.dMin:
-            print("Obstaculo!!!")
+            # print("Obstaculo!!!")
             return fi_auf
         else:
             fi_tuf = self.moveField.fi_tuf(self.robotPos)
