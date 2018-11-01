@@ -244,9 +244,11 @@ class Athena:
                     for obstacle in self.warriors:
                         if obstacle != warrior:
                             command["data"]["obstacles"].append(obstacle.position)
+                            print("Warriors: ", obstacle.velEstimated)
                             command["data"]["obstaclesSpeed"].append([obstacle.velEstimated, obstacle.velEstimated])
                     for obstacle in self.theirWarriors:
                         command["data"]["obstacles"].append(obstacle.position)
+                        print("Enemies: ", obstacle.velEstimated)
                         command["data"]["obstaclesSpeed"].append([obstacle.velEstimated, obstacle.velEstimated])
 
                     if warrior.position[0] > self.ball["position"][0] in warrior.command:
