@@ -39,7 +39,10 @@ class Afrodite(QMainWindow):
         # PLAY
         self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
         self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
-        self.pushButtonPlayConnect.clicked.connect(self.record)
+        #self.pushButtonPlayStart.clicked.connect(self.record) #A gravação será feita aqui
+        self.pushButtonPlayConnect.clicked.connect(self.record) # Para testar a gravação
+        
+
         # VISION
         self.recordFlag = False
         self.cameraIsRunning = False
