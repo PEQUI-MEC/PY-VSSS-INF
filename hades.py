@@ -1,5 +1,6 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import time
+import datetime
 import numpy
 
 from helpers.plutus import Plutus
@@ -277,6 +278,7 @@ class Hades(QThread):
     def eventRecordVideo(self, videoName, recordFlag):
         self.recordFlag = recordFlag
         if recordFlag == True:
+           videoName = str(datetime.datetime.now())
            self.apolo.createVideo(videoName)
         else:
            self.apolo.stopVideo()

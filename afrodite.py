@@ -1,6 +1,7 @@
 # coding=utf-8
 import sys
 import os
+import datetime
 import cv2  # Somente para testes
 
 from PyQt5 import QtCore, QtGui
