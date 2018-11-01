@@ -632,16 +632,16 @@ class Athena:
                 warrior.command["avoidObstacles"] = "por favor"
 
                 if warrior.position[1] >= 400:
-                    print("Perto do canto superior ", self.spiral)
+                    # print("Perto do canto superior ", self.spiral)
                     self.spiral = 0.06
                 elif warrior.position[1] < 80:
-                    print("Perto do canto inferiror ", self.spiral)
+                    # print("Perto do canto inferiror ", self.spiral)
                     self.spiral = 0.06
-                elif distance.euclidean(warrior.position[0], self.ball["position"][0]) > 200:
-                    print("Longe da bola ", self.spiral)
+                elif distance.euclidean(warrior.position[0], self.ball["position"][0]) > 250:
+                    # print("Longe da bola ", self.spiral)
                     self.spiral = 1.0
                 else:
-                    print("Normal ", self.spiral)
+                    # print("Normal ", self.spiral)
                     self.spiral = 0.1
 
             elif warrior.tactics == Athena.tCatchSideways:
