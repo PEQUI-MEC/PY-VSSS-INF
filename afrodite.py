@@ -1,7 +1,6 @@
 # coding=utf-8
 import sys
 import os
-import datetime
 import cv2  # Somente para testes
 
 from PyQt5 import QtCore, QtGui
@@ -224,8 +223,7 @@ class Afrodite(QMainWindow):
         else:   
             self.recordFlag = False
 
-        print (self.recordFlag)
-        self.hades.eventRecordVideo('teste', self.recordFlag) #nome será gerado de outras maneiras depois
+        self.hades.eventRecordVideo(self.recordFlag) #nome será gerado de outras maneiras depois
 
     # VideoView
     # Positions

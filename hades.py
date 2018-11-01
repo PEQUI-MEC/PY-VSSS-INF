@@ -275,7 +275,7 @@ class Hades(QThread):
     def eventsendMessage(self, robotId, message):
         self.hermes.sendMessage(robotId, message)
 
-    def eventRecordVideo(self, videoName, recordFlag):
+    def eventRecordVideo(self, recordFlag):
         self.recordFlag = recordFlag
         if recordFlag == True:
            videoName = str(datetime.datetime.now())
