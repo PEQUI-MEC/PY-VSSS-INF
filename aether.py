@@ -71,7 +71,7 @@ class Aether:
 
     def loopTeam(self, team):
         while True:
-            time.sleep(0.026)
+            time.sleep(0.001)
 
             if self.pause or \
                     (not self.enabled[3 * team] and not self.enabled[3 * team + 1] and not self.enabled[3 * team + 2]):
@@ -157,7 +157,6 @@ class Aether:
         self.showInfos(0)
         self.showInfos(1)
         self.sim.reset()
-        self.viewer._paused = False
 
     def startStop(self, pause):
         self.pause = pause
