@@ -37,9 +37,10 @@ class Afrodite(QMainWindow):
         self.objectsToDraw = {}
 
         # PLAY
+        self.pushButtonPlayStart.setEnabled(True)
         self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
         self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
-        # self.pushButtonPlayStart.clicked.connect(self.record)  # A gravação será feita aqui
+        #self.pushButtonPlayStart.clicked.connect(self.record)  # A gravação será feita aqui
         # self.pushButtonPlayConnect.clicked.connect(self.record)  # Para testar a gravação
 
         # VISION
@@ -195,13 +196,13 @@ class Afrodite(QMainWindow):
     # PLAY BUTTON
     def clickedPlay(self):
         icon = QIcon()
-        self.record()
         if self.hades.eventStartGame():
             icon.addPixmap(QPixmap('interface/Imgs/Pause.png'))
             self.pushButtonPlayStart.setIcon(icon)
         else:
             icon.addPixmap(QPixmap('interface/Imgs/Play.png'))
             self.pushButtonPlayStart.setIcon(icon)
+        self.record()
 
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Space and self.pushButtonPlayStart.isEnabled():
