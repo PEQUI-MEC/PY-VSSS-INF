@@ -221,8 +221,8 @@ class Hades(QThread):
 
     def eventStartVision(self, cameraId):
         try:
-            self.apolo = Apolo(int(cameraId))
-            #self.apolo = Apolo(0)
+            #self.apolo = Apolo(int(cameraId))
+            self.apolo = Apolo(0)
             return True
         except:
             return False
@@ -260,6 +260,9 @@ class Hades(QThread):
 
     def eventWarpGoal(self, state):
         return self.apolo.setWarpGoalState(state)
+		
+    def eventWarpReset(self):
+        self.apolo.resetWarp()
 
     #Offset
 

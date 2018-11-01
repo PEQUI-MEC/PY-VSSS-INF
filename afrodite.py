@@ -599,9 +599,8 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
 
         self.warpCount = 0
-        self.warpMatriz = [[0,0],[640,0],[640,480],[0,480]]
-        self.hades.eventWarp(self.warpMatriz)
-        self.hades.eventWarpGoal(False)
+        #self.warpMatriz = [[0,0],[640,0],[640,480],[0,480]]
+        self.hades.eventWarpReset()
 
     def getPushButtonCaptureWarpAdjust(self):
         self.pushButtonCaptureWarpAdjust.setEnabled(False)
