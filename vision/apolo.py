@@ -28,6 +28,7 @@ class Apolo:
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
+        #record variables
         self.videoOutput = None
         self.fourcc = None
 
@@ -560,8 +561,8 @@ class Apolo:
         return self.positions, frame
 
     def createVideo(self, videoName):
-        self.fourcc = VideoWriter_fourcc(*'MP4V')
-        self.videoOutput = VideoWriter(videoName + ".mp4", fourcc, 20.0, (640,480))
+        self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        self.videoOutput = cv2.VideoWriter(videoName + ".avi", self.fourcc, 20.0, (640,480))
 
     def writeFrame(self, frame):
         frame = cv2.flip(frame,0)

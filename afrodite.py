@@ -222,6 +222,8 @@ class Afrodite(QMainWindow):
             self.recordFlag = True
         else:   
             self.recordFlag = False
+
+        print (self.recordFlag)
         self.hades.eventRecordVideo('teste', self.recordFlag) #nome será gerado de outras maneiras depois
 
     # VideoView
