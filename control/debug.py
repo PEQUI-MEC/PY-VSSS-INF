@@ -114,6 +114,7 @@ def main(radius=6.0, kr=0.9, k0=0.12, dmin=20.0, lDelta=4.5):
 
     univetField = navigation.UnivectorField()
     univetField.updateConstants(radius, kr, k0, dmin, lDelta)
+
     univetField.updateTarget(ball, [160, 130])
 
     drawField(imgField2, univetField)
