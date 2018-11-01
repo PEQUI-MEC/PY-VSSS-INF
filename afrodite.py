@@ -37,7 +37,6 @@ class Afrodite(QMainWindow):
         self.objectsToDraw = {}
 
         # PLAY
-        self.pushButtonPlayStart.setEnabled(True)
         self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
         self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
         #self.pushButtonPlayStart.clicked.connect(self.record)  # A gravação será feita aqui

@@ -562,7 +562,7 @@ class Apolo:
 
     def createVideo(self, videoName):
         self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 20.0, (640, 480))
+        self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 29.97, (640, 480))
 
     def writeFrame(self, frame):
         self.videoOutput.write(frame)
