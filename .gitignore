@@ -35,3 +35,7 @@ modules.xml
 
 *.pyc
 *__pycache__*
+
+
+### VIDEOS ###
+/videos/
