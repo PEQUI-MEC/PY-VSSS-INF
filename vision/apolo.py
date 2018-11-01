@@ -169,9 +169,6 @@ class Apolo:
                 cy = int(M['m01'] / M['m00'])
                 secondaryTags.extend([(cx, cy)])
 
-            if len(secondaryTags) == 6:
-                break
-
         return secondaryTags
 
     def findBall(self, imagem):
