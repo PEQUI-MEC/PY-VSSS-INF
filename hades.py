@@ -92,15 +92,15 @@ class Hades(QThread):
         formattedPositions = [
             [
                 positions[0][0]["position"],
-                positions[0][0]["orientation"]
+                positions[0][0]["orientation"],
             ],
             [
                 positions[0][1]["position"],
-                positions[0][1]["orientation"]
+                positions[0][1]["orientation"],
             ],
             [
                 positions[0][2]["position"],
-                positions[0][2]["orientation"]
+                positions[0][2]["orientation"],
             ],
             positions[2]["position"]
         ]
@@ -198,6 +198,7 @@ class Hades(QThread):
             return value
         else:
             return 0
+    
 
     # Camera e Visão
     def eventInvertImage(self, state):
@@ -205,7 +206,7 @@ class Hades(QThread):
             return self.apolo.setInvertImage(state)
         return False
 
-    def getCamCongigs(self):
+    def getCameraConfigs(self):
         return self.apolo.getCamConfigs()
 
     def eventCamConfigs(self, newBrightness, newSaturation, newGain, newContrast,
@@ -249,6 +250,22 @@ class Hades(QThread):
         if self.apolo is not None:
             self.apolo.setImg(thresholdId)
 
+    #Warp
+    def eventWarp(self, warpMatriz):
+        self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
+
+    #WarpGoal
+    def eventWarpGoalMatriz(self, warpMatriz):
+        return self.apolo.setWarpGoalMatriz(warpMatriz)
+
+    def eventWarpGoal(self, state):
+        return self.apolo.setWarpGoalState(state)
+
+    #Offset
+
+    def eventWarpOffsetChanged(self, offsetLeft, offsetRight):
+        self.apolo.setWarpOffset(offsetLeft, offsetRight)
+        
     # Strategy
     def eventToggleTransitions(self, state):
         self.athena.setTransitionsState(state)

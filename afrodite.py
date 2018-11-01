@@ -8,6 +8,7 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
+import numpy as np
 import serial
 import glob
 import interface.icons_rc
@@ -51,7 +52,19 @@ class Afrodite(QMainWindow):
         self.spinBoxCaptureDevicePropertiesExposure.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesWhiteBalance.valueChanged.connect(self.camConfigsChanged)
 
-        # ModeView
+        # VideoView
+        # Vision
+        # Warp
+        self.warpCount = 0
+        self.warpMatriz = [[0,0],[0,0],[0,0],[0,0]]
+        self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
+        self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
+        self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
+        self.spinBoxCaptureWarpOffsetRight.valueChanged.connect(self.warpOffsetChanged)
+
+        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
+        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
+        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
 
         # HSVCalibration
         # Main
@@ -112,13 +125,6 @@ class Afrodite(QMainWindow):
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
         self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.updateComboBoxCaptureDeviceInformation)
         self.updateComboBoxCaptureDeviceInformation()
-
-        # Warp
-        self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
-
-        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
-        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
-        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
 
         # STRATEGY
 
@@ -185,10 +191,10 @@ class Afrodite(QMainWindow):
         self.hades.exit()
 
     '''
+    #Pega somente os pontos da tela sem o flutuante
     def mouseReleaseEvent(self, QMouseEvent):
-           print('(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')')           
+           print('(', QMouseEvent.pos().x(), ', ', QMouseEvent.pos().y(), ')')
     '''
-
     # PLAY BUTTON
     def clickedPlay(self):
         icon = QIcon()
@@ -216,7 +222,6 @@ class Afrodite(QMainWindow):
 
         self.pushButtonPlayConnect.setEnabled(False)
 
-    # VideoView
     # Positions
     def updateLabelPlayPositions(self, positions):
         self.labelPlayPositionsRobot1.setText(
@@ -286,6 +291,7 @@ class Afrodite(QMainWindow):
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
         }
         """
+        #cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
@@ -483,6 +489,7 @@ class Afrodite(QMainWindow):
         self.groupBoxCaptureDeviceInformation.setEnabled(not enable)
         self.groupBoxCaptureDeviceProperties.setEnabled(enable)
         self.groupBoxCaptureWarp.setEnabled(enable)
+
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
 
         if enable:
@@ -574,23 +581,79 @@ class Afrodite(QMainWindow):
     def toggleInvertImage(self):
         self.checkBoxInvertImage.setChecked(self.hades.eventInvertImage(self.checkBoxInvertImage.isChecked()))
 
+    #
     def getPushButtonCaptureWarpWarp(self):
-        pass
+        self.pushButtonCaptureWarpWarp.setEnabled(False)
+        enable = not self.pushButtonCaptureWarpWarp.isEnabled()
+
+        self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
+        self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
+        self.pushButtonCaptureWarpAdjust.setEnabled(enable)
 
     def getPushButtonCaptureWarpReset(self):
-        pass
+        self.spinBoxCaptureWarpOffsetLeft.setValue(0)
+        self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
+        self.spinBoxCaptureWarpOffsetRight.setValue(0)
+        self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
+
+        self.warpCount = 0
+        self.warpMatriz = [[0,0],[640,0],[640,480],[0,480]]
+        self.hades.eventWarp(self.warpMatriz)
+        self.hades.eventWarpGoal(False)
 
     def getPushButtonCaptureWarpAdjust(self):
-        pass
+        self.pushButtonCaptureWarpAdjust.setEnabled(False)
+        enable = self.pushButtonCaptureWarpAdjust.isEnabled()
 
-    def getCaptureWarpOffsetLeft(self):
-        pass
+        self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
+        self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
+        self.pushButtonCaptureWarpWarp.setEnabled(True)
 
-    def getCaptureWarpOffsetRight(self):
-        pass
+    def warpOffsetChanged(self):
+        self.hades.eventWarpOffsetChanged(
+            self.spinBoxCaptureWarpOffsetLeft.value(),
+            self.spinBoxCaptureWarpOffsetRight.value(),
+        )
+
+    def getPosWarp(self, event):
+        if not self.pushButtonCaptureWarpWarp.isEnabled():
+            if self.groupBoxCaptureWarp.isEnabled():
+                px = event.pos().x()
+                py = event.pos().y()
+                
+                if self.warpCount < 4:
+                    self.callHadesWarpEvent(px,py)
+                elif self.warpCount >= 4 and self.warpCount < 8:
+                    self.callHadesWarpGoalEvent(px,py)   
+
+    def callHadesWarpEvent(self, px, py):
+        print(self.warpCount)
+        self.warpMatriz[self.warpCount][0] = px
+        self.warpMatriz[self.warpCount][1] = py
+
+        print(self.warpMatriz[self.warpCount])
+        self.warpCount+=1
+
+        if self.warpCount == 4:
+            self.hades.eventWarp(self.warpMatriz)
+
+    def callHadesWarpGoalEvent(self, px, py):
+        print(self.warpCount)
+        self.warpMatriz[self.warpCount%4][0] = px
+        self.warpMatriz[self.warpCount%4][1] = py
+
+        print(self.warpMatriz[self.warpCount%4])
+        self.warpCount+=1
+
+        if self.warpCount == 8:
+            self.hades.eventWarpGoal(True)
+            self.hades.eventWarpGoalMatriz(self.warpMatriz)
 
     # ROBOT TAB
-
     # role
     def clickEditRoles(self):
         self.pushButtonStrategyRobotFunctionsEdit.setEnabled(False)
