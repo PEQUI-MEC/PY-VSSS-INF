@@ -28,7 +28,7 @@ class Apolo:
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-        #record variables
+        # record variables
         self.videoOutput = None
         self.fourcc = None
 
@@ -568,4 +568,5 @@ class Apolo:
         self.videoOutput.write(frame)
 
     def stopVideo(self):
-        videoOutput.release()
+        self.videoOutput.release()
+s

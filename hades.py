@@ -277,11 +277,11 @@ class Hades(QThread):
 
     def eventRecordVideo(self, recordFlag):
         self.recordFlag = recordFlag
-        if recordFlag == True:
-           videoName = str(datetime.datetime.now())
-           self.apolo.createVideo(videoName)
+        if recordFlag:
+            videoName = str(datetime.datetime.now())
+            self.apolo.createVideo(videoName)
         else:
-           self.apolo.stopVideo()
+            self.apolo.stopVideo()
 
     def writeFrame(self, frame):
         self.apolo.writeFrame(frame)
