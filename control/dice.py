@@ -22,7 +22,7 @@ class Dice:
 
     def vectorControl(self):
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
-            return [0.0, 0.0]
+            return [0.0, 0.0, 0.0]
 
         theta = atan2(sin(self.warrior.transAngle), -cos(self.warrior.transAngle))
         target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
@@ -53,11 +53,11 @@ class Dice:
         left = self.warrior.vMax * left
         right = self.warrior.vMax * right
 
-        return [left, right]
+        return [left, right, self.warrior.transAngle]
 
     def positionControl(self):
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
-            return [0.0, 0.0]
+            return [0.0, 0.0, 0.0]
 
         targetTheta = atan2((self.warrior.target[1] - self.warrior.position[1])*1.3 / 480,
                             -(self.warrior.target[0] - self.warrior.position[0])*1.5 / 640)
@@ -85,7 +85,7 @@ class Dice:
         left = self.warrior.vMax * left
         right = self.warrior.vMax * right
 
-        return [left, right]
+        return [left, right, targetTheta]
 
     def orientationControl(self):
         targetTheta = self.warrior.targetOrientation
@@ -98,12 +98,11 @@ class Dice:
         thetaError = geometry.roundAngle(targetTheta - theta)
 
         if abs(thetaError) < 2*pi/180:
-            return [0.0, 0.0]
+            return [0.0, 0.0, 0.0]
 
         self.warrior.vLeft = geometry.saturate(self.warrior.vMax * thetaError)
         self.warrior.vRight = geometry.saturate(-self.warrior.vMax * thetaError)
-
-        return [self.warrior.vLeft * self.warrior.vMax, self.warrior.vRight * self.warrior.vMax]
+        return [self.warrior.vLeft * self.warrior.vMax, self.warrior.vRight * self.warrior.vMax, targetTheta]
 
     def speedControl(self):
-        return [self.warrior.vLeft, self.warrior.vRight]
+        return [self.warrior.vLeft, self.warrior.vRight, 0]
