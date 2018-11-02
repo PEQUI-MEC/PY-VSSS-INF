@@ -34,8 +34,6 @@ class Hades(QThread):
         self.cascadeLoops = 0
         self.cascadeLastTime = 0
 
-        self.recordFlag = False
-
         print("Hades summoned")
 
     def __del__(self):
@@ -83,9 +81,6 @@ class Hades(QThread):
             return None
 
         positions, frame = self.apolo.run()
-
-        if self.recordFlag:
-            self.writeFrame(frame)
         
         # atualiza o vídeo na interface
         self.prepareDraw(positions)
@@ -275,13 +270,10 @@ class Hades(QThread):
     def eventsendMessage(self, robotId, message):
         self.hermes.sendMessage(robotId, message)
 
-    def eventRecordVideo(self, recordFlag):
-        self.recordFlag = recordFlag
+    def eventRecordVideo(self):
+        recordFlag = self.apolo.changeRecordFlag()
         if recordFlag:
             videoName = str(datetime.datetime.now())
             self.apolo.createVideo(videoName)
         else:
             self.apolo.stopVideo()
-
-    def writeFrame(self, frame):
-        self.apolo.writeFrame(frame)

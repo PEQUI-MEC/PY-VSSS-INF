@@ -98,6 +98,11 @@ class Apolo:
             if self.invertImage:
                 cv2.flip(frame, -1, frame)
 
+            if videoOutput is not None and recordFlag:
+                self.videoOutput.write(frame)
+
+
+
         return frame
 
     @staticmethod
@@ -560,13 +565,17 @@ class Apolo:
         # print(self.positions)
         return self.positions, frame
 
+    def changeRecordFlag(self):
+        if not self.recordFlag:
+            self.recordFlag = True
+        else:   
+            self.recordFlag = False
+
+        return self.recordFlag
+
     def createVideo(self, videoName):
         self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
         self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 30.0, (640, 480))
-
-    def writeFrame(self, frame):
-        if videoOutput is not None:
-            self.videoOutput.write(frame)
 
     def stopVideo(self):
         self.videoOutput.release()

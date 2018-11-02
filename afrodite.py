@@ -43,7 +43,6 @@ class Afrodite(QMainWindow):
         # self.pushButtonPlayConnect.clicked.connect(self.record)  # Para testar a gravação
 
         # VISION
-        self.recordFlag = False
         self.cameraIsRunning = False
 
         # Capture
@@ -221,15 +220,8 @@ class Afrodite(QMainWindow):
         self.pushButtonPlayConnect.setEnabled(False)
 
     def record(self):
-        if not self.recordFlag:
-            self.recordFlag = True
-        else:   
-            self.recordFlag = False
-
-        print(self.recordFlag)
-
-        self.hades.eventRecordVideo(self.recordFlag)  # nome será gerado de outras maneiras depois
-
+        self.hades.eventRecordVideo()
+        
     # VideoView
     # Positions
     def updateLabelPlayPositions(self, positions):
