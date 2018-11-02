@@ -1,25 +1,5 @@
-from math import atan2, pi, fmod, sin, cos
-import time
-
-
-def roundAngle(angle):
-    theta = fmod(angle,  2 * pi)
-
-    if theta > pi:
-        theta = theta - (2 * pi)
-    elif theta < -pi:
-        theta = theta + (2 * pi)
-
-    return theta
-
-
-def saturate(value):
-    if value > 1:
-        value = 1
-    elif value < -1:
-        value = -1
-
-    return value
+from math import atan2, pi, sin, cos
+from helpers import geometry
 
 
 class Dice:
@@ -67,16 +47,11 @@ class Dice:
         left = self.warrior.front + sin(thetaError)
         right = self.warrior.front - sin(thetaError)
 
-        left = saturate(left)
-        right = saturate(right)
+        left = geometry.saturate(left)
+        right = geometry.saturate(right)
 
         left = self.warrior.vMax * left
         right = self.warrior.vMax * right
-
-        # if self.warrior.name == "huguinho":
-            # print(self.warrior.backward)
-            # print(self.warrior.position)
-            # print("Current: ", currentTheta, " Target: ", targetTheta, target, "TransAngle: ", self.warrior.transAngle)
 
         return [left, right]
 
@@ -104,8 +79,8 @@ class Dice:
         left = self.warrior.front + sin(thetaError)
         right = self.warrior.front - sin(thetaError)
 
-        left = saturate(left)
-        right = saturate(right)
+        left = geometry.saturate(left)
+        right = geometry.saturate(right)
 
         left = self.warrior.vMax * left
         right = self.warrior.vMax * right
@@ -117,16 +92,16 @@ class Dice:
         theta = self.warrior.orientation
 
         # É necessário girar se estiver com a 'traseira' de frente pro alvo? (Se sim, não usar o if abaixo)
-        if roundAngle(targetTheta - self.warrior.orientation + pi/2) < 0:
-            theta = roundAngle(self.warrior.orientation + pi)
+        if geometry.roundAngle(targetTheta - self.warrior.orientation + pi/2) < 0:
+            theta = geometry.roundAngle(self.warrior.orientation + pi)
 
-        thetaError = roundAngle(targetTheta - theta)
+        thetaError = geometry.roundAngle(targetTheta - theta)
 
         if abs(thetaError) < 2*pi/180:
             return [0.0, 0.0]
 
-        self.warrior.vLeft = saturate(0.8 * thetaError)
-        self.warrior.vRight = saturate(-0.8 * thetaError)
+        self.warrior.vLeft = geometry.saturate(self.warrior.vMax * thetaError)
+        self.warrior.vRight = geometry.saturate(-self.warrior.vMax * thetaError)
 
         return [self.warrior.vLeft * self.warrior.vMax, self.warrior.vRight * self.warrior.vMax]
 

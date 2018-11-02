@@ -160,6 +160,7 @@ class Zeus:
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
+                warriors[x].spiral = info["spiral"]
                 warriors[x].position = info["pose"]["position"]
                 warriors[x].orientation = info["pose"]["orientation"]
 
@@ -180,6 +181,7 @@ class Zeus:
 
             elif strategia[x]["command"] == "spin":
                 warriors[x].action.append(info["direction"])
+
                 if "velocity" in info:
                     warriors[x].vMax = info["velocity"]
                 else:
@@ -187,7 +189,12 @@ class Zeus:
 
             elif strategia[x]["command"] == "lookAt":
                 warriors[x].orientation = info["pose"]["orientation"]
-                warriors[x].vMax = 0.8
+
+                if "velocity" in info:
+                    warriors[x].vMax = info["velocity"]
+                else:
+                    warriors[x].vMax = self.robotsSpeed[x]
+
                 if type(info["target"]) is float:
                     warriors[x].targetOrientation = info["target"]
                     warriors[x].action.append("orientation")

@@ -1,20 +1,8 @@
-from math import pi, atan2, sin, cos, exp, sqrt
+from math import pi, atan2, sin, cos, sqrt
+from helpers import geometry
 import numpy as np
 
 # TODO Documentar tudo
-
-
-def gaussian(m, v):
-    return exp(-(m**2) / (2 * (v**2)))
-
-
-def wrap2pi(theta):
-    if theta > pi:
-        return theta - 2 * pi
-    if theta < -pi:
-        return 2 * pi + theta
-    else:
-        return theta
 
 
 class HyperbolicSpiral:
@@ -47,10 +35,10 @@ class HyperbolicSpiral:
             spiral = (pi / 2.0) * sqrt(ro / radius)
 
         if clockwise:
-            spiral = wrap2pi(theta + spiral)
+            spiral = geometry.wrap2pi(theta + spiral)
             return atan2(sin(spiral), cos(spiral))
         else:
-            spiral = wrap2pi(theta - spiral)
+            spiral = geometry.wrap2pi(theta - spiral)
             return atan2(sin(spiral), cos(spiral))
 
 
@@ -239,17 +227,17 @@ class UnivectorField:
         if target is not None:
             self.updateTarget(target, orientation)
         if obstacles is not None:
-            # if ostaclesSpeed is None:
-            ostaclesSpeed = [0.0, 0.0]
+            if ostaclesSpeed is None:
+                ostaclesSpeed = [0.0, 0.0]
             self.updateObstacles(obstacles, ostaclesSpeed)
 
         centers = []
         fi_auf = 0.0
         minDistance = self.dMin + 1
-        # self.obstacles = None
+        self.obstacles = None
         if self.obstacles is not None:
             for i in range(0, len(self.obstacles)):
-                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed)
+                self.avoidField.updateObstacle(self.obstacles[i], self.obstaclesSpeed[i])
                 center = self.avoidField.getVirtualPos()
                 centers.append(center)
 
@@ -262,14 +250,15 @@ class UnivectorField:
             fi_auf = self.avoidField.avoid(self.robotPos, vPos=closestCenter, theta=True)
 
         if minDistance <= self.dMin:
+            # print("Obstaculo!!!")
             return fi_auf
         else:
             fi_tuf = self.moveField.fi_tuf(self.robotPos)
 
             if self.obstacles is not None:
-                guass = gaussian(minDistance - self.dMin, self.lDelta)
-                diff = wrap2pi(fi_auf - fi_tuf)
-                return wrap2pi(guass*diff + fi_tuf)
+                guass = geometry.gaussian(minDistance - self.dMin, self.lDelta)
+                diff = geometry.wrap2pi(fi_auf - fi_tuf)
+                return geometry.wrap2pi(guass*diff + fi_tuf)
 
             else:
                 return fi_tuf
