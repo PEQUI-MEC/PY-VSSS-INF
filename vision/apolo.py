@@ -31,6 +31,7 @@ class Apolo:
         # record variables
         self.videoOutput = None
         self.fourcc = None
+        self.recordFlag = False
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
@@ -98,11 +99,8 @@ class Apolo:
             if self.invertImage:
                 cv2.flip(frame, -1, frame)
 
-            if videoOutput is not None and recordFlag:
+            if self.videoOutput is not None and self.recordFlag:
                 self.videoOutput.write(frame)
-
-
-
         return frame
 
     @staticmethod
