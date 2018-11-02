@@ -257,17 +257,20 @@ class Zeus:
             {
                 "robotLetter": strategia[0]["robotLetter"],
                 "vLeft": velocities[0][0],
-                "vRight": velocities[0][1]
+                "vRight": velocities[0][1],
+                "vector": velocities[0][2]
             },
             {
                 "robotLetter": strategia[1]["robotLetter"],
                 "vLeft": velocities[1][0],
-                "vRight": velocities[1][1]
+                "vRight": velocities[1][1],
+                "vector": velocities[1][2]
             },
             {
                 "robotLetter": strategia[2]["robotLetter"],
                 "vLeft": velocities[2][0],
-                "vRight": velocities[2][1]
+                "vRight": velocities[2][1],
+                "vector": velocities[2][2]
             }
         ]
         return output
