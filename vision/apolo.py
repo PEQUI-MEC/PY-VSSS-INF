@@ -52,22 +52,27 @@ class Apolo:
         )
 
         print("Apolo summoned")
-		
+
+    def setWarpOffset(self, offLeft, offRight):
+        newShape = np.float32([(self.shape[0][0] - offLeft, self.shape[0][1]),
+                               (self.shape[1][0] + offRight, self.shape[1][1]),
+                               (self.shape[2][0] - offLeft, self.shape[2][1]),
+                               (self.shape[3][0] + offRight, self.shape[3][1])])
+
+        plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
+        self.perspective = cv2.getPerspectiveTransform(newShape,plot)
+
     def resetWarp(self):
         self.setWarpPoints((0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT))
         self.warpMatrizGoal = [(0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT)]
-		
 
     def setWarpPoints(self, pt1, pt2, pt3, pt4):
-        shape = np.float32([pt1,pt2,pt4,pt3])
+        self.shape = np.float32([pt1,pt2,pt4,pt3])
         plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
-        self.perspective = cv2.getPerspectiveTransform(shape,plot)
+        self.perspective = cv2.getPerspectiveTransform(self.shape,plot)
 
     def setWarpGoalMatriz(self, warpMatrix):
         self.warpMatrizGoal = warpMatrix
-
-    def setWarpGoalState(self, state):
-        self.warpGoal = state
 
     def warpGoalFrame(self, frame):
         pt1, pt2, pt3, pt4 = self.warpMatrizGoal[0], self.warpMatrizGoal[1], self.warpMatrizGoal[2], self.warpMatrizGoal[3]
@@ -77,10 +82,6 @@ class Apolo:
         cv2.rectangle(frame, (0, pt4[1]), (pt4[0], HEIGHT), (0, 0, 0), -1)
 
         return frame
-
-    def setWarpOffset(self, offsetLeft, offsetRight):
-        print(offsetLeft, offsetRight)
-
 
     def preProcess(self,frame):
         # make blur
@@ -490,9 +491,9 @@ class Apolo:
         """
 
         # Pega o frame
-        #frame = self.getFrame()
+        frame = self.getFrame()
 
-        frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
+        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
         #frame = cv2.imread("Tags/nova90inv2Balls.png", cv2.IMREAD_COLOR)
 
         if frame is None:

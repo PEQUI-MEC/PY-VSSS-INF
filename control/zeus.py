@@ -160,6 +160,7 @@ class Zeus:
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
+                warriors[x].spiral = info["spiral"]
                 warriors[x].position = info["pose"]["position"]
                 warriors[x].orientation = info["pose"]["orientation"]
 
@@ -180,6 +181,7 @@ class Zeus:
 
             elif strategia[x]["command"] == "spin":
                 warriors[x].action.append(info["direction"])
+
                 if "velocity" in info:
                     warriors[x].vMax = info["velocity"]
                 else:
@@ -187,7 +189,12 @@ class Zeus:
 
             elif strategia[x]["command"] == "lookAt":
                 warriors[x].orientation = info["pose"]["orientation"]
-                warriors[x].vMax = 0.8
+
+                if "velocity" in info:
+                    warriors[x].vMax = info["velocity"]
+                else:
+                    warriors[x].vMax = self.robotsSpeed[x]
+
                 if type(info["target"]) is float:
                     warriors[x].targetOrientation = info["target"]
                     warriors[x].action.append("orientation")
@@ -250,17 +257,20 @@ class Zeus:
             {
                 "robotLetter": strategia[0]["robotLetter"],
                 "vLeft": velocities[0][0],
-                "vRight": velocities[0][1]
+                "vRight": velocities[0][1],
+                "vector": velocities[0][2]
             },
             {
                 "robotLetter": strategia[1]["robotLetter"],
                 "vLeft": velocities[1][0],
-                "vRight": velocities[1][1]
+                "vRight": velocities[1][1],
+                "vector": velocities[1][2]
             },
             {
                 "robotLetter": strategia[2]["robotLetter"],
                 "vLeft": velocities[2][0],
-                "vRight": velocities[2][1]
+                "vRight": velocities[2][1],
+                "vector": velocities[2][2]
             }
         ]
         return output

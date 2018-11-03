@@ -221,8 +221,9 @@ class Hades(QThread):
 
     def eventStartVision(self, cameraId):
         try:
-            #self.apolo = Apolo(int(cameraId))
-            self.apolo = Apolo(0)
+            self.apolo = Apolo(int(cameraId))
+
+            #self.apolo = Apolo(0)
             return True
         except:
             return False
@@ -250,21 +251,18 @@ class Hades(QThread):
         if self.apolo is not None:
             self.apolo.setImg(thresholdId)
 
-    #Warp
+    # Warp
     def eventWarp(self, warpMatriz):
         self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
 
-    #WarpGoal
+    # WarpGoal
     def eventWarpGoalMatriz(self, warpMatriz):
         return self.apolo.setWarpGoalMatriz(warpMatriz)
 
-    def eventWarpGoal(self, state):
-        return self.apolo.setWarpGoalState(state)
-		
     def eventWarpReset(self):
         self.apolo.resetWarp()
 
-    #Offset
+    # Offset
 
     def eventWarpOffsetChanged(self, offsetLeft, offsetRight):
         self.apolo.setWarpOffset(offsetLeft, offsetRight)
@@ -292,19 +290,3 @@ class Hades(QThread):
 
     def eventsendMessage(self, robotId, message):
         self.hermes.sendMessage(robotId, message)
-
-
-def timeToFinish(method):
-    # This decorator returns time elapsed on execution of a method
-    # HOW TO USE
-    # Before the method, place @timeToFinish
-    # In the terminal will be printed the time elapsed on method execution
-
-    def timed(*args, **kwargs):
-        tStart = time.time()
-        result = method(*args, **kwargs)
-        tEnd = time.time()
-
-        print("{:.3f} sec".format(tEnd-tStart))
-        return result
-    return timed
