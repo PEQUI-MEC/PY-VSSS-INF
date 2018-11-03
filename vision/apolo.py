@@ -83,13 +83,6 @@ class Apolo:
 
         return frame
 
-    def preProcess(self,frame):
-        # make blur
-        # make erode
-        # make dilate
-        return frame
-
-
     def changeCamera(self, cameraId):
         self.camera.release()
         self.camera = cv2.VideoCapture(cameraId)
@@ -317,6 +310,24 @@ class Apolo:
 
         return linkedSecondaryTags
 
+    def preProcess(self, frame, id):
+        # Blur
+        if self.threshList[id][4] > 0:
+            frame = cv2.blur(frame, (self.threshList[id][4], self.threshList[id][4]))
+
+        # Erode
+        if self.threshList[id][3] > 0:
+            kernel = np.ones((self.threshList[id][3], self.threshList[id][3]), np.uint8)
+            frame = cv2.erode(frame, kernel, iterations=1)
+
+        # Dilate
+        if self.threshList[id][5] > 0:
+            kernel = np.ones((self.threshList[id][5], self.threshList[id][5]), np.uint8)
+            frame = cv2.dilate(frame, kernel, iterations=1)
+
+        return frame
+
+
     @staticmethod
     def findRobotOrientation(robotPos, secondaryTagPosition):
         """
@@ -510,7 +521,7 @@ class Apolo:
 
         # Aplica todos os thresholds (pode adicionar threads)
         for i in range(0, 4, 1):
-            self.thresholdedImages[i] = self.applyThreshold(frameHSV, i)
+            self.thresholdedImages[i] = self.applyThreshold(self.preProcess(frameHSV, i), i)
 
         # Procura os robos
         tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN])
