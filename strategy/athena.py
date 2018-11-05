@@ -3,7 +3,7 @@ import math
 import time
 from helpers import geometry
 from scipy.spatial import distance
-from strategy.endless import Endless
+from helpers.endless import Endless
 from strategy.warrior import Warrior
 from strategy.oracle import Oracle
 
@@ -234,7 +234,6 @@ class Athena:
             if warrior.command["type"] == "goTo":
                 command["command"] = "goTo"
                 command["data"] = {}
-                command["data"]["spiral"] = warrior.spiral
                 command["data"]["pose"] = {
                     "position": warrior.position,
                     "orientation": warrior.orientation
@@ -680,19 +679,6 @@ class Athena:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "por favor"
 
-                if warrior.position[1] >= 400:
-                    # print("Perto do canto superior ", self.spiral)
-                    warrior.spiral = 0.06
-                elif warrior.position[1] < 80:
-                    # print("Perto do canto inferiror ", self.spiral)
-                    warrior.spiral = 0.06
-                elif distance.euclidean(warrior.position[0], self.ball["position"][0]) > 250:
-                    # print("Longe da bola ", self.spiral)
-                    warrior.spiral = 1.0
-                else:
-                    # print("Normal ", self.spiral)
-                    warrior.spiral = 0.1
-
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados
                 warrior.command["type"] = "goTo"
@@ -700,18 +686,11 @@ class Athena:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
 
-                if warrior.position[1] >= 400:
-                    # print("Perto do canto superior ", self.spiral)
-                    warrior.spiral = 0.06
-                elif warrior.position[1] < 80:
-                    # print("Perto do canto inferiror ", self.spiral)
-                    warrior.spiral = 0.06
-                elif distance.euclidean(warrior.position[0], self.ball["position"][0]) > 250:
-                    # print("Longe da bola ", self.spiral)
-                    warrior.spiral = 1.0
+                # escolhe o lado que vai pressionar a bola, dependendo de qual parede ela tá mais perto
+                if ballY > self.endless.midField[1]:
+                    warrior.command["targetOrientation"] = math.pi / 2
                 else:
-                    # print("Normal ", self.spiral)
-                    warrior.spiral = 0.1
+                    warrior.command["targetOrientation"] = -math.pi / 2
 
             elif warrior.tactics == Athena.tBlock:
                 # !TODO pegar Y composto com a velocidade da bola
@@ -768,7 +747,6 @@ class Athena:
                     warrior.command["target"] = target
                     warrior.command["avoidObstacles"] = "por favor, nunca te pedi nada irmão"
 
-                    # !TODO verificar se ele está chegando pelo lado certo
                     if warrior.position[1] > self.endless.midField[1]:
                         warrior.command["targetOrientation"] = (self.endless.goalieLine, self.endless.height)
                     else:
