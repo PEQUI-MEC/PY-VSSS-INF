@@ -66,6 +66,10 @@ class Afrodite(QMainWindow):
         self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
         self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
 
+        #RobotRadius
+        self.horizontalSliderRobotRadius.valueChanged.connect(self.robotRadiusChanged)
+        self.spinBoxRobotRadius.valueChanged.connect(self.robotRadiusChanged)
+
         # HSVCalibration
         # Main
         self.horizontalSliderVisionHSVCalibrationMainVmin.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
@@ -489,6 +493,7 @@ class Afrodite(QMainWindow):
         self.groupBoxCaptureDeviceInformation.setEnabled(not enable)
         self.groupBoxCaptureDeviceProperties.setEnabled(enable)
         self.groupBoxCaptureWarp.setEnabled(enable)
+        self.groupBoxRobotRadius.setEnabled(enable)
 
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
 
@@ -769,6 +774,11 @@ class Afrodite(QMainWindow):
             return "Original"
         else:
             return "Split"
+
+    #RobotRadius
+    def robotRadiusChanged(self):
+        self.hades.setRobotRadiusEvent(self.spinBoxRobotRadius.value())
+
 
     #GetHSVValues
     def getHSVValues(self, id):

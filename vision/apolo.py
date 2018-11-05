@@ -10,7 +10,6 @@ MAIN = 0
 GREEN = 1
 BALL = 2
 ADV = 3
-ROBOT_RADIUS = 230 # Lembrar de alterar esse valor
 
 
 class Apolo:
@@ -26,6 +25,7 @@ class Apolo:
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
+        self.robotRadius = 0
 
         self.robotPositions = [(0, 0, 0, True), (0, 0, 0, True), (0, 0, 0, True)]
         self.ballPosition = [0, 0]
@@ -52,6 +52,9 @@ class Apolo:
         )
 
         print("Apolo summoned")
+
+    def setRobotRadius(self, radius):
+        self.robotRadius = radius
 
     def setWarpOffset(self, offLeft, offRight):
         newShape = np.float32([(self.shape[0][0] - offLeft, self.shape[0][1]),
@@ -263,10 +266,9 @@ class Apolo:
 
         return advRobotsPositionList
 
-    @staticmethod
-    def inSphere(robotPosition, secondaryTagPosition):
+    def inSphere(self, robotPosition, secondaryTagPosition):
         if abs(robotPosition[0] - secondaryTagPosition[0]) + abs(
-                robotPosition[1] - secondaryTagPosition[1]) <= ROBOT_RADIUS:
+                robotPosition[1] - secondaryTagPosition[1]) <= self.robotRadius:
             return True
         else:
             return False

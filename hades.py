@@ -184,6 +184,9 @@ class Hades(QThread):
         print("Hades started") if self.play else print("Hades stopped")
         return self.play
 
+    def setRobotRadiusEvent(self, robotRadius):
+    	self.apolo.setRobotRadius(robotRadius)
+
     def SetFileSave(self, file):
         self.plutus.setFile(file)
 
