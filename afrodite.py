@@ -57,7 +57,9 @@ class Afrodite(QMainWindow):
         # Warp
         self.warpCount = 0
         self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        self.warpGoalMatrix = [[0, 0], [0, 0], [0, 0], [0, 0]]
         self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
+
         self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
         self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
         self.spinBoxCaptureWarpOffsetRight.valueChanged.connect(self.warpOffsetChanged)
@@ -481,6 +483,7 @@ class Afrodite(QMainWindow):
         self.groupBoxCaptureDeviceInformation.setEnabled(not enable)
         self.groupBoxCaptureDeviceProperties.setEnabled(enable)
         self.groupBoxCaptureWarp.setEnabled(enable)
+        self.pushButtonCaptureWarpAdjust.setEnabled(True)
         self.groupBoxRobotRadius.setEnabled(enable)
 
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
@@ -585,6 +588,8 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
         self.pushButtonCaptureWarpAdjust.setEnabled(enable)
 
+        self.warpCount = 0
+
     def getPushButtonCaptureWarpReset(self):
         self.pushButtonCaptureWarpWarp.setEnabled(True)
 
@@ -594,17 +599,13 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
 
         self.warpCount = 0
+        self.pushButtonCaptureWarpAdjust.setEnabled(False)
         self.hades.eventWarpReset()
 
     def getPushButtonCaptureWarpAdjust(self):
         self.pushButtonCaptureWarpAdjust.setEnabled(False)
-        enable = self.pushButtonCaptureWarpAdjust.isEnabled()
-
-        self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
-        self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
-        self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
-        self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
-        self.pushButtonCaptureWarpWarp.setEnabled(True)
+        self.pushButtonCaptureWarpWarp.setEnabled(False)
+        self.warpCount = 4
 
     def warpOffsetChanged(self):
         self.hades.eventWarpOffsetChanged(
@@ -614,43 +615,47 @@ class Afrodite(QMainWindow):
 
     def getPosWarp(self, event):
         if not self.pushButtonCaptureWarpWarp.isEnabled():
-            if self.groupBoxCaptureWarp.isEnabled():
-                px = event.pos().x()
-                py = event.pos().y()
-                
-                if self.warpCount < 4:
-                    self.callHadesWarpEvent(px,py)
+            px = event.pos().x()
+            py = event.pos().y()
 
-    def getPosAdjust(self, event):
-        if not self.pushButtonCaptureWarpWarp.isEnabled():
-            if self.groupBoxCaptureWarp.isEnabled():
-                px = event.pos().x()
-                py = event.pos().y()
-
-                if self.warpCount < 4:
+            if self.warpCount < 4:
+                print(self.warpCount)
+                self.callHadesWarpEvent(px,py)
+            elif not self.pushButtonCaptureWarpAdjust.isEnabled():
+                if self.warpCount < 8:
+                    print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
 
+    '''
+    def getPosAdjust(self, event):
+        if not self.pushButtonCaptureWarpAdjust.isEnabled():
+            px = event.pos().x()
+            py = event.pos().y()
+            print(px,py)
+
+            if self.warpCount < 4:
+                self.callHadesAdjustGoalEvent(px, py)
+    '''
     def callHadesWarpEvent(self, px, py):
-        print(self.warpCount)
         self.warpMatriz[self.warpCount][0] = px
         self.warpMatriz[self.warpCount][1] = py
 
-        print(self.warpMatriz[self.warpCount])
         self.warpCount+=1
 
         if self.warpCount == 4:
             self.hades.eventWarp(self.warpMatriz)
 
-    def callHadesWarpGoalEvent(self, px, py):
-        print(self.warpCount)
-        self.warpMatriz[self.warpCount%4][0] = px
-        self.warpMatriz[self.warpCount%4][1] = py
+    def callHadesAdjustGoalEvent(self, px, py):
+        self.warpGoalMatrix[self.warpCount%4][0] = px
+        self.warpGoalMatrix[self.warpCount%4][1] = py
 
-        print(self.warpMatriz[self.warpCount%4])
         self.warpCount+=1
 
         if self.warpCount == 8:
-            self.hades.eventWarpGoalMatriz(self.warpMatriz)
+            self.hades.eventWarpGoalMatriz(self.warpGoalMatrix)
+            self.pushButtonCaptureWarpAdjust.setEnabled(True)
+            self.pushButtonCaptureWarpWarp.setEnabled(True)
+            self.warpCount = 0
 
     # ROBOT TAB
     # role
