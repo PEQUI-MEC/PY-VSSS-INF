@@ -7,14 +7,10 @@ import random
 WIDTH = 640
 HEIGHT = 480
 MAIN = 0
-BALL = 1
-ADV = 2
-GREEN = 3
-ROBOT_RADIUS = 180
-# Alterar para settar a tagAmin na interface
-TAG_AMIN = 400
-# Alterar para settar a ballAmin na interface
-BALL_AMIN = 30
+GREEN = 1
+BALL = 2
+ADV = 3
+ROBOT_RADIUS = 230 # Lembrar de alterar esse valor
 
 
 class Apolo:
@@ -34,16 +30,19 @@ class Apolo:
         self.robotPositions = [(0, 0, 0, True), (0, 0, 0, True), (0, 0, 0, True)]
         self.ballPosition = [0, 0]
         self.advRobotPositions = [(0, 0), (0, 0), (0, 0)]
-
+    
         # Por default seta esses valores, deve ser modificado quando der o quickSave
-        self.setHSVThresh(((28, 30), (0, 255), (0, 255)), MAIN)
-        self.setHSVThresh(((120, 250), (0, 250), (0, 250)), BALL)
-        self.setHSVThresh(((120, 250), (0, 250), (0, 250)), ADV)
-        self.setHSVThresh(((69, 70), (0, 255), (0, 255)), GREEN)
+        self.setHSVThresh(((28, 30), (0, 255), (0, 255), 0, 0, 0, 30), MAIN)
+        self.setHSVThresh(((120, 250), (0, 250), (0, 250), 0, 0, 0, 30), BALL)
+        self.setHSVThresh(((120, 250), (0, 250), (0, 250), 0, 0, 0, 30), ADV)
+        self.setHSVThresh(((69, 70), (0, 255), (0, 255), 0, 0, 0, 30), GREEN)
+
+        self.resetWarp()
 
         self.imageId = -1
         self.invertImage = False
         self.robotLetter = ['A', 'B', 'C']
+        self.warpMatrizGoal = [(0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT)]
 
         self.positions = self.returnData(
             self.robotPositions,
@@ -53,6 +52,43 @@ class Apolo:
         )
 
         print("Apolo summoned")
+
+    def setWarpOffset(self, offLeft, offRight):
+        newShape = np.float32([(self.shape[0][0] - offLeft, self.shape[0][1]),
+                               (self.shape[1][0] + offRight, self.shape[1][1]),
+                               (self.shape[2][0] - offLeft, self.shape[2][1]),
+                               (self.shape[3][0] + offRight, self.shape[3][1])])
+
+        plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
+        self.perspective = cv2.getPerspectiveTransform(newShape,plot)
+
+    def resetWarp(self):
+        self.setWarpPoints((0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT))
+        self.warpMatrizGoal = [(0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT)]
+
+    def setWarpPoints(self, pt1, pt2, pt3, pt4):
+        self.shape = np.float32([pt1,pt2,pt4,pt3])
+        plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
+        self.perspective = cv2.getPerspectiveTransform(self.shape,plot)
+
+    def setWarpGoalMatriz(self, warpMatrix):
+        self.warpMatrizGoal = warpMatrix
+
+    def warpGoalFrame(self, frame):
+        pt1, pt2, pt3, pt4 = self.warpMatrizGoal[0], self.warpMatrizGoal[1], self.warpMatrizGoal[2], self.warpMatrizGoal[3]
+        cv2.rectangle(frame, (0,0), (pt1[0],pt1[1]), (0, 0, 0), -1)
+        cv2.rectangle(frame, (pt2[0], 0), (WIDTH, pt2[1]), (0, 0, 0), -1)
+        cv2.rectangle(frame, (pt3[0], pt3[1]), (WIDTH, HEIGHT), (0, 0, 0), -1)
+        cv2.rectangle(frame, (0, pt4[1]), (pt4[0], HEIGHT), (0, 0, 0), -1)
+
+        return frame
+
+    def preProcess(self,frame):
+        # make blur
+        # make erode
+        # make dilate
+        return frame
+
 
     def changeCamera(self, cameraId):
         self.camera.release()
@@ -107,9 +143,9 @@ class Apolo:
             hsvThresh: deve ser do tipo (hmin,hmax),(smin,smax),(vmin,vmax)
             imageId:
                 0 - MAIN
-                1 - Ball
-                2 - Adv
-                3 - Green
+                1 - Green
+                2 - Ball
+                3 - Adv
         """
         self.imageId = imageId
 
@@ -126,8 +162,8 @@ class Apolo:
 
         return maskHSV
 
-    @staticmethod
-    def findRobots(thresholdedImage, areaMin):
+
+    def findRobots(self, thresholdedImage):
         """
         Econtra os robos em uma imagem onde o threshold foi aplicado
         Se a posiçao for -1, nao encontrou o robo
@@ -145,7 +181,7 @@ class Apolo:
         for i in contours:
             M = cv2.moments(i)
 
-            if M['m00'] > areaMin:
+            if M['m00'] > self.threshList[MAIN][6]:
                 cx = int(M['m10'] / M['m00'])
                 cy = int(M['m01'] / M['m00'])
                 robotPositionList.extend([(cx, cy, 0, False)])
@@ -160,8 +196,7 @@ class Apolo:
 
         return robotPositionList
 
-    @staticmethod
-    def findSecondaryTags(thresholdedImage, areaMin):
+    def findSecondaryTags(self, thresholdedImage):
         secondaryTags = list()
 
         _, contours, hierarchy = cv2.findContours(thresholdedImage, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -169,18 +204,14 @@ class Apolo:
         for i in contours:
             M = cv2.moments(i)
 
-            if M['m00'] > areaMin:
+            if M['m00'] > self.threshList[GREEN][6]:
                 cx = int(M['m10'] / M['m00'])
                 cy = int(M['m01'] / M['m00'])
                 secondaryTags.extend([(cx, cy)])
 
-            if len(secondaryTags) == 6:
-                break
-
         return secondaryTags
 
-    @staticmethod
-    def findBall(imagem, areaMin):
+    def findBall(self, imagem):
         """
         Econtra a bola em uma imagem onde o threshold foi aplicado
         Args:
@@ -197,7 +228,7 @@ class Apolo:
 
         for i in contours:
             M = cv2.moments(i)
-            if M['m00'] > areaMin:
+            if M['m00'] > self.threshList[BALL][6]:
                 cx = int(M['m10'] / M['m00'])
                 cy = int(M['m01'] / M['m00'])
                 okFlag = True
@@ -208,8 +239,7 @@ class Apolo:
         else:
             return None
 
-    @staticmethod
-    def findAdvRobots(thresholdedImage, areaMin):
+    def findAdvRobots(self, thresholdedImage):
         """
         Econtra os robos adversarios em uma imagem onde o threshold foi aplicado
         Args:
@@ -226,7 +256,7 @@ class Apolo:
         for i in contours:
             M = cv2.moments(i)
 
-            if M['m00'] > areaMin:
+            if M['m00'] > self.threshList[ADV][6]:
                 cx = int(M['m10'] / M['m00'])
                 cy = int(M['m01'] / M['m00'])
 
@@ -241,14 +271,14 @@ class Apolo:
         return advRobotsPositionList
 
     @staticmethod
-    def inSphere(robotPosition, secondaryTagPosition, robotRadius):
+    def inSphere(robotPosition, secondaryTagPosition):
         if abs(robotPosition[0] - secondaryTagPosition[0]) + abs(
-                robotPosition[1] - secondaryTagPosition[1]) <= robotRadius:
+                robotPosition[1] - secondaryTagPosition[1]) <= ROBOT_RADIUS:
             return True
         else:
             return False
 
-    def linkTags(self, robotList, secondaryTagsList, robotRadius):
+    def linkTags(self, robotList, secondaryTagsList):
         """
         Linka as tags secundarias às suas respectivas tags Principais
         Args:
@@ -265,10 +295,10 @@ class Apolo:
         for i in robotList:
             if i != (-1, -1, -1):
                 auxTagList = list()
-                for j in secondaryTagsList:
-                    if self.inSphere(i, j, robotRadius):
-                        auxTagList.extend(j)
 
+                for j in secondaryTagsList:
+                    if self.inSphere(i, j):
+                        auxTagList.extend(j)
                 secondaryTags[robotID] = auxTagList
 
             robotID += 1
@@ -282,6 +312,8 @@ class Apolo:
 
             elif len(secondaryTags[i]) == 6:
                 linkedSecondaryTags[2] = [robotList[i], secondaryTags[i]]
+
+        #print(linkedSecondaryTags)
 
         return linkedSecondaryTags
 
@@ -411,17 +443,17 @@ class Apolo:
             [
                 # OurRobots
                 {
-                    "position": (robotList[0][0], robotList[0][1]),
+                    "position": (robotList[0][0], HEIGHT - robotList[0][1]),
                     "orientation": robotList[0][2],
                     "robotLetter": robotLetter[0]
                 },
                 {
-                    "position": (robotList[1][0], robotList[1][1]),
+                    "position": (robotList[1][0], HEIGHT - robotList[1][1]),
                     "orientation": robotList[1][2],
                     "robotLetter": robotLetter[1]
                 },
                 {
-                    "position": (robotList[2][0], robotList[2][1]),
+                    "position": (robotList[2][0], HEIGHT - robotList[2][1]),
                     "orientation": robotList[2][2],
                     "robotLetter": robotLetter[2]
                 }
@@ -429,18 +461,18 @@ class Apolo:
             [
                 # EnemyRobots
                 {
-                    "position": (robotAdvList[0][0], robotAdvList[0][1]),
+                    "position": (robotAdvList[0][0], HEIGHT - robotAdvList[0][1]),
                 },
                 {
-                    "position": (robotAdvList[1][0], robotAdvList[1][1]),
+                    "position": (robotAdvList[1][0], HEIGHT - robotAdvList[1][1]),
                 },
                 {
-                    "position": (robotAdvList[2][0], robotAdvList[2][1]),
+                    "position": (robotAdvList[2][0], HEIGHT - robotAdvList[2][1]),
                 }
             ],
             # Ball
             {
-                "position": (ball[0], ball[1])
+                "position": (ball[0], HEIGHT - ball[1])
             }
         ]
 
@@ -461,12 +493,17 @@ class Apolo:
         # Pega o frame
         frame = self.getFrame()
 
-        # frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
-        # frame = cv2.imread("Tags/nova90inv2Balls.png", cv2.IMREAD_COLOR)
+        #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
+        #frame = cv2.imread("Tags/nova90inv2Balls.png", cv2.IMREAD_COLOR)
 
         if frame is None:
             print("Nao há câmeras ou o dispositivo está ocupado")
             return None
+
+        frame = cv2.warpPerspective(frame,self.perspective,(640,480))
+
+        #WarpGoal
+        frame = self.warpGoalFrame(frame)
 
         # Transforma de BRG para HSV
         frameHSV = self.getHSVFrame(frame)
@@ -476,13 +513,17 @@ class Apolo:
             self.thresholdedImages[i] = self.applyThreshold(frameHSV, i)
 
         # Procura os robos
-        tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN], TAG_AMIN)
+        tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN])
+
+        #print(tempRobotPosition)
 
         # Procura as tags Secundarias
-        secondaryTagsList = self.findSecondaryTags(self.thresholdedImages[GREEN], TAG_AMIN)
+        secondaryTagsList = self.findSecondaryTags(self.thresholdedImages[GREEN])
+
+        #print(secondaryTagsList)
 
         # Organiza as tags secundarias para corresponderem à ordem das tags primarias
-        linkedSecondaryTags = self.linkTags(tempRobotPosition, secondaryTagsList, ROBOT_RADIUS)
+        linkedSecondaryTags = self.linkTags(tempRobotPosition, secondaryTagsList)
 
         for i in range(0, 3, 1):
             try:
@@ -525,10 +566,10 @@ class Apolo:
                 pass
 
         # Procura a bola
-        tempBallPosition = self.findBall(self.thresholdedImages[BALL], BALL_AMIN)
+        tempBallPosition = self.findBall(self.thresholdedImages[BALL])
 
         # Procura os adversarios
-        tempAdvRobots = self.findAdvRobots(self.thresholdedImages[ADV], TAG_AMIN)
+        tempAdvRobots = self.findAdvRobots(self.thresholdedImages[ADV])
 
         if tempBallPosition is not None:
             self.ballPosition = tempBallPosition
@@ -548,10 +589,8 @@ class Apolo:
             self.robotLetter
         )
 
-        # print(self.positions)
-
         if self.imageId != -1:
             frame = self.thresholdedImages[self.imageId]
 
-        # print(self.positions)
+        #print(self.positions)
         return self.positions, frame
