@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1390</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuBarArquivo">
@@ -199,7 +199,7 @@
        <x>10</x>
        <y>0</y>
        <width>605</width>
-       <height>500</height>
+       <height>511</height>
       </rect>
      </property>
      <property name="minimumSize">
@@ -6729,10 +6729,10 @@ Message</string>
        </property>
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>20</x>
          <y>400</y>
          <width>251</width>
-         <height>51</height>
+         <height>71</height>
         </rect>
        </property>
        <property name="title">
@@ -6742,7 +6742,7 @@ Message</string>
         <property name="geometry">
          <rect>
           <x>70</x>
-          <y>20</y>
+          <y>30</y>
           <width>160</width>
           <height>22</height>
          </rect>
@@ -6757,8 +6757,8 @@ Message</string>
        <widget class="QSpinBox" name="spinBoxRobotRadius">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>20</y>
+          <x>10</x>
+          <y>30</y>
           <width>42</width>
           <height>22</height>
          </rect>
