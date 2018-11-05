@@ -102,29 +102,42 @@
 
   <!-- INDICADORES -->
   <worldbody>
+    <body name="target_1" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.02 0.003 0.003" rgba="0 0 1 1" type="box"/>
+      <geom conaffinity="0" contype="0" pos="0.02 0 0" size="0.01" rgba="0 0 1 1" type="sphere"/>
+    </body>
+    <body name="target_2" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.02 0.003 0.003" rgba="1 1 0 1" type="box"/>
+      <geom conaffinity="0" contype="0" pos="0.02 0 0" size="0.01" rgba="1 1 0 1" type="sphere"/>
+    </body>
+    <body name="target_3" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.02 0.003 0.003" rgba="1 0 0 1" type="box"/>
+      <geom conaffinity="0" contype="0" pos="0.02 0 0" size="0.01" rgba="1 0 0 1" type="sphere"/>
+    </body>
+
     <body name="indicator_1" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
-      <geom conaffinity="1" contype="1" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
     </body>
     <body name="indicator_2" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
-      <geom conaffinity="1" contype="1" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
     </body>
     <body name="indicator_3" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
-      <geom conaffinity="1" contype="1" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
     </body>
     <body name="indicator_4" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
-      <geom conaffinity="1" contype="1" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
     </body>
     <body name="indicator_5" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
-      <geom conaffinity="1" contype="1" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
     </body>
     <body name="indicator_6" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
-      <geom conaffinity="1" contype="1" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
     </body>
   </worldbody>
 

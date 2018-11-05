@@ -40,7 +40,9 @@ class Athena:
         self.mid = None
         self.gk = None
 
-        self.gkOffset = self.midOffset = 0
+        self.gkOffset = self.goalBorderOffset = self.midOffset = 0
+
+        self.transitionTimer = 0
 
         # angulo da bola com o gol
         self.ballGoal = 0
@@ -342,16 +344,22 @@ class Athena:
         avaliableWarriors = self.warriors.copy()
 
         if self.transitionsEnabled:
-            # escolhe os melhores pra cada posição crítica
-            # o defensor vai ser escolhido de acordo com a situação do jogo
-            self.gk = sorted(avaliableWarriors, key=self.__distanceToGoal)[0]
-            self.gk.role = "gk"  # usado ao selecionar ação pra tática
-            avaliableWarriors.remove(self.gk)
-            self.atk = sorted(avaliableWarriors, key=self.__distanceToBall)[0]
-            self.atk.role = "atk"  # usado ao selecionar ação pra tática
-            avaliableWarriors.remove(self.atk)
-            self.mid = avaliableWarriors[0]
-            self.mid.role = "mid"  # usado ao selecionar ação pra tática
+            if self.transitionTimer > 0:
+                self.transitionTimer -= self.deltaTime
+            else:
+                # escolhe os melhores pra cada posição crítica
+                # o defensor vai ser escolhido de acordo com a situação do jogo
+                self.gk = sorted(avaliableWarriors, key=self.__distanceToGoal)[0]
+                self.gk.role = "gk"  # usado ao selecionar ação pra tática
+                avaliableWarriors.remove(self.gk)
+                self.atk = sorted(avaliableWarriors, key=self.__distanceToBall)[0]
+                self.atk.role = "atk"  # usado ao selecionar ação pra tática
+                avaliableWarriors.remove(self.atk)
+                self.mid = avaliableWarriors[0]
+                self.mid.role = "mid"  # usado ao selecionar ação pra tática
+
+                # espera um segundo para permitir outra troca de posições
+                self.transitionTimer = 1
 
         else:
             for i in range(len(self.roles)):
@@ -682,10 +690,10 @@ class Athena:
                 targetX = self.endless.goalieLine + self.midOffset
 
                 # se posiciona na projeção da bola
-                if ballY > self.endless.goalTop:
-                    target = (targetX, self.endless.goalTop)
-                elif ballY < self.endless.goalBottom:
-                    target = (targetX, self.endless.goalBottom)
+                if ballY > self.endless.goalTop + self.goalBorderOffset:
+                    target = (targetX, self.endless.goalTop + self.goalBorderOffset)
+                elif ballY < self.endless.goalBottom - self.goalBorderOffset:
+                    target = (targetX, self.endless.goalBottom - self.goalBorderOffset)
                 else:
                     target = (targetX, ballY)
 
