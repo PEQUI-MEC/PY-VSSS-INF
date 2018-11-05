@@ -227,14 +227,14 @@ class Afrodite(QMainWindow):
     # Positions
     def updateLabelPlayPositions(self, positions):
         self.labelPlayPositionsRobot1.setText(
-            "(" + str(positions[0][0][0]) + ", " + str(positions[0][0][1]) + ", " +
-            str(positions[0][1]) + " rad)")
+            "(" + str(round(positions[0][0][0])) + ", " + str(round(positions[0][0][1])) + ", " +
+            str(round(positions[0][1], 2)) + ")")
         self.labelPlayPositionsRobot2.setText(
-            "(" + str(positions[1][0][0]) + ", " + str(positions[1][0][1]) + ", " +
-            str(positions[1][1]) + " rad)")
+            "(" + str(round(positions[1][0][0])) + ", " + str(round(positions[1][0][1])) + ", " +
+            str(round(positions[1][1], 2)) + ")")
         self.labelPlayPositionsRobot3.setText(
-            "(" + str(positions[2][0][0]) + ", " + str(positions[2][0][1]) + ", " +
-            str(positions[2][1]) + " rad)")
+            "(" + str(round(positions[2][0][0])) + ", " + str(round(positions[2][0][1])) + ", " +
+            str(round(positions[2][1], 2)) + ")")
         self.labelPlayPositionsBall.setText("(" + str(positions[3][0]) + ", " + str(positions[3][1]) + ")")
 
     # FPS
@@ -620,8 +620,6 @@ class Afrodite(QMainWindow):
                 
                 if self.warpCount < 4:
                     self.callHadesWarpEvent(px,py)
-                elif self.warpCount >= 4 and self.warpCount < 8:
-                    self.callHadesWarpGoalEvent(px,py)
 
     def getPosAdjust(self, event):
         if not self.pushButtonCaptureWarpWarp.isEnabled():
