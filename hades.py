@@ -182,7 +182,13 @@ class Hades(QThread):
     # Hades
     def eventStartGame(self):
         self.play = not self.play
-        print("Hades started") if self.play else print("Hades stopped")
+
+        if self.play:
+            self.athena.reset()
+            print("Hades started")
+        else:
+            print("Hades stopped")
+
         return self.play
 
     def SetFileSave(self, file):
@@ -200,7 +206,6 @@ class Hades(QThread):
         else:
             return 0
     
-
     # Camera e Visão
     def eventInvertImage(self, state):
         if self.apolo is not None:
@@ -224,7 +229,7 @@ class Hades(QThread):
         try:
             self.apolo = Apolo(int(cameraId))
 
-            #self.apolo = Apolo(0)
+            # self.apolo = Apolo(0)
             return True
         except:
             return False
