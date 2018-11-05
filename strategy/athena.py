@@ -5,6 +5,7 @@ from helpers import geometry
 from scipy.spatial import distance
 from strategy.endless import Endless
 from strategy.warrior import Warrior
+from strategy.oracle import Oracle
 
 
 class Athena:
@@ -30,11 +31,6 @@ class Athena:
         self.warriors = []
         self.theirWarriors = []
         self.theirWarriorsLastPos = []
-        self.ball = {
-            "lastPosition": (0, 0),
-            "position": (0, 0),
-            "velocity": 0
-        }
 
         self.atk = None
         self.mid = None
@@ -42,8 +38,13 @@ class Athena:
 
         self.gkOffset = self.goalBorderOffset = self.midOffset = 0
 
-        self.transitionTimer = 0
+        self.ball = {
+            "position": (0, 0),
+            "oracle": None
+        }
 
+        self.transitionTimer = 0
+        self.estimationTimer = 1
         # angulo da bola com o gol
         self.ballGoal = 0
 
@@ -53,7 +54,7 @@ class Athena:
         self.unlockDirection = 1
         self.deltaTime = time.time()
         self.lastTime = time.time()
-        self.spiral = 1.0
+
         print("Athena summoned")
 
     def setup(self, numRobots, width, height, defaultVel):
@@ -61,8 +62,16 @@ class Athena:
         for i in range(0, numRobots):
             self.warriors.append(Warrior(defaultVel))
 
+        self.ball = {
+            "position": (0, 0),
+            "oracle": Oracle(100, self.endless.pixelMeterRatio)
+        }
+
         print("Athena is set up.")
         return self
+
+    def reset(self):
+        self.transitionTimer = 0
 
     def getTargets(self, positions):
         """
@@ -157,10 +166,9 @@ class Athena:
                 self.theirWarriors[i].velEstimated = min(dist) / self.deltaTime
                 self.theirWarriors[i].velEstimated /= self.endless.pixelMeterRatio
 
-        self.ball["lastPosition"] = self.ball["position"]
         self.ball["position"] = positions[2]["position"]
-        self.ball["velocity"] = distance.euclidean(self.ball["position"], self.ball["lastPosition"]) / self.deltaTime
-        self.ball["velocity"] /= self.endless.pixelMeterRatio
+        # oracle é acessado sem verificação pois deve quebrar o programa se a Athena não tiver sido configurada
+        self.ball["oracle"].pushState(self.ball["position"])
 
         return positions
 
@@ -219,13 +227,14 @@ class Athena:
         for warrior in warriors:
             command = {
                 "robotLetter": warrior.robotID,
-                "tactics": warrior.tactics
+                "tactics": warrior.tactics,
+                "futureBall": self.ball["oracle"].predict(1)
             }
 
             if warrior.command["type"] == "goTo":
                 command["command"] = "goTo"
                 command["data"] = {}
-                command["data"]["spiral"] = self.spiral
+                command["data"]["spiral"] = warrior.spiral
                 command["data"]["pose"] = {
                     "position": warrior.position,
                     "orientation": warrior.orientation
@@ -316,7 +325,7 @@ class Athena:
         """
 
         # verifica os ângulos dos robôs, bola e gols
-
+        # TODO calcular o kickangle com a projeção da bola
         ballX = self.ball["position"][0]
         ballY = self.ball["position"][1]
         # angulo da bola com o gol
@@ -328,7 +337,7 @@ class Athena:
                                                     (ballX - self.warriors[i].position[0]))
             # angulo entre as retas robo->bola e bola->gol
             self.warriors[i].robotBallGoal = math.atan2(math.sin(self.warriors[i].robotBall - self.ballGoal),
-                                                    math.cos(self.warriors[i].robotBall - self.ballGoal))
+                                                        math.cos(self.warriors[i].robotBall - self.ballGoal))
             # orientação do robô em relação ao gol
             self.warriors[i].robotGoal = abs(
                 geometry.roundAngle(
@@ -338,24 +347,36 @@ class Athena:
             )
 
             self.warriors[i].hasKickAngle = abs(self.warriors[i].robotBallGoal) < math.pi / 4 and \
-                                            (self.warriors[i].robotGoal < math.pi / 4 or
-                                             self.warriors[i].robotGoal > 3 * math.pi / 4)
+                                               (self.warriors[i].robotGoal < math.pi / 4 or
+                                                self.warriors[i].robotGoal > 3 * math.pi / 4)
 
-        avaliableWarriors = self.warriors.copy()
+        availableWarriors = self.warriors.copy()
 
         if self.transitionsEnabled:
             if self.transitionTimer > 0:
                 self.transitionTimer -= self.deltaTime
             else:
+                self.atk = self.gk = self.mid = None
+
+                for warrior in availableWarriors:
+                    if warrior.hasKickAngle:
+                        dist = self.__distanceToBall(warrior)
+                        if dist < self.endless.width / 4 and (self.atk is None or dist < self.__distanceToBall(self.atk)):
+                            self.atk = warrior
+
+                if self.atk is None:
+                    self.atk = sorted(availableWarriors, key=self.__distanceToBall)[0]
+
+                self.atk.role = "atk"  # usado ao selecionar ação pra tática
+
+                availableWarriors.remove(self.atk)
+
                 # escolhe os melhores pra cada posição crítica
                 # o defensor vai ser escolhido de acordo com a situação do jogo
-                self.gk = sorted(avaliableWarriors, key=self.__distanceToGoal)[0]
+                self.gk = sorted(availableWarriors, key=self.__distanceToGoal)[0]
                 self.gk.role = "gk"  # usado ao selecionar ação pra tática
-                avaliableWarriors.remove(self.gk)
-                self.atk = sorted(avaliableWarriors, key=self.__distanceToBall)[0]
-                self.atk.role = "atk"  # usado ao selecionar ação pra tática
-                avaliableWarriors.remove(self.atk)
-                self.mid = avaliableWarriors[0]
+                availableWarriors.remove(self.gk)
+                self.mid = availableWarriors[0]
                 self.mid.role = "mid"  # usado ao selecionar ação pra tática
 
                 # espera um segundo para permitir outra troca de posições
@@ -364,13 +385,13 @@ class Athena:
         else:
             for i in range(len(self.roles)):
                 if self.roles[i] == "gk":
-                    self.gk = avaliableWarriors[i]
+                    self.gk = availableWarriors[i]
                     self.gk.role = "gk"
                 elif self.roles[i] == "mid":
-                    self.mid = avaliableWarriors[i]
+                    self.mid = availableWarriors[i]
                     self.mid.role = "mid"
                 else:
-                    self.atk = avaliableWarriors[i]
+                    self.atk = availableWarriors[i]
                     self.atk.role = "Attack"
 
         ballX = self.ball["position"][0]
@@ -661,16 +682,16 @@ class Athena:
 
                 if warrior.position[1] >= 400:
                     # print("Perto do canto superior ", self.spiral)
-                    self.spiral = 0.06
+                    warrior.spiral = 0.06
                 elif warrior.position[1] < 80:
                     # print("Perto do canto inferiror ", self.spiral)
-                    self.spiral = 0.06
+                    warrior.spiral = 0.06
                 elif distance.euclidean(warrior.position[0], self.ball["position"][0]) > 250:
                     # print("Longe da bola ", self.spiral)
-                    self.spiral = 1.0
+                    warrior.spiral = 1.0
                 else:
                     # print("Normal ", self.spiral)
-                    self.spiral = 0.1
+                    warrior.spiral = 0.1
 
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados
@@ -679,11 +700,18 @@ class Athena:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
 
-                # escolhe o lado que vai pressionar a bola, dependendo de qual parede ela tá mais perto
-                if ballY > self.endless.midField[1]:
-                    warrior.command["targetOrientation"] = math.pi / 2
+                if warrior.position[1] >= 400:
+                    # print("Perto do canto superior ", self.spiral)
+                    warrior.spiral = 0.06
+                elif warrior.position[1] < 80:
+                    # print("Perto do canto inferiror ", self.spiral)
+                    warrior.spiral = 0.06
+                elif distance.euclidean(warrior.position[0], self.ball["position"][0]) > 250:
+                    # print("Longe da bola ", self.spiral)
+                    warrior.spiral = 1.0
                 else:
-                    warrior.command["targetOrientation"] = -math.pi / 2
+                    # print("Normal ", self.spiral)
+                    warrior.spiral = 0.1
 
             elif warrior.tactics == Athena.tBlock:
                 # !TODO pegar Y composto com a velocidade da bola
