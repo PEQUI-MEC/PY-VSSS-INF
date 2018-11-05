@@ -46,7 +46,7 @@ class Athena:
         self.ballGoal = 0
 
         self.globalState = "push"
-        self.transitionsEnabled = False
+        self.transitionsEnabled = True
         self.roles = ["gk", "mid", "atk"]
         self.unlockDirection = 1
         self.deltaTime = time.time()
