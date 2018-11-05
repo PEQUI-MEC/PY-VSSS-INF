@@ -623,16 +623,13 @@ class Apolo:
             if sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
                 self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
                 self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 30.0, (640, 480))
+
             elif sys.platform.startswith('win'):
-                print ("Record Windows")
                 self.fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-                videoName = '{}-{}-{} {}:{}:{}'.format(videoName[:4], teste[4:6], teste[6:8], teste[8:10], test[10:12], test[12:14])
-                nomeVideo = 'videos/' + str(videoName) + '.avi'
-                self.videoOutput = cv2.VideoWriter(nomeVideo, self.fourcc, 30.0, (640, 480))
-            
-                #self.fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-                #self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 30.0, (640, 480))
+                self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 30.0, (640, 480))
             else:
-                raise EnvironmentError('Unsuported plaftorm')
+                raise EnvironmentError('Unsuported plaftorm')  
+
     def stopVideo(self):
-        self.videoOutput.release()
+        if videoOutput is not None:
+            self.videoOutput.release()

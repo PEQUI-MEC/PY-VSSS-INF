@@ -298,7 +298,7 @@ class Hades(QThread):
     def eventRecordVideo(self):
         recordFlag = self.apolo.changeRecordFlag()
         if recordFlag:
-            videoName = str(datetime.datetime.now())
+            videoName = str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             self.apolo.createVideo(videoName)
         else:
             self.apolo.stopVideo()

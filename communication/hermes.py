@@ -11,7 +11,8 @@ class Hermes:
         self.robots = {
             "A": "\x56\x0D",
             "B": "\x6B\x0D",
-            "C": "\x21\x5C"
+            "C": "\x21\x5C",
+            "D": "\xDC\xA8"
         }
         print("Hermes summoned")
 
