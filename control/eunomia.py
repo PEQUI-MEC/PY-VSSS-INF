@@ -1,4 +1,4 @@
-from math import atan2, pi, cos, sin
+from math import atan2, cos, sin
 from .navigation import UnivectorField
 
 

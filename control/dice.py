@@ -1,5 +1,6 @@
 from math import atan2, pi, sin, cos
 from helpers import geometry
+import numpy as np
 
 
 class Dice:
@@ -21,6 +22,9 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self):
+        acc = 1 - \
+              geometry.gaussian(np.linalg.norm(np.array(self.warrior.position) - np.array(self.warrior.target)), 8)
+
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
 
