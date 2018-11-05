@@ -48,13 +48,16 @@ class Dice:
 
         else:
             if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
+                if not self.warrior.backward:
+                    self.transitionTime = 1
                 self.warrior.backward = True
                 self.warrior.front = 1
-                self.transitionTime = 1
+
             else:
+                if self.warrior.backward:
+                    self.transitionTime = 1
                 self.warrior.backward = False
                 self.warrior.front = -1
-            self.transitionTime = 1
 
         if self.warrior.backward:
             currentTheta = currentTheta + pi
