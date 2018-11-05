@@ -15,6 +15,7 @@ class Hades(QThread):
     sigDraw = pyqtSignal(dict)
     sigDisplay = pyqtSignal(numpy.ndarray)
     sigPositions = pyqtSignal(list)
+    sigMessages = pyqtSignal(list)
 
     def __init__(self):
         QThread.__init__(self)
@@ -128,7 +129,8 @@ class Hades(QThread):
         if velocities is None:
             return None
 
-        self.hermes.fly(velocities)
+        self.hermesMessages = self.hermes.fly(velocities)
+        self.sigMessages.emit(hermesMessages)
 
     # HELPERS
     def getFPS(self):
