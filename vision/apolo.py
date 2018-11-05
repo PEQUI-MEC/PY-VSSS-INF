@@ -93,23 +93,29 @@ class Apolo:
         return pt1, pt2, pt3, pt4
 
     def setWarpPoints(self,pt1, pt2, pt3, pt4):
-        pt1, pt2, pt3, pt4 = self.ordenaWarp([pt1, pt2, pt3, pt4])
+        try:
+            pt1, pt2, pt3, pt4 = self.ordenaWarp([pt1, pt2, pt3, pt4])
 
-        self.shape = np.float32([pt1,pt2,pt4,pt3])
-        plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
-        self.perspective = cv2.getPerspectiveTransform(self.shape,plot)
-
+            self.shape = np.float32([pt1,pt2,pt4,pt3])
+            plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
+            self.perspective = cv2.getPerspectiveTransform(self.shape,plot)
+        except:
+            pass
+            
     def setWarpGoalMatriz(self, warpMatrix):
         self.warpMatrizGoal = warpMatrix
 
     def warpGoalFrame(self, frame):
-        pt1, pt2, pt3, pt4 = self.ordenaWarp(self.warpMatrizGoal)
-        cv2.rectangle(frame, (0,0), (pt1[0],pt1[1]), (0, 0, 0), -1)
-        cv2.rectangle(frame, (pt2[0], 0), (WIDTH, pt2[1]), (0, 0, 0), -1)
-        cv2.rectangle(frame, (pt3[0], pt3[1]), (WIDTH, HEIGHT), (0, 0, 0), -1)
-        cv2.rectangle(frame, (0, pt4[1]), (pt4[0], HEIGHT), (0, 0, 0), -1)
+        try:
+            pt1, pt2, pt3, pt4 = self.ordenaWarp(self.warpMatrizGoal)
+            cv2.rectangle(frame, (0,0), (pt1[0],pt1[1]), (0, 0, 0), -1)
+            cv2.rectangle(frame, (pt2[0], 0), (WIDTH, pt2[1]), (0, 0, 0), -1)
+            cv2.rectangle(frame, (pt3[0], pt3[1]), (WIDTH, HEIGHT), (0, 0, 0), -1)
+            cv2.rectangle(frame, (0, pt4[1]), (pt4[0], HEIGHT), (0, 0, 0), -1)
 
-        return frame
+            return frame
+        except:
+            pass
 
     def changeCamera(self, cameraId):
         self.camera.release()
