@@ -50,7 +50,6 @@ class Aether:
         ]
         self.athena[0].setup(3, self.field_width, self.field_height, 0.8)
         self.athena[1].setup(3, self.field_width, self.field_height, 0.8)
-        self.athena[0].setTransitionsState(False)
         self.zeus[0].setup(3)
         self.zeus[1].setup(3)
 
