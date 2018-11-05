@@ -157,7 +157,7 @@ class Aether:
                         if type(targetOrientation) is tuple:
                             position = positions[0][i]["position"]
                             targetOrientation = math.atan2(position[1] - targetOrientation[1],
-                                                           position[0] - targetOrientation[0])
+                                                           -(position[0] - targetOrientation[0]))
 
                         self.setObjectPose("target_" + str(i + 1), target, 0, 0.01, targetOrientation)
 
