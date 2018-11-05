@@ -1051,7 +1051,7 @@ class Afrodite(QMainWindow):
     def getPushButtonControlSerialSend(self):
         robotId = self.comboBoxControlSerialRobots.currentText()
         message = self.lineEditControlSerialSend.text()
-        if robotId is not None and message != "":
+        if robotId and message:
             self.hades.eventSendMessage(robotId, message)
 
     '''
