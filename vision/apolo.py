@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 import cv2
 import numpy as np
 import random
@@ -28,6 +29,7 @@ class Apolo:
         self.videoOutput = None
         self.fourcc = None
         self.recordFlag = False
+        self.recordState = True
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
@@ -135,7 +137,7 @@ class Apolo:
             if self.invertImage:
                 cv2.flip(frame, -1, frame)
 
-            if self.videoOutput is not None and self.recordFlag:
+            if self.videoOutput is not None and self.recordFlag and self.recordState:
                 self.videoOutput.write(frame)
         return frame
 
@@ -610,9 +612,25 @@ class Apolo:
 
         return self.recordFlag
 
-    def createVideo(self, videoName):
-        self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 30.0, (640, 480))
+    def setRecordState(self, state):
+        self.recordState = not state
 
+    def createVideo(self, videoName):
+
+        if self.recordState:
+            if sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+                self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
+                self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 30.0, (640, 480))
+            elif sys.platform.startswith('win'):
+                print ("Record Windows")
+                self.fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+                videoName = '{}-{}-{} {}:{}:{}'.format(videoName[:4], teste[4:6], teste[6:8], teste[8:10], test[10:12], test[12:14])
+                nomeVideo = 'videos/' + str(videoName) + '.avi'
+                self.videoOutput = cv2.VideoWriter(nomeVideo, self.fourcc, 30.0, (640, 480))
+            
+                #self.fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+                #self.videoOutput = cv2.VideoWriter("videos/" + videoName + ".avi", self.fourcc, 30.0, (640, 480))
+            else:
+                raise EnvironmentError('Unsuported plaftorm')
     def stopVideo(self):
         self.videoOutput.release()

@@ -292,6 +292,9 @@ class Hades(QThread):
     def eventsendMessage(self, robotId, message):
         self.hermes.sendMessage(robotId, message)
 
+    def eventRecordState(self, state):
+    	self.apolo.setRecordState(state)
+
     def eventRecordVideo(self):
         recordFlag = self.apolo.changeRecordFlag()
         if recordFlag:

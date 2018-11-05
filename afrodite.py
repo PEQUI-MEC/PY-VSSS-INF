@@ -42,6 +42,8 @@ class Afrodite(QMainWindow):
         self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
         #self.pushButtonPlayStart.clicked.connect(self.record)  # A gravação será feita aqui
         # self.pushButtonPlayConnect.clicked.connect(self.record)  # Para testar a gravação
+        self.checkBoxPlayDisableRecord.stateChanged.connect(self.checkBoxPlayDisableRecordChecked)
+
 
         # VISION
         self.cameraIsRunning = False
@@ -203,9 +205,12 @@ class Afrodite(QMainWindow):
         if self.hades.eventStartGame():
             icon.addPixmap(QPixmap('interface/Imgs/Pause.png'))
             self.pushButtonPlayStart.setIcon(icon)
+            self.checkBoxPlayDisableRecord.setEnabled(False)
         else:
             icon.addPixmap(QPixmap('interface/Imgs/Play.png'))
             self.pushButtonPlayStart.setIcon(icon)
+            self.checkBoxPlayDisableRecord.setEnabled(True)
+
         self.record()
 
     def keyPressEvent(self, QKeyEvent):
@@ -227,6 +232,10 @@ class Afrodite(QMainWindow):
 
     def record(self):
         self.hades.eventRecordVideo()
+
+    def checkBoxPlayDisableRecordChecked(self):
+         if "Online" in self.labelCommunicationState.text():
+            self.hades.eventRecordState(self.checkBoxPlayDisableRecord.isChecked())
         
     # VideoView
     # Positions
@@ -331,7 +340,6 @@ class Afrodite(QMainWindow):
 
     # MENU BAR
     # MenuBarArquivo
-
     def actionLoadConfigsTriggered(self):
         self.loadConfigs()
 
@@ -1153,16 +1161,6 @@ class Afrodite(QMainWindow):
 
     def getStrategyTestParametersGoalieOffset(self):
         return self.spinBoxStrategyTestParametersGoalieLine.value()
-
-    def getStrategyTestParametersName3(self):
-        return self.spinBoxStrategyTestParametersGoalieLine.value()
-
-    def getStrategyTestParametersName4(self):
-        return self.spinBoxStrategyTestParametersGoalieLine.value()
-
-    def getStrategyTestParametersName5(self):
-        return self.spinBoxStrategyTestParametersGoalieLine.value()
-
 
 def main():
     app = QApplication(sys.argv)
