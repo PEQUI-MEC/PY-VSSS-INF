@@ -834,9 +834,9 @@ class Athena:
 
             elif warrior.tactics == Athena.tUnlock:
                 warrior.command["type"] = "goTo"
-                warrior.command["target"] = (warrior.position[0] + self.unlockDirection * 10 *
+                warrior.command["target"] = (warrior.position[0] + self.unlockDirection * 100 *
                                              math.cos(warrior.orientation),
-                                             warrior.position[1] + self.unlockDirection * 10 *
+                                             warrior.position[1] + self.unlockDirection * 100 *
                                              math.sin(warrior.orientation))
 
         return self.warriors

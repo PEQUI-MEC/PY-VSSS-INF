@@ -1,11 +1,15 @@
 from math import atan2, pi, sin, cos
 from helpers import geometry
 import numpy as np
+import time
 
 
 class Dice:
     def __init__(self):
         self.warrior = None
+        self.deltaTime = time.time()
+        self.lastTime = time.time()
+        self.transitionTime = 0
 
     def run(self, warrior):
         self.warrior = warrior
@@ -21,7 +25,11 @@ class Dice:
         else:
             raise ValueError("Invalid cmdType")
 
+    def reset(self):
+        self.transitionTime = 0
+
     def vectorControl(self):
+
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
 
@@ -32,12 +40,24 @@ class Dice:
                             -(target[0] - self.warrior.position[0]) * 1.5 / 640)
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
-        if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
-            self.warrior.backward = True
-            self.warrior.front = 1
+        self.lastTime = time.time()
+        self.deltaTime -= time.time() - self.lastTime
+
+        if self.transitionTime > 0:
+            self.transitionTime -= self.deltaTime
+
         else:
-            self.warrior.backward = False
-            self.warrior.front = -1
+            if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
+                if not self.warrior.backward:
+                    self.transitionTime = 1
+                self.warrior.backward = True
+                self.warrior.front = 1
+
+            else:
+                if self.warrior.backward:
+                    self.transitionTime = 1
+                self.warrior.backward = False
+                self.warrior.front = -1
 
         if self.warrior.backward:
             currentTheta = currentTheta + pi
