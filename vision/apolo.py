@@ -605,7 +605,9 @@ class Apolo:
         return self.positions, frame
 
     def changeRecordFlag(self):
-        if not self.recordFlag:
+        if not self.recordState:
+            self.recordFlag = False
+        elif not self.recordFlag:
             self.recordFlag = True
         else:   
             self.recordFlag = False
