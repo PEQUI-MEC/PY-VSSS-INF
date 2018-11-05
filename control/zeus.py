@@ -1,7 +1,7 @@
 from control.eunomia import Eunomia
 from control.dice import Dice
 from control.warrior import Warrior
-from multiprocessing import Pool
+from helpers.endless import Endless
 
 
 class Zeus:
@@ -19,6 +19,7 @@ class Zeus:
         self.warriors = []
         self.nWarriors = 0
         self.robotsSpeed = [0, 0, 0]
+        self.endless = None
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
@@ -42,7 +43,7 @@ class Zeus:
         for robot in self.robotsSpeed:
             print(robot)
 
-    def setup(self, nWarriors, width=100):
+    def setup(self, nWarriors, width, height):
         """Zeus first movements
 
         This method must be called before using Zeus properly.
@@ -56,7 +57,8 @@ class Zeus:
 
         """
 
-        self.actions.setup(width)
+        self.endless = Endless(width, height)
+        self.actions.setup()
         self.nWarriors = nWarriors
 
         for i in range(0, nWarriors):
@@ -64,6 +66,9 @@ class Zeus:
 
         print("Zeus is set up")
         return self
+
+    def reset(self):
+        self.translate.reset()
 
     def getVelocities(self, strategia):
         """Zeus main method
@@ -160,7 +165,6 @@ class Zeus:
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
-                warriors[x].spiral = info["spiral"]
                 warriors[x].position = info["pose"]["position"]
                 warriors[x].orientation = info["pose"]["orientation"]
 

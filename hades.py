@@ -49,7 +49,8 @@ class Hades(QThread):
         self.athena.setup(3, 300, 300, 1.0)
 
         # set up zeus
-        self.zeus.setup(3)
+        # TODO passar as dimensões corretamente
+        self.zeus.setup(3, 300, 300)
 
         # setting up hermes
         # self.hermes = Hermes(self.srcXbee)
@@ -184,6 +185,7 @@ class Hades(QThread):
 
         if self.play:
             self.athena.reset()
+            self.zeus.reset()
             print("Hades started")
         else:
             print("Hades stopped")
@@ -205,7 +207,6 @@ class Hades(QThread):
         else:
             return 0
     
-
     # Camera e Visão
     def eventInvertImage(self, state):
         if self.apolo is not None:
@@ -229,7 +230,7 @@ class Hades(QThread):
         try:
             self.apolo = Apolo(int(cameraId))
 
-            #self.apolo = Apolo(0)
+            # self.apolo = Apolo(0)
             return True
         except:
             return False
