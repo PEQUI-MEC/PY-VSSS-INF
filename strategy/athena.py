@@ -32,8 +32,7 @@ class Athena:
         self.theirWarriorsLastPos = []
         self.ball = {
             "lastPosition": (0, 0),
-            "position": (0, 0),
-            "velocity": 0
+            "position": (0, 0)
         }
 
         self.atk = None
@@ -43,7 +42,7 @@ class Athena:
         self.gkOffset = self.goalBorderOffset = self.midOffset = 0
 
         self.transitionTimer = 0
-
+        self.estimationTimer = 1
         # angulo da bola com o gol
         self.ballGoal = 0
 
@@ -157,10 +156,9 @@ class Athena:
                 self.theirWarriors[i].velEstimated = min(dist) / self.deltaTime
                 self.theirWarriors[i].velEstimated /= self.endless.pixelMeterRatio
 
-        self.ball["lastPosition"] = self.ball["position"]
+        self.ball["lastPosition"] = (int(self.ball["lastPosition"][0] * 0.2 + 0.8 * self.ball["position"][0]),
+                                     int(self.ball["lastPosition"][1] * 0.2 + 0.8 * self.ball["position"][1]))
         self.ball["position"] = positions[2]["position"]
-        self.ball["velocity"] = distance.euclidean(self.ball["position"], self.ball["lastPosition"]) / self.deltaTime
-        self.ball["velocity"] /= self.endless.pixelMeterRatio
 
         return positions
 
@@ -219,7 +217,8 @@ class Athena:
         for warrior in warriors:
             command = {
                 "robotLetter": warrior.robotID,
-                "tactics": warrior.tactics
+                "tactics": warrior.tactics,
+                "futureBall": geometry.projection(self.ball["lastPosition"], self.ball["position"], 30, self.deltaTime)
             }
 
             if warrior.command["type"] == "goTo":
@@ -351,12 +350,14 @@ class Athena:
 
                 for warrior in availableWarriors:
                     if warrior.hasKickAngle:
-                        if self.atk is None or self.__distanceToBall(warrior) < self.__distanceToBall(self.atk):
+                        dist = self.__distanceToBall(warrior)
+                        if dist < self.endless.width / 4 and (self.atk is None or dist < self.__distanceToBall(self.atk)):
                             self.atk = warrior
 
                 if self.atk is None:
                     self.atk = sorted(availableWarriors, key=self.__distanceToBall)[0]
-                    self.atk.role = "atk"  # usado ao selecionar ação pra tática
+
+                self.atk.role = "atk"  # usado ao selecionar ação pra tática
 
                 availableWarriors.remove(self.atk)
 

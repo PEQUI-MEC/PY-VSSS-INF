@@ -150,6 +150,8 @@ class Aether:
 
             if commands:
                 # indicadores 3D
+                # print(commands[0]["futureBall"])
+                self.setObjectPose("virtual_ball", commands[0]["futureBall"], 0, 0.022)
                 for i in range(3):
                     if commands[i]["command"] == "goTo":
                         target = commands[i]["data"]["target"]["position"]
