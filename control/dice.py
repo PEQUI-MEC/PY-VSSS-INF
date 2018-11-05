@@ -22,8 +22,8 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self):
-        acc = 1 - \
-              geometry.gaussian(np.linalg.norm(np.array(self.warrior.position) - np.array(self.warrior.target)), 8)
+        accDistance = 1 - \
+              geometry.gaussian(np.linalg.norm(np.array(self.warrior.position) - np.array(self.warrior.target)), 15)
 
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
@@ -54,8 +54,8 @@ class Dice:
         left = geometry.saturate(left)
         right = geometry.saturate(right)
 
-        left = self.warrior.vMax * left
-        right = self.warrior.vMax * right
+        left = self.warrior.vMax * left * accDistance
+        right = self.warrior.vMax * right * accDistance
 
         return [left, right, self.warrior.transAngle]
 
