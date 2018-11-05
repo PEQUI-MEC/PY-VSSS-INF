@@ -185,6 +185,7 @@ class Hades(QThread):
 
         if self.play:
             self.athena.reset()
+            self.zeus.reset()
             print("Hades started")
         else:
             print("Hades stopped")

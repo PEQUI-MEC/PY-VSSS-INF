@@ -67,6 +67,9 @@ class Zeus:
         print("Zeus is set up")
         return self
 
+    def reset(self):
+        self.translate.reset()
+
     def getVelocities(self, strategia):
         """Zeus main method
 
