@@ -93,7 +93,8 @@ class Move2Goal:
         self.orientation = np.array(orientation)
 
     def buildAxis(self, orientation, target):
-        print(orientation, target)
+        #
+        # print(orientation, target)
         if type(orientation) != int and self.rotation is True:
             # print("Orientation ", self.orientation, " Origin ", self.target)
             self.x = np.array(np.array(orientation) - np.array(target), dtype=np.float32)
@@ -103,7 +104,7 @@ class Move2Goal:
             else:
                 self.x = [-1.0, 0.0]
 
-        print(self.x)
+        # print(self.x)
         self.x /= -np.linalg.norm(self.x)
 
         theta = atan2(self.x[1], self.x[0])

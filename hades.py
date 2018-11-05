@@ -181,7 +181,13 @@ class Hades(QThread):
     # Hades
     def eventStartGame(self):
         self.play = not self.play
-        print("Hades started") if self.play else print("Hades stopped")
+
+        if self.play:
+            self.athena.reset()
+            print("Hades started")
+        else:
+            print("Hades stopped")
+
         return self.play
 
     def SetFileSave(self, file):

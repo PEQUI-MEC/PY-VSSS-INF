@@ -5,6 +5,7 @@ from helpers import geometry
 from scipy.spatial import distance
 from strategy.endless import Endless
 from strategy.warrior import Warrior
+from strategy.oracle import Oracle
 
 
 class Athena:
@@ -30,16 +31,17 @@ class Athena:
         self.warriors = []
         self.theirWarriors = []
         self.theirWarriorsLastPos = []
-        self.ball = {
-            "lastPosition": (0, 0),
-            "position": (0, 0)
-        }
 
         self.atk = None
         self.mid = None
         self.gk = None
 
         self.gkOffset = self.goalBorderOffset = self.midOffset = 0
+
+        self.ball = {
+            "position": (0, 0),
+            "oracle": None
+        }
 
         self.transitionTimer = 0
         self.estimationTimer = 1
@@ -60,8 +62,16 @@ class Athena:
         for i in range(0, numRobots):
             self.warriors.append(Warrior(defaultVel))
 
+        self.ball = {
+            "position": (0, 0),
+            "oracle": Oracle(100, self.endless.pixelMeterRatio)
+        }
+
         print("Athena is set up.")
         return self
+
+    def reset(self):
+        self.transitionTimer = 0
 
     def getTargets(self, positions):
         """
@@ -156,9 +166,9 @@ class Athena:
                 self.theirWarriors[i].velEstimated = min(dist) / self.deltaTime
                 self.theirWarriors[i].velEstimated /= self.endless.pixelMeterRatio
 
-        self.ball["lastPosition"] = (int(self.ball["lastPosition"][0] * 0.2 + 0.8 * self.ball["position"][0]),
-                                     int(self.ball["lastPosition"][1] * 0.2 + 0.8 * self.ball["position"][1]))
         self.ball["position"] = positions[2]["position"]
+        # oracle é acessado sem verificação pois deve quebrar o programa se a Athena não tiver sido configurada
+        self.ball["oracle"].pushState(self.ball["position"])
 
         return positions
 
@@ -218,7 +228,7 @@ class Athena:
             command = {
                 "robotLetter": warrior.robotID,
                 "tactics": warrior.tactics,
-                "futureBall": geometry.projection(self.ball["lastPosition"], self.ball["position"], 30, self.deltaTime)
+                "futureBall": self.ball["oracle"].predict(1)
             }
 
             if warrior.command["type"] == "goTo":
