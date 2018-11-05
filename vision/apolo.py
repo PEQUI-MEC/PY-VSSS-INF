@@ -69,7 +69,32 @@ class Apolo:
         self.setWarpPoints((0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT))
         self.warpMatrizGoal = [(0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT)]
 
-    def setWarpPoints(self, pt1, pt2, pt3, pt4):
+    @staticmethod
+    def ordenaWarp(points):
+        largura = WIDTH/2
+        altura = HEIGHT/2
+
+        for i in range(0, 4, 1):
+            if points[i][0] - largura < 0:
+                if points[i][1] - altura < 0:
+                    # Quadrante 1
+                    pt1 = points[i]
+                else:
+                    # Quadrante 4
+                    pt4 = points[i]
+            else:
+                if points[i][1] - altura < 0:
+                    # Quadrante 2
+                    pt2 = points[i]
+                else:
+                    # Quadrante 3
+                    pt3 = points[i]
+
+        return pt1, pt2, pt3, pt4
+
+    def setWarpPoints(self,pt1, pt2, pt3, pt4):
+        pt1, pt2, pt3, pt4 = self.ordenaWarp([pt1, pt2, pt3, pt4])
+
         self.shape = np.float32([pt1,pt2,pt4,pt3])
         plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
         self.perspective = cv2.getPerspectiveTransform(self.shape,plot)
@@ -78,7 +103,7 @@ class Apolo:
         self.warpMatrizGoal = warpMatrix
 
     def warpGoalFrame(self, frame):
-        pt1, pt2, pt3, pt4 = self.warpMatrizGoal[0], self.warpMatrizGoal[1], self.warpMatrizGoal[2], self.warpMatrizGoal[3]
+        pt1, pt2, pt3, pt4 = self.ordenaWarp(self.warpMatrizGoal)
         cv2.rectangle(frame, (0,0), (pt1[0],pt1[1]), (0, 0, 0), -1)
         cv2.rectangle(frame, (pt2[0], 0), (WIDTH, pt2[1]), (0, 0, 0), -1)
         cv2.rectangle(frame, (pt3[0], pt3[1]), (WIDTH, HEIGHT), (0, 0, 0), -1)

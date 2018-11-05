@@ -353,49 +353,37 @@ class Afrodite(QMainWindow):
         self.comboBoxStrategyRobotFunctionsRobot2.setCurrentText(str(self.hades.eventLoadConfigs("robot2")))
         self.comboBoxStrategyRobotFunctionsRobot3.setCurrentText(str(self.hades.eventLoadConfigs("robot3")))
 
-        self.horizontalSliderVisionHSVCalibrationMainBlur.setValue(self.hades.eventLoadConfigs("mainBlur"))
-        self.horizontalSliderVisionHSVCalibrationMainErode.setValue(self.hades.eventLoadConfigs("mainErode"))
-        self.horizontalSliderVisionHSVCalibrationMainHmin.setValue(self.hades.eventLoadConfigs("mainHmin"))
-        self.horizontalSliderVisionHSVCalibrationMainSmin.setValue(self.hades.eventLoadConfigs("mainSmin"))
-        self.horizontalSliderVisionHSVCalibrationMainVmin.setValue(self.hades.eventLoadConfigs("mainVmin"))
-        self.horizontalSliderVisionHSVCalibrationMainAmin.setValue(self.hades.eventLoadConfigs("mainAmin"))
-        self.horizontalSliderVisionHSVCalibrationMainDilate.setValue(self.hades.eventLoadConfigs("mainDilate"))
-        self.horizontalSliderVisionHSVCalibrationMainHmax.setValue(self.hades.eventLoadConfigs("mainHmax"))
-        self.horizontalSliderVisionHSVCalibrationMainSmax.setValue(self.hades.eventLoadConfigs("mainSmax"))
-        self.horizontalSliderVisionHSVCalibrationMainVmax.setValue(self.hades.eventLoadConfigs("mainVmax"))
+        tempHSVCalib = [(self.hades.eventLoadConfigs("mainHmin"),self.hades.eventLoadConfigs("mainHmax")),
+                        (self.hades.eventLoadConfigs("mainSmin"), self.hades.eventLoadConfigs("mainSmax")),
+                        (self.hades.eventLoadConfigs("mainVmin"), self.hades.eventLoadConfigs("mainVmax")),
+                        self.hades.eventLoadConfigs("mainErode"), self.hades.eventLoadConfigs("mainBlur"),
+                        self.hades.eventLoadConfigs("mainDilate"), self.hades.eventLoadConfigs("mainAmin")]
 
-        self.horizontalSliderVisionHSVCalibrationGreenBlur.setValue(self.hades.eventLoadConfigs("greenBlur"))
-        self.horizontalSliderVisionHSVCalibrationGreenErode.setValue(self.hades.eventLoadConfigs("greenErode"))
-        self.horizontalSliderVisionHSVCalibrationGreenHmin.setValue(self.hades.eventLoadConfigs("greenHmin"))
-        self.horizontalSliderVisionHSVCalibrationGreenSmin.setValue(self.hades.eventLoadConfigs("greenSmin"))
-        self.horizontalSliderVisionHSVCalibrationGreenVmin.setValue(self.hades.eventLoadConfigs("greenVmin"))
-        self.horizontalSliderVisionHSVCalibrationGreenAmin.setValue(self.hades.eventLoadConfigs("greenAmin"))
-        self.horizontalSliderVisionHSVCalibrationGreenDilate.setValue(self.hades.eventLoadConfigs("greenDilate"))
-        self.horizontalSliderVisionHSVCalibrationGreenHmax.setValue(self.hades.eventLoadConfigs("greenHmax"))
-        self.horizontalSliderVisionHSVCalibrationGreenSmax.setValue(self.hades.eventLoadConfigs("greenSmax"))
-        self.horizontalSliderVisionHSVCalibrationGreenVmax.setValue(self.hades.eventLoadConfigs("greenVmax"))
+        self.setHSVValues(0, tempHSVCalib)
 
-        self.horizontalSliderVisionHSVCalibrationBallBlur.setValue(self.hades.eventLoadConfigs("ballBlur"))
-        self.horizontalSliderVisionHSVCalibrationBallErode.setValue(self.hades.eventLoadConfigs("ballErode"))
-        self.horizontalSliderVisionHSVCalibrationBallHmin.setValue(self.hades.eventLoadConfigs("ballHmin"))
-        self.horizontalSliderVisionHSVCalibrationBallSmin.setValue(self.hades.eventLoadConfigs("ballSmin"))
-        self.horizontalSliderVisionHSVCalibrationBallVmin.setValue(self.hades.eventLoadConfigs("ballVmin"))
-        self.horizontalSliderVisionHSVCalibrationBallAmin.setValue(self.hades.eventLoadConfigs("ballAmin"))
-        self.horizontalSliderVisionHSVCalibrationBallDilate.setValue(self.hades.eventLoadConfigs("ballDilate"))
-        self.horizontalSliderVisionHSVCalibrationBallHmax.setValue(self.hades.eventLoadConfigs("ballHmax"))
-        self.horizontalSliderVisionHSVCalibrationBallSmax.setValue(self.hades.eventLoadConfigs("ballSmax"))
-        self.horizontalSliderVisionHSVCalibrationBallVmax.setValue(self.hades.eventLoadConfigs("ballVmax"))
+        tempHSVCalib = [(self.hades.eventLoadConfigs("greenHmin"),self.hades.eventLoadConfigs("greenHmax")),
+                        (self.hades.eventLoadConfigs("greenSmin"), self.hades.eventLoadConfigs("greenSmax")),
+                        (self.hades.eventLoadConfigs("greenVmin"), self.hades.eventLoadConfigs("greenVmax")),
+                        self.hades.eventLoadConfigs("greenErode"), self.hades.eventLoadConfigs("greenBlur"),
+                        self.hades.eventLoadConfigs("greenDilate"), self.hades.eventLoadConfigs("greenAmin")]
 
-        self.horizontalSliderVisionHSVCalibrationOpponentBlur.setValue(self.hades.eventLoadConfigs("oppBlur"))
-        self.horizontalSliderVisionHSVCalibrationOpponentErode.setValue(self.hades.eventLoadConfigs("oppErode"))
-        self.horizontalSliderVisionHSVCalibrationOpponentHmin.setValue(self.hades.eventLoadConfigs("oppHmin"))
-        self.horizontalSliderVisionHSVCalibrationOpponentSmin.setValue(self.hades.eventLoadConfigs("oppSmin"))
-        self.horizontalSliderVisionHSVCalibrationOpponentVmin.setValue(self.hades.eventLoadConfigs("oppVmin"))
-        self.horizontalSliderVisionHSVCalibrationOpponentAmin.setValue(self.hades.eventLoadConfigs("oppAmin"))
-        self.horizontalSliderVisionHSVCalibrationOpponentDilate.setValue(self.hades.eventLoadConfigs("oppDilate"))
-        self.horizontalSliderVisionHSVCalibrationOpponentHmax.setValue(self.hades.eventLoadConfigs("oppHmax"))
-        self.horizontalSliderVisionHSVCalibrationOpponentSmax.setValue(self.hades.eventLoadConfigs("oppSmax"))
-        self.horizontalSliderVisionHSVCalibrationOpponentVmax.setValue(self.hades.eventLoadConfigs("oppVmax"))
+        self.setHSVValues(1, tempHSVCalib)
+
+        tempHSVCalib = [(self.hades.eventLoadConfigs("ballHmin"),self.hades.eventLoadConfigs("ballHmax")),
+                        (self.hades.eventLoadConfigs("ballSmin"), self.hades.eventLoadConfigs("ballSmax")),
+                        (self.hades.eventLoadConfigs("ballVmin"), self.hades.eventLoadConfigs("ballVmax")),
+                        self.hades.eventLoadConfigs("ballErode"), self.hades.eventLoadConfigs("ballBlur"),
+                        self.hades.eventLoadConfigs("ballDilate"), self.hades.eventLoadConfigs("ballAmin")]
+
+        self.setHSVValues(2, tempHSVCalib)
+
+        tempHSVCalib = [(self.hades.eventLoadConfigs("oppHmin"),self.hades.eventLoadConfigs("oppHmax")),
+                        (self.hades.eventLoadConfigs("oppSmin"), self.hades.eventLoadConfigs("oppSmax")),
+                        (self.hades.eventLoadConfigs("oppVmin"), self.hades.eventLoadConfigs("oppVmax")),
+                        self.hades.eventLoadConfigs("oppErode"), self.hades.eventLoadConfigs("oppBlur"),
+                        self.hades.eventLoadConfigs("oppDilate"), self.hades.eventLoadConfigs("oppAmin")]
+
+        self.setHSVValues(3, tempHSVCalib)
 
     def actionSaveConfigsTriggered(self):
         self.saveConfigs()

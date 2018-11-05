@@ -185,7 +185,7 @@ class Hades(QThread):
         return self.play
 
     def setRobotRadiusEvent(self, robotRadius):
-    	self.apolo.setRobotRadius(robotRadius)
+        self.apolo.setRobotRadius(robotRadius)
 
     def SetFileSave(self, file):
         self.plutus.setFile(file)
@@ -225,7 +225,6 @@ class Hades(QThread):
     def eventStartVision(self, cameraId):
         try:
             self.apolo = Apolo(int(cameraId))
-
             #self.apolo = Apolo(0)
             return True
         except:
