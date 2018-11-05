@@ -59,6 +59,7 @@ class Dice:
 
         return [left, right, self.warrior.transAngle]
 
+    # !TODO atualizar position control baseado nas alterações feitas no vector control
     def positionControl(self):
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
