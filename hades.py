@@ -201,6 +201,7 @@ class Hades(QThread):
             return value
         else:
             return 0
+    
 
     # Camera e Visão
     def eventInvertImage(self, state):

@@ -56,20 +56,18 @@ class Afrodite(QMainWindow):
         # Vision
         # Warp
         self.warpCount = 0
-        self.warpMatriz = [[0,0],[0,0],[0,0],[0,0]]
+        self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
         self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
         self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
         self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
         self.spinBoxCaptureWarpOffsetRight.valueChanged.connect(self.warpOffsetChanged)
 
-        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
-        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
-        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
-
         #RobotRadius
         self.horizontalSliderRobotRadius.valueChanged.connect(self.robotRadiusChanged)
         self.spinBoxRobotRadius.valueChanged.connect(self.robotRadiusChanged)
-
+        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
+        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
+        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
         # HSVCalibration
         # Main
         self.horizontalSliderVisionHSVCalibrationMainVmin.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
@@ -272,10 +270,12 @@ class Afrodite(QMainWindow):
             self.graphicsViewVideoViewVideo.setPixmap(QPixmap.fromImage(outImage))
             self.graphicsViewVideoViewVideo.setScaledContents(True)
 
+    """
     @staticmethod
     def graphicsViewVideoViewVideoClicked():  # event
         point = QtGui.QCursor.pos()
         print("X:" + str(point.x()) + " | " + "Y:" + str(point.y()))
+    """
 
     def updateObjectsToDraw(self, newObjects):
         self.objectsToDraw = newObjects
@@ -295,7 +295,7 @@ class Afrodite(QMainWindow):
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
         }
         """
-        #cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
+        # cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
@@ -758,7 +758,6 @@ class Afrodite(QMainWindow):
             self.lineEditRobotIDRobot2.setText(changedLetters[1])
             self.lineEditRobotIDRobot3.setText(changedLetters[2])
 
-
     # VISION TAB
 
     # Capture
@@ -794,7 +793,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
 
-        elif id == 1:
+        elif current == 1:
             Hmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationGreenSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
@@ -806,7 +805,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
-        elif id == 2:
+        elif current == 2:
             Hmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationBallSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
