@@ -18,6 +18,15 @@ class Warrior:
 
         self.tactics = "wait"
 
+        # ângulo do robô com a bola
+        self.robotBall = 0
+        # angulo entre as retas robo->bola e bola->gol
+        self.robotBallGoal = 0
+        # orientação do robô em relação ao gol
+        self.robotGoal = 0
+        # o robô tem ângulo bom pra chutar?
+        self.hasKickAngle = False
+
         self.command = {}
 
     def setup(self, robotID, position, orientation=0):
