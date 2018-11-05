@@ -12,7 +12,7 @@ class Hermes:
             "A": "\x56\x0D",
             "B": "\x6B\x0D",
             "C": "\x21\x5C",
-            "D": "\xDC\xA8"
+            "F": "\x45\x0D"
         }
         print("Hermes summoned")
 
@@ -70,7 +70,7 @@ class Hermes:
                 try:
                     self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
                     messages.append(message)
-                    # print(velocities[i]["robotLetter"] + ": " + message)
+                    print(velocities[i]["robotLetter"] + ": " + message)
                 except SerialTimeoutException:
                     print("[Hermes]: Message sending timed out")
                 except KeyError:
@@ -94,7 +94,7 @@ class Hermes:
     def sendMessage(self, robotId, message):
         if self.xbee is not None:
             try:
-                # print(robotId)
+                print(robotId)
                 self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
             except SerialTimeoutException:
                 print("Message sending timed out")
