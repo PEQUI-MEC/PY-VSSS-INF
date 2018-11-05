@@ -30,6 +30,9 @@ class Hades(QThread):
         self.play = False
         self.isCalibrating = False
 
+        self.height = 480  # TODO pegar isso da afrodite e passar pro apolo
+        self.width = 640
+
         self.cascadeTime = 0
         self.cascadeLoops = 0
         self.cascadeLastTime = 0
@@ -90,15 +93,15 @@ class Hades(QThread):
         formattedPositions = [
             [
                 positions[0][0]["position"],
-                positions[0][0]["orientation"]
+                positions[0][0]["orientation"],
             ],
             [
                 positions[0][1]["position"],
-                positions[0][1]["orientation"]
+                positions[0][1]["orientation"],
             ],
             [
                 positions[0][2]["position"],
-                positions[0][2]["orientation"]
+                positions[0][2]["orientation"],
             ],
             positions[2]["position"]
         ]
@@ -148,7 +151,7 @@ class Hades(QThread):
 
             objectsToDraw["robot" + str(i + 1)] = {
                 "shape": "robot",
-                "position": positions[0][i]["position"],
+                "position": (positions[0][i]["position"][0], self.height - positions[0][i]["position"][1]),
                 "color": (255, 255, 0),
                 "label": str(i + 1),
                 "orientation": positions[0][i]["orientation"]
@@ -160,14 +163,14 @@ class Hades(QThread):
 
             objectsToDraw["advRobot" + str(i + 1)] = {
                 "shape": "robot",
-                "position": positions[1][i]["position"],
+                "position": (positions[1][i]["position"][0], self.height - positions[1][i]["position"][1]),
                 "color": (0, 0, 255),
                 "label": str(i + 1),
             }
 
         objectsToDraw["ball"] = {
             "shape": "circle",
-            "position": positions[2]["position"],
+            "position": (positions[2]["position"][0], self.height - positions[2]["position"][1]),
             "color": (255, 255, 255),
             "label": "Bola",
             "radius": 4
@@ -196,6 +199,7 @@ class Hades(QThread):
             return value
         else:
             return 0
+    
 
     # Camera e Visão
     def eventInvertImage(self, state):
@@ -203,7 +207,7 @@ class Hades(QThread):
             return self.apolo.setInvertImage(state)
         return False
 
-    def getCamCongigs(self):
+    def getCameraConfigs(self):
         return self.apolo.getCamConfigs()
 
     def eventCamConfigs(self, newBrightness, newSaturation, newGain, newContrast,
@@ -219,6 +223,8 @@ class Hades(QThread):
     def eventStartVision(self, cameraId):
         try:
             self.apolo = Apolo(int(cameraId))
+
+            #self.apolo = Apolo(0)
             return True
         except:
             return False
@@ -246,6 +252,22 @@ class Hades(QThread):
         if self.apolo is not None:
             self.apolo.setImg(thresholdId)
 
+    # Warp
+    def eventWarp(self, warpMatriz):
+        self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
+
+    # WarpGoal
+    def eventWarpGoalMatriz(self, warpMatriz):
+        return self.apolo.setWarpGoalMatriz(warpMatriz)
+
+    def eventWarpReset(self):
+        self.apolo.resetWarp()
+
+    # Offset
+
+    def eventWarpOffsetChanged(self, offsetLeft, offsetRight):
+        self.apolo.setWarpOffset(offsetLeft, offsetRight)
+        
     # Strategy
     def eventToggleTransitions(self, state):
         self.athena.setTransitionsState(state)

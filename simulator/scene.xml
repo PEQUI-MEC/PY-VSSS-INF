@@ -100,6 +100,56 @@
   </worldbody>
   <!--BOLA-->
 
+  <!-- INDICADORES -->
+  <worldbody>
+    <body name="indicator_1" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
+      <geom conaffinity="1" contype="1" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+    </body>
+    <body name="indicator_2" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
+      <geom conaffinity="1" contype="1" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+    </body>
+    <body name="indicator_3" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
+      <geom conaffinity="1" contype="1" pos="0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+    </body>
+    <body name="indicator_4" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
+      <geom conaffinity="1" contype="1" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+    </body>
+    <body name="indicator_5" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
+      <geom conaffinity="1" contype="1" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+    </body>
+    <body name="indicator_6" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.003 0.003" rgba="0 1 0 1" type="box"/>
+      <geom conaffinity="1" contype="1" pos="-0.04 0 0" size="0.01" rgba="0 1 0 1" type="sphere"/>
+    </body>
+  </worldbody>
+
+  <!-- ROBÔS VIRTUAIS -->
+  <worldbody>
+    <body name="virtual_robot_1" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.04 0.04" rgba="1 1 0 0.3" type="box"/>
+    </body>
+    <body name="virtual_robot_2" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.04 0.04" rgba="1 1 0 0.3" type="box"/>
+    </body>
+    <body name="virtual_robot_3" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.04 0.04" rgba="1 1 0 0.3" type="box"/>
+    </body>
+    <body name="virtual_robot_4" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.04 0.04" rgba="0 0 1 0.3" type="box"/>
+    </body>
+    <body name="virtual_robot_5" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.04 0.04" rgba="0 0 1 0.3" type="box"/>
+    </body>
+    <body name="virtual_robot_6" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.04 0.04 0.04" rgba="0 0 1 0.3" type="box"/>
+    </body>
+  </worldbody>
+
   <!--ROBOS-->
   <worldbody>
     <body name="robot_01" pos="-0.6 0 0.04" axisangle="0 0 1 3.14159265359">

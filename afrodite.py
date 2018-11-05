@@ -8,6 +8,7 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
+import numpy as np
 import serial
 import glob
 import interface.icons_rc
@@ -53,7 +54,19 @@ class Afrodite(QMainWindow):
         self.spinBoxCaptureDevicePropertiesExposure.valueChanged.connect(self.camConfigsChanged)
         self.spinBoxCaptureDevicePropertiesWhiteBalance.valueChanged.connect(self.camConfigsChanged)
 
-        # ModeView
+        # VideoView
+        # Vision
+        # Warp
+        self.warpCount = 0
+        self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
+        self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
+        self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
+        self.spinBoxCaptureWarpOffsetRight.valueChanged.connect(self.warpOffsetChanged)
+
+        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
+        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
+        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
 
         # HSVCalibration
         # Main
@@ -114,13 +127,6 @@ class Afrodite(QMainWindow):
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
         self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.updateComboBoxCaptureDeviceInformation)
         self.updateComboBoxCaptureDeviceInformation()
-
-        # Warp
-        self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
-
-        self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
-        self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
-        self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
 
         # STRATEGY
 
@@ -187,10 +193,10 @@ class Afrodite(QMainWindow):
         self.hades.exit()
 
     '''
+    #Pega somente os pontos da tela sem o flutuante
     def mouseReleaseEvent(self, QMouseEvent):
-           print('(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')')           
+           print('(', QMouseEvent.pos().x(), ', ', QMouseEvent.pos().y(), ')')
     '''
-
     # PLAY BUTTON
     def clickedPlay(self):
         icon = QIcon()
@@ -269,10 +275,12 @@ class Afrodite(QMainWindow):
             self.graphicsViewVideoViewVideo.setPixmap(QPixmap.fromImage(outImage))
             self.graphicsViewVideoViewVideo.setScaledContents(True)
 
+    """
     @staticmethod
     def graphicsViewVideoViewVideoClicked():  # event
         point = QtGui.QCursor.pos()
         print("X:" + str(point.x()) + " | " + "Y:" + str(point.y()))
+    """
 
     def updateObjectsToDraw(self, newObjects):
         self.objectsToDraw = newObjects
@@ -292,6 +300,7 @@ class Afrodite(QMainWindow):
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
         }
         """
+        # cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
@@ -492,6 +501,7 @@ class Afrodite(QMainWindow):
         self.groupBoxCaptureDeviceInformation.setEnabled(not enable)
         self.groupBoxCaptureDeviceProperties.setEnabled(enable)
         self.groupBoxCaptureWarp.setEnabled(enable)
+
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
 
         if enable:
@@ -583,23 +593,87 @@ class Afrodite(QMainWindow):
     def toggleInvertImage(self):
         self.checkBoxInvertImage.setChecked(self.hades.eventInvertImage(self.checkBoxInvertImage.isChecked()))
 
+    #
     def getPushButtonCaptureWarpWarp(self):
-        pass
+        self.pushButtonCaptureWarpWarp.setEnabled(False)
+        enable = not self.pushButtonCaptureWarpWarp.isEnabled()
+
+        self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
+        self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
+        self.pushButtonCaptureWarpAdjust.setEnabled(enable)
 
     def getPushButtonCaptureWarpReset(self):
-        pass
+        self.pushButtonCaptureWarpWarp.setEnabled(True)
+
+        self.spinBoxCaptureWarpOffsetLeft.setValue(0)
+        self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
+        self.spinBoxCaptureWarpOffsetRight.setValue(0)
+        self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
+
+        self.warpCount = 0
+        self.hades.eventWarpReset()
 
     def getPushButtonCaptureWarpAdjust(self):
-        pass
+        self.pushButtonCaptureWarpAdjust.setEnabled(False)
+        enable = self.pushButtonCaptureWarpAdjust.isEnabled()
 
-    def getCaptureWarpOffsetLeft(self):
-        pass
+        self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
+        self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
+        self.pushButtonCaptureWarpWarp.setEnabled(True)
 
-    def getCaptureWarpOffsetRight(self):
-        pass
+    def warpOffsetChanged(self):
+        self.hades.eventWarpOffsetChanged(
+            self.spinBoxCaptureWarpOffsetLeft.value(),
+            self.spinBoxCaptureWarpOffsetRight.value(),
+        )
+
+    def getPosWarp(self, event):
+        if not self.pushButtonCaptureWarpWarp.isEnabled():
+            if self.groupBoxCaptureWarp.isEnabled():
+                px = event.pos().x()
+                py = event.pos().y()
+                
+                if self.warpCount < 4:
+                    self.callHadesWarpEvent(px,py)
+                elif self.warpCount >= 4 and self.warpCount < 8:
+                    self.callHadesWarpGoalEvent(px,py)
+
+    def getPosAdjust(self, event):
+        if not self.pushButtonCaptureWarpWarp.isEnabled():
+            if self.groupBoxCaptureWarp.isEnabled():
+                px = event.pos().x()
+                py = event.pos().y()
+
+                if self.warpCount < 4:
+                    self.callHadesAdjustGoalEvent(px, py)
+
+    def callHadesWarpEvent(self, px, py):
+        # print(self.warpCount)
+        self.warpMatriz[self.warpCount][0] = px
+        self.warpMatriz[self.warpCount][1] = py
+
+        # print(self.warpMatriz[self.warpCount])
+        self.warpCount += 1
+
+        if self.warpCount == 4:
+            self.hades.eventWarp(self.warpMatriz)
+
+    def callHadesWarpGoalEvent(self, px, py):
+        # print(self.warpCount)
+        self.warpMatriz[self.warpCount % 4][0] = px
+        self.warpMatriz[self.warpCount % 4][1] = py
+
+        # print(self.warpMatriz[self.warpCount % 4])
+        self.warpCount += 1
+
+        if self.warpCount == 8:
+            self.hades.eventWarpGoalMatriz(self.warpMatriz)
 
     # ROBOT TAB
-
     # role
     def clickEditRoles(self):
         self.pushButtonStrategyRobotFunctionsEdit.setEnabled(False)
@@ -691,7 +765,6 @@ class Afrodite(QMainWindow):
             self.lineEditRobotIDRobot2.setText(changedLetters[1])
             self.lineEditRobotIDRobot3.setText(changedLetters[2])
 
-
     # VISION TAB
 
     # Capture
@@ -708,9 +781,9 @@ class Afrodite(QMainWindow):
         else:
             return "Split"
 
-    # HSVCalibration
-    def callHadesCalibEvent(self, current):
-        if current == 0:
+    # GetHSVValues
+    def getHSVValues(self, colorId):
+        if colorId == 0:
             Hmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationMainSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationMainVmin.value()
@@ -722,7 +795,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
 
-        elif current == 1:
+        elif colorId == 1:
             Hmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationGreenSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
@@ -734,7 +807,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
-        elif current == 2:
+        elif colorId == 2:
             Hmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationBallSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
@@ -758,41 +831,131 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        self.hades.eventCalibration(current, ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin))
+        return (Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin
+
+    def setHSVValues(self, colorId, hsvCalib):
+        if colorId == 0:
+            # Main
+            # Setta o slider
+            self.horizontalSliderVisionHSVCalibrationMainHmin.setValue(hsvCalib[0][0])  # HMin
+            self.horizontalSliderVisionHSVCalibrationMainHmax.setValue(hsvCalib[0][1])  # HMax
+            self.horizontalSliderVisionHSVCalibrationMainSmin.setValue(hsvCalib[1][0])  # SMin
+            self.horizontalSliderVisionHSVCalibrationMainSmax.setValue(hsvCalib[1][1])  # SMax
+            self.horizontalSliderVisionHSVCalibrationMainVmin.setValue(hsvCalib[2][0])  # VMin
+            self.horizontalSliderVisionHSVCalibrationMainVmax.setValue(hsvCalib[2][1])  # VMax
+            self.horizontalSliderVisionHSVCalibrationMainErode.setValue(hsvCalib[3])  # Erode
+            self.horizontalSliderVisionHSVCalibrationMainBlur.setValue(hsvCalib[4])  # Blur
+            self.horizontalSliderVisionHSVCalibrationMainDilate.setValue(hsvCalib[5])  # Dilate
+            self.horizontalSliderVisionHSVCalibrationMainAmin.setValue(hsvCalib[6])  # Amin
+
+            # Setta a spinbox
+
+            self.spinBoxVisionHSVCalibrationMainHmin.setValue(hsvCalib[0][0])  # HMin
+            self.spinBoxVisionHSVCalibrationMainHmax.setValue(hsvCalib[0][1])  # HMax
+            self.spinBoxVisionHSVCalibrationMainSmin.setValue(hsvCalib[1][0])  # SMin
+            self.spinBoxVisionHSVCalibrationMainSmax.setValue(hsvCalib[1][1])  # SMax
+            self.spinBoxVisionHSVCalibrationMainVmin.setValue(hsvCalib[2][0])  # VMin
+            self.spinBoxVisionHSVCalibrationMainVmax.setValue(hsvCalib[2][1])  # VMax
+            self.spinBoxVisionHSVCalibrationMainErode.setValue(hsvCalib[3])  # Erode
+            self.spinBoxVisionHSVCalibrationMainBlur.setValue(hsvCalib[4])  # Blur
+            self.spinBoxVisionHSVCalibrationMainDilate.setValue(hsvCalib[5])  # Dilate
+            self.spinBoxVisionHSVCalibrationMainAmin.setValue(hsvCalib[6])  # Amin
+
+        elif colorId == 1:
+            # Green
+            # Setta o slider
+            self.horizontalSliderVisionHSVCalibrationGreenHmin.setValue(hsvCalib[0][0])  # HMin
+            self.horizontalSliderVisionHSVCalibrationGreenHmax.setValue(hsvCalib[0][1])  # HMax
+            self.horizontalSliderVisionHSVCalibrationGreenSmin.setValue(hsvCalib[1][0])  # SMin
+            self.horizontalSliderVisionHSVCalibrationGreenSmax.setValue(hsvCalib[1][1])  # SMax
+            self.horizontalSliderVisionHSVCalibrationGreenVmin.setValue(hsvCalib[2][0])  # VMin
+            self.horizontalSliderVisionHSVCalibrationGreenVmax.setValue(hsvCalib[2][1])  # VMax
+            self.horizontalSliderVisionHSVCalibrationGreenErode.setValue(hsvCalib[3])  # Erode
+            self.horizontalSliderVisionHSVCalibrationGreenBlur.setValue(hsvCalib[4])  # Blur
+            self.horizontalSliderVisionHSVCalibrationGreenDilate.setValue(hsvCalib[5])  # Dilate
+            self.horizontalSliderVisionHSVCalibrationGreenAmin.setValue(hsvCalib[6])  # Amin
+
+            # Setta a spinbox
+
+            self.spinBoxVisionHSVCalibrationGreenHmin.setValue(hsvCalib[0][0])  # HMin
+            self.spinBoxVisionHSVCalibrationGreenHmax.setValue(hsvCalib[0][1])  # HMax
+            self.spinBoxVisionHSVCalibrationGreenSmin.setValue(hsvCalib[1][0])  # SMin
+            self.spinBoxVisionHSVCalibrationGreenSmax.setValue(hsvCalib[1][1])  # SMax
+            self.spinBoxVisionHSVCalibrationGreenVmin.setValue(hsvCalib[2][0])  # VMin
+            self.spinBoxVisionHSVCalibrationGreenVmax.setValue(hsvCalib[2][1])  # VMax
+            self.spinBoxVisionHSVCalibrationGreenErode.setValue(hsvCalib[3])  # Erode
+            self.spinBoxVisionHSVCalibrationGreenBlur.setValue(hsvCalib[4])  # Blur
+            self.spinBoxVisionHSVCalibrationGreenDilate.setValue(hsvCalib[5])  # Dilate
+            self.spinBoxVisionHSVCalibrationGreenAmin.setValue(hsvCalib[6])  # Amin
+
+        elif colorId == 2:
+            # Ball
+            # Setta o slider
+            self.horizontalSliderVisionHSVCalibrationBallHmin.setValue(hsvCalib[0][0])  # HMin
+            self.horizontalSliderVisionHSVCalibrationBallHmax.setValue(hsvCalib[0][1])  # HMax
+            self.horizontalSliderVisionHSVCalibrationBallSmin.setValue(hsvCalib[1][0])  # SMin
+            self.horizontalSliderVisionHSVCalibrationBallSmax.setValue(hsvCalib[1][1])  # SMax
+            self.horizontalSliderVisionHSVCalibrationBallVmin.setValue(hsvCalib[2][0])  # VMin
+            self.horizontalSliderVisionHSVCalibrationBallVmax.setValue(hsvCalib[2][1])  # VMax
+            self.horizontalSliderVisionHSVCalibrationBallErode.setValue(hsvCalib[3])  # Erode
+            self.horizontalSliderVisionHSVCalibrationBallBlur.setValue(hsvCalib[4])  # Blur
+            self.horizontalSliderVisionHSVCalibrationBallDilate.setValue(hsvCalib[5])  # Dilate
+            self.horizontalSliderVisionHSVCalibrationBallAmin.setValue(hsvCalib[6])  # Amin
+
+            # Setta a spinbox
+
+            self.spinBoxVisionHSVCalibrationBallHmin.setValue(hsvCalib[0][0])  # HMin
+            self.spinBoxVisionHSVCalibrationBallHmax.setValue(hsvCalib[0][1])  # HMax
+            self.spinBoxVisionHSVCalibrationBallSmin.setValue(hsvCalib[1][0])  # SMin
+            self.spinBoxVisionHSVCalibrationBallSmax.setValue(hsvCalib[1][1])  # SMax
+            self.spinBoxVisionHSVCalibrationBallVmin.setValue(hsvCalib[2][0])  # VMin
+            self.spinBoxVisionHSVCalibrationBallVmax.setValue(hsvCalib[2][1])  # VMax
+            self.spinBoxVisionHSVCalibrationBallErode.setValue(hsvCalib[3])  # Erode
+            self.spinBoxVisionHSVCalibrationBallBlur.setValue(hsvCalib[4])  # Blur
+            self.spinBoxVisionHSVCalibrationBallDilate.setValue(hsvCalib[5])  # Dilate
+            self.spinBoxVisionHSVCalibrationBallAmin.setValue(hsvCalib[6])  # Amin
+
+        elif colorId == 3:  # current = 3
+            # Opponent
+            # Setta o slider
+            self.horizontalSliderVisionHSVCalibrationOpponentHmin.setValue(hsvCalib[0][0])  # HMin
+            self.horizontalSliderVisionHSVCalibrationOpponentHmax.setValue(hsvCalib[0][1])  # HMax
+            self.horizontalSliderVisionHSVCalibrationOpponentSmin.setValue(hsvCalib[1][0])  # SMin
+            self.horizontalSliderVisionHSVCalibrationOpponentSmax.setValue(hsvCalib[1][1])  # SMax
+            self.horizontalSliderVisionHSVCalibrationOpponentVmin.setValue(hsvCalib[2][0])  # VMin
+            self.horizontalSliderVisionHSVCalibrationOpponentVmax.setValue(hsvCalib[2][1])  # VMax
+            self.horizontalSliderVisionHSVCalibrationOpponentErode.setValue(hsvCalib[3])  # Erode
+            self.horizontalSliderVisionHSVCalibrationOpponentBlur.setValue(hsvCalib[4])  # Blur
+            self.horizontalSliderVisionHSVCalibrationOpponentDilate.setValue(hsvCalib[5])  # Dilate
+            self.horizontalSliderVisionHSVCalibrationOpponentAmin.setValue(hsvCalib[6])  # Amin
+
+            # Setta a spinbox
+
+            self.spinBoxVisionHSVCalibrationOpponentHmin.setValue(hsvCalib[0][0])  # HMin
+            self.spinBoxVisionHSVCalibrationOpponentHmax.setValue(hsvCalib[0][1])  # HMax
+            self.spinBoxVisionHSVCalibrationOpponentSmin.setValue(hsvCalib[1][0])  # SMin
+            self.spinBoxVisionHSVCalibrationOpponentSmax.setValue(hsvCalib[1][1])  # SMax
+            self.spinBoxVisionHSVCalibrationOpponentVmin.setValue(hsvCalib[2][0])  # VMin
+            self.spinBoxVisionHSVCalibrationOpponentVmax.setValue(hsvCalib[2][1])  # VMax
+            self.spinBoxVisionHSVCalibrationOpponentErode.setValue(hsvCalib[3])  # Erode
+            self.spinBoxVisionHSVCalibrationOpponentBlur.setValue(hsvCalib[4])  # Blur
+            self.spinBoxVisionHSVCalibrationOpponentDilate.setValue(hsvCalib[5])  # Dilate
+            self.spinBoxVisionHSVCalibrationOpponentAmin.setValue(hsvCalib[6])  # Amin
+
+    # HSVCalibration
+    def callHadesCalibEvent(self, tagId):
+        hsvValue = None
+
+        if tagId != -1:
+            hsvValue = self.getHSVValues(tagId)
+
+        self.hades.eventCalibration(tagId, hsvValue)
 
     def getPushButtonVisionHSVCalibrationSwap(self):
-        Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
-        Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
-        Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
-        Erode = self.spinBoxVisionHSVCalibrationOpponentErode.value()
-        Blur = self.spinBoxVisionHSVCalibrationOpponentBlur.value()
-        Hmax = self.spinBoxVisionHSVCalibrationOpponentHmax.value()
-        Smax = self.spinBoxVisionHSVCalibrationOpponentSmax.value()
-        Vmax = self.spinBoxVisionHSVCalibrationOpponentVmax.value()
-        Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
-        Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
+        hsvTemp = self.getHSVValues(3)
 
-        self.spinBoxVisionHSVCalibrationOpponentHmin.setValue(self.spinBoxVisionHSVCalibrationMainHmin.value())
-        self.spinBoxVisionHSVCalibrationOpponentSmin.setValue(self.spinBoxVisionHSVCalibrationMainSmin.value())
-        self.spinBoxVisionHSVCalibrationOpponentVmin.setValue(self.spinBoxVisionHSVCalibrationMainVmin.value())
-        self.spinBoxVisionHSVCalibrationOpponentErode.setValue(self.spinBoxVisionHSVCalibrationMainErode.value())
-        self.spinBoxVisionHSVCalibrationOpponentBlur.setValue(self.spinBoxVisionHSVCalibrationMainBlur.value())
-        self.spinBoxVisionHSVCalibrationOpponentHmax.setValue(self.spinBoxVisionHSVCalibrationMainHmax.value())
-        self.spinBoxVisionHSVCalibrationOpponentSmax.setValue(self.spinBoxVisionHSVCalibrationMainSmax.value())
-        self.spinBoxVisionHSVCalibrationOpponentVmax.setValue(self.spinBoxVisionHSVCalibrationMainVmax.value())
-        self.spinBoxVisionHSVCalibrationOpponentDilate.setValue(self.spinBoxVisionHSVCalibrationMainDilate.value())
-        self.spinBoxVisionHSVCalibrationOpponentAmin.setValue(self.spinBoxVisionHSVCalibrationMainAmin.value())
-
-        self.horizontalSliderVisionHSVCalibrationMainBlur.setValue(Blur)
-        self.horizontalSliderVisionHSVCalibrationMainErode.setValue(Erode)
-        self.horizontalSliderVisionHSVCalibrationMainHmin.setValue(Hmin)
-        self.horizontalSliderVisionHSVCalibrationMainSmin.setValue(Smin)
-        self.horizontalSliderVisionHSVCalibrationMainVmin.setValue(Vmin)
-        self.horizontalSliderVisionHSVCalibrationMainAmin.setValue(Amin)
-        self.horizontalSliderVisionHSVCalibrationMainDilate.setValue(Dilate)
-        self.horizontalSliderVisionHSVCalibrationMainHmax.setValue(Hmax)
-        self.horizontalSliderVisionHSVCalibrationMainSmax.setValue(Smax)
-        self.horizontalSliderVisionHSVCalibrationMainVmax.setValue(Vmax)
+        self.setHSVValues(3, self.getHSVValues(0))  # Posição 3 é referente ao HSV do Oponente
+        self.setHSVValues(0, hsvTemp)  # Posição 0 é referente ao HSV da Main
 
         # atualiza os valores do apolo para o main e oponente
         print("HSV Swapped Main<->Opponent")
@@ -807,22 +970,19 @@ class Afrodite(QMainWindow):
         self.pushButtonVisionHSVCalibrationPrev.setEnabled(enable)
         self.pushButtonVisionHSVCalibrationNext.setEnabled(enable)
 
-        self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex())
+        self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex() if enable else -1)
 
     def getPushButtonVisionHSVCalibrationNext(self):
-        current = self.stackedWidgetVisionHSVCalibration.currentIndex()
-        self.stackedWidgetVisionHSVCalibration.setCurrentIndex((current + 1) % 4)
+        current = (self.stackedWidgetVisionHSVCalibration.currentIndex() + 1) % 4
+        self.stackedWidgetVisionHSVCalibration.setCurrentIndex((current))
 
         self.callHadesCalibEvent(current)
 
     def getPushButtonVisionHSVCalibrationPrev(self):
-        current = self.stackedWidgetVisionHSVCalibration.currentIndex()
-        if current > 0:
-            self.stackedWidgetVisionHSVCalibration.setCurrentIndex(current - 1)
-        else:
-            self.stackedWidgetVisionHSVCalibration.setCurrentIndex(3)
+        current = (self.stackedWidgetVisionHSVCalibration.currentIndex() - 1) % 4
+        self.stackedWidgetVisionHSVCalibration.setCurrentIndex(current)
 
-            self.callHadesCalibEvent(current)
+        self.callHadesCalibEvent(current)
 
     def visionHSVCalibrationSliderChanged(self):
         self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex())

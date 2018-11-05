@@ -2,6 +2,7 @@ import threading
 from mujoco_py import load_model_from_path, MjSim
 import math
 import time
+import numpy as np
 
 from strategy import Athena
 from control import Zeus
@@ -93,6 +94,11 @@ class Aether:
 
             # mostra resultados
             self.showInfos(team, positions, commands)
+            # indicadores 3D
+            for i in range(3):
+                position = positions[0][i]["position"]
+                self.setObjectPose("indicator_" + str(i + 3 * team + 1), position, team, 0.2, velocities[i]["vector"])
+                # self.setObjectPose("virtual_robot_1", velocities["virtualPos"], team=0)
 
     # HELPERS
     def showInfos(self, team, positions=None, commands=None):
@@ -100,17 +106,20 @@ class Aether:
 
         for i in range(3):
             if self.enabled[i + 3 * team] and positions and commands:
+                # informações que todos os robôs tem
                 robot = "X: " + "{:.1f}".format(positions[0][i]["position"][0])
                 robot += ", Y: " + "{:.1f}".format(positions[0][i]["position"][1])
                 robot += ", O: " + "{:.1f}".format(positions[0][i]["orientation"])
                 robot += ", T: " + commands[i]["tactics"]
                 robot += ", C: " + commands[i]["command"]
+
                 if commands[i]["command"] == "lookAt":
                     if type(commands[i]["data"]["target"]) is tuple:
                         robot += "(" + "{:.1f}".format(commands[i]["data"]["target"][0]) + ", "
                         robot += "{:.1f}".format(commands[i]["data"]["target"][1]) + ")"
                     else:
                         robot += "(" + "{:.1f}".format(commands[i]["data"]["target"]) + ")"
+
                 elif commands[i]["command"] == "goTo":
                     robot += "(" + "{:.1f}".format(commands[i]["data"]["target"]["position"][0]) + ", "
                     robot += "{:.1f}".format(commands[i]["data"]["target"]["position"][1]) + ", "
@@ -120,6 +129,7 @@ class Aether:
                         robot += "{:.1f}".format(commands[i]["data"]["target"]["orientation"][1]) + ") )"
                     else:
                         robot += "{:.1f}".format(commands[i]["data"]["target"]["orientation"]) + ")"
+
                 elif commands[i]["command"] == "spin":
                     robot += "(" + commands[i]["data"]["direction"] + ")"
 
@@ -226,6 +236,29 @@ class Aether:
     @staticmethod
     def convertVelocity(vel):
         return vel * 30
+
+    def setObjectPose(self, objectName, newPos, team=0, height=0.04, newOrientation=0):
+        """Seta a posição e orientação de um objeto no simulador
+        Args:
+            objectName: Nome do objeto a ter a pose alterada. Esse nome deve ser de um mocap configurado na cena.
+                        Se o objeto for virtual_robot_i, o robô é amarelo se i <= 3, azul caso contrário
+            newPos: (x, y), 'x' e 'y' valores em pixels
+            team: índice do time (valor em pixels inverte de acordo com o time)
+            height: altura do objeto no universo
+            newOrientation: orientação Z em radianos do objeto
+        """
+        if team == 0:
+            x = (newPos[0] / self.field_width) * 1.6167748365182593 - 0.8083874182591296
+            y = (newPos[1] / self.field_height) * 1.16678166 - 0.58339083
+        else:
+            x = -(newPos[0] / self.field_width) * 1.6167748365182593 + 0.8083874182591296
+            y = -(newPos[1] / self.field_height) * 1.16678166 + 0.58339083
+
+        # conversão de eulerAngles para quaternions (wikipedia)
+        newQuat = [math.sin(newOrientation / 2), 0, 0, math.cos(newOrientation / 2)]
+
+        self.sim.data.set_mocap_quat(objectName, newQuat)
+        self.sim.data.set_mocap_pos(objectName, np.array([x, y, height]))
 
     def generatePositions(self, team):
         """Cria o vetor de posições no formato esperado pela estratégia

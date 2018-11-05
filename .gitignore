@@ -39,3 +39,8 @@ modules.xml
 
 ### VIDEOS ###
 /videos/
+
+
+### QUICKSAVE ###
+/helpers/quicksave.json
+/helpers/save.json
