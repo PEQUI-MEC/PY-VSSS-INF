@@ -225,7 +225,7 @@ class Athena:
             if warrior.command["type"] == "goTo":
                 command["command"] = "goTo"
                 command["data"] = {}
-                command["data"]["spiral"] = self.spiral
+                command["data"]["spiral"] = warrior.spiral
                 command["data"]["pose"] = {
                     "position": warrior.position,
                     "orientation": warrior.orientation
