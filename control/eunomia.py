@@ -1,4 +1,5 @@
 from math import atan2, cos, sin
+from scipy.spatial import distance
 from .navigation import UnivectorField
 
 
@@ -12,7 +13,7 @@ class Eunomia:
         self.dMin = None
         self.lDelta = None
 
-    def setup(self, width=100):
+    def setup(self):
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
         # self.uvf.updateConstants(radius=6.0, kr=0.9, k0=0.12, dMin=20.0, lDelta=4.5)
@@ -140,12 +141,18 @@ class Eunomia:
         # if warrior.before is not None:
         #   time = warrior.before
 
-        # print("Obs speed: ", self.warrior.obstaclesSpeed)
-        # print("Spiral ", self.warrior.spiral)
+        spiral = 0.1
+        if self.warrior.position[1] >= 400:
+            spiral = 0.06
+        elif self.warrior.position[1] < 80:
+            spiral = 0.06
+        elif distance.euclidean(self.warrior.position[0], self.warrior.target[0]) > 250:
+            spiral = 1.0
+
         if time is None:
             self.warrior.vRight = self.warrior.vMax
             self.warrior.vLeft = self.warrior.vMax
-            self.uvf.updateConstants(self.radius*self.warrior.spiral, self.kr, self.k0, self.dMin, self.lDelta)
+            self.uvf.updateConstants(self.radius*spiral, self.kr, self.k0, self.dMin, self.lDelta)
             self.warrior.transAngle = self.uvf.univector(robotPos=self.warrior.position,
                                                          robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
                                                          target=self.warrior.target,

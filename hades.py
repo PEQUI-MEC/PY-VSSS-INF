@@ -49,7 +49,8 @@ class Hades(QThread):
         self.athena.setup(3, 300, 300, 1.0)
 
         # set up zeus
-        self.zeus.setup(3)
+        # TODO passar as dimensões corretamente
+        self.zeus.setup(3, 300, 300)
 
         # setting up hermes
         # self.hermes = Hermes(self.srcXbee)
