@@ -288,5 +288,5 @@ class Hades(QThread):
     def eventStartXbee(self, port):
         return self.hermes.setup(port=port)
 
-    def eventsendMessage(self, robotId, message):
+    def eventSendMessage(self, robotId, message):
         self.hermes.sendMessage(robotId, message)
