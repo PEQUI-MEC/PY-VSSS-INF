@@ -1,11 +1,14 @@
 from math import atan2, pi, sin, cos
 from helpers import geometry
 import numpy as np
+import time
 
 
 class Dice:
     def __init__(self):
         self.warrior = None
+        self.deltaTime = time.time()
+        self.lastTime = time.time()
 
     def run(self, warrior):
         self.warrior = warrior
@@ -22,6 +25,8 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self):
+        self.lastTime = time.time()
+
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
 
@@ -32,7 +37,9 @@ class Dice:
                             -(target[0] - self.warrior.position[0]) * 1.5 / 640)
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
+        print(self.deltaTime)
         if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
+            # self.deltaTime = time.time() - self.lastTime
             self.warrior.backward = True
             self.warrior.front = 1
         else:
