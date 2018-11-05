@@ -40,7 +40,12 @@ class Athena:
         self.mid = None
         self.gk = None
 
-        self.gkOffset = self.midOffset = 0
+        self.gkOffset = self.goalBorderOffset = self.midOffset = 0
+
+        self.transitionTimer = 0
+
+        # angulo da bola com o gol
+        self.ballGoal = 0
 
         self.globalState = "push"
         self.transitionsEnabled = True
@@ -202,6 +207,7 @@ class Athena:
                         "orientation": θ radianos
                     },
                     "target": θ radianos | (x, y)
+                    "velocity": X m/s
                 }
             }
             - {
@@ -262,6 +268,9 @@ class Athena:
                     "orientation": warrior.orientation
                 }
 
+                if "targetVelocity" in warrior.command:
+                    command["data"]["velocity"] = warrior.command["targetVelocity"]
+
                 if "targetOrientation" in warrior.command:
                     command["data"]["target"] = warrior.command["targetOrientation"]
 
@@ -305,19 +314,52 @@ class Athena:
                 - pass: bola está atrás do atk, na frente do mid e no campo aliado
                 - danger: bola está atrás do atk e do mid e no campo aliado
         """
+
+        # verifica os ângulos dos robôs, bola e gols
+
+        ballX = self.ball["position"][0]
+        ballY = self.ball["position"][1]
+        # angulo da bola com o gol
+        self.ballGoal = math.atan2(self.endless.goal[1] - ballY, (self.endless.pastGoal[0] - ballX))
+
+        for i in range(len(self.warriors)):
+            # angulo do robô com a bola
+            self.warriors[i].robotBall = math.atan2(ballY - self.warriors[i].position[1],
+                                                    (ballX - self.warriors[i].position[0]))
+            # angulo entre as retas robo->bola e bola->gol
+            self.warriors[i].robotBallGoal = math.atan2(math.sin(self.warriors[i].robotBall - self.ballGoal),
+                                                    math.cos(self.warriors[i].robotBall - self.ballGoal))
+            # orientação do robô em relação ao gol
+            self.warriors[i].robotGoal = abs(
+                geometry.roundAngle(
+                    math.atan2(self.endless.pastGoal[1] - self.warriors[i].position[1],
+                               -(self.endless.pastGoal[0] - self.warriors[i].position[0]))
+                )
+            )
+
+            self.warriors[i].hasKickAngle = abs(self.warriors[i].robotBallGoal) < math.pi / 4 and \
+                                            (self.warriors[i].robotGoal < math.pi / 4 or
+                                             self.warriors[i].robotGoal > 3 * math.pi / 4)
+
         avaliableWarriors = self.warriors.copy()
 
         if self.transitionsEnabled:
-            # escolhe os melhores pra cada posição crítica
-            # o defensor vai ser escolhido de acordo com a situação do jogo
-            self.gk = sorted(avaliableWarriors, key=self.__distanceToGoal)[0]
-            self.gk.role = "gk"  # usado ao selecionar ação pra tática
-            avaliableWarriors.remove(self.gk)
-            self.atk = sorted(avaliableWarriors, key=self.__distanceToBall)[0]
-            self.atk.role = "atk"  # usado ao selecionar ação pra tática
-            avaliableWarriors.remove(self.atk)
-            self.mid = avaliableWarriors[0]
-            self.mid.role = "mid"  # usado ao selecionar ação pra tática
+            if self.transitionTimer > 0:
+                self.transitionTimer -= self.deltaTime
+            else:
+                # escolhe os melhores pra cada posição crítica
+                # o defensor vai ser escolhido de acordo com a situação do jogo
+                self.gk = sorted(avaliableWarriors, key=self.__distanceToGoal)[0]
+                self.gk.role = "gk"  # usado ao selecionar ação pra tática
+                avaliableWarriors.remove(self.gk)
+                self.atk = sorted(avaliableWarriors, key=self.__distanceToBall)[0]
+                self.atk.role = "atk"  # usado ao selecionar ação pra tática
+                avaliableWarriors.remove(self.atk)
+                self.mid = avaliableWarriors[0]
+                self.mid.role = "mid"  # usado ao selecionar ação pra tática
+
+                # espera um segundo para permitir outra troca de posições
+                self.transitionTimer = 1
 
         else:
             for i in range(len(self.roles)):
@@ -377,26 +419,10 @@ class Athena:
         # usa o estado global pra agir
 
         if self.globalState == Athena.sAdvance:
-            # angulo do robô com a bola
-            robotBall = math.atan2(ballY - self.atk.position[1], (ballX - self.atk.position[0]))
-            # angulo da bola com o gol
-            ballGoal = math.atan2(self.endless.goal[1] - ballY, (self.endless.goal[0] - ballX))
-            # angulo entre as retas robo->bola e bola->gol
-            robotBallGoal = math.atan2(math.sin(robotBall - ballGoal), math.cos(robotBall - ballGoal))
-            # orientação do robô em relação ao gol
-            robotGoal = abs(
-                geometry.roundAngle(
-                    math.atan2(self.endless.goal[1] - self.atk.position[1],
-                               -(self.endless.goal[0] - self.atk.position[0]))
-                )
-            )
-            hasKickAngle = abs(robotBallGoal) < math.pi / 4 and (robotGoal < math.pi / 4 or robotGoal > 3 * math.pi / 4)
-
             # se o ângulo do robô com a bola e da bola com o gol é bom, se o atk tá atrás da bola e se tá perto dela
             if distance.euclidean(self.ball["position"], self.atk.position) < self.endless.spinSize:
-                if hasKickAngle:
-                    self.atk.tactics = Athena.tKick
-                    self.atk.actionTimer = 1
+                if self.atk.hasKickAngle:
+                    tAtk = Athena.tKick
                 else:
                     tAtk = Athena.tSpin
             else:
@@ -557,7 +583,7 @@ class Athena:
                         else:
                             warrior.tactics = Athena.tUnlock  # sobrebrescreve a tática direto
                             warrior.lockedTime = 0
-                            warrior.actionTimer = 0.5  # tempo que deverá andar numa direção pra destravar
+                            warrior.actionTimer = 0.8  # tempo que deverá andar numa direção pra destravar
                             self.unlockDirection *= -1  # direção que deverá tentar dessa vez
                     else:
                         warrior.lockedTime += self.deltaTime
@@ -664,10 +690,10 @@ class Athena:
                 targetX = self.endless.goalieLine + self.midOffset
 
                 # se posiciona na projeção da bola
-                if ballY > self.endless.goalTop:
-                    target = (targetX, self.endless.goalTop)
-                elif ballY < self.endless.goalBottom:
-                    target = (targetX, self.endless.goalBottom)
+                if ballY > self.endless.goalTop + self.goalBorderOffset:
+                    target = (targetX, self.endless.goalTop + self.goalBorderOffset)
+                elif ballY < self.endless.goalBottom - self.goalBorderOffset:
+                    target = (targetX, self.endless.goalBottom - self.goalBorderOffset)
                 else:
                     target = (targetX, ballY)
 

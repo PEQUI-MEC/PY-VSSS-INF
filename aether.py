@@ -148,6 +148,19 @@ class Aether:
                 if fps:
                     self.viewer.infos["fps"] = fps
 
+            if commands:
+                # indicadores 3D
+                for i in range(3):
+                    if commands[i]["command"] == "goTo":
+                        target = commands[i]["data"]["target"]["position"]
+                        targetOrientation = commands[i]["data"]["target"]["orientation"]
+                        if type(targetOrientation) is tuple:
+                            position = positions[0][i]["position"]
+                            targetOrientation = math.atan2(position[1] - targetOrientation[1],
+                                                           position[0] - targetOrientation[0])
+
+                        self.setObjectPose("target_" + str(i + 1), target, 0, 0.01, targetOrientation)
+
     def getFPS(self):
         # calcula o fps e manda pra interface
         self.cascadeTime += time.time() - self.cascadeLastTime
