@@ -1,5 +1,6 @@
 from math import atan2, pi, sin, cos
 from helpers import geometry
+import numpy as np
 
 
 class Dice:
@@ -50,11 +51,17 @@ class Dice:
         left = geometry.saturate(left)
         right = geometry.saturate(right)
 
-        left = self.warrior.vMax * left
-        right = self.warrior.vMax * right
+        accDistance = 1 - geometry.gaussian(np.linalg.norm(np.array(self.warrior.position)
+                                                           - np.array(self.warrior.target)), 15)
+
+        accError = geometry.gaussian(thetaError, 15)
+
+        left = self.warrior.vMax * left * accDistance * accError
+        right = self.warrior.vMax * right * accDistance * accError
 
         return [left, right, self.warrior.transAngle]
 
+    # !TODO atualizar position control baseado nas alterações feitas no vector control
     def positionControl(self):
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
