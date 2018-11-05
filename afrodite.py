@@ -56,7 +56,7 @@ class Afrodite(QMainWindow):
         # Vision
         # Warp
         self.warpCount = 0
-        self.warpMatriz = [[0,0],[0,0],[0,0],[0,0]]
+        self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
         self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
         self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
         self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
@@ -268,10 +268,12 @@ class Afrodite(QMainWindow):
             self.graphicsViewVideoViewVideo.setPixmap(QPixmap.fromImage(outImage))
             self.graphicsViewVideoViewVideo.setScaledContents(True)
 
+    """
     @staticmethod
     def graphicsViewVideoViewVideoClicked():  # event
         point = QtGui.QCursor.pos()
         print("X:" + str(point.x()) + " | " + "Y:" + str(point.y()))
+    """
 
     def updateObjectsToDraw(self, newObjects):
         self.objectsToDraw = newObjects
@@ -291,7 +293,7 @@ class Afrodite(QMainWindow):
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
         }
         """
-        #cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
+        # cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
@@ -640,23 +642,23 @@ class Afrodite(QMainWindow):
                     self.callHadesAdjustGoalEvent(px, py)
 
     def callHadesWarpEvent(self, px, py):
-        print(self.warpCount)
+        # print(self.warpCount)
         self.warpMatriz[self.warpCount][0] = px
         self.warpMatriz[self.warpCount][1] = py
 
-        print(self.warpMatriz[self.warpCount])
-        self.warpCount+=1
+        # print(self.warpMatriz[self.warpCount])
+        self.warpCount += 1
 
         if self.warpCount == 4:
             self.hades.eventWarp(self.warpMatriz)
 
     def callHadesWarpGoalEvent(self, px, py):
-        print(self.warpCount)
-        self.warpMatriz[self.warpCount%4][0] = px
-        self.warpMatriz[self.warpCount%4][1] = py
+        # print(self.warpCount)
+        self.warpMatriz[self.warpCount % 4][0] = px
+        self.warpMatriz[self.warpCount % 4][1] = py
 
-        print(self.warpMatriz[self.warpCount%4])
-        self.warpCount+=1
+        # print(self.warpMatriz[self.warpCount % 4])
+        self.warpCount += 1
 
         if self.warpCount == 8:
             self.hades.eventWarpGoalMatriz(self.warpMatriz)
@@ -753,7 +755,6 @@ class Afrodite(QMainWindow):
             self.lineEditRobotIDRobot2.setText(changedLetters[1])
             self.lineEditRobotIDRobot3.setText(changedLetters[2])
 
-
     # VISION TAB
 
     # Capture
@@ -770,9 +771,9 @@ class Afrodite(QMainWindow):
         else:
             return "Split"
 
-    #GetHSVValues
-    def getHSVValues(self, id):
-        if id == 0:
+    # GetHSVValues
+    def getHSVValues(self, colorId):
+        if colorId == 0:
             Hmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationMainSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationMainVmin.value()
@@ -784,7 +785,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationMainDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationMainAmin.value()
 
-        elif id == 1:
+        elif colorId == 1:
             Hmin = self.spinBoxVisionHSVCalibrationGreenHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationGreenSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationGreenVmin.value()
@@ -796,7 +797,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationGreenDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationGreenAmin.value()
 
-        elif id == 2:
+        elif colorId == 2:
             Hmin = self.spinBoxVisionHSVCalibrationBallHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationBallSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationBallVmin.value()
@@ -808,7 +809,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
 
-        elif id == 3:  # current = 3
+        else:  # current = 3
             Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
@@ -820,10 +821,10 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
+        return (Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin
 
-    def setHSVValues(self, id, hsvCalib):
-        if id == 0:
+    def setHSVValues(self, colorId, hsvCalib):
+        if colorId == 0:
             # Main
             # Setta o slider
             self.horizontalSliderVisionHSVCalibrationMainHmin.setValue(hsvCalib[0][0])  # HMin
@@ -850,7 +851,7 @@ class Afrodite(QMainWindow):
             self.spinBoxVisionHSVCalibrationMainDilate.setValue(hsvCalib[5])  # Dilate
             self.spinBoxVisionHSVCalibrationMainAmin.setValue(hsvCalib[6])  # Amin
 
-        elif id == 1:
+        elif colorId == 1:
             # Green
             # Setta o slider
             self.horizontalSliderVisionHSVCalibrationGreenHmin.setValue(hsvCalib[0][0])  # HMin
@@ -877,7 +878,7 @@ class Afrodite(QMainWindow):
             self.spinBoxVisionHSVCalibrationGreenDilate.setValue(hsvCalib[5])  # Dilate
             self.spinBoxVisionHSVCalibrationGreenAmin.setValue(hsvCalib[6])  # Amin
 
-        elif id == 2:
+        elif colorId == 2:
             # Ball
             # Setta o slider
             self.horizontalSliderVisionHSVCalibrationBallHmin.setValue(hsvCalib[0][0])  # HMin
@@ -904,7 +905,7 @@ class Afrodite(QMainWindow):
             self.spinBoxVisionHSVCalibrationBallDilate.setValue(hsvCalib[5])  # Dilate
             self.spinBoxVisionHSVCalibrationBallAmin.setValue(hsvCalib[6])  # Amin
 
-        elif id == 3:  # current = 3
+        elif colorId == 3:  # current = 3
             # Opponent
             # Setta o slider
             self.horizontalSliderVisionHSVCalibrationOpponentHmin.setValue(hsvCalib[0][0])  # HMin
