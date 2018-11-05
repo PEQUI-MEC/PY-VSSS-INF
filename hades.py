@@ -291,4 +291,5 @@ class Hades(QThread):
         return self.hermes.setup(port=port)
 
     def eventsendMessage(self, robotId, message):
-        self.hermes.sendMessage(robotId, message)
+        self.hermesMessages = self.hermes.sendMessage(robotId, message)
+        self.sigMessages.emit(hermesMessages)

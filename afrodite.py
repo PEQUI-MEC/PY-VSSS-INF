@@ -516,16 +516,17 @@ class Afrodite(QMainWindow):
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):
         cams = []
-        try:
-            for i in range(0, 2):
+        
+        for i in range(0, 2):
+            try:
                 cam = cv2.VideoCapture(i)
                 if cam.isOpened():
                     cams.append(str(i))  # 'CAM' + str(i)
                     cam.release()
                 else:
                     break
-        except:
-            pass
+            except:
+                pass
 
         ports = cams
         # cams.clear()
