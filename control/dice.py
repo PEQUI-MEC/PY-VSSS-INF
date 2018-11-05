@@ -9,6 +9,8 @@ class Dice:
         self.warrior = None
         self.deltaTime = time.time()
         self.lastTime = time.time()
+        self.transitionTime = 0
+        self.timer = 1
 
     def run(self, warrior):
         self.warrior = warrior
@@ -25,7 +27,6 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def vectorControl(self):
-        self.lastTime = time.time()
 
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
@@ -37,14 +38,21 @@ class Dice:
                             -(target[0] - self.warrior.position[0]) * 1.5 / 640)
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
-        print(self.deltaTime)
-        if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
-            # self.deltaTime = time.time() - self.lastTime
-            self.warrior.backward = True
-            self.warrior.front = 1
+        self.lastTime = time.time()
+        self.timer -= time.time() - self.lastTime
+
+        if self.transitionTime > 0:
+            self.transitionTime -= self.deltaTime
+
         else:
-            self.warrior.backward = False
-            self.warrior.front = -1
+            if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
+                self.warrior.backward = True
+                self.warrior.front = 1
+                self.transitionTime = 1
+            else:
+                self.warrior.backward = False
+                self.warrior.front = -1
+            self.transitionTime = 1
 
         if self.warrior.backward:
             currentTheta = currentTheta + pi
