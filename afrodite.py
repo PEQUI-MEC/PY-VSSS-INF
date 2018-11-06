@@ -28,6 +28,7 @@ class Afrodite(QMainWindow):
         self.hades.sigDraw.connect(self.updateObjectsToDraw)
         self.hades.sigDisplay.connect(self.updateFrameVideoView)
         self.hades.sigPositions.connect(self.updateLabelPlayPositions)
+        self.hades.sigMessages.connect(self.updateMessages)
         self.hades.start()
 
         dirname = os.path.dirname(__file__)
@@ -254,6 +255,16 @@ class Afrodite(QMainWindow):
         self.displayImageVideoView(1)
 
         return None
+
+    def updateMessages(self, messages):
+        for message in messages:
+            if message[0] == 0:
+                self.labelPlayLastMessageRobot1.setText(message[1])
+            elif message[0]== 1:
+                self.labelPlayLastMessageRobot2.setText(message[1])
+            elif message[0] == 2:
+                self.labelPlayLastMessageRobot3.setText(message[1])
+
 
     def displayImageVideoView(self, window=1):
         qformat = QImage.Format_Indexed8
@@ -499,16 +510,17 @@ class Afrodite(QMainWindow):
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):
         cams = []
-        try:
-            for i in range(0, 2):
+        
+        for i in range(0, 2):
+            try:
                 cam = cv2.VideoCapture(i)
                 if cam.isOpened():
                     cams.append(str(i))  # 'CAM' + str(i)
                     cam.release()
                 else:
                     break
-        except:
-            pass
+            except:
+                pass
 
         ports = cams
         # cams.clear()
