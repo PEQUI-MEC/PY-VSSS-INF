@@ -35,3 +35,7 @@ modules.xml
 
 *.pyc
 *__pycache__*
+
+# Saves
+helpers/quicksave.json
+helpers/save.json
