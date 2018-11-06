@@ -24,10 +24,10 @@ class Eunomia:
         self.dMin = 20.0
         self.lDelta = 4.5
 
-        print("Corner ", self.endless.corner)
-        print("OurConer ", self.endless.ourCorner)
-        print("Golie ", self.endless.goalieLine)
-        print("area ", self.endless.areaLine0)
+        # print("Corner ", self.endless.corner)
+        # print("OurConer ", self.endless.ourCorner)
+        # print("Golie ", self.endless.goalieLine)
+        # print("area ", self.endless.areaLine)
 
     def run(self, warrior):
         """Main method of action controller
