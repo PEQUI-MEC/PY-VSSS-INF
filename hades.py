@@ -286,6 +286,7 @@ class Hades(QThread):
 
     def loadFormations(self):
         self.formations = self.plutus.get("formations")
+        return self.formations
 
     def loadFormation(self, formationIndex):
         if self.play:
