@@ -144,6 +144,7 @@ class Athena:
             self.warriors[i].velEstimated = \
                 distance.euclidean(self.warriors[i].position, self.warriors[i].lastPosition) / self.deltaTime
             self.warriors[i].velEstimated /= self.endless.pixelMeterRatio
+            print(self.warriors[i].defaultVel)
 
         self.theirWarriorsLastPos = []
         for i in range(0, len(self.theirWarriors)):
@@ -665,6 +666,7 @@ class Athena:
                 warrior.command["type"] = "goTo"
                 warrior.command["targetOrientation"] = self.endless.pastGoal
                 warrior.command["avoidObstacles"] = "por favor"
+                warrior.command["targetVelocity"] = warrior.defaultVel
 
                 if distance.euclidean(warrior.position, self.ball["position"]) < self.endless.robotSize:
                     warrior.command["target"] = self.endless.goal
@@ -687,6 +689,7 @@ class Athena:
                 warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
 
             elif warrior.tactics == Athena.tBlock:
+                warrior.command["targetVelocity"] = warrior.defaultVel
                 # !TODO pegar Y composto com a velocidade da bola
                 targetX = self.endless.goalieLine + self.midOffset
 
@@ -703,7 +706,6 @@ class Athena:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
                     warrior.command["avoidObstacles"] = "se não for pedir demais..."
-                    warrior.command["targetVelocity"] = warrior.defaultVel  # TODO controle de velocidade
 
                     # se posiciona com uvf para maior precisão
                     if warrior.position[1] > self.endless.midField[1]:
@@ -716,9 +718,9 @@ class Athena:
                     warrior.positionLocked = True
                     warrior.command["type"] = "lookAt"
                     warrior.command["targetOrientation"] = (self.endless.goalieLine, 0)
-                    warrior.command["targetVelocity"] = warrior.defaultVel
 
             elif warrior.tactics == Athena.tBlockOpening:
+                warrior.command["targetVelocity"] = warrior.defaultVel
                 targetX = self.endless.areaLine + self.midOffset
                 targetY = ballY
 
@@ -752,8 +754,6 @@ class Athena:
                     warrior.command["type"] = "lookAt"
                     warrior.command["targetOrientation"] = self.ball["position"]
 
-                warrior.command["targetVelocity"] = warrior.defaultVel
-
             elif warrior.tactics == Athena.tWaitPass:
                 # TODO verificar se é bom dividir o mid e atk verticalmente no campo
                 # dessa forma faz com que o mid sempre acompanhe do meio do campo em Y
@@ -767,6 +767,7 @@ class Athena:
                 if distance.euclidean(warrior.position, target) > self.endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
+                    warrior.command["targetVelocity"] = warrior.defaultVel
                     warrior.command["avoidObstacles"] = "mas é claro, chefia"
                     if target == self.ball["position"]:
                         warrior.command["targetOrientation"] = (self.ball["position"][0] + 10,
@@ -807,6 +808,7 @@ class Athena:
 
             elif warrior.tactics == Athena.tUnlock:
                 warrior.command["type"] = "goTo"
+                warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["target"] = (warrior.position[0] + self.unlockDirection * 100 *
                                              math.cos(warrior.orientation),
                                              warrior.position[1] + self.unlockDirection * 100 *

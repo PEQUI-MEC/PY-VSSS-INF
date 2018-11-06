@@ -1,6 +1,6 @@
 import sys
 from xbee import XBee
-from serial import Serial, SerialException, SerialTimeoutException
+from serial import Serial, SerialException, SerialTimeoutException, serialutil
 
 
 class Hermes:
@@ -98,6 +98,9 @@ class Hermes:
                 self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
             except SerialTimeoutException:
                 print("Message sending timed out")
+            except SerialException:
+                print("Could not send message")
+
             if robotId in self.robots:
                 messageInfo.append((robotId, message))
             else:
