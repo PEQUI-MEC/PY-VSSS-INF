@@ -1,7 +1,6 @@
 from control.eunomia import Eunomia
 from control.dice import Dice
 from control.warrior import Warrior
-from helpers.endless import Endless
 
 
 class Zeus:
@@ -19,7 +18,6 @@ class Zeus:
         self.warriors = []
         self.nWarriors = 0
         self.robotsSpeed = [0, 0, 0]
-        self.endless = None
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
@@ -57,9 +55,7 @@ class Zeus:
         Returns:
 
         """
-
-        self.endless = Endless(width, height)
-        self.actions.setup(self.endless)
+        self.actions.setup()
         self.nWarriors = nWarriors
 
         for i in range(0, nWarriors):
