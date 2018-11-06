@@ -514,18 +514,21 @@ class Afrodite(QMainWindow):
 
         if enable:
 
-            self.hades.eventWarp(self.warpMatriz)
-            self.hades.eventWarpGoalMatriz(self.warpGoalMatrix)
-            self.setOffset(self.tempOffset)
+            #self.hades.eventWarp(self.warpMatriz)
+            #self.hades.eventWarpGoalMatriz(self.warpGoalMatrix)
+            #self.setOffset(self.tempOffset)
+
+            for i in range(0, 4, 1):
+                self.hades.eventCalibration(i, self.getHSVValues(i))
+
+            self.hades.eventCalibration(-1)
 
             self.labelCameraState.setText("<font color='green'>Online</font>")
             if "Online" in self.labelCommunicationState.text():
                 self.pushButtonPlayStart.setEnabled(True)
                 self.groupBoxStrategyFormation.setEnabled(True)
 
-                
 
-                
         else:
             self.labelCameraState.setText("Error")
 
