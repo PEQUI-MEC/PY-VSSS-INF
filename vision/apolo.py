@@ -10,7 +10,6 @@ MAIN = 0
 GREEN = 1
 BALL = 2
 ADV = 3
-ROBOT_RADIUS = 230 # Lembrar de alterar esse valor
 
 
 class Apolo:
@@ -26,6 +25,7 @@ class Apolo:
 
         self.threshList = [None] * 4
         self.thresholdedImages = [None] * 4
+        self.robotRadius = 0
 
         self.robotPositions = [(0, 0, 0, True), (0, 0, 0, True), (0, 0, 0, True)]
         self.ballPosition = [0, 0]
@@ -53,6 +53,9 @@ class Apolo:
 
         print("Apolo summoned")
 
+    def setRobotRadius(self, radius):
+        self.robotRadius = radius
+
     def setWarpOffset(self, offLeft, offRight):
         newShape = np.float32([(self.shape[0][0] - offLeft, self.shape[0][1]),
                                (self.shape[1][0] + offRight, self.shape[1][1]),
@@ -66,29 +69,53 @@ class Apolo:
         self.setWarpPoints((0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT))
         self.warpMatrizGoal = [(0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT)]
 
-    def setWarpPoints(self, pt1, pt2, pt3, pt4):
-        self.shape = np.float32([pt1,pt2,pt4,pt3])
-        plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
-        self.perspective = cv2.getPerspectiveTransform(self.shape,plot)
+    @staticmethod
+    def ordenaWarp(points):
+        largura = WIDTH/2
+        altura = HEIGHT/2
 
+        for i in range(0, 4, 1):
+            if points[i][0] - largura < 0:
+                if points[i][1] - altura < 0:
+                    # Quadrante 1
+                    pt1 = points[i]
+                else:
+                    # Quadrante 4
+                    pt4 = points[i]
+            else:
+                if points[i][1] - altura < 0:
+                    # Quadrante 2
+                    pt2 = points[i]
+                else:
+                    # Quadrante 3
+                    pt3 = points[i]
+
+        return pt1, pt2, pt3, pt4
+
+    def setWarpPoints(self,pt1, pt2, pt3, pt4):
+        try:
+            pt1, pt2, pt3, pt4 = self.ordenaWarp([pt1, pt2, pt3, pt4])
+
+            self.shape = np.float32([pt1,pt2,pt4,pt3])
+            plot = np.float32([[0,0],[WIDTH,0],[0,HEIGHT],[WIDTH,HEIGHT]])
+            self.perspective = cv2.getPerspectiveTransform(self.shape,plot)
+        except:
+            pass
+            
     def setWarpGoalMatriz(self, warpMatrix):
         self.warpMatrizGoal = warpMatrix
 
     def warpGoalFrame(self, frame):
-        pt1, pt2, pt3, pt4 = self.warpMatrizGoal[0], self.warpMatrizGoal[1], self.warpMatrizGoal[2], self.warpMatrizGoal[3]
-        cv2.rectangle(frame, (0,0), (pt1[0],pt1[1]), (0, 0, 0), -1)
-        cv2.rectangle(frame, (pt2[0], 0), (WIDTH, pt2[1]), (0, 0, 0), -1)
-        cv2.rectangle(frame, (pt3[0], pt3[1]), (WIDTH, HEIGHT), (0, 0, 0), -1)
-        cv2.rectangle(frame, (0, pt4[1]), (pt4[0], HEIGHT), (0, 0, 0), -1)
+        try:
+            pt1, pt2, pt3, pt4 = self.ordenaWarp(self.warpMatrizGoal)
+            cv2.rectangle(frame, (0,0), (pt1[0],pt1[1]), (0, 0, 0), -1)
+            cv2.rectangle(frame, (pt2[0], 0), (WIDTH, pt2[1]), (0, 0, 0), -1)
+            cv2.rectangle(frame, (pt3[0], pt3[1]), (WIDTH, HEIGHT), (0, 0, 0), -1)
+            cv2.rectangle(frame, (0, pt4[1]), (pt4[0], HEIGHT), (0, 0, 0), -1)
 
-        return frame
-
-    def preProcess(self,frame):
-        # make blur
-        # make erode
-        # make dilate
-        return frame
-
+            return frame
+        except:
+            pass
 
     def changeCamera(self, cameraId):
         self.camera.release()
@@ -270,10 +297,9 @@ class Apolo:
 
         return advRobotsPositionList
 
-    @staticmethod
-    def inSphere(robotPosition, secondaryTagPosition):
+    def inSphere(self, robotPosition, secondaryTagPosition):
         if abs(robotPosition[0] - secondaryTagPosition[0]) + abs(
-                robotPosition[1] - secondaryTagPosition[1]) <= ROBOT_RADIUS:
+                robotPosition[1] - secondaryTagPosition[1]) <= self.robotRadius:
             return True
         else:
             return False
@@ -316,6 +342,24 @@ class Apolo:
         #print(linkedSecondaryTags)
 
         return linkedSecondaryTags
+
+    def preProcess(self, frame, id):
+        # Blur
+        if self.threshList[id][4] > 0:
+            frame = cv2.blur(frame, (self.threshList[id][4], self.threshList[id][4]))
+
+        # Erode
+        if self.threshList[id][3] > 0:
+            kernel = np.ones((self.threshList[id][3], self.threshList[id][3]), np.uint8)
+            frame = cv2.erode(frame, kernel, iterations=1)
+
+        # Dilate
+        if self.threshList[id][5] > 0:
+            kernel = np.ones((self.threshList[id][5], self.threshList[id][5]), np.uint8)
+            frame = cv2.dilate(frame, kernel, iterations=1)
+
+        return frame
+
 
     @staticmethod
     def findRobotOrientation(robotPos, secondaryTagPosition):
@@ -510,7 +554,7 @@ class Apolo:
 
         # Aplica todos os thresholds (pode adicionar threads)
         for i in range(0, 4, 1):
-            self.thresholdedImages[i] = self.applyThreshold(frameHSV, i)
+            self.thresholdedImages[i] = self.applyThreshold(self.preProcess(frameHSV, i), i)
 
         # Procura os robos
         tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN])
