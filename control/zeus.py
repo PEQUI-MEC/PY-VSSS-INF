@@ -227,7 +227,6 @@ class Zeus:
             if len(warrior.action) > 0:
                 velocities.append(self.translate.run(self.actions.run(warrior)))
 
-        print(type(velocities))
         return velocities
 
     def generateOutput(self, velocities, strategia):
