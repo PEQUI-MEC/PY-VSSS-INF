@@ -10,7 +10,7 @@ class Zeus:
     Attributes:
         warriors: Warrior() list with the information of the robots.
         nWarriors: Robots in play.
-        robotsSpeeds: interface speed list.
+        robotsSpeed: interface speed list.
         actions: Instance of class Eunomia() that calculates what is needed to find de robots velocities.
         translate: Instance of class Dice() that calculates the robots velocities.
     """
@@ -52,6 +52,7 @@ class Zeus:
         Args:
             nWarriors: Num of warriors in game
             width:
+            height:
 
         Returns:
 
@@ -138,7 +139,6 @@ class Zeus:
 
         """
 
-        # TODO(Luana) Testar paralelização com um(1) processo para cada robô.
         warriors = []
         if type(strategia) is not list or \
                 len(strategia) != self.nWarriors:
@@ -232,15 +232,10 @@ class Zeus:
 
         """
 
-        # TODO(Luana) Testar paralelização com um(1) processo para cada robô.
         velocities = []
         for warrior in self.warriors:
             if len(warrior.action) > 0:
                 velocities.append(self.translate.run(self.actions.run(warrior)))
-
-        # with Pool(processes=3) as pool:
-        #    warriors = pool.map(self.actions.run, self.warriors)
-        #    velocities = pool.map(self.translate.run, warriors)
 
         return velocities
 

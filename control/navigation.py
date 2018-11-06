@@ -24,16 +24,13 @@ class HyperbolicSpiral:
         else:
             radius = r
 
-        # theta = angle(p, self.origin) - (self.orientation - angle(p, self.origin))
-        theta = atan2(position[1], position[0])
-        # print(": Theta: " + str(theta))
-
         ro = np.linalg.norm(position - self.target)
         if ro > radius:
             spiral = (pi / 2.0) * (2.0 - (radius + self.kr) / (ro + self.kr))
         else:
             spiral = (pi / 2.0) * sqrt(ro / radius)
 
+        theta = atan2(position[1], position[0])
         if clockwise:
             spiral = geometry.wrap2pi(theta + spiral)
             return atan2(sin(spiral), cos(spiral))
@@ -93,7 +90,7 @@ class Move2Goal:
         self.orientation = np.array(orientation)
 
     def buildAxis(self, orientation, target):
-        #
+
         # print(orientation, target)
         if type(orientation) != int and self.rotation is True:
             # print("Orientation ", self.orientation, " Origin ", self.target)
@@ -104,13 +101,11 @@ class Move2Goal:
             else:
                 self.x = [-1.0, 0.0]
 
-        # print(self.x)
         self.x /= -np.linalg.norm(self.x)
 
         theta = atan2(self.x[1], self.x[0])
         self.y = [sin(theta), cos(theta)]
 
-        # print("X: ", self.x, " theta: ", theta, " y: ", self.y)
         self.toGame = np.array([self.x, self.y]).T
         self.toUnivector = np.linalg.inv(self.toGame)
 
@@ -125,10 +120,10 @@ class Move2Goal:
         pr = np.array([x, yl])
 
         if -self.radius <= y < self.radius:
-            nhCounterClockwise = self.hyperSpiral.hyperbolic(pl, clockwise=False)
+            nhCounterClockwise = self.hyperSpiral.hyperbolic(pl, clockwise=True)
             nhCounterClockwise = np.array([cos(nhCounterClockwise), sin(nhCounterClockwise)])
 
-            nhClockwise = self.hyperSpiral.hyperbolic(pr, clockwise=True)
+            nhClockwise = self.hyperSpiral.hyperbolic(pr, clockwise=False)
             nhClockwise = np.array([cos(nhClockwise), sin(nhClockwise)])
 
             movement = (abs(yl) * nhCounterClockwise + abs(yr) * nhClockwise) / (2.0 * self.radius)
@@ -136,9 +131,9 @@ class Move2Goal:
 
         else:
             if y < -self.radius:
-                theta = self.hyperSpiral.hyperbolic(pl, clockwise=True)
+                theta = self.hyperSpiral.hyperbolic(pl, clockwise=False)
             else:
-                theta = self.hyperSpiral.hyperbolic(pr, clockwise=False)
+                theta = self.hyperSpiral.hyperbolic(pr, clockwise=True)
 
             # No artigo aqui ele só usa o theta
             movement = np.array([cos(theta), sin(theta)])
