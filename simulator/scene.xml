@@ -45,6 +45,7 @@
     <material name="tag05" rgba="1 1 1 1" texture="Tag5" shininess="0"/>
     <material name="tag06" rgba="1 1 1 1" texture="Tag6" shininess="0"/>
     <material name="ball_surf" rgba="1 0.5 0 1" emission="0.3" shininess="0.8"/>
+    <material name="virtual_ball_surf" rgba="1 0.5 0 0.4" emission="0.3" shininess="0.8"/>
   </asset>
 
   <!--PISTA-->
@@ -104,15 +105,15 @@
   <worldbody>
     <body name="target_1" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.02 0.003 0.003" rgba="0 0 1 1" type="box"/>
-      <geom conaffinity="0" contype="0" pos="0.02 0 0" size="0.01" rgba="0 0 1 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="-0.02 0 0" size="0.01" rgba="0 0 1 1" type="sphere"/>
     </body>
     <body name="target_2" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.02 0.003 0.003" rgba="1 1 0 1" type="box"/>
-      <geom conaffinity="0" contype="0" pos="0.02 0 0" size="0.01" rgba="1 1 0 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="-0.02 0 0" size="0.01" rgba="1 1 0 1" type="sphere"/>
     </body>
     <body name="target_3" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.02 0.003 0.003" rgba="1 0 0 1" type="box"/>
-      <geom conaffinity="0" contype="0" pos="0.02 0 0" size="0.01" rgba="1 0 0 1" type="sphere"/>
+      <geom conaffinity="0" contype="0" pos="-0.02 0 0" size="0.01" rgba="1 0 0 1" type="sphere"/>
     </body>
 
     <body name="indicator_1" mocap="true" pos="0 0 -0.1">
@@ -141,8 +142,12 @@
     </body>
   </worldbody>
 
-  <!-- ROBÔS VIRTUAIS -->
+  <!-- POSIÇÕES VIRTUAIS -->
   <worldbody>
+    <body name="virtual_ball" mocap="true" pos="0 0 -0.1">
+      <geom conaffinity="0" contype="0" size="0.02135" material="virtual_ball_surf" type="sphere"/>
+    </body>
+
     <body name="virtual_robot_1" mocap="true" pos="0 0 -0.1">
       <geom conaffinity="0" contype="0" size="0.04 0.04 0.04" rgba="1 1 0 0.3" type="box"/>
     </body>
