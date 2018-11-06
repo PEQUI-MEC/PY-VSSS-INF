@@ -50,7 +50,7 @@ class Hades(QThread):
 
         # set up athena
         # TODO passar as dimensões corretamente
-        self.athena.setup(3, 640, 480, 1.0)
+        self.athena.setup(3, 640, 480, 0.8)
 
         # set up zeus
         # TODO passar as dimensões corretamente
