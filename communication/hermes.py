@@ -63,7 +63,7 @@ class Hermes:
 
         messages = []
         for i in range(len(velocities)):
-            message = str(velocities[i]["vRight"]) + ";" + str(velocities[i]["vLeft"])
+            message = "{:.2f}".format(velocities[i]["vRight"]) + ";" + "{:.2f}".format(velocities[i]["vLeft"])
 
             if self.xbee is not None:
                 try:

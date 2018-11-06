@@ -130,7 +130,7 @@ class Hades(QThread):
         if velocities is None:
             return None
 
-        self.hermesMessages = self.hermes.fly(velocities)
+        hermesMessages = self.hermes.fly(velocities)
         self.sigMessages.emit(hermesMessages)
 
     # HELPERS
