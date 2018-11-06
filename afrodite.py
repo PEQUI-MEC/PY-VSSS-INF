@@ -8,6 +8,7 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
+from scipy.spatial import distance
 import numpy as np
 import serial
 import glob
@@ -159,8 +160,9 @@ class Afrodite(QMainWindow):
         self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
         self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
 
-        # pid test
+        # PID TEST
         self.pushButtonComunicationRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
+        self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
 
         # COMMUNICATION
 
@@ -654,10 +656,10 @@ class Afrodite(QMainWindow):
         )
 
     def getPosWarp(self, event):
-        if not self.pushButtonCaptureWarpWarp.isEnabled():
-            px = event.pos().x()
-            py = event.pos().y()
+        px = event.pos().x()
+        py = event.pos().y()
 
+        if not self.pushButtonCaptureWarpWarp.isEnabled():
             if self.warpCount < 4:
                 print(self.warpCount)
                 self.callHadesWarpEvent(px,py)
@@ -668,6 +670,12 @@ class Afrodite(QMainWindow):
                 if self.warpCount < 8:
                     print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
+        elif self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
+            if event.buttons() == QtCore.Qt.LeftButton:
+                self.selectRobotPID(px, py)
+
+            elif event.buttons() == QtCore.Qt.RightButton:
+                self.selectPointPID(px,py)
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
@@ -1038,6 +1046,24 @@ class Afrodite(QMainWindow):
             self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
             self.hades.disablePIDTest()
 
+            
+
+    def selectRobotPID(self, pointX, pointY):
+        nearless = -1
+        distanceMin = 800 #TAMANHO MAXIMO DA TELA
+        for i in range(0, 3): #QUANTIDADE DE ROBOS
+            objectToDraw = self.objectsToDraw["robot" + str(i + 1)]
+            euclideanDistance = distance.euclidean((pointX, pointY), objectToDraw["position"])
+            if (euclideanDistance < distanceMin):
+                distanceMin = euclideanDistance
+                nearless = i
+        
+        self.hades.setRobotPID(nearless)
+
+    def selectPointPID(self, pointX, pointY):
+        self.hades.setPointPID((pointX, pointY))
+        
+        
     def sendWheelVelocities(self):
         # TODO robotId = getControlSerialRobots()
         robotId = None

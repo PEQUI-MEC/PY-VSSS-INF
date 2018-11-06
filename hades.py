@@ -298,11 +298,18 @@ class Hades(QThread):
     def eventUpdateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
         self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
 
+    # PID TEST
     def enablePIDTest(self):
         print("PID test enabled")
 
     def disablePIDTest(self):
         print("PID test disabled")
+
+    def setRobotPID(self, robotID):
+        print("Robot", robotID)
+
+    def setPointPID(self, point):
+        print("PID Point", point)
 
     # Communication
     def eventStartXbee(self, port):
