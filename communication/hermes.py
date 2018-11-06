@@ -10,8 +10,8 @@ class Hermes:
         self.serial = None
         self.robots = {
             "A": "\x56\x0D",
-            "B": "\x6B\x0D",
-            "C": "\x21\x5C"
+            "B": "\x5B\x0D",
+            "C": "\x45\x0D"
         }
         print("Hermes summoned")
 

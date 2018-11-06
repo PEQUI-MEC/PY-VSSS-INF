@@ -1,7 +1,7 @@
 from control.eunomia import Eunomia
 from control.dice import Dice
 from control.warrior import Warrior
-from multiprocessing import Pool
+from helpers.endless import Endless
 
 
 class Zeus:
@@ -10,7 +10,7 @@ class Zeus:
     Attributes:
         warriors: Warrior() list with the information of the robots.
         nWarriors: Robots in play.
-        robotsSpeeds: interface speed list.
+        robotsSpeed: interface speed list.
         actions: Instance of class Eunomia() that calculates what is needed to find de robots velocities.
         translate: Instance of class Dice() that calculates the robots velocities.
     """
@@ -19,6 +19,7 @@ class Zeus:
         self.warriors = []
         self.nWarriors = 0
         self.robotsSpeed = [0, 0, 0]
+        self.endless = None
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
@@ -42,7 +43,7 @@ class Zeus:
         for robot in self.robotsSpeed:
             print(robot)
 
-    def setup(self, nWarriors, width=100):
+    def setup(self, nWarriors, width, height):
         """Zeus first movements
 
         This method must be called before using Zeus properly.
@@ -51,12 +52,14 @@ class Zeus:
         Args:
             nWarriors: Num of warriors in game
             width:
+            height:
 
         Returns:
 
         """
 
-        self.actions.setup(width)
+        self.endless = Endless(width, height)
+        self.actions.setup()
         self.nWarriors = nWarriors
 
         for i in range(0, nWarriors):
@@ -64,6 +67,9 @@ class Zeus:
 
         print("Zeus is set up")
         return self
+
+    def reset(self):
+        self.translate.reset()
 
     def getVelocities(self, strategia):
         """Zeus main method
@@ -133,7 +139,6 @@ class Zeus:
 
         """
 
-        # TODO(Luana) Testar paralelização com um(1) processo para cada robô.
         warriors = []
         if type(strategia) is not list or \
                 len(strategia) != self.nWarriors:
@@ -160,7 +165,6 @@ class Zeus:
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
-                warriors[x].spiral = info["spiral"]
                 warriors[x].position = info["pose"]["position"]
                 warriors[x].orientation = info["pose"]["orientation"]
 
@@ -228,15 +232,10 @@ class Zeus:
 
         """
 
-        # TODO(Luana) Testar paralelização com um(1) processo para cada robô.
         velocities = []
         for warrior in self.warriors:
             if len(warrior.action) > 0:
                 velocities.append(self.translate.run(self.actions.run(warrior)))
-
-        # with Pool(processes=3) as pool:
-        #    warriors = pool.map(self.actions.run, self.warriors)
-        #    velocities = pool.map(self.translate.run, warriors)
 
         return velocities
 
