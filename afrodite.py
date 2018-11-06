@@ -15,6 +15,10 @@ import interface.icons_rc
 import serial.tools.list_ports as list_ports
 import hades
 
+# Constantes
+WIDTH = 640
+HEIGHT = 480
+
 
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
@@ -28,6 +32,7 @@ class Afrodite(QMainWindow):
         self.hades.sigDraw.connect(self.updateObjectsToDraw)
         self.hades.sigDisplay.connect(self.updateFrameVideoView)
         self.hades.sigPositions.connect(self.updateLabelPlayPositions)
+        self.hades.sigMessages.connect(self.updateMessages)
         self.hades.start()
 
         dirname = os.path.dirname(__file__)
@@ -57,14 +62,15 @@ class Afrodite(QMainWindow):
         # Warp
         self.warpCount = 0
         self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
-        self.warpGoalMatrix = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        self.warpGoalMatrix = [[0,0],[WIDTH,0],[WIDTH,HEIGHT],[0,HEIGHT]]
+        self.tempOffset = [0,0]
         self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
 
         self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
         self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
         self.spinBoxCaptureWarpOffsetRight.valueChanged.connect(self.warpOffsetChanged)
 
-        #RobotRadius
+        # RobotRadius
         self.horizontalSliderRobotRadius.valueChanged.connect(self.robotRadiusChanged)
         self.spinBoxRobotRadius.valueChanged.connect(self.robotRadiusChanged)
         self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
@@ -141,7 +147,7 @@ class Afrodite(QMainWindow):
 
         '''
         # formation load
-        self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormationLoad)
+        self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormation)
         self.pushButtonStrategyFormationDelete.clicked.connect(self.getPushButtonStrategyFormationDelete)
         self.pushButtonStrategyFormationCreate.clicked.connect(self.getPushButtonStrategyFormationCreate)
         self.pushButtonStrategyFormationSave.clicked.connect(self.getPushButtonStrategyFormationSave)
@@ -163,8 +169,8 @@ class Afrodite(QMainWindow):
         self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
         self.updateComboBoxControlSerialDevice()
         self.getComboBoxControlSerialDevice()
-        '''     
-        self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
+        self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.clickedSetSkippedFrames)
+        '''
         # RobotStatus
         self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
         '''
@@ -254,6 +260,15 @@ class Afrodite(QMainWindow):
         self.displayImageVideoView(1)
 
         return None
+
+    def updateMessages(self, messages):
+        for message in messages:
+            if message[0] == 0:
+                self.labelPlayLastMessageRobot1.setText(message[1])
+            elif message[0]== 1:
+                self.labelPlayLastMessageRobot2.setText(message[1])
+            elif message[0] == 2:
+                self.labelPlayLastMessageRobot3.setText(message[1])
 
     def displayImageVideoView(self, window=1):
         qformat = QImage.Format_Indexed8
@@ -387,6 +402,10 @@ class Afrodite(QMainWindow):
 
         self.setHSVValues(3, tempHSVCalib)
 
+        self.warpMatriz = self.hades.eventLoadConfigs("warpMatriz")
+        self.warpGoalMatrix = self.hades.eventLoadConfigs("warpGoalMatrix")
+        self.tempOffset = [(self.hades.eventLoadConfigs("offsetLeft")), (self.hades.eventLoadConfigs("offsetRight"))]
+
     def actionSaveConfigsTriggered(self):
         self.saveConfigs()
 
@@ -455,7 +474,12 @@ class Afrodite(QMainWindow):
             "oppDilate": self.horizontalSliderVisionHSVCalibrationOpponentDilate.value(),
             "oppHmax": self.horizontalSliderVisionHSVCalibrationOpponentHmax.value(),
             "oppSmax": self.horizontalSliderVisionHSVCalibrationOpponentSmax.value(),
-            "oppVmax": self.horizontalSliderVisionHSVCalibrationOpponentVmax.value()
+            "oppVmax": self.horizontalSliderVisionHSVCalibrationOpponentVmax.value(),
+
+            "warpMatriz": self.warpMatriz,
+            "warpGoalMatrix": self.warpGoalMatrix,
+            "offsetLeft": self.horizontalSliderCaptureWarpOffsetLeft.value(),
+            "offsetRight": self.horizontalSliderCaptureWarpOffsetRight.value()
         }
 
         self.hades.eventSaveConfigs(value)
@@ -489,26 +513,36 @@ class Afrodite(QMainWindow):
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
 
         if enable:
+
+            self.hades.eventWarp(self.warpMatriz)
+            self.hades.eventWarpGoalMatriz(self.warpGoalMatrix)
+            self.setOffset(self.tempOffset)
+
             self.labelCameraState.setText("<font color='green'>Online</font>")
             if "Online" in self.labelCommunicationState.text():
                 self.pushButtonPlayStart.setEnabled(True)
                 self.groupBoxStrategyFormation.setEnabled(True)
+
+                
+
+                
         else:
             self.labelCameraState.setText("Error")
 
     def updateComboBoxCaptureDeviceInformation(self):
         # if sys.platform.startswith('win'):
         cams = []
-        try:
-            for i in range(0, 2):
+        
+        for i in range(0, 2):
+            try:
                 cam = cv2.VideoCapture(i)
                 if cam.isOpened():
                     cams.append(str(i))  # 'CAM' + str(i)
                     cam.release()
                 else:
                     break
-        except:
-            pass
+            except:
+                pass
 
         ports = cams
         # cams.clear()
@@ -600,6 +634,10 @@ class Afrodite(QMainWindow):
 
         self.warpCount = 0
         self.pushButtonCaptureWarpAdjust.setEnabled(False)
+
+        self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        self.warpGoalMatrix = [[0,0],[WIDTH,0],[WIDTH,HEIGHT],[0,HEIGHT]]
+
         self.hades.eventWarpReset()
 
     def getPushButtonCaptureWarpAdjust(self):
@@ -608,6 +646,8 @@ class Afrodite(QMainWindow):
         self.warpCount = 4
 
     def warpOffsetChanged(self):
+        self.tempOffset = [self.spinBoxCaptureWarpOffsetLeft.value(), self.spinBoxCaptureWarpOffsetRight.value()]
+
         self.hades.eventWarpOffsetChanged(
             self.spinBoxCaptureWarpOffsetLeft.value(),
             self.spinBoxCaptureWarpOffsetRight.value(),
@@ -621,10 +661,17 @@ class Afrodite(QMainWindow):
             if self.warpCount < 4:
                 print(self.warpCount)
                 self.callHadesWarpEvent(px,py)
+                if self.warpCount == 4:
+                    self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
+                    self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
             elif not self.pushButtonCaptureWarpAdjust.isEnabled():
                 if self.warpCount < 8:
                     print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
+
+    def setOffset(self, Offset):
+        self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
+        self.horizontalSliderCaptureWarpOffsetRight.setValue(Offset[1])
 
     '''
     def getPosAdjust(self, event):
@@ -765,12 +812,12 @@ class Afrodite(QMainWindow):
         else:
             return "Split"
 
-    #RobotRadius
+    # RobotRadius
     def robotRadiusChanged(self):
         self.hades.setRobotRadiusEvent(self.spinBoxRobotRadius.value())
 
 
-    #GetHSVValues
+    # GetHSVValues
     def getHSVValues(self, colorId):
         if colorId == 0:
             Hmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
@@ -808,7 +855,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
 
-        elif colorId == 3:  # current = 3
+        else:  # current = 3
             Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
@@ -820,7 +867,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
+        return (Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin
 
     def setHSVValues(self, colorId, hsvCalib):
         if colorId == 0:
@@ -1003,6 +1050,11 @@ class Afrodite(QMainWindow):
         self.hades.eventSendMessage(message)
 
     # Serial
+    def clickedSetSkippedFrames(self):
+        skippedFrames = self.lineEditControlSerialSetSkippedFrames.text()
+        if skippedFrames:
+            self.hades.eventSetSkippedFrames(skippedFrames)
+
     def getPushButtonControlSerialDeviceStart(self):
         device = self.getComboBoxControlSerialDevice()
         enable = self.hades.eventStartXbee(device)
@@ -1057,15 +1109,6 @@ class Afrodite(QMainWindow):
             self.hades.eventSendMessage(robotId, message)
 
     '''
-    def getControlSerialSetSkippedFrames(self):
-        pass
-
-    def getPushButtonControlSerialSetSkippedFrames(self):
-        pass
-
-    def setLabelControlSerialDelay(self, delay):
-        pass
-
     # Robot
     def getPushButtonControlRobotStatusRobotUpdate(self):
         self.setLabelControlRobotStatusLastUpdate()
