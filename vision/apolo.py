@@ -164,7 +164,7 @@ class Apolo:
             if self.invertImage:
                 cv2.flip(frame, -1, frame)
 
-            if self.videoOutput is not None and self.recordFlag and self.recordState:
+            if frame is not None and self.videoOutput is not None and self.recordFlag and self.recordState:
                 self.videoOutput.write(frame)
         return frame
 
