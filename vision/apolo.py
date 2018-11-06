@@ -343,7 +343,7 @@ class Apolo:
 
         return linkedSecondaryTags
 
-    def preProcess(self, frame, id):
+    def posProcess(self, frame, id):
         # Blur
         if self.threshList[id][4] > 0:
             frame = cv2.GaussianBlur(frame, (self.threshList[id][4], self.threshList[id][4]), 0)
@@ -554,7 +554,7 @@ class Apolo:
 
         # Aplica todos os thresholds (pode adicionar threads)
         for i in range(0, 4, 1):
-            self.thresholdedImages[i] = self.preProcess(self.applyThreshold(frameHSV, i), i)
+            self.thresholdedImages[i] = self.posProcess(self.applyThreshold(frameHSV, i), i)
 
         # Procura os robos
         tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN])
