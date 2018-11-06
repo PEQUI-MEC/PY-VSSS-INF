@@ -33,6 +33,9 @@ class Hades(QThread):
         self.height = 480  # TODO pegar isso da afrodite e passar pro apolo
         self.width = 640
 
+        self.skippedFrames = 0
+        self.framesToSkip = 5  # valor padrão
+
         self.cascadeTime = 0
         self.cascadeLoops = 0
         self.cascadeLastTime = 0
@@ -47,11 +50,11 @@ class Hades(QThread):
 
         # set up athena
         # TODO passar as dimensões corretamente
-        self.athena.setup(3, 300, 300, 1.0)
+        self.athena.setup(3, 640, 480, 1.0)
 
         # set up zeus
         # TODO passar as dimensões corretamente
-        self.zeus.setup(3, 300, 300)
+        self.zeus.setup(3, 640, 480)
 
         # setting up hermes
         # self.hermes = Hermes(self.srcXbee)
@@ -127,11 +130,17 @@ class Hades(QThread):
         return velocities
 
     def hermesRules(self, velocities):
+        if self.skippedFrames < self.framesToSkip:
+            self.skippedFrames += 1
+            return None
+
         if velocities is None:
             return None
 
         hermesMessages = self.hermes.fly(velocities)
         self.sigMessages.emit(hermesMessages)
+
+        self.skippedFrames = 0
 
     # HELPERS
     def getFPS(self):
@@ -303,3 +312,6 @@ class Hades(QThread):
         message = self.hermes.sendMessage(robotId, message)
         message[0] = (list(self.changeRobotLetters(None)).index(robotId), message[0][1])
         self.sigMessages.emit(message)
+
+    def eventSetSkippedFrames(self, framesToSkip):
+        self.framesToSkip = framesToSkip
