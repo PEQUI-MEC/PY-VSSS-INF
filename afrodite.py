@@ -15,6 +15,10 @@ import interface.icons_rc
 import serial.tools.list_ports as list_ports
 import hades
 
+# Constantes
+WIDTH = 640
+HEIGHT = 480
+
 
 class Afrodite(QMainWindow):
     """ Interface do programa. Instancia Hades e chama seus métodos ao receber disparos de eventos. """
@@ -58,7 +62,8 @@ class Afrodite(QMainWindow):
         # Warp
         self.warpCount = 0
         self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
-        self.warpGoalMatrix = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        self.warpGoalMatrix = [[0,0],[WIDTH,0],[WIDTH,HEIGHT],[0,HEIGHT]]
+        self.tempOffset = [0,0]
         self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
 
         self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
@@ -142,7 +147,7 @@ class Afrodite(QMainWindow):
 
         '''
         # formation load
-        self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormationLoad)
+        self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormation)
         self.pushButtonStrategyFormationDelete.clicked.connect(self.getPushButtonStrategyFormationDelete)
         self.pushButtonStrategyFormationCreate.clicked.connect(self.getPushButtonStrategyFormationCreate)
         self.pushButtonStrategyFormationSave.clicked.connect(self.getPushButtonStrategyFormationSave)
@@ -397,6 +402,10 @@ class Afrodite(QMainWindow):
 
         self.setHSVValues(3, tempHSVCalib)
 
+        self.warpMatriz = self.hades.eventLoadConfigs("warpMatriz")
+        self.warpGoalMatrix = self.hades.eventLoadConfigs("warpGoalMatrix")
+        self.tempOffset = [(self.hades.eventLoadConfigs("offsetLeft")), (self.hades.eventLoadConfigs("offsetRight"))]
+
     def actionSaveConfigsTriggered(self):
         self.saveConfigs()
 
@@ -465,7 +474,12 @@ class Afrodite(QMainWindow):
             "oppDilate": self.horizontalSliderVisionHSVCalibrationOpponentDilate.value(),
             "oppHmax": self.horizontalSliderVisionHSVCalibrationOpponentHmax.value(),
             "oppSmax": self.horizontalSliderVisionHSVCalibrationOpponentSmax.value(),
-            "oppVmax": self.horizontalSliderVisionHSVCalibrationOpponentVmax.value()
+            "oppVmax": self.horizontalSliderVisionHSVCalibrationOpponentVmax.value(),
+
+            "warpMatriz": self.warpMatriz,
+            "warpGoalMatrix": self.warpGoalMatrix,
+            "offsetLeft": self.horizontalSliderCaptureWarpOffsetLeft.value(),
+            "offsetRight": self.horizontalSliderCaptureWarpOffsetRight.value()
         }
 
         self.hades.eventSaveConfigs(value)
@@ -499,10 +513,19 @@ class Afrodite(QMainWindow):
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
 
         if enable:
+
+            self.hades.eventWarp(self.warpMatriz)
+            self.hades.eventWarpGoalMatriz(self.warpGoalMatrix)
+            self.setOffset(self.tempOffset)
+
             self.labelCameraState.setText("<font color='green'>Online</font>")
             if "Online" in self.labelCommunicationState.text():
                 self.pushButtonPlayStart.setEnabled(True)
                 self.groupBoxStrategyFormation.setEnabled(True)
+
+                
+
+                
         else:
             self.labelCameraState.setText("Error")
 
@@ -611,6 +634,10 @@ class Afrodite(QMainWindow):
 
         self.warpCount = 0
         self.pushButtonCaptureWarpAdjust.setEnabled(False)
+
+        self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        self.warpGoalMatrix = [[0,0],[WIDTH,0],[WIDTH,HEIGHT],[0,HEIGHT]]
+
         self.hades.eventWarpReset()
 
     def getPushButtonCaptureWarpAdjust(self):
@@ -619,6 +646,8 @@ class Afrodite(QMainWindow):
         self.warpCount = 4
 
     def warpOffsetChanged(self):
+        self.tempOffset = [self.spinBoxCaptureWarpOffsetLeft.value(), self.spinBoxCaptureWarpOffsetRight.value()]
+
         self.hades.eventWarpOffsetChanged(
             self.spinBoxCaptureWarpOffsetLeft.value(),
             self.spinBoxCaptureWarpOffsetRight.value(),
@@ -632,10 +661,17 @@ class Afrodite(QMainWindow):
             if self.warpCount < 4:
                 print(self.warpCount)
                 self.callHadesWarpEvent(px,py)
+                if self.warpCount == 4:
+                    self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
+                    self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
             elif not self.pushButtonCaptureWarpAdjust.isEnabled():
                 if self.warpCount < 8:
                     print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
+
+    def setOffset(self, Offset):
+        self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
+        self.horizontalSliderCaptureWarpOffsetRight.setValue(Offset[1])
 
     '''
     def getPosAdjust(self, event):
