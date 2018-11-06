@@ -65,7 +65,7 @@ class Afrodite(QMainWindow):
         self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
         self.spinBoxCaptureWarpOffsetRight.valueChanged.connect(self.warpOffsetChanged)
 
-        #RobotRadius
+        # RobotRadius
         self.horizontalSliderRobotRadius.valueChanged.connect(self.robotRadiusChanged)
         self.spinBoxRobotRadius.valueChanged.connect(self.robotRadiusChanged)
         self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
@@ -164,8 +164,8 @@ class Afrodite(QMainWindow):
         self.pushButtonControlSerialSend.clicked.connect(self.getPushButtonControlSerialSend)
         self.updateComboBoxControlSerialDevice()
         self.getComboBoxControlSerialDevice()
-        '''     
-        self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.getPushButtonControlSerialSetSkippedFrames)
+        self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.clickedSetSkippedFrames)
+        '''
         # RobotStatus
         self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
         '''
@@ -264,7 +264,6 @@ class Afrodite(QMainWindow):
                 self.labelPlayLastMessageRobot2.setText(message[1])
             elif message[0] == 2:
                 self.labelPlayLastMessageRobot3.setText(message[1])
-
 
     def displayImageVideoView(self, window=1):
         qformat = QImage.Format_Indexed8
@@ -777,12 +776,12 @@ class Afrodite(QMainWindow):
         else:
             return "Split"
 
-    #RobotRadius
+    # RobotRadius
     def robotRadiusChanged(self):
         self.hades.setRobotRadiusEvent(self.spinBoxRobotRadius.value())
 
 
-    #GetHSVValues
+    # GetHSVValues
     def getHSVValues(self, colorId):
         if colorId == 0:
             Hmin = self.spinBoxVisionHSVCalibrationMainHmin.value()
@@ -820,7 +819,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationBallDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationBallAmin.value()
 
-        elif colorId == 3:  # current = 3
+        else:  # current = 3
             Hmin = self.spinBoxVisionHSVCalibrationOpponentHmin.value()
             Smin = self.spinBoxVisionHSVCalibrationOpponentSmin.value()
             Vmin = self.spinBoxVisionHSVCalibrationOpponentVmin.value()
@@ -832,7 +831,7 @@ class Afrodite(QMainWindow):
             Dilate = self.spinBoxVisionHSVCalibrationOpponentDilate.value()
             Amin = self.spinBoxVisionHSVCalibrationOpponentAmin.value()
 
-        return ((Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin)
+        return (Hmin, Hmax), (Smin, Smax), (Vmin, Vmax), Erode, Blur, Dilate, Amin
 
     def setHSVValues(self, colorId, hsvCalib):
         if colorId == 0:
@@ -1015,6 +1014,11 @@ class Afrodite(QMainWindow):
         self.hades.eventSendMessage(message)
 
     # Serial
+    def clickedSetSkippedFrames(self):
+        skippedFrames = self.lineEditControlSerialSetSkippedFrames.text()
+        if skippedFrames:
+            self.hades.eventSetSkippedFrames(skippedFrames)
+
     def getPushButtonControlSerialDeviceStart(self):
         device = self.getComboBoxControlSerialDevice()
         enable = self.hades.eventStartXbee(device)
@@ -1069,15 +1073,6 @@ class Afrodite(QMainWindow):
             self.hades.eventSendMessage(robotId, message)
 
     '''
-    def getControlSerialSetSkippedFrames(self):
-        pass
-
-    def getPushButtonControlSerialSetSkippedFrames(self):
-        pass
-
-    def setLabelControlSerialDelay(self, delay):
-        pass
-
     # Robot
     def getPushButtonControlRobotStatusRobotUpdate(self):
         self.setLabelControlRobotStatusLastUpdate()
