@@ -2,6 +2,7 @@ from control.eunomia import Eunomia
 from control.dice import Dice
 from control.warrior import Warrior
 from helpers.endless import Endless
+import numpy
 
 
 class Zeus:
@@ -18,23 +19,13 @@ class Zeus:
     def __init__(self):
         self.warriors = []
         self.nWarriors = 0
-        self.robotsSpeed = [0, 0, 0]
+        self.robotsSpeed = numpy.asarray([0.0, 0.0, 0.0], dtype=float)
         self.endless = None
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
 
     def updateSpeeds(self, robotA, robotB, robotC):
-        """Get
-
-        Args:
-            robotA:
-            robotB:
-            robotC:
-
-        Returns:
-
-        """
         print("[Zeus] New speeds:")
         self.robotsSpeed[0] = robotA
         self.robotsSpeed[1] = robotB
@@ -165,14 +156,17 @@ class Zeus:
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
-                warriors[x].position = info["pose"]["position"]
-                warriors[x].orientation = info["pose"]["orientation"]
+                warriors[x].position = numpy.asarray(info["pose"]["position"], dtype=float)
+                warriors[x].orientation = float(info["pose"]["orientation"])
 
-                warriors[x].target = info["target"]["position"]
-                warriors[x].targetOrientation = info["target"]["orientation"]
+                warriors[x].target = numpy.asarray(info["target"]["position"], dtype=float)
+                if type(info["target"]["orientation"]) is tuple:
+                    warriors[x].targetOrientation = numpy.asarray(info["target"]["orientation"], dtype=float)
+                else:
+                    warriors[x].targetOrientation = float(info["target"]["orientation"])
 
                 if "velocity" in info:
-                    warriors[x].vMax = info["velocity"]
+                    warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
                     warriors[x].vMax = self.robotsSpeed[x]
 
@@ -180,43 +174,39 @@ class Zeus:
                     warriors[x].before = float(info["before"])
 
                 if "obstacles" in info:
-                    warriors[x].obstacles = info["obstacles"]
-                    warriors[x].obstaclesSpeed = info["obstaclesSpeed"]
+                    warriors[x].obstacles = numpy.asarray(info["obstacles"], dtype=float)
+                    warriors[x].obstaclesSpeed = numpy.asarray(info["obstaclesSpeed"], dtype=float)
 
             elif strategia[x]["command"] == "spin":
                 warriors[x].action.append(info["direction"])
 
                 if "velocity" in info:
-                    warriors[x].vMax = info["velocity"]
+                    warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
                     warriors[x].vMax = self.robotsSpeed[x]
 
             elif strategia[x]["command"] == "lookAt":
-                warriors[x].orientation = info["pose"]["orientation"]
+                warriors[x].orientation = float(info["pose"]["orientation"])
 
                 if "velocity" in info:
-                    warriors[x].vMax = info["velocity"]
+                    warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
                     warriors[x].vMax = self.robotsSpeed[x]
 
-                if type(info["target"]) is float:
-                    warriors[x].targetOrientation = info["target"]
+                if type(info["target"]) is not tuple:
+                    warriors[x].targetOrientation = float(info["target"])
                     warriors[x].action.append("orientation")
                 else:
-                    warriors[x].position = info["pose"]["position"]
-                    warriors[x].target = info["target"]
+                    warriors[x].position = numpy.asarray(info["pose"]["position"], dtype=float)
+                    warriors[x].target = numpy.asarray(info["target"], dtype=float)
                     warriors[x].action.append("target")
 
             elif strategia[x]["command"] == "stop":
-                warriors[x].vMax = 0
+                warriors[x].vMax = 0.0
                 warriors[x].before = float(info["before"])
 
             warriors[x].backward = self.warriors[x].backward
             warriors[x].front = self.warriors[x].front
-
-        warriors[0].name = "luisinho"
-        warriors[1].name = "zezinho"
-        warriors[2].name = "huguinho"
 
         return warriors
 
@@ -237,6 +227,7 @@ class Zeus:
             if len(warrior.action) > 0:
                 velocities.append(self.translate.run(self.actions.run(warrior)))
 
+        print(type(velocities))
         return velocities
 
     def generateOutput(self, velocities, strategia):
