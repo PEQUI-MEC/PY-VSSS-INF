@@ -346,7 +346,7 @@ class Apolo:
     def preProcess(self, frame, id):
         # Blur
         if self.threshList[id][4] > 0:
-            frame = cv2.blur(frame, (self.threshList[id][4], self.threshList[id][4]))
+            frame = cv2.GaussianBlur(frame, (self.threshList[id][4], self.threshList[id][4]), 0)
 
         # Erode
         if self.threshList[id][3] > 0:
@@ -554,7 +554,7 @@ class Apolo:
 
         # Aplica todos os thresholds (pode adicionar threads)
         for i in range(0, 4, 1):
-            self.thresholdedImages[i] = self.applyThreshold(self.preProcess(frameHSV, i), i)
+            self.thresholdedImages[i] = self.preProcess(self.applyThreshold(frameHSV, i), i)
 
         # Procura os robos
         tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN])
