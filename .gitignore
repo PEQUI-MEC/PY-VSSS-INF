@@ -36,11 +36,6 @@ modules.xml
 *.pyc
 *__pycache__*
 
-
-### VIDEOS ###
-/videos/
-
-
-### QUICKSAVE ###
-/helpers/quicksave.json
-/helpers/save.json
+# Saves
+helpers/quicksave.json
+helpers/save.json

@@ -16,6 +16,7 @@ class Hades(QThread):
     sigDraw = pyqtSignal(dict)
     sigDisplay = pyqtSignal(numpy.ndarray)
     sigPositions = pyqtSignal(list)
+    sigMessages = pyqtSignal(list)
 
     def __init__(self):
         QThread.__init__(self)
@@ -33,6 +34,9 @@ class Hades(QThread):
         self.height = 480  # TODO pegar isso da afrodite e passar pro apolo
         self.width = 640
 
+        self.skippedFrames = 0
+        self.framesToSkip = 5  # valor padrão
+
         self.cascadeTime = 0
         self.cascadeLoops = 0
         self.cascadeLastTime = 0
@@ -47,11 +51,11 @@ class Hades(QThread):
 
         # set up athena
         # TODO passar as dimensões corretamente
-        self.athena.setup(3, 300, 300, 1.0)
+        self.athena.setup(3, 640, 480, 0.8)
 
         # set up zeus
         # TODO passar as dimensões corretamente
-        self.zeus.setup(3, 300, 300)
+        self.zeus.setup(3, 640, 480)
 
         # setting up hermes
         # self.hermes = Hermes(self.srcXbee)
@@ -127,10 +131,17 @@ class Hades(QThread):
         return velocities
 
     def hermesRules(self, velocities):
+        if self.skippedFrames < self.framesToSkip:
+            self.skippedFrames += 1
+            return None
+
         if velocities is None:
             return None
 
-        self.hermes.fly(velocities)
+        hermesMessages = self.hermes.fly(velocities)
+        self.sigMessages.emit(hermesMessages)
+
+        self.skippedFrames = 0
 
     # HELPERS
     def getFPS(self):
@@ -299,7 +310,9 @@ class Hades(QThread):
         return self.hermes.setup(port=port)
 
     def eventSendMessage(self, robotId, message):
-        self.hermes.sendMessage(robotId, message)
+        message = self.hermes.sendMessage(robotId, message)
+        message[0] = (list(self.changeRobotLetters(None)).index(robotId), message[0][1])
+        self.sigMessages.emit(message)
 
     def eventRecordState(self, state):
     	self.apolo.setRecordState(state)
@@ -311,3 +324,5 @@ class Hades(QThread):
             self.apolo.createVideo(videoName)
         else:
             self.apolo.stopVideo()
+    def eventSetSkippedFrames(self, framesToSkip):
+        self.framesToSkip = framesToSkip

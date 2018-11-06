@@ -59,7 +59,7 @@ class Zeus:
         """
 
         self.endless = Endless(width, height)
-        self.actions.setup()
+        self.actions.setup(self.endless)
         self.nWarriors = nWarriors
 
         for i in range(0, nWarriors):
