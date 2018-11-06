@@ -49,7 +49,8 @@ class Hades(QThread):
         self.athena.setup(3, 300, 300, 1.0)
 
         # set up zeus
-        self.zeus.setup(3)
+        # TODO passar as dimensões corretamente
+        self.zeus.setup(3, 300, 300)
 
         # setting up hermes
         # self.hermes = Hermes(self.srcXbee)
@@ -181,7 +182,14 @@ class Hades(QThread):
     # Hades
     def eventStartGame(self):
         self.play = not self.play
-        print("Hades started") if self.play else print("Hades stopped")
+
+        if self.play:
+            self.athena.reset()
+            self.zeus.reset()
+            print("Hades started")
+        else:
+            print("Hades stopped")
+
         return self.play
 
     def setRobotRadiusEvent(self, robotRadius):
@@ -202,7 +210,6 @@ class Hades(QThread):
         else:
             return 0
     
-
     # Camera e Visão
     def eventInvertImage(self, state):
         if self.apolo is not None:
@@ -290,5 +297,5 @@ class Hades(QThread):
     def eventStartXbee(self, port):
         return self.hermes.setup(port=port)
 
-    def eventsendMessage(self, robotId, message):
+    def eventSendMessage(self, robotId, message):
         self.hermes.sendMessage(robotId, message)

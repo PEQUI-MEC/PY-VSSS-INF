@@ -87,21 +87,24 @@ class Move2Goal:
         self.orientation = np.array(orientation)
         self.hyperSpiral.updateTarget(target)
 
-        self.buildAxis()
+        self.buildAxis(target, orientation)
 
     def updateOrientation(self, orientation):
         self.orientation = np.array(orientation)
 
-    def buildAxis(self):
-        if type(self.orientation) != int and self.rotation is True:
+    def buildAxis(self, orientation, target):
+        #
+        # print(orientation, target)
+        if type(orientation) != int and self.rotation is True:
             # print("Orientation ", self.orientation, " Origin ", self.target)
-            self.x = np.array(self.orientation - self.target, dtype=np.float32)
+            self.x = np.array(np.array(orientation) - np.array(target), dtype=np.float32)
         else:
-            if self.orientation == 1:
+            if orientation == 1:
                 self.x = [1.0, 0.0]
             else:
                 self.x = [-1.0, 0.0]
 
+        # print(self.x)
         self.x /= -np.linalg.norm(self.x)
 
         theta = atan2(self.x[1], self.x[0])
@@ -221,10 +224,12 @@ class UnivectorField:
         self.obstacles = np.array(obstacles)
         self.obstaclesSpeed = np.array(obstacleSpeeds)
 
-    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=None, orientation=[650, 250]):
+    def univector(self, robotPos=None, robotSpeed=None, target=None, obstacles=None, ostaclesSpeed=None, orientation=None):
         if robotPos is not None and robotSpeed is not None:
             self.updateRobot(robotPos, robotSpeed)
         if target is not None:
+            if orientation is None:
+                orientation = [650, 250]
             self.updateTarget(target, orientation)
         if obstacles is not None:
             if ostaclesSpeed is None:
