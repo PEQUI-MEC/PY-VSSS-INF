@@ -40,6 +40,10 @@ class Hades(QThread):
         self.cascadeLoops = 0
         self.cascadeLastTime = 0
 
+        self.pidTesting = False
+        self.pidRobot = -1
+        self.pidTarget = None
+
         print("Hades summoned")
 
     def __del__(self):
@@ -71,6 +75,11 @@ class Hades(QThread):
 
             if self.play:
                 commands = self.athenaRules(positions)
+                velocities = self.zeusRules(commands)
+                self.hermesRules(velocities)
+
+            elif self.pidTesting:
+                commands = self.getPIDTarget(positions)
                 velocities = self.zeusRules(commands)
                 self.hermesRules(velocities)
 
@@ -189,6 +198,21 @@ class Hades(QThread):
 
         self.sigDraw.emit(objectsToDraw)
 
+    def getPIDTarget(self, positions):
+        if not self.pidTarget:
+            return None
+
+        commands = []
+
+        for i in range(len(positions)):
+            if i == self.pidRobot:
+                if distance.euclidean(positions[0][i]["position"], self.pidTarget) < Endless.robotSize:
+                    commands.append(
+                        {
+                            "command": "goTo"
+                        }
+                    )
+
     # EVENTOS
     # Hades
     def eventStartGame(self):
@@ -299,17 +323,14 @@ class Hades(QThread):
         self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
 
     # PID TEST
-    def enablePIDTest(self):
-        print("PID test enabled")
-
-    def disablePIDTest(self):
-        print("PID test disabled")
+    def enablePIDTest(self, state):
+        self.pidTesting = state
 
     def setRobotPID(self, robotID):
-        print("Robot", robotID)
+        self.pidRobot = robotID
 
     def setPointPID(self, point):
-        print("PID Point", point)
+        self.pidTarget = point
 
     # Communication
     def eventStartXbee(self, port):

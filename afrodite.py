@@ -1043,30 +1043,27 @@ class Afrodite(QMainWindow):
     def getPushButtonControlRobotFunctionsPIDTest(self):
         if self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#efefef':
             self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#ff0000')
-            self.hades.enablePIDTest()
+            self.hades.enablePIDTest(True)
 
         elif self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
             self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
-            self.hades.disablePIDTest()
-
-            
+            self.hades.enablePIDTest(False)
 
     def selectRobotPID(self, pointX, pointY):
-        nearless = -1
-        distanceMin = 800 #TAMANHO MAXIMO DA TELA
-        for i in range(0, 3): #QUANTIDADE DE ROBOS
+        nearest = -1
+        distanceMin = 800  # TAMANHO MAXIMO DA TELA
+        for i in range(0, 3):  # QUANTIDADE DE ROBOS
             objectToDraw = self.objectsToDraw["robot" + str(i + 1)]
             euclideanDistance = distance.euclidean((pointX, pointY), objectToDraw["position"])
-            if (euclideanDistance < distanceMin):
+            if euclideanDistance < distanceMin:
                 distanceMin = euclideanDistance
-                nearless = i
+                nearest = i
         
-        self.hades.setRobotPID(nearless)
+        self.hades.setRobotPID(nearest)
 
     def selectPointPID(self, pointX, pointY):
         self.hades.setPointPID((pointX, pointY))
-        
-        
+
     def sendWheelVelocities(self):
         # TODO robotId = getControlSerialRobots()
         robotId = None
