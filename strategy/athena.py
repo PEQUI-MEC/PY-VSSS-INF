@@ -687,8 +687,15 @@ class Athena:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "por favor"
 
-                if ballX < warrior.position[0] - 2 * Endless.robotSize:
-                    warrior.command["target"] = (self.ball["position"])
+                if ballX < warrior.position[0] - Endless.robotSize:
+                    if ballY > Endless.midField[1]:
+                        warrior.command["target"] = (
+                            self.ball["position"][0] - 2 * Endless.robotSize,
+                            self.ball["position"][1] - 1.2 * Endless.robotRadius)
+                    else:
+                        warrior.command["target"] = (
+                            self.ball["position"][0] - 2 * Endless.robotSize,
+                            self.ball["position"][1] + 1.2 * Endless.robotRadius)
                 else:
                     warrior.command["target"] = self.ball["position"]
 
