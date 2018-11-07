@@ -294,6 +294,9 @@ class Hades(QThread):
     def eventSelectRoles(self, roles):
         self.athena.setRoles(roles)
 
+    def updateStrategyConstants(self, goalieLine, goalieOffset, areaLine):
+        self.athena.updateStrategyConstants(goalieLine, goalieOffset, areaLine)
+
     # Control
     def eventUpdateSpeeds(self, speeds):
         self.zeus.updateSpeeds(speeds)
