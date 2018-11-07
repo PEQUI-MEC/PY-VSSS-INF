@@ -14,13 +14,18 @@ class Plutus:
     def setFile(self, file):
         self.file = "helpers/" + file + ".json"
 
-    def get(self, key):
+    def get(self, key=None):
+        if key is None:
+            try:
+                loadFile = open(self.file, "r")
+            except EnvironmentError:
+                print("File is empty")
+                return False
+
+            return True
+
         data = {}
-        loadFile = None
-        try:
-            loadFile = open(self.file, "r")
-        except EnvironmentError:
-            print("File is empty")
+        loadFile = open(self.file, "r")
 
         try:
             if loadFile:

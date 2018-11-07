@@ -214,7 +214,10 @@ class Hades(QThread):
             self.plutus.set(key, value[key])
         print("Save configs")
 
-    def eventLoadConfigs(self, key):
+    def eventLoadConfigs(self, key=None):
+        if key is None:
+            return self.plutus.get()
+
         value = self.plutus.get(key)
         if value is not None:
             return value
