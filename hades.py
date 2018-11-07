@@ -1,7 +1,8 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import time
 import numpy
-
+from scipy.spatial import distance
+from helpers.endless import Endless
 from helpers.plutus import Plutus
 
 from vision import Apolo
@@ -39,6 +40,11 @@ class Hades(QThread):
         self.cascadeTime = 0
         self.cascadeLoops = 0
         self.cascadeLastTime = 0
+
+        # formations
+        self.formationToExecute = -1
+        self.formations = []
+        self.formating = False
 
         self.pidTesting = False
         self.pidRobot = -1
@@ -80,6 +86,11 @@ class Hades(QThread):
 
             elif self.pidTesting:
                 commands = self.getPIDTarget(positions)
+                velocities = self.zeusRules(commands)
+                self.hermesRules(velocities)
+
+            elif self.formating:
+                commands = self.executeFormation(positions)
                 velocities = self.zeusRules(commands)
                 self.hermesRules(velocities)
 
@@ -213,6 +224,50 @@ class Hades(QThread):
                         }
                     )
 
+    def executeFormation(self, positions):
+        if self.formationToExecute == -1:
+            return None
+
+        commands = []
+
+        for i in range(positions[0]):
+            if distance.euclidean(positions[0][i],
+                                  self.formations[self.formationToExecute]["positions"][i]) < Endless.robotSize:
+                commands.append(
+                    {
+                        "command": "lookAt",
+                        "robotLetter": positions[0][i]["robotLetter"],
+                        "data": {
+                            "pose": {
+                                "position": positions[0][i]["position"],
+                                "orientation": positions[0][i]["orientation"]
+                            },
+                            "target": self.formations[self.formationToExecute]["orientations"][i],
+                            "velocity": 0.4
+                        }
+                    }
+                )
+            else:
+                commands.append(
+                    {
+                        "command": "goTo",
+                        "robotLetter": positions[0][i]["robotLetter"],
+                        "data": {
+                            "pose": {
+                                "position": positions[0][i]["position"],
+                                "orientation": positions[0][i]["orientation"]
+                            },
+                            "target": {
+                                "position": self.formations[self.formationToExecute]["positions"][i],
+                                "orientation": self.formations[self.formationToExecute]["orientations"][i]
+                            },
+                            "velocity": 0.4
+                        }
+                    }
+                )
+
+        return commands
+
     # EVENTOS
     # Hades
     def eventStartGame(self):
@@ -244,6 +299,29 @@ class Hades(QThread):
             return value
         else:
             return 0
+
+    def saveFormation(self, positions, orientations):
+        newFormation = {
+            "positions": positions,
+            "orientations": orientations
+        }
+        self.formations.append(newFormation)
+        self.plutus.set("formations", self.formations)
+
+    def loadFormations(self):
+        self.formations = self.plutus.get("formations")
+        return self.formations
+
+    def loadFormation(self, formationIndex):
+        if self.play:
+            return
+
+        self.formationToExecute = formationIndex
+        self.formating = True
+
+    def stopFormation(self):
+        self.formationToExecute = -1
+        self.formating = False
     
     # Camera e Visão
     def eventInvertImage(self, state):
