@@ -237,7 +237,6 @@ class Afrodite(QMainWindow):
                 #print ("v")
                 self.warpMatriz[self.quadrant][1] += 1
             if QKeyEvent.key() == QtCore.Qt.Key_Enter or QKeyEvent.key() == QtCore.Qt.Key_Return:
-                print("Entrou aqui")
                 self.hades.eventWarp(self.warpMatriz)
                 self.exitWarp()
                 self.warpCount = 0
@@ -775,7 +774,6 @@ class Afrodite(QMainWindow):
                     self.quadrant = 2
                 elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 4
                     self.quadrant = 3
-                print(self.quadrant)
         elif not self.pushButtonCaptureWarpAdjust.isEnabled():
             self.callHadesAdjustGoalEvent(px, py)
 
