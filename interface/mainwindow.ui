@@ -6810,10 +6810,10 @@ Message</string>
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>12</x>
-          <y>32</y>
+          <x>10</x>
+          <y>50</y>
           <width>551</width>
-          <height>111</height>
+          <height>101</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
@@ -7052,6 +7052,22 @@ Message</string>
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QCheckBox" name="checkBox">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>20</y>
+          <width>161</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string>Draw Constants</string>
+        </property>
        </widget>
       </widget>
       <widget class="QGroupBox" name="groupBoxStrategyRobotFunctions">

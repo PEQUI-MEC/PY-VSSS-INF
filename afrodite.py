@@ -145,6 +145,7 @@ class Afrodite(QMainWindow):
         self.pushButtonStrategyRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
         self.pushButtonStrategyRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
+        self.checkBoxStrategyTestParametersDrawConstants.clicked.connect(self.toggleDrawConstants)
         self.horizontalSliderStrategyTestParametersGoalieOffset.valueChanged.connect(self.updateStrategyConstants)
         self.horizontalSliderStrategyTestParametersGoalieLine.valueChanged.connect(self.updateStrategyConstants)
         self.horizontalSliderStrategyTestParametersAreaLine.valueChanged.connect(self.updateStrategyConstants)
@@ -305,14 +306,14 @@ class Afrodite(QMainWindow):
         """Itera sobre o self.objectsToDraw e desenha cada objeto
         Os objetos nessa lista devem ser do tipo:
         {
-            "shape": "circle" | "rect" | "robot",
-            "position": (x, y),
+            "shape": "circle" | "rect" | "robot" | "line",
+            "position": (x, y), # centro do shape ou o início de uma line
             "color": (r, g, b),
             "label": # string - rótulo do objeto (opcional)
             "radius": # number - se shape = circle
             "limit": (x1, y1) # se shape = rect
             "orientation": # number - se shape = robot (opcional)
-            "target": (x2, y2) # se shape = robot (opcional)
+            "target": (x2, y2) # se shape = robot (opcional) ou final de uma line
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
         }
         """
@@ -344,6 +345,9 @@ class Afrodite(QMainWindow):
                 elif objectToDraw["shape"] == "rect":
                     cv2.rectangle(self.image, objectToDraw["position"], objectToDraw["limit"],
                                   objectToDraw["color"], 2)
+
+                elif objectToDraw["shape"] == "line":
+                    cv2.line(self.image, objectToDraw["position"], objectToDraw["target"], objectToDraw["color"], 2)
 
     # MENU BAR
     # MenuBarArquivo
@@ -1187,11 +1191,14 @@ class Afrodite(QMainWindow):
 
     # Parameters
     def updateStrategyConstants(self):
-        self.hades.updateStrategyConstants(
+        hades.Hades.updateStrategyConstants(
             self.spinBoxStrategyTestParametersGoalieLine.value(),
             self.spinBoxStrategyTestParametersGoalieOffset.value(),
             self.spinBoxStrategyTestParametersAreaLine.value()
         )
+
+    def toggleDrawConstants(self):
+        self.hades.setDrawConstantsState(self.checkBoxStrategyTestParametersDrawConstants.checked())
 
 
 def main():

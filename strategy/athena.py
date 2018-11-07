@@ -36,8 +36,6 @@ class Athena:
         self.mid = None
         self.gk = None
 
-        self.gkOffset = self.goalBorderOffset = self.midOffset = 0
-
         self.ball = {
             "position": (0, 0),
             "oracle": None
@@ -691,13 +689,13 @@ class Athena:
             elif warrior.tactics == Athena.tBlock:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 # !TODO pegar Y composto com a velocidade da bola
-                targetX = self.endless.goalieLine + self.midOffset
+                targetX = self.endless.goalieLine
 
                 # se posiciona na projeção da bola
-                if ballY > self.endless.goalTop + self.goalBorderOffset:
-                    target = (targetX, self.endless.goalTop + self.goalBorderOffset)
-                elif ballY < self.endless.goalBottom - self.goalBorderOffset:
-                    target = (targetX, self.endless.goalBottom - self.goalBorderOffset)
+                if ballY > self.endless.goalTop:
+                    target = (targetX, self.endless.goalTop)
+                elif ballY < self.endless.goalBottom:
+                    target = (targetX, self.endless.goalBottom)
                 else:
                     target = (targetX, ballY)
 
@@ -721,7 +719,7 @@ class Athena:
 
             elif warrior.tactics == Athena.tBlockOpening:
                 warrior.command["targetVelocity"] = warrior.defaultVel
-                targetX = self.endless.areaLine + self.midOffset
+                targetX = self.endless.areaLine
                 targetY = ballY
 
                 if ballY > self.endless.height - self.endless.robotSize:
@@ -868,8 +866,3 @@ class Athena:
             elif warrior.role == "gk":
                 warrior.setDefaultVel(gkSpeed)
                 print("\tGoalkeeper: " + gkSpeed)
-
-    def updateStrategyConstants(self, goalieLine, goalieOffset, areaLine):
-        self.gkOffset = goalieLine
-        self.goalBorderOffset = goalieOffset
-        self.midOffset = areaLine

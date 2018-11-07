@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import time
 import numpy
-
+from helpers.endless import Endless
 from helpers.plutus import Plutus
 
 from vision import Apolo
@@ -39,6 +39,8 @@ class Hades(QThread):
         self.cascadeTime = 0
         self.cascadeLoops = 0
         self.cascadeLastTime = 0
+
+        self.drawStrategyConstants = False
 
         print("Hades summoned")
 
@@ -187,6 +189,14 @@ class Hades(QThread):
             "radius": 4
         }
 
+        if self.drawStrategyConstants:
+            objectsToDraw["strategyConstants"] = {
+                "shape": "line",
+                "position": (Endless.goalieOffset, 0),
+                "target": (Endless.goalieOffset, 480),
+                "color": (0, 255, 0)
+            }
+
         self.sigDraw.emit(objectsToDraw)
 
     # EVENTOS
@@ -291,11 +301,17 @@ class Hades(QThread):
     def eventToggleTransitions(self, state):
         self.athena.setTransitionsState(state)
 
+    def setDrawConstantsState(self, state):
+        self.drawStrategyConstants = state
+
     def eventSelectRoles(self, roles):
         self.athena.setRoles(roles)
 
-    def updateStrategyConstants(self, goalieLine, goalieOffset, areaLine):
-        self.athena.updateStrategyConstants(goalieLine, goalieOffset, areaLine)
+    @staticmethod
+    def updateStrategyConstants(goalieLine, goalieOffset, areaLine):
+        Endless.goalieLine = goalieLine
+        Endless.goalieOffset = goalieOffset
+        Endless.areaLine = areaLine
 
     # Control
     def eventUpdateSpeeds(self, speeds):
