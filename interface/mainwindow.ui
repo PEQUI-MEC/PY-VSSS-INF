@@ -221,7 +221,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -738,7 +738,7 @@
       </widget>
       <widget class="QGroupBox" name="groupBoxStrategyFormation">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -845,10 +845,16 @@
          </size>
         </property>
         <property name="text">
+         <string/>
+        </property>
+        <property name="placeholderText">
          <string>Formation Name</string>
         </property>
        </widget>
        <widget class="QPushButton" name="pushButtonStrategyFormationSave">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>310</x>

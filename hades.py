@@ -276,8 +276,9 @@ class Hades(QThread):
         else:
             return 0
 
-    def saveFormation(self, positions, orientations):
+    def saveFormation(self, name, positions, orientations):
         newFormation = {
+            "name": name
             "positions": positions,
             "orientations": orientations
         }

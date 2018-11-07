@@ -42,9 +42,15 @@ class Afrodite(QMainWindow):
         self.image = None
         self.objectsToDraw = {}
 
-        # PLAY
+        # PLAY TAB
         self.pushButtonPlayStart.clicked.connect(self.clickedPlay)
         self.pushButtonPlayConnect.clicked.connect(self.clickedConnect)
+
+        self.pushButtonStrategyFormationLoad.clicked.connect(self.loadComboBoxFormation)
+        self.pushButtonStrategyFormationDelete.clicked.connect(self.deleteItemComboBoxFormation)
+        self.pushButtonStrategyFormationCreate.clicked.connect(self.createNewFormation)
+        self.pushButtonStrategyFormationSave.clicked.connect(self.saveNewFormation)
+        self.newFormation = False
 
         # VISION
         self.cameraIsRunning = False
@@ -406,6 +412,8 @@ class Afrodite(QMainWindow):
         self.warpGoalMatrix = self.hades.eventLoadConfigs("warpGoalMatrix")
         self.tempOffset = [(self.hades.eventLoadConfigs("offsetLeft")), (self.hades.eventLoadConfigs("offsetRight"))]
 
+        self.updateComboBoxFormation
+
     def actionSaveConfigsTriggered(self):
         self.saveConfigs()
 
@@ -497,9 +505,41 @@ class Afrodite(QMainWindow):
         pass
     '''
 
-    # CAPTURE TAB
+    # PLAY TAB
+    ## Formation
+    def updateComboBoxFormation(self):
+        formations = self.hades.loadFormations
+        for formation in formations:
+                self.comboBoxStrategyFormationLoadStrategy.addItem(formation)
 
-    # DeviceInformation
+    def loadComboBoxFormation(self):
+        #self.hades.loadFormation(self.comboBoxStrategyFormationLoadStrategy.currentText())
+        print(self.comboBoxStrategyFormationLoadStrategy.currentIndex())
+
+    def deleteItemComboBoxFormation(self):
+        self.comboBoxStrategyFormationLoadStrategy.removeItem(self.comboBoxStrategyFormationLoadStrategy.currentIndex())
+
+    def createNewFormation(self):
+        #Criar Robos virtuais
+        #Clicar nos robos
+        #Setar desctino
+        #Setar angulos
+
+        self.pushButtonStrategyFormationCreate.setEnabled(False)
+        self.pushButtonStrategyFormationSave.setEnabled(True)
+
+        nameNewFormation = self.lineEditStrategyFormationNewStrategy.text()
+        self.hades.saveFormation(name, (2,1), (2.1))
+
+    def saveNewFormation(self):
+        self.pushButtonStrategyFormationCreate.setEnabled(True)
+        self.pushButtonStrategyFormationSave.setEnabled(False)
+        
+
+
+
+    # CAPTURE TAB
+    ## DeviceInformation
     def getPushButtonCaptureDeviceInformationStart(self):
         cameraId = self.comboBoxCaptureDeviceInformation.currentText()
         enable = self.hades.eventStartVision(cameraId)
@@ -671,6 +711,9 @@ class Afrodite(QMainWindow):
                 if self.warpCount < 8:
                     print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
+
+        elif self.newFormation
+            print("newFormation")
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
@@ -1030,8 +1073,7 @@ class Afrodite(QMainWindow):
         self.callHadesCalibEvent(self.stackedWidgetVisionHSVCalibration.currentIndex())
 
     # CONTROL TAB
-
-    # PIDTest
+    ## PIDTest
     def getPushButtonControlRobotFunctionsPIDTest(self):
         if self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#efefef':
             self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#ff0000')
