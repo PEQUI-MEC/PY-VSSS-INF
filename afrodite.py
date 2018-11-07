@@ -218,10 +218,16 @@ class Afrodite(QMainWindow):
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Space and self.pushButtonPlayStart.isEnabled():
             self.clickedPlay()
-        if not not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Left:
-        if not not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Right:
-        if not not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Up:
-        if not not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Down:            
+        if not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Left:
+            self.warpMatriz[self.quadrant][0] -= 1
+        if not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Right:
+            self.warpMatriz[self.quadrant][0] += 1
+        if not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Up:
+            self.warpMatriz[self.quadrant][1] -= 1
+        if not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Down:            
+            self.warpMatriz[self.quadrant][1] += 1
+
+
     def clickedConnect(self):
         lastCamera = self.comboBoxCaptureDeviceInformation.itemText(self.comboBoxCaptureDeviceInformation.count() - 1)
         if lastCamera:
@@ -671,6 +677,7 @@ class Afrodite(QMainWindow):
                 print(self.warpCount)
                 self.callHadesWarpEvent(px,py)
                 if self.warpCount == 4:
+                    self.warpMatriz = self.hades.ordenaWarp(warpMatriz)
                     self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
                     self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
             elif not self.pushButtonCaptureWarpAdjust.isEnabled():
@@ -678,7 +685,15 @@ class Afrodite(QMainWindow):
                     print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
             else:
-                if  
+                if  px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
+                    self.quadrant = 0
+                elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 2
+                    self.quadrant = 1
+                elif px > WIDTH/2 and py < HEIGHT/2: #QUADRANT 3
+                    self.quadrant = 2
+                elif px > WIDTH/2 and py > HEIGHT/2: #QUADRANT 4
+                    self.quadrant = 3
+
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
