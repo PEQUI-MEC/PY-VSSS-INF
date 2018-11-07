@@ -760,45 +760,43 @@ class Afrodite(QMainWindow):
     def getPosWarp(self, event):
         px = event.pos().x()
         py = event.pos().y()
-
         if not self.pushButtonCaptureWarpWarp.isEnabled():
             if self.warpCount < 4:
-                self.callHadesWarpEvent(px, py)
-                if self.warpCount == 4:
-                    self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
-                    self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
-
-            elif not self.pushButtonCaptureWarpAdjust.isEnabled():
-                if self.warpCount < 8:
-                    self.callHadesAdjustGoalEvent(px, py)
-                if self.warpCount == 9:
-                    self.warpMatriz = self.hades.ordenaWarp(self.warpMatriz)
+                self.callHadesWarpEvent(px,py)        
+            if self.warpCount == 9:
                 for i in range(0, 4):
-                    self.objectsToDraw["line" + str(i+1)] = {
+                    self.warpMatriz = self.hades.ordenaWarp(self.warpMatriz)
+                    self.objectsToDraw["line" + str(i + 1)] = {
                         "shape": "line",
-                        "points": (self.warpMatriz[i%4], self.warpMatriz[(i+1)%4]),
+                        "points": (self.warpMatriz[i % 4], self.warpMatriz[(i + 1) % 4]),
                         "color": (0, 255, 0),
                         "lineThickness": 1,
-                        "label": "Warp" + str(i+1),
+                        "label": "Warp" + str(i + 1),
                     }
-                self.warpCount = 10
+                self.drawImageVideoView()
                 self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
                 self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
+                self.warpCount = 10
 
             elif self.warpCount == 10:
-                if px < WIDTH/2 and py < HEIGHT/2:  #QUADRANT 1
+                if px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
+                    print(self.quadrant)
                     self.quadrant = 0
-                elif px > WIDTH/2 and py < HEIGHT/2:  #QUADRANT 2
+                elif px > WIDTH/2 and py < HEIGHT/2: #QUADRANT 2
+                    print(self.quadrant)
                     self.quadrant = 1
-                elif px > WIDTH/2 and py > HEIGHT/2:  #QUADRANT 3
+                elif px > WIDTH/2 and py > HEIGHT/2: #QUADRANT 3
+                    print(self.quadrant)
                     self.quadrant = 2
-                elif px < WIDTH/2 and py > HEIGHT/2:  #QUADRANT 4
+                elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 4
+                    print(self.quadrant)
                     self.quadrant = 3
-
+                    
+        elif not self.pushButtonCaptureWarpAdjust.isEnabled():
+            self.callHadesAdjustGoalEvent(px, py)
         elif self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
             if event.buttons() == QtCore.Qt.LeftButton:
                 self.selectRobotPID(px, py)
-
             elif event.buttons() == QtCore.Qt.RightButton:
                 self.selectPointPID(px, py)
 
