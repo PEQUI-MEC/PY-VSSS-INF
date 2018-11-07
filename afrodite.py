@@ -145,6 +145,10 @@ class Afrodite(QMainWindow):
         self.pushButtonStrategyRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
         self.pushButtonStrategyRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
+        self.horizontalSliderStrategyTestParametersGoalieOffset.valueChanged.connect(self.updateStrategyConstants)
+        self.horizontalSliderStrategyTestParametersGoalieLine.valueChanged.connect(self.updateStrategyConstants)
+        self.horizontalSliderStrategyTestParametersAreaLine.valueChanged.connect(self.updateStrategyConstants)
+
         '''
         # formation load
         self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormation)
@@ -1181,28 +1185,13 @@ class Afrodite(QMainWindow):
     def getPushButtonStrategyFormationSave(self):
         pass
 
-    # TestParameters
-    def getStrategyTestParameters(self):
-        return self.getStrategyTestParametersGoalieLine(), \
-               self.getStrategyTestParametersGoalieOffset(), \
-               self.getStrategyTestParametersName3(), \
-               self.getStrategyTestParametersName4(), \
-               self.getStrategyTestParametersName5()
-
-    def getStrategyTestParametersGoalieLine(self):
-        return self.spinBoxStrategyTestParametersGoalieLine.value()
-
-    def getStrategyTestParametersGoalieOffset(self):
-        return self.spinBoxStrategyTestParametersGoalieLine.value()
-
-    def getStrategyTestParametersName3(self):
-        return self.spinBoxStrategyTestParametersGoalieLine.value()
-
-    def getStrategyTestParametersName4(self):
-        return self.spinBoxStrategyTestParametersGoalieLine.value()
-
-    def getStrategyTestParametersName5(self):
-        return self.spinBoxStrategyTestParametersGoalieLine.value()
+    # Parameters
+    def updateStrategyConstants(self):
+        self.hades.updateStrategyConstants(
+            self.spinBoxStrategyTestParametersGoalieLine.value(),
+            self.spinBoxStrategyTestParametersGoalieOffset.value(),
+            self.spinBoxStrategyTestParametersAreaLine.value()
+        )
 
 
 def main():
