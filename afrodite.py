@@ -588,8 +588,12 @@ class Afrodite(QMainWindow):
         self.groupBoxCaptureDeviceInformation.setEnabled(not enable)
         self.groupBoxCaptureDeviceProperties.setEnabled(enable)
         self.groupBoxCaptureWarp.setEnabled(enable)
-        self.pushButtonCaptureWarpAdjust.setEnabled(True)
         self.groupBoxRobotRadius.setEnabled(enable)
+        self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
+        self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
+        self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
+        self.pushButtonCaptureWarpAdjust.setEnabled(enable)
 
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
 
