@@ -278,11 +278,18 @@ class Hades(QThread):
 
     def saveFormation(self, name, positions, orientations):
         newFormation = {
-            "name": name
+            "name": name,
             "positions": positions,
             "orientations": orientations
         }
         self.formations.append(newFormation)
+        self.plutus.set("formations", self.formations)
+
+        print("SaveFormation: ", name, positions, orientations)
+
+    def deleteFormation(self, indexFormation):
+        print ("DeleteFormation", indexFormation)
+        self.formations.pop(indexFormation)
         self.plutus.set("formations", self.formations)
 
     def loadFormations(self):

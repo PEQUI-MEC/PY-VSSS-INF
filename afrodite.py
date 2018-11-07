@@ -50,7 +50,8 @@ class Afrodite(QMainWindow):
         self.pushButtonStrategyFormationDelete.clicked.connect(self.deleteItemComboBoxFormation)
         self.pushButtonStrategyFormationCreate.clicked.connect(self.createNewFormation)
         self.pushButtonStrategyFormationSave.clicked.connect(self.saveNewFormation)
-        self.newFormation = False
+        self.formating = False
+        self.robotsFormation = {}
 
         # VISION
         self.cameraIsRunning = False
@@ -82,6 +83,7 @@ class Afrodite(QMainWindow):
         self.pushButtonCaptureWarpWarp.clicked.connect(self.getPushButtonCaptureWarpWarp)
         self.pushButtonCaptureWarpReset.clicked.connect(self.getPushButtonCaptureWarpReset)
         self.pushButtonCaptureWarpAdjust.clicked.connect(self.getPushButtonCaptureWarpAdjust)
+
         # HSVCalibration
         # Main
         self.horizontalSliderVisionHSVCalibrationMainVmin.valueChanged.connect(self.visionHSVCalibrationSliderChanged)
@@ -137,22 +139,22 @@ class Afrodite(QMainWindow):
         self.pushButtonVisionHSVCalibrationNext.clicked.connect(self.getPushButtonVisionHSVCalibrationNext)
 
         # Capture
-        # DeviceInformation
+        ## DeviceInformation
         self.pushButtonCaptureDeviceInformationStart.clicked.connect(self.getPushButtonCaptureDeviceInformationStart)
         self.pushButtonCaptureDeviceInformationRefresh.clicked.connect(self.updateComboBoxCaptureDeviceInformation)
         self.updateComboBoxCaptureDeviceInformation()
 
         # STRATEGY
 
-        # transitions
+        ## transitions
         self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(self.toggleTransitions)
 
-        # roles
+        ## roles
         self.pushButtonStrategyRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
         self.pushButtonStrategyRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
         '''
-        # formation load
+        ## formation load
         self.pushButtonStrategyFormationLoad.clicked.connect(self.getPushButtonStrategyFormation)
         self.pushButtonStrategyFormationDelete.clicked.connect(self.getPushButtonStrategyFormationDelete)
         self.pushButtonStrategyFormationCreate.clicked.connect(self.getPushButtonStrategyFormationCreate)
@@ -320,6 +322,11 @@ class Afrodite(QMainWindow):
         """
         # cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
+            if self.formating:
+                print("Desenhando Formating")
+
+
+
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
                     cv2.rectangle(self.image, objectToDraw["position"],
@@ -412,7 +419,7 @@ class Afrodite(QMainWindow):
         self.warpGoalMatrix = self.hades.eventLoadConfigs("warpGoalMatrix")
         self.tempOffset = [(self.hades.eventLoadConfigs("offsetLeft")), (self.hades.eventLoadConfigs("offsetRight"))]
 
-        self.updateComboBoxFormation
+        self.updateComboBoxFormation()
 
     def actionSaveConfigsTriggered(self):
         self.saveConfigs()
@@ -508,35 +515,57 @@ class Afrodite(QMainWindow):
     # PLAY TAB
     ## Formation
     def updateComboBoxFormation(self):
-        formations = self.hades.loadFormations
+        formations = self.hades.loadFormations()
+        self.comboBoxStrategyFormationLoadStrategy.clear()
         for formation in formations:
-                self.comboBoxStrategyFormationLoadStrategy.addItem(formation)
+                self.comboBoxStrategyFormationLoadStrategy.addItem(formation["name"])
+
+        if (self.comboBoxStrategyFormationLoadStrategy.currentIndex() > -1):
+            self.pushButtonStrategyFormationDelete.setEnabled(True)
+            self.pushButtonStrategyFormationLoad.setEnabled(True)
 
     def loadComboBoxFormation(self):
         #self.hades.loadFormation(self.comboBoxStrategyFormationLoadStrategy.currentText())
         print(self.comboBoxStrategyFormationLoadStrategy.currentIndex())
 
     def deleteItemComboBoxFormation(self):
+        self.hades.deleteFormation(self.comboBoxStrategyFormationLoadStrategy.currentIndex())
         self.comboBoxStrategyFormationLoadStrategy.removeItem(self.comboBoxStrategyFormationLoadStrategy.currentIndex())
+
+        if (self.comboBoxStrategyFormationLoadStrategy.currentIndex() == -1):
+            self.pushButtonStrategyFormationDelete.setEnabled(False)
+            self.pushButtonStrategyFormationLoad.setEnabled(False)
 
     def createNewFormation(self):
         #Criar Robos virtuais
         #Clicar nos robos
-        #Setar desctino
+        #Setar destino
         #Setar angulos
 
         self.pushButtonStrategyFormationCreate.setEnabled(False)
         self.pushButtonStrategyFormationSave.setEnabled(True)
+        self.formating = True
 
-        nameNewFormation = self.lineEditStrategyFormationNewStrategy.text()
-        self.hades.saveFormation(name, (2,1), (2.1))
+        for i in range(0, 3):
+            self.robotsFormation["robot" + str(i + 1)] = {
+                "shape": "robotFormation",
+                "position": (WIDTH/2 + i*10, HEIGHT/2),
+                "color": (0, 255, 0),
+                "label": str(i + 1),
+                "orientation": 0.0
+            }
 
     def saveNewFormation(self):
         self.pushButtonStrategyFormationCreate.setEnabled(True)
         self.pushButtonStrategyFormationSave.setEnabled(False)
+        self.formating = False
+
+        nameNewFormation = self.lineEditStrategyFormationNewStrategy.text()
+
+        self.hades.saveFormation(nameNewFormation, (2,1), (2.1))
         
-
-
+        self.lineEditStrategyFormationNewStrategy.setText("")
+        self.updateComboBoxFormation()
 
     # CAPTURE TAB
     ## DeviceInformation
@@ -712,8 +741,8 @@ class Afrodite(QMainWindow):
                     print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
 
-        elif self.newFormation
-            print("newFormation")
+        elif self.formating:
+            print("Formating")
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
