@@ -144,6 +144,7 @@ class Athena:
             self.warriors[i].velEstimated = \
                 distance.euclidean(self.warriors[i].position, self.warriors[i].lastPosition) / self.deltaTime
             self.warriors[i].velEstimated /= self.endless.pixelMeterRatio
+            # print(self.warriors[i].defaultVel)
 
         self.theirWarriorsLastPos = []
         for i in range(0, len(self.theirWarriors)):
@@ -228,7 +229,7 @@ class Athena:
             command = {
                 "robotLetter": warrior.robotID,
                 "tactics": warrior.tactics,
-                "futureBall": self.ball["oracle"].predict(1)
+                "futureBall": self.ball["oracle"].predict(2)
             }
 
             if warrior.command["type"] == "goTo":
@@ -505,7 +506,7 @@ class Athena:
         # situações especiais
 
         # se a bola tá muito próxima ao nosso gol em x
-        if ballX < self.endless.ourCorner:
+        if ballX < self.endless.areaLine:
             # mid marca a saída de bola
             tMid = Athena.tBlockOpening
 
