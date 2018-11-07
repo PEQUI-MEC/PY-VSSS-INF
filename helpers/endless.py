@@ -1,42 +1,61 @@
 class Endless:
+    height = 0
+    width = 0
+    pixelMeterRatio = 0
+    robotSize = 0
+    spinSize = 0
+    robotRadius = 0
+    goalSize = 0
+    areaSize = 0
+    midField = 0
+    goal = 0
+    pastGoal = 0
+    ourGoal = 0
+    topSide = 0
+    bottomSide = 0
+    corner = 0
+    ourCorner = 0
+    goalTop = 0
+    goalBottom = 0
+    areaTop = 0
+    areaBottom = 0
+    goalieLine = 0
+    areaLine = 0
 
-    def __setup(self):
-        self.pixelMeterRatio = self.width / 1.70  # o campo tem 1m 70cm
+    @staticmethod
+    def setup(width, height):
+        Endless.width = width
+        Endless.height = height
+        Endless.pixelMeterRatio = width / 1.70  # o campo tem 1m 70cm
 
         # tamanhos
-        self.robotSize = round(0.08 * self.pixelMeterRatio)
-        self.spinSize = self.robotSize * 1.2
-        self.robotRadius = self.robotSize / 2
-        self.goalSize = (round(0.1 * self.pixelMeterRatio), round(0.4 * self.pixelMeterRatio))
-        self.areaSize = (round(0.15 * self.pixelMeterRatio), round(0.8 * self.pixelMeterRatio))
+        Endless.robotSize = round(0.08 * Endless.pixelMeterRatio)
+        Endless.spinSize = Endless.robotSize * 1.2
+        Endless.robotRadius = Endless.robotSize / 2
+        Endless.goalSize = (round(0.1 * Endless.pixelMeterRatio), round(0.4 * Endless.pixelMeterRatio))
+        Endless.areaSize = (round(0.15 * Endless.pixelMeterRatio), round(0.8 * Endless.pixelMeterRatio))
 
         # coordenadas
-        self.midField = (self.width / 2, self.height / 2)
-        self.goal = (self.width, self.height / 2)
-        self.pastGoal = (self.width + self.areaSize[0], self.height / 2)
-        self.ourGoal = (self.goalSize[0], self.height / 2)
+        Endless.midField = (Endless.width / 2, Endless.height / 2)
+        Endless.goal = (Endless.width, Endless.height / 2)
+        Endless.pastGoal = (Endless.width + Endless.areaSize[0], Endless.height / 2)
+        Endless.ourGoal = (Endless.goalSize[0], Endless.height / 2)
 
         # offsets
-        self.areaBorderOffset = 0
-        self.goalieOffset = 0
-        self.areaOffset = 0
+        Endless.areaBorderOffset = 0
+        Endless.goalieOffset = 0
+        Endless.areaOffset = 0
 
         # limites
-        self.topSide = self.height - self.robotSize
-        self.bottomSide = self.robotSize
-        self.corner = self.width - self.goalSize[0] - self.areaSize[0]  # em X
-        self.ourCorner = self.areaSize[0]  # em X
-        self.goalTop = self.height / 2 + self.goalSize[1] / 2  # em Y
-        self.goalBottom = self.height / 2 - self.goalSize[1] / 2  # em Y
-        self.areaTop = self.height / 2 + self.areaSize[1] / 2 + self.areaBorderOffset  # em Y
-        self.areaBottom = self.height / 2 - self.areaSize[1] / 2 - self.areaBorderOffset  # em Y
-        self.goalieLine = self.goalSize[0] + self.robotSize + self.goalieOffset  # em X
-        self.areaLine = self.goalSize[0] + self.areaSize[0] + self.robotSize + self.areaOffset  # em X
+        Endless.topSide = Endless.height - Endless.robotSize
+        Endless.bottomSide = Endless.robotSize
+        Endless.corner = Endless.width - Endless.goalSize[0] - Endless.areaSize[0]  # em X
+        Endless.ourCorner = Endless.areaSize[0]  # em X
+        Endless.goalTop = Endless.height / 2 + Endless.goalSize[1] / 2  # em Y
+        Endless.goalBottom = Endless.height / 2 - Endless.goalSize[1] / 2  # em Y
+        Endless.areaTop = Endless.height / 2 + Endless.areaSize[1] / 2 + Endless.areaBorderOffset  # em Y
+        Endless.areaBottom = Endless.height / 2 - Endless.areaSize[1] / 2 - Endless.areaBorderOffset  # em Y
+        Endless.goalieLine = Endless.goalSize[0] + Endless.robotSize + Endless.goalieOffset  # em X
+        Endless.areaLine = Endless.goalSize[0] + Endless.areaSize[0] + Endless.robotSize + Endless.areaOffset  # em X
 
         print("Endless is set up.")
-
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-
-        self.__setup()
