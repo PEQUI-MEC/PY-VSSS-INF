@@ -687,15 +687,21 @@ class Athena:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "por favor"
 
-                if ballX < warrior.position[0] - 2 * Endless.robotSize:
-                    warrior.command["target"] = (self.ball["position"])
+                if ballX < warrior.position[0] - Endless.robotSize:
+                    if ballY > Endless.midField[1]:
+                        warrior.command["target"] = (
+                            self.ball["position"][0] - 2 * Endless.robotSize,
+                            self.ball["position"][1] - 1.2 * Endless.robotRadius)
+                    else:
+                        warrior.command["target"] = (
+                            self.ball["position"][0] - 2 * Endless.robotSize,
+                            self.ball["position"][1] + 1.2 * Endless.robotRadius)
                 else:
                     warrior.command["target"] = self.ball["position"]
 
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados
                 warrior.command["type"] = "goTo"
-                warrior.command["target"] = self.__ballInterceptLocation(warrior)
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
 
@@ -705,11 +711,26 @@ class Athena:
                 else:
                     warrior.command["targetOrientation"] = -math.pi / 2
 
+                if ballX < warrior.position[0] - Endless.robotSize:
+                    if ballY > Endless.midField[1]:
+                        warrior.command["target"] = (
+                            self.ball["position"][0] - 2 * Endless.robotSize,
+                            self.ball["position"][1] - 1.2 * Endless.robotRadius)
+                    else:
+                        warrior.command["target"] = (
+                            self.ball["position"][0] - 2 * Endless.robotSize,
+                            self.ball["position"][1] + 1.2 * Endless.robotRadius)
+                else:
+                    warrior.command["target"] = self.ball["position"]
+
             elif warrior.tactics == Athena.tBlock:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 # !TODO pegar Y composto com a velocidade da bola
                 targetX = Endless.goalieLine
-                targetY = geometry.saturate(self.ball["oracle"].getY(targetX), Endless.goalBottom, Endless.goalTop)
+
+                projection = self.ball["oracle"].getY(targetX)
+                trustabillity = geometry.saturate(ballY / Endless.midField[0], 1, 0)
+                targetY = geometry.saturate(projection * trustabillity + ballY * (1 - trustabillity), Endless.goalBottom, Endless.goalTop)
 
                 target = (targetX, targetY)
 
