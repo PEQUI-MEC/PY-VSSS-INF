@@ -170,6 +170,7 @@ class Afrodite(QMainWindow):
         # PID TEST
         self.pushButtonComunicationRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
         self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
+        self.lineEditPIDRobotVel.textChanged.connect(self.hades.setPIDSpeed)
 
         # COMMUNICATION
 

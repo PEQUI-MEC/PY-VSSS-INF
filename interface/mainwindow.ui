@@ -7839,13 +7839,13 @@ Message</string>
          <rect>
           <x>10</x>
           <y>60</y>
-          <width>100</width>
+          <width>50</width>
           <height>31</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>100</width>
+          <width>50</width>
           <height>0</height>
          </size>
         </property>
@@ -7862,7 +7862,7 @@ Message</string>
        <widget class="QPushButton" name="pushButtonControlSerialSetSkippedFrames">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>70</x>
           <y>60</y>
           <width>150</width>
           <height>31</height>
@@ -7882,6 +7882,25 @@ Message</string>
         </property>
         <property name="text">
          <string>Set Skipped Frames</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEditPIDRobotVel">
+        <property name="geometry">
+         <rect>
+          <x>320</x>
+          <y>60</y>
+          <width>101</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>Robot Speed</string>
+        </property>
+        <property name="inputMask">
+         <string/>
+        </property>
+        <property name="text">
+         <string>0.4</string>
         </property>
        </widget>
       </widget>

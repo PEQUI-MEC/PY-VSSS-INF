@@ -49,6 +49,7 @@ class Hades(QThread):
         self.pidTesting = False
         self.pidRobot = -1
         self.pidTarget = None
+        self.pidSpeed = 0.4
 
         print("Hades summoned")
 
@@ -252,7 +253,7 @@ class Hades(QThread):
                                     "position": self.pidTarget,
                                     "orientation": Endless.pastGoal
                                 },
-                                "velocity": 0.5
+                                "velocity": self.pidSpeed
                             }
                         }
                     )
@@ -467,6 +468,13 @@ class Hades(QThread):
     def setPointPID(self, point):
         if self.pidRobot != -1:
             self.pidTarget = (point[0], Endless.height - point[1])
+
+    def setPIDSpeed(self, speed):
+        try:
+            speed = float(speed)
+            self.pidSpeed = speed
+        except ValueError:
+            print("Invalid speed value")
 
     # Communication
     def eventStartXbee(self, port):
