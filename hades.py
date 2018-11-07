@@ -188,17 +188,6 @@ class Hades(QThread):
             "radius": 4
         }
 
-        if self.allWarpPoints and len(self.warpPoints) == 4:
-            for i in range(0, 4):
-                print (self.warpPoints)
-                objectsToDraw["line" + str(i+1)] = {
-                    "shape": "line",
-                    "points": (self.warpPoints[i%4], self.warpPoints[(i+1)%4]),
-                    "color": (0, 255, 0),
-                    "lineThickness": 1,
-                    "label": "Warp" + str(i+1),
-                }            
-
         self.sigDraw.emit(objectsToDraw)
 
     # EVENTOS
