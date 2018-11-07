@@ -110,7 +110,8 @@ class Hades(QThread):
 
         # atualiza o vídeo na interface
         self.prepareDraw(positions)
-        self.sigDisplay.emit(frame)
+        if frame is not None:
+            self.sigDisplay.emit(frame)
 
         # atualiza as posições dos robôs na interface
         formattedPositions = [
@@ -431,6 +432,7 @@ class Hades(QThread):
     # Control
     def eventUpdateSpeeds(self, speeds):
         self.zeus.updateSpeeds(speeds)
+        #self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
 
     # PID TEST
     def enablePIDTest(self, state):
