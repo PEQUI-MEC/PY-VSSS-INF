@@ -426,7 +426,7 @@ class Hades(QThread):
     # Warp
     def eventWarp(self, warpMatriz):
         self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
-
+        
     # WarpGoal
     def eventWarpGoalMatriz(self, warpMatriz):
         return self.apolo.setWarpGoalMatriz(warpMatriz)
@@ -487,3 +487,31 @@ class Hades(QThread):
 
     def eventSetSkippedFrames(self, framesToSkip):
         self.framesToSkip = framesToSkip
+
+    @staticmethod
+    def ordenaWarp(points):
+        WIDTH = 640
+        HEIGHT = 480
+        largura = WIDTH/2
+        altura = HEIGHT/2
+
+        for i in range(0, 4, 1):
+            if points[i][0] - largura < 0:
+                if points[i][1] - altura < 0:
+                    # Quadrante 1
+                    pt1 = points[i]
+                else:
+                    # Quadrante 4
+                    pt4 = points[i]
+            else:
+                if points[i][1] - altura < 0:
+                    # Quadrante 2
+                    pt2 = points[i]
+                else:
+                    # Quadrante 3
+                    pt3 = points[i]
+
+        return pt1, pt2, pt3, pt4
+
+
+    
