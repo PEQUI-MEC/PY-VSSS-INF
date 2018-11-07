@@ -303,6 +303,7 @@ class Hades(QThread):
     # Control
     def eventUpdateSpeeds(self, speeds):
         self.zeus.updateSpeeds(speeds)
+        #self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
 
     def enablePIDTest(self):
         print("PID test enabled")
