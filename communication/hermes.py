@@ -1,6 +1,6 @@
 import sys
 from xbee import XBee
-from serial import Serial, SerialException, SerialTimeoutException
+from serial import Serial, SerialException, SerialTimeoutException, serialutil
 
 
 class Hermes:
@@ -63,12 +63,12 @@ class Hermes:
 
         messages = []
         for i in range(len(velocities)):
-            message = str(velocities[i]["vRight"]) + ";" + str(velocities[i]["vLeft"])
+            message = "{:.2f}".format(velocities[i]["vRight"]) + ";" + "{:.2f}".format(velocities[i]["vLeft"])
 
             if self.xbee is not None:
                 try:
                     self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
-                    messages.append(message)
+                    messages.append((i, message))
                     # print(velocities[i]["robotLetter"] + ": " + message)
                 except SerialTimeoutException:
                     print("[Hermes]: Message sending timed out")
@@ -92,11 +92,20 @@ class Hermes:
 
     def sendMessage(self, robotId, message):
         if self.xbee is not None:
+            messageInfo = []
             try:
                 # print(robotId)
                 self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
             except SerialTimeoutException:
                 print("Message sending timed out")
+            except SerialException:
+                print("Could not send message")
+
+            if robotId in self.robots:
+                messageInfo.append((robotId, message))
+            else:
+                print("We don't have this robot configured")
+            return messageInfo
 
     @staticmethod
     def isSerial(port):

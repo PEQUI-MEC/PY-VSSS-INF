@@ -4,7 +4,7 @@ class Warrior:
         self.robotID = "A"
 
         self.defaultVel = defaultVel
-        self.maxVel = 1.4
+        self.maxVel = 1
         self.velEstimated = 0
 
         self.robotID = "A"
