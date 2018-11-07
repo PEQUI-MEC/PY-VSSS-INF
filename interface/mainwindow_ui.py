@@ -1921,7 +1921,6 @@ class Ui_MainWindow(object):
         self.comboBoxControlSerialRobots.addItem("")
         self.comboBoxControlSerialRobots.addItem("")
         self.comboBoxControlSerialRobots.addItem("")
-        print("hey")
         self.lineEditControlSerialSpeedLeft = QtWidgets.QLineEdit(self.groupControlSerial)
         self.lineEditControlSerialSpeedLeft.setGeometry(QtCore.QRect(200, 60, 70, 25))
         self.lineEditControlSerialSpeedLeft.setObjectName("lineEditControlSerialSpeedLeft")

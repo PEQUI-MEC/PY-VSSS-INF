@@ -395,7 +395,6 @@ class Apolo:
         if orientation > math.pi:
             orientation = -math.pi + (orientation - math.pi)
 
-        print(orientation)
         return orientation
 
     @staticmethod

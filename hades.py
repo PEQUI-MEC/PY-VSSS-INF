@@ -64,7 +64,7 @@ class Hades(QThread):
 
         # set up athena
         # TODO passar as dimensões corretamente
-        self.athena.setup(3, self.width, self.height, 0.8)
+        self.athena.setup(3, self.width, self.height, 0.6)
 
         # set up zeus
         # TODO passar as dimensões corretamente
@@ -213,7 +213,6 @@ class Hades(QThread):
             "radius": 4
         }
 
-        print(Endless.areaTop)
         if self.drawStrategyConstants:
             objectsToDraw["strategyGoalieLine"] = {
                 "shape": "line",

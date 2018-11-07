@@ -29,7 +29,6 @@ class Zeus:
 
         for robot in robots:
             self.robotsSpeed.append(robot)
-            print(robot)
 
     def setup(self, nWarriors):
         """Zeus first movements
