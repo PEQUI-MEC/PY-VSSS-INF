@@ -91,7 +91,8 @@ class Hades(QThread):
 
         # atualiza o vídeo na interface
         self.prepareDraw(positions)
-        self.sigDisplay.emit(frame)
+        if frame is not None:
+            self.sigDisplay.emit(frame)
 
         # atualiza as posições dos robôs na interface
         formattedPositions = [
