@@ -62,11 +62,11 @@ class Hades(QThread):
 
         # set up athena
         # TODO passar as dimensões corretamente
-        self.athena.setup(3, 640, 480, 0.8)
+        self.athena.setup(3, self.width, self.height, 0.8)
 
         # set up zeus
         # TODO passar as dimensões corretamente
-        self.zeus.setup(3, 640, 480)
+        self.zeus.setup(3)
 
         # setting up hermes
         # self.hermes = Hermes(self.srcXbee)
