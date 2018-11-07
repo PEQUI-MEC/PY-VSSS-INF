@@ -195,7 +195,7 @@ class Hades(QThread):
                     "shape": "line",
                     "points": (self.warpPoints[i%4], self.warpPoints[(i+1)%4]),
                     "color": (0, 255, 0),
-                    "lineThickness": 2,
+                    "lineThickness": 1,
                     "label": "Warp" + str(i+1),
                 }            
 

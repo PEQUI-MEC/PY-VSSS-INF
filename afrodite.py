@@ -218,7 +218,10 @@ class Afrodite(QMainWindow):
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Space and self.pushButtonPlayStart.isEnabled():
             self.clickedPlay()
-
+        if not not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Left:
+        if not not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Right:
+        if not not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Up:
+        if not not self.pushButtonCaptureWarpWarp.isEnabled() and QKeyEvent.key() == QtCore.Qt.Key_Down:            
     def clickedConnect(self):
         lastCamera = self.comboBoxCaptureDeviceInformation.itemText(self.comboBoxCaptureDeviceInformation.count() - 1)
         if lastCamera:
@@ -674,6 +677,8 @@ class Afrodite(QMainWindow):
                 if self.warpCount < 8:
                     print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
+            else:
+                if  
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
@@ -697,6 +702,9 @@ class Afrodite(QMainWindow):
 
         if self.warpCount == 4:
             self.hades.eventWarp(self.warpMatriz)
+
+    def updateWarPoints(self, quadrant):
+
 
     def callHadesAdjustGoalEvent(self, px, py):
         self.warpGoalMatrix[self.warpCount%4][0] = px
