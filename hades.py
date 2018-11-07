@@ -76,8 +76,6 @@ class Hades(QThread):
         while True:
             # visão
             positions = self.apoloRules()
-            # if positions is not None:
-            #     print(positions[0][0]["robotLetter"])
 
             if self.play:
                 commands = self.athenaRules(positions)
@@ -95,6 +93,7 @@ class Hades(QThread):
                 self.hermesRules(velocities)
 
             time.sleep(0.0001)
+
     # MAIN METHODS
 
     def apoloRules(self):
@@ -218,11 +217,38 @@ class Hades(QThread):
         for i in range(len(positions)):
             if i == self.pidRobot:
                 if distance.euclidean(positions[0][i]["position"], self.pidTarget) < Endless.robotSize:
+                    self.pidTarget = None
+                else:
                     commands.append(
                         {
-                            "command": "goTo"
+                            "command": "goTo",
+                            "robotLetter": positions[0][i]["robotLetter"],
+                            "data": {
+                                "pose": {
+                                    "position": positions[0][i]["position"],
+                                    "orientation": positions[0][i]["orientation"]
+                                },
+                                "target": {
+                                    "position": self.pidTarget,
+                                    "orientation": self.endless.pastGoal
+                                },
+                                "velocity": 0.5
+                            }
                         }
                     )
+                    continue
+
+            commands.append(
+                {
+                    "command": "stop",
+                    "robotLetter": positions[0][i]["robotLetter"],
+                    "data": {
+                        "before": 0
+                    }
+                }
+            )
+
+        return commands
 
     def executeFormation(self, positions):
         if self.formationToExecute == -1:
@@ -231,7 +257,7 @@ class Hades(QThread):
         commands = []
 
         for i in range(positions[0]):
-            if distance.euclidean(positions[0][i],
+            if distance.euclidean(positions[0][i]["position"],
                                   self.formations[self.formationToExecute]["positions"][i]) < Endless.robotSize:
                 commands.append(
                     {
