@@ -235,7 +235,7 @@ class Afrodite(QMainWindow):
                 self.hades.eventWarp(self.warpMatriz)
                 self.exitWarp()
                 self.warpCount = 0
-        if self.warpCount == 9 or warpCount == 4:
+        if self.warpCount == 9:
             for i in range(0, 4):
                 self.objectsToDraw["line" + str(i+1)] = {
                     "shape": "line",
@@ -343,9 +343,6 @@ class Afrodite(QMainWindow):
         """
         # cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
-            if warpDraw:
-                self.warpObjectToDraw
-
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
                     cv2.rectangle(self.image, objectToDraw["position"],
@@ -723,8 +720,9 @@ class Afrodite(QMainWindow):
         if not self.pushButtonCaptureWarpWarp.isEnabled():
             px = event.pos().x()
             py = event.pos().y()
-        
-            self.callHadesWarpEvent(px,py)
+            
+            if self.warpCount < 4:
+                self.callHadesWarpEvent(px,py)
         
             if self.warpCount == 4:
                 self.warpMatriz = self.hades.ordenaWarp(warpMatriz)
@@ -737,13 +735,12 @@ class Afrodite(QMainWindow):
                         "label": "Warp" + str(i+1),
                     }
                 self.drawImageVideoView()
-
                 self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
                 self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
 
         elif not self.pushButtonCaptureWarpAdjust.isEnabled():
              self.callHadesAdjustGoalEvent(px, py)
-        elif warpCount == 9:
+        elif self.warpCount == 9:
             if  px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
                 self.quadrant = 0
             elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 2
