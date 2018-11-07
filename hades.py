@@ -243,7 +243,7 @@ class Hades(QThread):
     def eventStartVision(self, cameraId):
         try:
             self.apolo = Apolo(int(cameraId))
-            #self.apolo = Apolo(0)
+            # self.apolo = Apolo(0)
             return True
         except:
             return False
@@ -295,8 +295,8 @@ class Hades(QThread):
         self.athena.setRoles(roles)
 
     # Control
-    def eventUpdateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
-        self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
+    def eventUpdateSpeeds(self, speeds):
+        self.zeus.updateSpeeds(speeds)
 
     def enablePIDTest(self):
         print("PID test enabled")

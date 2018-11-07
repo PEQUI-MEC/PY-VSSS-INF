@@ -19,19 +19,18 @@ class Zeus:
     def __init__(self):
         self.warriors = []
         self.nWarriors = 0
-        self.robotsSpeed = numpy.asarray([0.0, 0.0, 0.0], dtype=float)
+        self.robotsSpeed = []
+
         self.endless = None
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
 
-    def updateSpeeds(self, robotA, robotB, robotC):
+    def updateSpeeds(self, robots):
         print("[Zeus] New speeds:")
-        self.robotsSpeed[0] = robotA
-        self.robotsSpeed[1] = robotB
-        self.robotsSpeed[2] = robotC
 
-        for robot in self.robotsSpeed:
+        for robot in robots:
+            self.robotsSpeed.append(robot)
             print(robot)
 
     def setup(self, nWarriors, width, height):
@@ -55,6 +54,7 @@ class Zeus:
 
         for i in range(0, nWarriors):
             self.warriors.append(Warrior())
+            self.robotsSpeed.append(0.0)
 
         print("Zeus is set up")
         return self
@@ -241,25 +241,15 @@ class Zeus:
             list: List of dictionary ready to be sent to the Communication(Hermes).
 
         """
+        output = []
+        for x in range(0, self.nWarriors):
+            output.append(
+                {
+                    "robotLetter": strategia[x]["robotLetter"],
+                    "vLeft": velocities[x][0],
+                    "vRight": velocities[x][1],
+                    "vector": velocities[x][2]
+                }
+            )
 
-        output = [
-            {
-                "robotLetter": strategia[0]["robotLetter"],
-                "vLeft": velocities[0][0],
-                "vRight": velocities[0][1],
-                "vector": velocities[0][2]
-            },
-            {
-                "robotLetter": strategia[1]["robotLetter"],
-                "vLeft": velocities[1][0],
-                "vRight": velocities[1][1],
-                "vector": velocities[1][2]
-            },
-            {
-                "robotLetter": strategia[2]["robotLetter"],
-                "vLeft": velocities[2][0],
-                "vRight": velocities[2][1],
-                "vector": velocities[2][2]
-            }
-        ]
         return output
