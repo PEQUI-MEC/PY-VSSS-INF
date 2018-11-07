@@ -68,7 +68,6 @@ class Move2Goal:
         self.x = None
         self.y = None
         self.orientation = 1
-        self.rotation = True
         self.toUnivector = None
         self.toGame = None
 
@@ -87,17 +86,16 @@ class Move2Goal:
         self.buildAxis(self.target, self.orientation)
 
     def buildAxis(self, orientation, target):
-        if type(orientation) != int and self.rotation is True:
-            # print("Orientation ", self.orientation, " Origin ", self.target)
-            self.x = numpy.asarray(numpy.asarray(orientation, dtype=float) - numpy.asarray(target, dtype=float), dtype=float)
+        if type(self.orientation) is int:
+            self.x = numpy.asarray([1.0, 0.0], dtype=float)
         else:
-            if orientation == 1:
+            self.x = numpy.asarray(numpy.asarray(orientation, dtype=float)
+                                   - numpy.asarray(target, dtype=float), dtype=float)
+            if self.x.all() == 0.0:
                 self.x = numpy.asarray([1.0, 0.0], dtype=float)
-            else:
-                self.x = numpy.asarray([-1.0, 0.0], dtype=float)
 
-        self.x = self.x / (-numpy.linalg.norm(self.x))
-
+        # self.x = self.x / (-numpy.linalg.norm(self.x))
+        self.x = self.x / (-numpy.sqrt(self.x.dot(self.x)))
         theta = atan2(self.x[1], self.x[0])
         self.y = [sin(theta), cos(theta)]
 
