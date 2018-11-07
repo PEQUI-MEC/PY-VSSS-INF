@@ -224,27 +224,36 @@ class Afrodite(QMainWindow):
             self.clickedPlay()
         if not self.pushButtonCaptureWarpWarp.isEnabled():
             if QKeyEvent.key() == QtCore.Qt.Key_Left:
+                print ("<")
                 self.warpMatriz[self.quadrant][0] -= 1
             if QKeyEvent.key() == QtCore.Qt.Key_Right:
+                print (">")
                 self.warpMatriz[self.quadrant][0] += 1
             if QKeyEvent.key() == QtCore.Qt.Key_Up:
+                print ("^")
                 self.warpMatriz[self.quadrant][1] -= 1
             if QKeyEvent.key() == QtCore.Qt.Key_Down:            
+                print ("v")
                 self.warpMatriz[self.quadrant][1] += 1
             if QKeyEvent.key() == QtCore.Qt.Key_Enter:
                 self.hades.eventWarp(self.warpMatriz)
                 self.exitWarp()
                 self.warpCount = 0
-        if self.warpCount == 9:
             for i in range(0, 4):
-                self.objectsToDraw["line" + str(i+1)] = {
-                    "shape": "line",
-                    "points": (self.warpMatriz[i%4], self.warpMatriz[(i+1)%4]),
-                    "color": (0, 255, 0),
-                    "lineThickness": 2,
-                    "label": "Warp" + str(i+1),
-                }
-            self.drawImageVideoView()    
+                key = "line" + str(i+1) 
+                if key in self.objectsToDraw.keys():
+                    del self.objectsToDraw[key]     
+            
+            if self.warpCount == 9:
+                for i in range(0, 4):
+                    self.objectsToDraw["line" + str(i+1)] = {
+                        "shape": "line",
+                        "points": (self.warpMatriz[i%4], self.warpMatriz[(i+1)%4]),
+                        "color": (0, 255, 0),
+                        "lineThickness": 2,
+                        "label": "Warp" + str(i+1),
+                    }
+                self.drawImageVideoView()    
 
     def clickedConnect(self):
         lastCamera = self.comboBoxCaptureDeviceInformation.itemText(self.comboBoxCaptureDeviceInformation.count() - 1)
@@ -685,6 +694,11 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
 
         self.warpCount = 0
+        for i in range(0, 4):
+            key = "line" + str(i+1) 
+            if key in self.objectsToDraw.keys():
+                del self.objectsToDraw[key]
+
         self.pushButtonCaptureWarpAdjust.setEnabled(False)
 
         self.warpMatriz = [[0, 0], [0, 0], [0, 0], [0, 0]]
@@ -724,8 +738,8 @@ class Afrodite(QMainWindow):
             if self.warpCount < 4:
                 self.callHadesWarpEvent(px,py)
         
-            if self.warpCount == 4:
-                self.warpMatriz = self.hades.ordenaWarp(warpMatriz)
+            if self.warpCount == 9:
+                self.warpMatriz = self.hades.ordenaWarp(self.warpMatriz)
                 for i in range(0, 4):
                     self.objectsToDraw["line" + str(i+1)] = {
                         "shape": "line",
