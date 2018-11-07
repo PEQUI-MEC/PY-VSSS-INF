@@ -17,6 +17,7 @@ class Hades(QThread):
     sigDisplay = pyqtSignal(numpy.ndarray)
     sigPositions = pyqtSignal(list)
     sigMessages = pyqtSignal(list)
+    sigRemoveDraw = pyqtSignal(str)
 
     def __init__(self):
         QThread.__init__(self)
@@ -452,7 +453,7 @@ class Hades(QThread):
     # Control
     def eventUpdateSpeeds(self, speeds):
         self.zeus.updateSpeeds(speeds)
-        #self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
+        # self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
 
     # PID TEST
     def enablePIDTest(self, state):
@@ -464,6 +465,9 @@ class Hades(QThread):
         self.pidRobot = robotID
         if robotID == -1:
             self.pidTarget = None
+
+            self.sigRemoveDraw.emit("pidTarget")
+            self.sigRemoveDraw.emit("pidRobot")
 
     def setPointPID(self, point):
         if self.pidRobot != -1:
@@ -494,6 +498,7 @@ class Hades(QThread):
         HEIGHT = 480
         largura = WIDTH/2
         altura = HEIGHT/2
+        pt1 = pt2 = pt3 = pt4 = None
 
         for i in range(0, 4, 1):
             if points[i][0] - largura < 0:
@@ -512,6 +517,3 @@ class Hades(QThread):
                     pt3 = points[i]
 
         return pt1, pt2, pt3, pt4
-
-
-    

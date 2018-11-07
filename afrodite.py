@@ -37,6 +37,7 @@ class Afrodite(QMainWindow):
         self.hades.sigDisplay.connect(self.updateFrameVideoView)
         self.hades.sigPositions.connect(self.updateLabelPlayPositions)
         self.hades.sigMessages.connect(self.updateMessages)
+        self.hades.sigRemoveDraw.connect(self.removeObjectToDraw)
         self.hades.start()
 
         dirname = os.path.dirname(__file__)
@@ -339,8 +340,11 @@ class Afrodite(QMainWindow):
 
     def updateObjectsToDraw(self, newObjects):
         for key, newObjectDraw in newObjects.items():
-                self.objectsToDraw[key]  = newObjectDraw
+                self.objectsToDraw[key] = newObjectDraw
 
+    def removeObjectToDraw(self, key):
+        if key in self.objectsToDraw:
+            del self.objectsToDraw[key]
 
     def drawImageVideoView(self):
         """Itera sobre o self.objectsToDraw e desenha cada objeto
@@ -707,7 +711,6 @@ class Afrodite(QMainWindow):
         self.pushButtonCaptureWarpWarp.setEnabled(True)
         self.pushButtonCaptureWarpAdjust.setEnabled(True)
         self.hades.eventWarp(self.warpMatriz)
-
 
     def getPushButtonCaptureWarpReset(self):
         self.pushButtonCaptureWarpWarp.setEnabled(True)
