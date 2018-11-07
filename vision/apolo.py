@@ -545,9 +545,9 @@ class Apolo:
 
         if frame is None:
             print("Nao há câmeras ou o dispositivo está ocupado")
-            return None
+            return self.positions, None
 
-        frame = cv2.warpPerspective(frame,self.perspective,(640,480))
+        frame = cv2.warpPerspective(frame, self.perspective, (640,480))
 
         #WarpGoal
         frame = self.warpGoalFrame(frame)
