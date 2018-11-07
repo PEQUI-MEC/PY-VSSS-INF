@@ -646,15 +646,21 @@ class Afrodite(QMainWindow):
     #
     def getPushButtonCaptureWarpWarp(self):
         self.pushButtonCaptureWarpWarp.setEnabled(False)
-        enable = not self.pushButtonCaptureWarpWarp.isEnabled()
+        self.pushButtonCaptureWarpAdjust.setEnabled(False)
+
+        enable = True
 
         self.spinBoxCaptureWarpOffsetLeft.setEnabled(enable)
         self.horizontalSliderCaptureWarpOffsetLeft.setEnabled(enable)
         self.spinBoxCaptureWarpOffsetRight.setEnabled(enable)
         self.horizontalSliderCaptureWarpOffsetRight.setEnabled(enable)
-        self.pushButtonCaptureWarpAdjust.setEnabled(enable)
 
         self.warpCount = 0
+
+    def exitWarp(self):
+        self.pushButtonCaptureWarpWarp.setEnabled(True)
+        self.pushButtonCaptureWarpAdjust.setEnabled(True)
+        self.warpCount = 9
 
     def getPushButtonCaptureWarpReset(self):
         self.pushButtonCaptureWarpWarp.setEnabled(True)
@@ -677,6 +683,11 @@ class Afrodite(QMainWindow):
         self.pushButtonCaptureWarpWarp.setEnabled(False)
         self.warpCount = 4
 
+    def exitAdjust(self):
+        self.pushButtonCaptureWarpAdjust.setEnabled(True)
+        self.pushButtonCaptureWarpWarp.setEnabled(True)
+
+
     def warpOffsetChanged(self):
         self.tempOffset = [self.spinBoxCaptureWarpOffsetLeft.value(), self.spinBoxCaptureWarpOffsetRight.value()]
 
@@ -684,6 +695,12 @@ class Afrodite(QMainWindow):
             self.spinBoxCaptureWarpOffsetLeft.value(),
             self.spinBoxCaptureWarpOffsetRight.value(),
         )
+
+    '''
+        0 - 3: warp
+        4 - 8: adjust
+        9: Funçao do alessandro
+    '''
 
     def getPosWarp(self, event):
         if not self.pushButtonCaptureWarpWarp.isEnabled():
@@ -697,10 +714,9 @@ class Afrodite(QMainWindow):
                     self.stillWarping = True
                     self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
                     self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
-            elif not self.pushButtonCaptureWarpAdjust.isEnabled():
-                if self.warpCount < 8:
-                    self.callHadesAdjustGoalEvent(px, py)
-            else:
+            elif self.warpCount < 8:
+                 self.callHadesAdjustGoalEvent(px, py)
+            elif warpCount == 9:
                 if  px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
                     self.quadrant = 0
                 elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 2
@@ -733,6 +749,7 @@ class Afrodite(QMainWindow):
 
         if self.warpCount == 4:
             self.hades.eventWarp(self.warpMatriz)
+            self.exitWarp()
 
     def callHadesAdjustGoalEvent(self, px, py):
         self.warpGoalMatrix[self.warpCount%4][0] = px
@@ -742,9 +759,7 @@ class Afrodite(QMainWindow):
 
         if self.warpCount == 8:
             self.hades.eventWarpGoalMatriz(self.warpGoalMatrix)
-            self.pushButtonCaptureWarpAdjust.setEnabled(True)
-            self.pushButtonCaptureWarpWarp.setEnabled(True)
-            self.warpCount = 0
+            self.exitAdjust()
 
     # ROBOT TAB
     # role
