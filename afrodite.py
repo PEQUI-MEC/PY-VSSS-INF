@@ -15,8 +15,11 @@ import glob
 import interface.icons_rc
 import serial.tools.list_ports as list_ports
 import hades
+from helpers.endless import Endless
 
 # Constantes
+# TODO não deve ser constante
+ROBOTS = 3
 WIDTH = 640
 HEIGHT = 480
 
@@ -691,7 +694,7 @@ class Afrodite(QMainWindow):
                 self.selectRobotPID(px, py)
 
             elif event.buttons() == QtCore.Qt.RightButton:
-                self.selectPointPID(px,py)
+                self.selectPointPID(px, py)
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
@@ -1066,16 +1069,14 @@ class Afrodite(QMainWindow):
             self.hades.enablePIDTest(False)
 
     def selectRobotPID(self, pointX, pointY):
-        nearest = -1
-        distanceMin = 800  # TAMANHO MAXIMO DA TELA
-        for i in range(0, 3):  # QUANTIDADE DE ROBOS
+        for i in range(ROBOTS):  # QUANTIDADE DE ROBOS
             objectToDraw = self.objectsToDraw["robot" + str(i + 1)]
             euclideanDistance = distance.euclidean((pointX, pointY), objectToDraw["position"])
-            if euclideanDistance < distanceMin:
-                distanceMin = euclideanDistance
-                nearest = i
-        
-        self.hades.setRobotPID(nearest)
+            if euclideanDistance < Endless.robotSize:
+                self.hades.setRobotPID(i)
+                return
+
+        self.hades.setRobotPID(-1)
 
     def selectPointPID(self, pointX, pointY):
         self.hades.setPointPID((pointX, pointY))

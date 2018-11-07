@@ -7822,9 +7822,6 @@ Message</string>
         </property>
        </widget>
        <widget class="QPushButton" name="pushButtonComunicationRobotFunctionsPIDTest">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="geometry">
          <rect>
           <x>430</x>

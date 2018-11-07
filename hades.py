@@ -230,7 +230,7 @@ class Hades(QThread):
                                 },
                                 "target": {
                                     "position": self.pidTarget,
-                                    "orientation": self.endless.pastGoal
+                                    "orientation": Endless.pastGoal
                                 },
                                 "velocity": 0.5
                             }
@@ -438,9 +438,12 @@ class Hades(QThread):
 
     def setRobotPID(self, robotID):
         self.pidRobot = robotID
+        if robotID == -1:
+            self.pidTarget = None
 
     def setPointPID(self, point):
-        self.pidTarget = point
+        if self.pidRobot != -1:
+            self.pidTarget = (point[0], Endless.height - point[1])
 
     # Communication
     def eventStartXbee(self, port):
