@@ -417,6 +417,7 @@ class Afrodite(QMainWindow):
             self.comboBoxStrategyRobotFunctionsRobot2.setCurrentText(str(self.hades.eventLoadConfigs("robot2")))
             self.comboBoxStrategyRobotFunctionsRobot3.setCurrentText(str(self.hades.eventLoadConfigs("robot3")))
 
+            #LoadHSV
             tempHSVCalib = [(self.hades.eventLoadConfigs("mainHmin"),self.hades.eventLoadConfigs("mainHmax")),
                             (self.hades.eventLoadConfigs("mainSmin"), self.hades.eventLoadConfigs("mainSmax")),
                             (self.hades.eventLoadConfigs("mainVmin"), self.hades.eventLoadConfigs("mainVmax")),
@@ -454,6 +455,14 @@ class Afrodite(QMainWindow):
             self.tempOffset = [(self.hades.eventLoadConfigs("offsetLeft")), (self.hades.eventLoadConfigs("offsetRight"))]
 
             self.spinBoxRobotRadius.setValue(self.hades.eventLoadConfigs("robotRadius"))
+
+            self.spinBoxRobotSpeedAttack.setValue(self.hades.eventLoadConfigs("attackSpeed"))
+            self.spinBoxRobotSpeedDefense.setValue(self.hades.eventLoadConfigs("midSpeed"))
+            self.spinBoxRobotSpeedGoalkeeper.setValue(self.hades.eventLoadConfigs("goalKeeperSpeed"))
+
+            self.updateRobotSpeeds()
+            #eventoUpdate
+
 
             return True
         else:
@@ -535,7 +544,11 @@ class Afrodite(QMainWindow):
             "warpGoalMatrix": self.warpGoalMatrix,
             "offsetLeft": self.horizontalSliderCaptureWarpOffsetLeft.value(),
             "offsetRight": self.horizontalSliderCaptureWarpOffsetRight.value(),
-            "robotRadius": self.spinBoxRobotRadius.value()
+            "robotRadius": self.spinBoxRobotRadius.value(),
+
+            "attackSpeed": self.spinBoxRobotSpeedAttack.value(),
+            "midSpeed": self.spinBoxRobotSpeedDefense.value(),
+            "goalKeeperSpeed": self.spinBoxRobotSpeedGoalkeeper.value()
         }
 
         self.hades.eventSaveConfigs(value)
@@ -840,11 +853,8 @@ class Afrodite(QMainWindow):
         self.horizontalSliderRobotSpeedDefense.setEnabled(False)
         self.spinBoxRobotSpeedGoalkeeper.setEnabled(False)
         self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(False)
-        self.updateRobotSpeeds()
 
-        return self.spinBoxRobotSpeedAttack.value(), \
-               self.spinBoxRobotSpeedDefense.value(), \
-               self.spinBoxRobotSpeedGoalkeeper.value()
+        self.updateRobotSpeeds()
 
     def setRobotSpeedAttackCurrent(self, speed):
         self.progressBarRobotSpeedAttack.setValue(speed)
@@ -866,6 +876,7 @@ class Afrodite(QMainWindow):
             self.spinBoxRobotSpeedDefense.value() / 100.0,
             self.spinBoxRobotSpeedGoalkeeper.value() / 100.0
         ]
+
         self.hades.eventUpdateSpeeds(speeds)
 
     # ID
