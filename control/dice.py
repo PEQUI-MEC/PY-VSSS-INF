@@ -1,6 +1,6 @@
 from math import atan2, pi, sin, cos
 from helpers import geometry
-import numpy as np
+import numpy
 import time
 
 
@@ -36,8 +36,8 @@ class Dice:
         theta = atan2(sin(self.warrior.transAngle), -cos(self.warrior.transAngle))
         target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
 
-        targetTheta = atan2((target[1] - self.warrior.position[1]) * 1.3 / 480,
-                            -(target[0] - self.warrior.position[0]) * 1.5 / 640)
+        targetTheta = atan2((target[1] - self.warrior.position[1]) * 1.3 / 480.0,
+                            -(target[0] - self.warrior.position[0]) * 1.5 / 640.0)
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
         self.lastTime = time.time()
@@ -47,7 +47,7 @@ class Dice:
             self.transitionTime -= self.deltaTime
 
         else:
-            if atan2(sin(targetTheta - currentTheta + pi / 2), -cos(targetTheta - currentTheta + pi / 2)) < 0:
+            if atan2(sin(targetTheta - currentTheta + pi / 2.0), -cos(targetTheta - currentTheta + pi / 2.0)) < 0.0:
                 if not self.warrior.backward:
                     self.transitionTime = 1
                 self.warrior.backward = True
@@ -71,8 +71,8 @@ class Dice:
         left = geometry.saturate(left)
         right = geometry.saturate(right)
 
-        accDistance = 1 - geometry.gaussian(np.linalg.norm(np.array(self.warrior.position)
-                                                           - np.array(self.warrior.target)), 15)
+        accDistance = 1 - geometry.gaussian(numpy.linalg.norm(numpy.asarray(self.warrior.position)
+                                                              - numpy.asarray(self.warrior.target)), 15)
 
         accError = geometry.gaussian(thetaError, 15)
 
