@@ -1040,7 +1040,7 @@
             <widget class="QLabel" name="labelPlayPositionsRobot">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>120</width>
                <height>35</height>
               </size>
              </property>
@@ -1062,7 +1062,7 @@
             <widget class="QLabel" name="labelPlayPositionsRobot1">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>120</width>
                <height>25</height>
               </size>
              </property>
@@ -1084,7 +1084,7 @@
             <widget class="QLabel" name="labelPlayPositionsRobot2">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>120</width>
                <height>25</height>
               </size>
              </property>
@@ -1106,7 +1106,7 @@
             <widget class="QLabel" name="labelPlayPositionsRobot3">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>120</width>
                <height>25</height>
               </size>
              </property>
@@ -1230,7 +1230,7 @@
             <widget class="QLabel" name="labelPlayLastMessageRobot">
              <property name="minimumSize">
               <size>
-               <width>80</width>
+               <width>100</width>
                <height>35</height>
               </size>
              </property>
@@ -1253,7 +1253,7 @@ Message</string>
             <widget class="QLabel" name="labelPlayLastMessageRobot1">
              <property name="minimumSize">
               <size>
-               <width>80</width>
+               <width>100</width>
                <height>25</height>
               </size>
              </property>
@@ -1275,7 +1275,7 @@ Message</string>
             <widget class="QLabel" name="labelPlayLastMessageRobot2">
              <property name="minimumSize">
               <size>
-               <width>80</width>
+               <width>100</width>
                <height>25</height>
               </size>
              </property>
@@ -1297,7 +1297,7 @@ Message</string>
             <widget class="QLabel" name="labelPlayLastMessageRobot3">
              <property name="minimumSize">
               <size>
-               <width>80</width>
+               <width>100</width>
                <height>25</height>
               </size>
              </property>
@@ -1326,7 +1326,7 @@ Message</string>
             <widget class="QLabel" name="labelPlayRobotStatus">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>50</width>
                <height>35</height>
               </size>
              </property>
@@ -1348,7 +1348,7 @@ Message</string>
             <widget class="QProgressBar" name="progressBarPlayRobotStatusRobotA">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>50</width>
                <height>25</height>
               </size>
              </property>
@@ -1367,7 +1367,7 @@ Message</string>
             <widget class="QProgressBar" name="progressBarPlayRobotStatusRobotB">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>50</width>
                <height>25</height>
               </size>
              </property>
@@ -1386,7 +1386,7 @@ Message</string>
             <widget class="QProgressBar" name="progressBarPlayRobotStatusRobotC">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>50</width>
                <height>25</height>
               </size>
              </property>
@@ -1412,7 +1412,7 @@ Message</string>
             <widget class="QLabel" name="labelPlayRobotSpeed">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>50</width>
                <height>35</height>
               </size>
              </property>
@@ -1434,7 +1434,7 @@ Message</string>
             <widget class="QProgressBar" name="progressBarPlaySpeedRobot1">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>50</width>
                <height>25</height>
               </size>
              </property>
@@ -1459,7 +1459,7 @@ Message</string>
             <widget class="QProgressBar" name="progressBarPlaySpeedRobot2">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>50</width>
                <height>25</height>
               </size>
              </property>
@@ -1484,7 +1484,7 @@ Message</string>
             <widget class="QProgressBar" name="progressBarPlaySpeedRobot3">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>50</width>
                <height>25</height>
               </size>
              </property>
@@ -6810,10 +6810,10 @@ Message</string>
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>12</x>
-          <y>32</y>
+          <x>10</x>
+          <y>50</y>
           <width>551</width>
-          <height>111</height>
+          <height>101</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
@@ -6851,10 +6851,10 @@ Message</string>
             </size>
            </property>
            <property name="minimum">
-            <number>0</number>
+            <number>-20</number>
            </property>
            <property name="maximum">
-            <number>100</number>
+            <number>200</number>
            </property>
            <property name="tracking">
             <bool>true</bool>
@@ -6885,10 +6885,10 @@ Message</string>
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <number>0</number>
+            <number>-20</number>
            </property>
            <property name="maximum">
-            <number>100</number>
+            <number>200</number>
            </property>
            <property name="value">
             <number>0</number>
@@ -6932,10 +6932,10 @@ Message</string>
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <number>0</number>
+            <number>-20</number>
            </property>
            <property name="maximum">
-            <number>100</number>
+            <number>200</number>
            </property>
            <property name="value">
             <number>0</number>
@@ -6957,10 +6957,10 @@ Message</string>
             </size>
            </property>
            <property name="minimum">
-            <number>0</number>
+            <number>-20</number>
            </property>
            <property name="maximum">
-            <number>100</number>
+            <number>200</number>
            </property>
            <property name="tracking">
             <bool>true</bool>
@@ -6988,7 +6988,7 @@ Message</string>
             </size>
            </property>
            <property name="minimum">
-            <number>0</number>
+            <number>-100</number>
            </property>
            <property name="maximum">
             <number>100</number>
@@ -7041,7 +7041,7 @@ Message</string>
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <number>0</number>
+            <number>-100</number>
            </property>
            <property name="maximum">
             <number>100</number>
@@ -7052,6 +7052,22 @@ Message</string>
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QCheckBox" name="checkBoxStrategyTestParametersDrawConstants">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>20</y>
+          <width>161</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string>Draw Constants</string>
+        </property>
        </widget>
       </widget>
       <widget class="QGroupBox" name="groupBoxStrategyRobotFunctions">
@@ -8718,12 +8734,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>921</x>
-     <y>530</y>
+     <x>919</x>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1343</x>
-     <y>530</y>
+     <x>1341</x>
+     <y>542</y>
     </hint>
    </hints>
   </connection>
@@ -8734,12 +8750,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1343</x>
-     <y>530</y>
+     <x>1341</x>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
-     <x>921</x>
-     <y>530</y>
+     <x>919</x>
+     <y>542</y>
     </hint>
    </hints>
   </connection>
@@ -8750,12 +8766,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>921</x>
-     <y>567</y>
+     <x>919</x>
+     <y>576</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1343</x>
-     <y>567</y>
+     <x>1341</x>
+     <y>576</y>
     </hint>
    </hints>
   </connection>
@@ -8766,12 +8782,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1343</x>
-     <y>567</y>
+     <x>1341</x>
+     <y>576</y>
     </hint>
     <hint type="destinationlabel">
-     <x>921</x>
-     <y>567</y>
+     <x>919</x>
+     <y>576</y>
     </hint>
    </hints>
   </connection>
@@ -8782,12 +8798,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>495</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8798,12 +8814,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>495</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8814,12 +8830,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>463</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8830,12 +8846,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>463</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8846,12 +8862,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>431</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8862,12 +8878,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>431</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8878,12 +8894,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>399</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8894,12 +8910,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>399</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8910,12 +8926,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>367</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>362</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8926,12 +8942,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>362</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>367</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8942,12 +8958,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8958,12 +8974,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>890</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8974,12 +8990,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8990,12 +9006,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>890</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9006,12 +9022,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9022,12 +9038,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>890</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9038,12 +9054,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9054,12 +9070,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>890</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9074,8 +9090,8 @@ Message</string>
      <y>362</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>362</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9086,8 +9102,8 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>362</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
      <x>890</x>
@@ -9102,12 +9118,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>495</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9118,12 +9134,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>495</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9134,12 +9150,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>463</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9150,12 +9166,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>463</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9166,12 +9182,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>431</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9182,12 +9198,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>431</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9198,12 +9214,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>399</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9214,12 +9230,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>399</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9230,12 +9246,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>367</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1240</x>
-     <y>362</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9246,12 +9262,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1240</x>
-     <y>362</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>367</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9262,12 +9278,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9278,12 +9294,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>890</x>
-     <y>490</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9294,12 +9310,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9310,12 +9326,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>890</x>
-     <y>458</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9326,12 +9342,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9342,12 +9358,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>890</x>
-     <y>426</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9358,12 +9374,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9374,12 +9390,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>890</x>
-     <y>394</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9394,8 +9410,8 @@ Message</string>
      <y>362</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1017</x>
-     <y>362</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9406,8 +9422,8 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
-     <y>362</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
      <x>890</x>
@@ -9422,12 +9438,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>495</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1241</x>
-     <y>491</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9438,12 +9454,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1241</x>
-     <y>491</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>495</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9454,12 +9470,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>463</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1241</x>
-     <y>459</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9470,12 +9486,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1241</x>
-     <y>459</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>463</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9486,12 +9502,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>431</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1241</x>
-     <y>427</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9502,12 +9518,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1241</x>
-     <y>427</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>431</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9518,12 +9534,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>399</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1241</x>
-     <y>395</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9534,12 +9550,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1241</x>
-     <y>395</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>399</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9550,12 +9566,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1162</x>
-     <y>367</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1241</x>
-     <y>363</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9566,12 +9582,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1241</x>
-     <y>363</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1162</x>
-     <y>367</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9582,12 +9598,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>878</x>
-     <y>491</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1018</x>
-     <y>491</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9598,12 +9614,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1018</x>
-     <y>491</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>878</x>
-     <y>491</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9614,12 +9630,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>878</x>
-     <y>459</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1018</x>
-     <y>459</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9630,12 +9646,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1018</x>
-     <y>459</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>878</x>
-     <y>459</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9646,12 +9662,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>878</x>
-     <y>427</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1018</x>
-     <y>427</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9662,12 +9678,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1018</x>
-     <y>427</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>878</x>
-     <y>427</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9678,12 +9694,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>878</x>
-     <y>395</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1018</x>
-     <y>395</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9694,12 +9710,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1018</x>
-     <y>395</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>878</x>
-     <y>395</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9714,8 +9730,8 @@ Message</string>
      <y>363</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1018</x>
-     <y>363</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -9726,8 +9742,8 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1018</x>
-     <y>363</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
      <x>878</x>
@@ -10286,12 +10302,12 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>900</x>
-     <y>481</y>
+     <x>919</x>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
-     <x>937</x>
-     <y>482</y>
+     <x>1341</x>
+     <y>508</y>
     </hint>
    </hints>
   </connection>
@@ -10302,8 +10318,8 @@ Message</string>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1003</x>
-     <y>482</y>
+     <x>1341</x>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
      <x>912</x>

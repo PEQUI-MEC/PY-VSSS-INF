@@ -52,6 +52,8 @@ class Hades(QThread):
         self.pidTarget = None
         self.pidSpeed = 0.4
 
+        self.drawStrategyConstants = False
+
         print("Hades summoned")
 
     def __del__(self):
@@ -62,11 +64,11 @@ class Hades(QThread):
 
         # set up athena
         # TODO passar as dimensões corretamente
-        self.athena.setup(3, 640, 480, 0.8)
+        self.athena.setup(3, self.width, self.height, 0.6)
 
         # set up zeus
         # TODO passar as dimensões corretamente
-        self.zeus.setup(3, 640, 480)
+        self.zeus.setup(3)
 
         # setting up hermes
         # self.hermes = Hermes(self.srcXbee)
@@ -210,6 +212,36 @@ class Hades(QThread):
             "label": "Bola",
             "radius": 4
         }
+
+        if self.drawStrategyConstants:
+            objectsToDraw["strategyGoalieLine"] = {
+                "shape": "line",
+                "position": (Endless.goalieLine, int(Endless.goalTop)),
+                "target": (Endless.goalieLine, int(Endless.goalBottom)),
+                "label": "Goalie Line",
+                "color": (0, 255, 0)
+            }
+            objectsToDraw["strategyAreaLine"] = {
+                "shape": "line",
+                "position": (Endless.areaLine, int(Endless.areaTop)),
+                "target": (Endless.areaLine, int(Endless.areaBottom)),
+                "label": "Area Line",
+                "color": (0, 255, 0)
+            }
+            objectsToDraw["strategyGoalBorder1"] = {
+                "shape": "line",
+                "position": (int(Endless.goalSize[0]), int(Endless.areaTop)),
+                "target": (Endless.areaLine, int(Endless.areaTop)),
+                "label": "Goal Border",
+                "color": (0, 255, 0)
+            }
+            objectsToDraw["strategyGoalBorder2"] = {
+                "shape": "line",
+                "position": (int(Endless.goalSize[0]), int(Endless.areaBottom)),
+                "target": (Endless.areaLine, int(Endless.areaBottom)),
+                "label": "Goal Border",
+                "color": (0, 255, 0)
+            }
 
         if self.pidRobot != -1:
             objectsToDraw["pidRobot"] = {
@@ -446,11 +478,22 @@ class Hades(QThread):
     def eventToggleTransitions(self, state):
         self.athena.setTransitionsState(state)
 
+    def setDrawConstantsState(self, state):
+        self.drawStrategyConstants = state
+
     def eventSelectRoles(self, roles):
         self.athena.setRoles(roles)
 
-    def updateStrategyConstants(self, goalieLine, goalieOffset, areaLine):
-        self.athena.updateStrategyConstants(goalieLine, goalieOffset, areaLine)
+    @staticmethod
+    def updateStrategyConstants(goalieLine, goalieOffset, areaLine):
+        Endless.goalieOffset = goalieLine
+        Endless.areaBorderOffset = goalieOffset
+        Endless.areaOffset = areaLine
+
+        Endless.areaTop = Endless.height / 2 + Endless.areaSize[1] / 2 + Endless.areaBorderOffset  # em Y
+        Endless.areaBottom = Endless.height / 2 - Endless.areaSize[1] / 2 - Endless.areaBorderOffset  # em Y
+        Endless.goalieLine = Endless.goalSize[0] + Endless.robotSize + Endless.goalieOffset  # em X
+        Endless.areaLine = Endless.goalSize[0] + Endless.areaSize[0] + Endless.robotSize + Endless.areaOffset  # em X
 
     # Control
     def eventUpdateSpeeds(self, speeds):

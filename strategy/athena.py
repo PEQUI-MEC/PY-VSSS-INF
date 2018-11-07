@@ -35,8 +35,6 @@ class Athena:
         self.mid = None
         self.gk = None
 
-        self.gkOffset = self.goalBorderOffset = self.midOffset = 0
-
         self.ball = {
             "position": (0, 0),
             "oracle": None
@@ -139,7 +137,9 @@ class Athena:
             if type(positions[0][i]) is not dict:
                 raise ValueError("Invalid value for our warriors received.")
 
-            self.warriors[i].setup(positions[0][i]["robotLetter"], positions[0][i]["position"], positions[0][i]["orientation"])
+            self.warriors[i].setup(positions[0][i]["robotLetter"],
+                                   positions[0][i]["position"],
+                                   positions[0][i]["orientation"])
             self.warriors[i].velEstimated = \
                 distance.euclidean(self.warriors[i].position, self.warriors[i].lastPosition) / self.deltaTime
             self.warriors[i].velEstimated /= Endless.pixelMeterRatio
@@ -495,12 +495,13 @@ class Athena:
             # mid volta rápido pra recuperar a bola
             tMid = Athena.tBlockOpening
             # goleiro fica em posição real da bola
+            """ NÃO DEIXA GOLEIRO SAIR DO GOL
             if ballX < Endless.width / 4 and \
                     distance.euclidean(self.atk.position, self.ball["position"]) > 3 * Endless.robotSize and \
                     distance.euclidean(self.mid.position, self.ball["position"]) > 3 * Endless.robotSize:
                 tGk = Athena.tCatchSideways
-            else:
-                tGk = Athena.tBlock
+            else:"""
+            tGk = Athena.tBlock
 
         # situações especiais
 
@@ -583,9 +584,16 @@ class Athena:
                 tAtk = Athena.tWaitPass
 
         # ações específicas de cada papel
-        # gk
-        if distance.euclidean(self.gk.position, self.ball["position"]) < Endless.robotSize * 1.2:
+        if distance.euclidean(self.gk.position, self.ball["position"]) < Endless.spinSize:
             tGk = Athena.tSpin
+
+        if tMid != Athena.tPush and tMid != Athena.tKick:
+            if distance.euclidean(self.mid.position, self.ball["position"]) < Endless.spinSize:
+                tMid = Athena.tSpin
+
+        if tAtk != Athena.tPush and tAtk != Athena.tKick:
+            if distance.euclidean(self.atk.position, self.ball["position"]) < Endless.spinSize:
+                tAtk = Athena.tSpin
 
         # verifica se algum robô está travado
         for warrior in self.warriors:
@@ -675,10 +683,14 @@ class Athena:
             elif warrior.tactics == Athena.tCatch:
                 # se é pra pegar a bola, o alvo é ela com orientação pro gol
                 warrior.command["type"] = "goTo"
-                warrior.command["target"] = self.ball["position"]
                 warrior.command["targetOrientation"] = Endless.pastGoal
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "por favor"
+
+                if ballX < warrior.position[0] - 2 * Endless.robotSize:
+                    warrior.command["target"] = (self.ball["position"])
+                else:
+                    warrior.command["target"] = self.ball["position"]
 
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados
@@ -696,11 +708,10 @@ class Athena:
             elif warrior.tactics == Athena.tBlock:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 # !TODO pegar Y composto com a velocidade da bola
-                targetX = Endless.goalieLine + self.midOffset
-                targetY = self.ball["oracle"].getY(targetX)
-                geometry.saturate(targetY, Endless.goalTop + self.goalBorderOffset, Endless.goalBottom - self.goalBorderOffset)
+                targetX = Endless.goalieLine
+                targetY = geometry.saturate(self.ball["oracle"].getY(targetX), Endless.goalBottom, Endless.goalTop)
 
-                target = (targetX, ballY)
+                target = (targetX, targetY)
 
                 if distance.euclidean(warrior.position, target) > Endless.robotSize:
                     # se está longe do alvo, vai até ele
@@ -722,7 +733,7 @@ class Athena:
 
             elif warrior.tactics == Athena.tBlockOpening:
                 warrior.command["targetVelocity"] = warrior.defaultVel
-                targetX = Endless.areaLine + self.midOffset
+                targetX = Endless.areaLine
                 targetY = ballY
 
                 if ballY > Endless.height - Endless.robotSize:
@@ -889,8 +900,3 @@ class Athena:
             elif warrior.role == "gk":
                 warrior.setDefaultVel(gkSpeed)
                 print("\tGoalkeeper: " + gkSpeed)
-
-    def updateStrategyConstants(self, goalieLine, goalieOffset, areaLine):
-        self.gkOffset = goalieLine
-        self.goalBorderOffset = goalieOffset
-        self.midOffset = areaLine

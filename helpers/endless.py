@@ -1,6 +1,6 @@
 class Endless:
-    width = 0
     height = 0
+    width = 0
     pixelMeterRatio = 0
     robotSize = 0
     spinSize = 0
@@ -21,6 +21,9 @@ class Endless:
     areaBottom = 0
     goalieLine = 0
     areaLine = 0
+    areaBorderOffset = 0
+    goalieOffset = 0
+    areaOffset = 0
 
     @staticmethod
     def setup(width, height):
@@ -41,6 +44,11 @@ class Endless:
         Endless.pastGoal = (Endless.width + Endless.areaSize[0], Endless.height / 2)
         Endless.ourGoal = (Endless.goalSize[0], Endless.height / 2)
 
+        # offsets
+        Endless.areaBorderOffset = 0
+        Endless.goalieOffset = 0
+        Endless.areaOffset = 0
+
         # limites
         Endless.topSide = Endless.height - Endless.robotSize
         Endless.bottomSide = Endless.robotSize
@@ -48,9 +56,9 @@ class Endless:
         Endless.ourCorner = Endless.areaSize[0]  # em X
         Endless.goalTop = Endless.height / 2 + Endless.goalSize[1] / 2  # em Y
         Endless.goalBottom = Endless.height / 2 - Endless.goalSize[1] / 2  # em Y
-        Endless.areaTop = Endless.height / 2 + Endless.areaSize[1] / 2  # em Y
-        Endless.areaBottom = Endless.height / 2 - Endless.areaSize[1] / 2  # em Y
-        Endless.goalieLine = Endless.goalSize[0] + Endless.robotSize  # em X
-        Endless.areaLine = Endless.goalSize[0] + Endless.areaSize[0] + Endless.robotSize  # em X
+        Endless.areaTop = Endless.height / 2 + Endless.areaSize[1] / 2 + Endless.areaBorderOffset  # em Y
+        Endless.areaBottom = Endless.height / 2 - Endless.areaSize[1] / 2 - Endless.areaBorderOffset  # em Y
+        Endless.goalieLine = Endless.goalSize[0] + Endless.robotSize + Endless.goalieOffset  # em X
+        Endless.areaLine = Endless.goalSize[0] + Endless.areaSize[0] + Endless.robotSize + Endless.areaOffset  # em X
 
         print("Endless is set up.")

@@ -29,9 +29,8 @@ class Zeus:
 
         for robot in robots:
             self.robotsSpeed.append(robot)
-            print(robot)
 
-    def setup(self, nWarriors, width, height):
+    def setup(self, nWarriors):
         """Zeus first movements
 
         This method must be called before using Zeus properly.
@@ -39,8 +38,6 @@ class Zeus:
 
         Args:
             nWarriors: Num of warriors in game
-            width:
-            height:
 
         Returns:
 

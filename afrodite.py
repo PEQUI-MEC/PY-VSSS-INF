@@ -151,6 +151,7 @@ class Afrodite(QMainWindow):
         self.pushButtonStrategyRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
         self.pushButtonStrategyRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
 
+        self.checkBoxStrategyTestParametersDrawConstants.clicked.connect(self.toggleDrawConstants)
         self.horizontalSliderStrategyTestParametersGoalieOffset.valueChanged.connect(self.updateStrategyConstants)
         self.horizontalSliderStrategyTestParametersGoalieLine.valueChanged.connect(self.updateStrategyConstants)
         self.horizontalSliderStrategyTestParametersAreaLine.valueChanged.connect(self.updateStrategyConstants)
@@ -350,29 +351,30 @@ class Afrodite(QMainWindow):
         """Itera sobre o self.objectsToDraw e desenha cada objeto
         Os objetos nessa lista devem ser do tipo:
         {
-            "shape": "circle" | "rect" | "robot",
-            "position": (x, y),
+            "shape": "circle" | "rect" | "robot" | "line",
+            "position": (x, y), # centro do shape ou o início de uma line
             "color": (r, g, b),
             "label": # string - rótulo do objeto (opcional)
             "radius": # number - se shape = circle
             "limit": lado # se shape = rect
             "orientation": # number - se shape = robot (opcional)
-            "target": (x2, y2) # se shape = robot (opcional)
+            "target": (x2, y2) # se shape = robot (opcional) ou final de uma line
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
         }
         """
         # cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
             for key, objectToDraw in self.objectsToDraw.items():
+                if "label" in objectToDraw:
+                    cv2.putText(self.image, objectToDraw["label"],
+                                (objectToDraw["position"][0] + 10, objectToDraw["position"][1] + 10),
+                                cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
+
                 if objectToDraw["shape"] == "robot":
                     cv2.rectangle(self.image, objectToDraw["position"],
                                   (objectToDraw["position"][0] + Endless.robotSize,
                                    objectToDraw["position"][1] + Endless.robotSize),
                                   objectToDraw["color"], 2)
-
-                    if "label" in objectToDraw:
-                        cv2.putText(self.image, objectToDraw["label"], objectToDraw["position"],
-                                    cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
 
                     if "target" in objectToDraw:
                         cv2.line(self.image, objectToDraw["position"], objectToDraw["target"],
@@ -383,10 +385,6 @@ class Afrodite(QMainWindow):
                     cv2.circle(self.image, objectToDraw["position"], objectToDraw["radius"], objectToDraw["color"],
                                2)
 
-                    if "label" in objectToDraw:
-                        cv2.putText(self.image, objectToDraw["label"], objectToDraw["position"],
-                                    cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
-
                 elif objectToDraw["shape"] == "rect":
                     cv2.rectangle(self.image, objectToDraw["position"],
                                   (objectToDraw["position"][0] + objectToDraw["limit"],
@@ -395,6 +393,8 @@ class Afrodite(QMainWindow):
                 elif objectToDraw["shape"] == "line":
                     cv2.line(self.image, (objectToDraw["points"][0][0], objectToDraw["points"][0][1]), (objectToDraw["points"][1][0], objectToDraw["points"][1][1]), objectToDraw["color"], objectToDraw["lineThickness"])
 
+                elif objectToDraw["shape"] == "line":
+                    cv2.line(self.image, objectToDraw["position"], objectToDraw["target"], objectToDraw["color"], 2)
 
     # MENU BAR
     # MenuBarArquivo
@@ -1325,11 +1325,14 @@ class Afrodite(QMainWindow):
 
     # Parameters
     def updateStrategyConstants(self):
-        self.hades.updateStrategyConstants(
+        hades.Hades.updateStrategyConstants(
             self.spinBoxStrategyTestParametersGoalieLine.value(),
             self.spinBoxStrategyTestParametersGoalieOffset.value(),
             self.spinBoxStrategyTestParametersAreaLine.value()
         )
+
+    def toggleDrawConstants(self):
+        self.hades.setDrawConstantsState(self.checkBoxStrategyTestParametersDrawConstants.isChecked())
 
 
 def main():
