@@ -415,12 +415,14 @@ class Apolo:
 
         # Nesse ponto, temos a orientação da tag Verde, porém, a orientação do robo fica à 135 graus anti-horario
         # Por isso, devemos subtrair 135º radianos
+        # Para inverter a frente, é só botar +45
+        #orientation = ((orientation + 0.785398) % 2*np.pi)
+        orientation = ((orientation - 2.35619) % 2 * np.pi)
 
-        orientation = ((orientation + 0.785398) % 2*np.pi)
 
         # Nesse ponto, temos a orientação entre 0 - 2pi, porém, o controle precisa dela no intervalo de -pi a pi
         if orientation > np.pi:
-            orientation = -np.pi + (orientation - np.pi)
+            orientation = np.pi - orientation
 
         return orientation
 
