@@ -29,6 +29,8 @@ class Dice:
         self.transitionTime = 0
 
     def vectorControl(self):
+        if self.warrior.velAcc < 0.5:
+            self.warrior.velAcc = 0.5
 
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
@@ -65,6 +67,11 @@ class Dice:
 
         thetaError = atan2(sin(targetTheta - currentTheta), -cos(targetTheta - currentTheta))
 
+        if self.warrior.velAcc < 1.0:
+            self.warrior.velAcc = self.warrior.velAcc + 0.25
+        else:
+            self.warrior.velAcc = 1.0
+
         left = self.warrior.front + sin(thetaError)
         right = self.warrior.front - sin(thetaError)
 
@@ -76,8 +83,8 @@ class Dice:
 
         accError = geometry.gaussian(thetaError, 15)
 
-        left = self.warrior.vMax * left * accDistance * accError
-        right = self.warrior.vMax * right * accDistance * accError
+        left = self.warrior.vMax * left * accDistance * accError * self.warrior.velAcc
+        right = self.warrior.vMax * right * accDistance * accError * self.warrior.velAcc
 
         return [left, right, self.warrior.transAngle]
 
