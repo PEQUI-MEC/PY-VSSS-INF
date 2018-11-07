@@ -8,6 +8,7 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
+from scipy.spatial import distance
 import numpy as np
 import serial
 import glob
@@ -52,6 +53,8 @@ class Afrodite(QMainWindow):
         self.pushButtonStrategyFormationSave.clicked.connect(self.saveNewFormation)
         self.formating = False
         self.robotsFormation = {}
+        self.countFormating = 0
+        self.robotFormationSet = True
 
         # VISION
         self.cameraIsRunning = False
@@ -303,7 +306,7 @@ class Afrodite(QMainWindow):
     """
 
     def updateObjectsToDraw(self, newObjects):
-        self.objectsToDraw = newObjects
+        self.objectsToDraw = newObjects  
 
     def drawImageVideoView(self):
         """Itera sobre o self.objectsToDraw e desenha cada objeto
@@ -322,11 +325,18 @@ class Afrodite(QMainWindow):
         """
         # cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
-            if self.formating:
-                print("Desenhando Formating")
+            '''
+                for i in range(0, self.countFormating%4):
+                    #print("Desenhando Formating", self.robotsFormation["robot" + str(i + 1)]["position"][0])
+                    cv2.rectangle(self.image, (self.robotsFormation["robot" + str(i + 1)]["position"][0], self.robotsFormation["robot" + str(i + 1)]["position"][1]),
+                                  (self.robotsFormation["robot" + str(i + 1)]["position"][0] + 10, self.robotsFormation["robot" + str(i + 1)]["position"][1] + 10),
+                                  self.robotsFormation["robot" + str(i + 1)]["color"], 2)
 
-
-
+                    cv2.line(self.image, (self.robotsFormation["robot" + str(i + 1)]["position"][0], self.robotsFormation["robot" + str(i + 1)]["position"][1]),
+                        (self.robotsFormation["robot" + str(i + 1)]["orientation"][0], self.robotsFormation["robot" + str(i + 1)]["orientation"][1]),
+                                 objectToDraw["color"], 2)
+            ###########-*
+            '''
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
                     cv2.rectangle(self.image, objectToDraw["position"],
@@ -353,6 +363,17 @@ class Afrodite(QMainWindow):
                 elif objectToDraw["shape"] == "rect":
                     cv2.rectangle(self.image, objectToDraw["position"], objectToDraw["limit"],
                                   objectToDraw["color"], 2)
+
+                elif objectToDraw["shape"] == "robotFormation":
+                    if self.formating:
+                        cv2.rectangle(self.image, (objectToDraw["position"][0], objectToDraw["position"][1]),
+                                      (objectToDraw["position"][0] + 10, objectToDraw["position"][1] + 10),
+                                      objectToDraw["color"], 2)
+                        '''
+                        cv2.line(self.image, (objectToDraw["position"][0], objectToDraw["position"][1]),
+                            (self.objectToDraw["orientation"][0], objectToDraw["orientation"][1]),
+                                     objectToDraw["color"], 2)
+                        '''
 
     # MENU BAR
     # MenuBarArquivo
@@ -546,15 +567,6 @@ class Afrodite(QMainWindow):
         self.pushButtonStrategyFormationSave.setEnabled(True)
         self.formating = True
 
-        for i in range(0, 3):
-            self.robotsFormation["robot" + str(i + 1)] = {
-                "shape": "robotFormation",
-                "position": (WIDTH/2 + i*10, HEIGHT/2),
-                "color": (0, 255, 0),
-                "label": str(i + 1),
-                "orientation": 0.0
-            }
-
     def saveNewFormation(self):
         self.pushButtonStrategyFormationCreate.setEnabled(True)
         self.pushButtonStrategyFormationSave.setEnabled(False)
@@ -566,6 +578,24 @@ class Afrodite(QMainWindow):
         
         self.lineEditStrategyFormationNewStrategy.setText("")
         self.updateComboBoxFormation()
+
+
+    #UNIR SELECT ROBOT FORMATION COM PID
+    #FAZ QUASE A MESMA COISA
+    def selectRobotFormation(self, pointX, pointY):
+        nearest = -1
+        distanceMin = 800  # TAMANHO MAXIMO DA TELA
+        for i in range(0, 3):  # QUANTIDADE DE ROBOS
+            objectToDraw = self.objectsToDraw["robot" + str(i + 1)]
+            euclideanDistance = distance.euclidean((pointX, pointY), objectToDraw["position"])
+            if euclideanDistance < distanceMin:
+                distanceMin = euclideanDistance
+                nearest = i
+        
+        return nearest
+
+    def selectOrientationFormation(self, pointX, pointY):
+        print("Orientation:", pointX, pointY)
 
     # CAPTURE TAB
     ## DeviceInformation
@@ -726,10 +756,10 @@ class Afrodite(QMainWindow):
         )
 
     def getPosWarp(self, event):
-        if not self.pushButtonCaptureWarpWarp.isEnabled():
-            px = event.pos().x()
-            py = event.pos().y()
+        px = event.pos().x()
+        py = event.pos().y()
 
+        if not self.pushButtonCaptureWarpWarp.isEnabled():
             if self.warpCount < 4:
                 print(self.warpCount)
                 self.callHadesWarpEvent(px,py)
@@ -742,7 +772,17 @@ class Afrodite(QMainWindow):
                     self.callHadesAdjustGoalEvent(px, py)
 
         elif self.formating:
-            print("Formating")
+            if self.countFormating < 3:
+                if self.robotFormationSet:
+                    self.objectsToDraw["robotFormation" + str(self.countFormating + 1)]["robotID"] = self.selectRobotFormation(px, py)
+                    #print("Setando RobotID Formation", self.objectsToDraw["robotFormation" + str(self.countFormating + 1)]["robotID"])
+                    self.robotFormationSet = False
+                else:
+                    #print("Setando posição Formation")
+                    self.objectsToDraw["robotFormation" + str(self.countFormating + 1)]["position"][0] = px
+                    self.objectsToDraw["robotFormation" + str(self.countFormating + 1)]["position"][1] = py
+                    self.countFormating += 1
+                    self.robotFormationSet = True     
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
