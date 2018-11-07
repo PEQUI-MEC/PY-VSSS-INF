@@ -537,8 +537,7 @@ class Afrodite(QMainWindow):
             self.pushButtonStrategyFormationLoad.setEnabled(True)
 
     def loadComboBoxFormation(self):
-        #self.hades.loadFormation(self.comboBoxStrategyFormationLoadStrategy.currentText())
-        print(self.comboBoxStrategyFormationLoadStrategy.currentIndex())
+        self.hades.loadFormation(self.comboBoxStrategyFormationLoadStrategy.currentText())
 
     def deleteItemComboBoxFormation(self):
         self.hades.deleteFormation(self.comboBoxStrategyFormationLoadStrategy.currentIndex())
@@ -576,7 +575,6 @@ class Afrodite(QMainWindow):
         
         self.lineEditStrategyFormationNewStrategy.setText("")
         self.updateComboBoxFormation()
-
 
     #UNIR SELECT ROBOT FORMATION COM PID
     #FAZ QUASE A MESMA COISA
