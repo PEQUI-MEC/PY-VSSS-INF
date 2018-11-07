@@ -894,8 +894,7 @@ class Athena:
                 warrior.setDefaultVel(gkSpeed)
                 print("\tGoalkeeper: " + gkSpeed)
 
-    def setGkOffset(self, newGkOffset):
-        self.gkOffset = newGkOffset
-
-    def setMidOffset(self, newMidOffset):
-        self.midOffset = newMidOffset
+    def updateStrategyConstants(self, goalieLine, goalieOffset, areaLine):
+        self.gkOffset = goalieLine
+        self.goalBorderOffset = goalieOffset
+        self.midOffset = areaLine
