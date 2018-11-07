@@ -200,6 +200,7 @@ class Zeus:
 
             warriors[x].backward = self.warriors[x].backward
             warriors[x].front = self.warriors[x].front
+            warriors[x].velAcc = self.warriors[x].velAcc
 
         return warriors
 

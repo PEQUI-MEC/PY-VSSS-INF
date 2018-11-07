@@ -16,6 +16,7 @@ class Warrior(Structure):
         self.vMax = None
         self.vLeft = None
         self.vRight = None
+        self.velAcc = 0.5
 
         self.target = None
         self.targetOrientation = None
