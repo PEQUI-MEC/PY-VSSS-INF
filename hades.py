@@ -208,11 +208,34 @@ class Hades(QThread):
             "radius": 4
         }
 
+        print(Endless.areaTop)
         if self.drawStrategyConstants:
-            objectsToDraw["strategyConstants"] = {
+            objectsToDraw["strategyGoalieLine"] = {
                 "shape": "line",
-                "position": (Endless.goalieOffset, 0),
-                "target": (Endless.goalieOffset, 480),
+                "position": (Endless.goalieLine, int(Endless.goalTop)),
+                "target": (Endless.goalieLine, int(Endless.goalBottom)),
+                "label": "Goalie Line",
+                "color": (0, 255, 0)
+            }
+            objectsToDraw["strategyAreaLine"] = {
+                "shape": "line",
+                "position": (Endless.areaLine, int(Endless.areaTop)),
+                "target": (Endless.areaLine, int(Endless.areaBottom)),
+                "label": "Area Line",
+                "color": (0, 255, 0)
+            }
+            objectsToDraw["strategyGoalBorder1"] = {
+                "shape": "line",
+                "position": (int(Endless.goalSize[0]), int(Endless.areaTop)),
+                "target": (Endless.areaLine, int(Endless.areaTop)),
+                "label": "Goal Border",
+                "color": (0, 255, 0)
+            }
+            objectsToDraw["strategyGoalBorder2"] = {
+                "shape": "line",
+                "position": (int(Endless.goalSize[0]), int(Endless.areaBottom)),
+                "target": (Endless.areaLine, int(Endless.areaBottom)),
+                "label": "Goal Border",
                 "color": (0, 255, 0)
             }
 
@@ -440,9 +463,14 @@ class Hades(QThread):
 
     @staticmethod
     def updateStrategyConstants(goalieLine, goalieOffset, areaLine):
-        Endless.goalieLine = goalieLine
-        Endless.goalieOffset = goalieOffset
-        Endless.areaLine = areaLine
+        Endless.goalieOffset = goalieLine
+        Endless.areaBorderOffset = goalieOffset
+        Endless.areaOffset = areaLine
+
+        Endless.areaTop = Endless.height / 2 + Endless.areaSize[1] / 2 + Endless.areaBorderOffset  # em Y
+        Endless.areaBottom = Endless.height / 2 - Endless.areaSize[1] / 2 - Endless.areaBorderOffset  # em Y
+        Endless.goalieLine = Endless.goalSize[0] + Endless.robotSize + Endless.goalieOffset  # em X
+        Endless.areaLine = Endless.goalSize[0] + Endless.areaSize[0] + Endless.robotSize + Endless.areaOffset  # em X
 
     # Control
     def eventUpdateSpeeds(self, speeds):

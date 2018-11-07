@@ -21,6 +21,9 @@ class Endless:
     areaBottom = 0
     goalieLine = 0
     areaLine = 0
+    areaBorderOffset = 0
+    goalieOffset = 0
+    areaOffset = 0
 
     @staticmethod
     def setup(width, height):

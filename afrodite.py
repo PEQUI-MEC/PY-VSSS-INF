@@ -325,14 +325,15 @@ class Afrodite(QMainWindow):
         # cv2.rectangle(self.image, (10,10),(200,200),(255,255,255), -1)
         if self.image is not None:
             for key, objectToDraw in self.objectsToDraw.items():
+                if "label" in objectToDraw:
+                    cv2.putText(self.image, objectToDraw["label"],
+                                (objectToDraw["position"][0] + 10, objectToDraw["position"][1] + 10),
+                                cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
+
                 if objectToDraw["shape"] == "robot":
                     cv2.rectangle(self.image, objectToDraw["position"],
                                   (objectToDraw["position"][0] + 10, objectToDraw["position"][1] + 10),
                                   objectToDraw["color"], 2)
-
-                    if "label" in objectToDraw:
-                        cv2.putText(self.image, objectToDraw["label"], objectToDraw["position"],
-                                    cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
 
                     if "target" in objectToDraw:
                         cv2.line(self.image, objectToDraw["position"], objectToDraw["target"],
@@ -342,10 +343,6 @@ class Afrodite(QMainWindow):
                 elif objectToDraw["shape"] == "circle":
                     cv2.circle(self.image, objectToDraw["position"], objectToDraw["radius"], objectToDraw["color"],
                                2)
-
-                    if "label" in objectToDraw:
-                        cv2.putText(self.image, objectToDraw["label"], objectToDraw["position"],
-                                    cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
 
                 elif objectToDraw["shape"] == "rect":
                     cv2.rectangle(self.image, objectToDraw["position"], objectToDraw["limit"],
@@ -1231,7 +1228,7 @@ class Afrodite(QMainWindow):
         )
 
     def toggleDrawConstants(self):
-        self.hades.setDrawConstantsState(self.checkBoxStrategyTestParametersDrawConstants.checked())
+        self.hades.setDrawConstantsState(self.checkBoxStrategyTestParametersDrawConstants.isChecked())
 
 
 def main():
