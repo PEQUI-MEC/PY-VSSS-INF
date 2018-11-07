@@ -2,6 +2,7 @@
 import cv2
 import numpy as np
 import random
+import math
 
 # Constantes
 WIDTH = 640
@@ -387,41 +388,14 @@ class Apolo:
         Como na imagem o Y cresce pra baixo, então é necessário inverter, ficando entao yInicial - yFinal
         
         '''
-        if distance == 0:
-            distance = 1
+        orientation = math.atan2(robotPos[1] - secondaryTagPosition[1], -robotPos[0] + secondaryTagPosition[0])
 
-        relativePosition = [(secondaryTagPosition[0] - robotPos[0]) / distance,
-                            (robotPos[1] - secondaryTagPosition[1]) / distance]
+        orientation += 0.9928943898326508
 
-        if abs(relativePosition[0]) == 0:
-            # Quando a variação em X é zero, arctg é indefino (divisão por zero). Sendo assim, deve utilizar arcsin
-            # Porém, a função arcsin para 90º demora mto (mais de 1,5 segundos), entao já seto o valor de 90º radianos direto
-            orientation = 1.5708
-        else:
-            orientation = np.arctan(relativePosition[1] / relativePosition[0])
+        if orientation > math.pi:
+            orientation = -math.pi + (orientation - math.pi)
 
-        # Corrige a orientação para o seu devido quadrante
-        if relativePosition[0] < 0:
-            if relativePosition[1] >= 0:
-                # Quadrante 2
-                orientation = np.pi - abs(orientation)
-            elif relativePosition[1] < 0:
-                # Quadrante 3
-                orientation = np.pi + orientation
-        elif relativePosition[0] >= 0:
-            if relativePosition[1] < 0:
-                # Quadrante 4
-                orientation = 2 * np.pi - abs(orientation)
-
-        # Nesse ponto, temos a orientação da tag Verde, porém, a orientação do robo fica à 135 graus anti-horario
-        # Por isso, devemos subtrair 135º radianos
-
-        orientation = ((orientation + 0.785398) % 2*np.pi)
-
-        # Nesse ponto, temos a orientação entre 0 - 2pi, porém, o controle precisa dela no intervalo de -pi a pi
-        if orientation > np.pi:
-            orientation = -np.pi + (orientation - np.pi)
-
+        print(orientation)
         return orientation
 
     @staticmethod
@@ -541,7 +515,7 @@ class Apolo:
         frame = self.getFrame()
 
         #frame = cv2.imread("./vision/Tags/newTag.png",cv2.IMREAD_COLOR)
-        #frame = cv2.imread("Tags/nova90inv2Balls.png", cv2.IMREAD_COLOR)
+        #frame = cv2.imread("./vision/Tags/Q3.png", cv2.IMREAD_COLOR)
 
         if frame is None:
             print("Nao há câmeras ou o dispositivo está ocupado")

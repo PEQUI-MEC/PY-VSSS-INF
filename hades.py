@@ -184,7 +184,8 @@ class Hades(QThread):
 
             objectsToDraw["robot" + str(i + 1)] = {
                 "shape": "robot",
-                "position": (positions[0][i]["position"][0], self.height - positions[0][i]["position"][1]),
+                "position": (int(positions[0][i]["position"][0] - Endless.robotSize / 2),
+                             int(self.height - positions[0][i]["position"][1] - Endless.robotSize / 2)),
                 "color": (255, 255, 0),
                 "label": str(i + 1),
                 "orientation": positions[0][i]["orientation"]
@@ -196,7 +197,8 @@ class Hades(QThread):
 
             objectsToDraw["advRobot" + str(i + 1)] = {
                 "shape": "robot",
-                "position": (positions[1][i]["position"][0], self.height - positions[1][i]["position"][1]),
+                "position": (int(positions[1][i]["position"][0] - Endless.robotSize / 2),
+                             int(self.height - positions[1][i]["position"][1] - Endless.robotSize / 2)),
                 "color": (0, 0, 255),
                 "label": str(i + 1),
             }
@@ -212,8 +214,8 @@ class Hades(QThread):
         if self.pidRobot != -1:
             objectsToDraw["pidRobot"] = {
                 "shape": "rect",
-                "position": (positions[0][self.pidRobot]["position"][0] - 5,
-                             self.height - positions[0][self.pidRobot]["position"][1] - 5),
+                "position": (int(positions[0][self.pidRobot]["position"][0] - Endless.robotSize / 2 - 5),
+                             int(self.height - positions[0][self.pidRobot]["position"][1] - Endless.robotSize / 2 - 5)),
                 "limit": Endless.robotSize + 10,
                 "color": (255, 255, 255),
                 "label": "Selecionado",
