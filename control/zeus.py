@@ -2,6 +2,7 @@ from control.eunomia import Eunomia
 from control.dice import Dice
 from control.warrior import Warrior
 from helpers.endless import Endless
+import numpy
 
 
 class Zeus:
@@ -18,29 +19,18 @@ class Zeus:
     def __init__(self):
         self.warriors = []
         self.nWarriors = 0
-        self.robotsSpeed = [0, 0, 0]
+        self.robotsSpeed = []
+
         self.endless = None
         self.actions = Eunomia()
         self.translate = Dice()
         print("Zeus summoned")
 
-    def updateSpeeds(self, robotA, robotB, robotC):
-        """Get
-
-        Args:
-            robotA:
-            robotB:
-            robotC:
-
-        Returns:
-
-        """
+    def updateSpeeds(self, robots):
         print("[Zeus] New speeds:")
-        self.robotsSpeed[0] = robotA
-        self.robotsSpeed[1] = robotB
-        self.robotsSpeed[2] = robotC
 
-        for robot in self.robotsSpeed:
+        for robot in robots:
+            self.robotsSpeed.append(robot)
             print(robot)
 
     def setup(self, nWarriors, width, height):
@@ -64,6 +54,7 @@ class Zeus:
 
         for i in range(0, nWarriors):
             self.warriors.append(Warrior())
+            self.robotsSpeed.append(0.0)
 
         print("Zeus is set up")
         return self
@@ -165,14 +156,17 @@ class Zeus:
             info = strategia[x]["data"]
 
             if strategia[x]["command"] == "goTo":
-                warriors[x].position = info["pose"]["position"]
-                warriors[x].orientation = info["pose"]["orientation"]
+                warriors[x].position = numpy.asarray(info["pose"]["position"], dtype=float)
+                warriors[x].orientation = float(info["pose"]["orientation"])
 
-                warriors[x].target = info["target"]["position"]
-                warriors[x].targetOrientation = info["target"]["orientation"]
+                warriors[x].target = numpy.asarray(info["target"]["position"], dtype=float)
+                if type(info["target"]["orientation"]) is tuple:
+                    warriors[x].targetOrientation = numpy.asarray(info["target"]["orientation"], dtype=float)
+                else:
+                    warriors[x].targetOrientation = float(info["target"]["orientation"])
 
                 if "velocity" in info:
-                    warriors[x].vMax = info["velocity"]
+                    warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
                     warriors[x].vMax = self.robotsSpeed[x]
 
@@ -180,43 +174,39 @@ class Zeus:
                     warriors[x].before = float(info["before"])
 
                 if "obstacles" in info:
-                    warriors[x].obstacles = info["obstacles"]
-                    warriors[x].obstaclesSpeed = info["obstaclesSpeed"]
+                    warriors[x].obstacles = numpy.asarray(info["obstacles"], dtype=float)
+                    warriors[x].obstaclesSpeed = numpy.asarray(info["obstaclesSpeed"], dtype=float)
 
             elif strategia[x]["command"] == "spin":
                 warriors[x].action.append(info["direction"])
 
                 if "velocity" in info:
-                    warriors[x].vMax = info["velocity"]
+                    warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
                     warriors[x].vMax = self.robotsSpeed[x]
 
             elif strategia[x]["command"] == "lookAt":
-                warriors[x].orientation = info["pose"]["orientation"]
+                warriors[x].orientation = float(info["pose"]["orientation"])
 
                 if "velocity" in info:
-                    warriors[x].vMax = info["velocity"]
+                    warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
                     warriors[x].vMax = self.robotsSpeed[x]
 
-                if type(info["target"]) is float:
-                    warriors[x].targetOrientation = info["target"]
+                if type(info["target"]) is not tuple:
+                    warriors[x].targetOrientation = float(info["target"])
                     warriors[x].action.append("orientation")
                 else:
-                    warriors[x].position = info["pose"]["position"]
-                    warriors[x].target = info["target"]
+                    warriors[x].position = numpy.asarray(info["pose"]["position"], dtype=float)
+                    warriors[x].target = numpy.asarray(info["target"], dtype=float)
                     warriors[x].action.append("target")
 
             elif strategia[x]["command"] == "stop":
-                warriors[x].vMax = 0
+                warriors[x].vMax = 0.0
                 warriors[x].before = float(info["before"])
 
             warriors[x].backward = self.warriors[x].backward
             warriors[x].front = self.warriors[x].front
-
-        warriors[0].name = "luisinho"
-        warriors[1].name = "zezinho"
-        warriors[2].name = "huguinho"
 
         return warriors
 
@@ -251,25 +241,15 @@ class Zeus:
             list: List of dictionary ready to be sent to the Communication(Hermes).
 
         """
+        output = []
+        for x in range(0, self.nWarriors):
+            output.append(
+                {
+                    "robotLetter": strategia[x]["robotLetter"],
+                    "vLeft": velocities[x][0],
+                    "vRight": velocities[x][1],
+                    "vector": velocities[x][2]
+                }
+            )
 
-        output = [
-            {
-                "robotLetter": strategia[0]["robotLetter"],
-                "vLeft": velocities[0][0],
-                "vRight": velocities[0][1],
-                "vector": velocities[0][2]
-            },
-            {
-                "robotLetter": strategia[1]["robotLetter"],
-                "vLeft": velocities[1][0],
-                "vRight": velocities[1][1],
-                "vector": velocities[1][2]
-            },
-            {
-                "robotLetter": strategia[2]["robotLetter"],
-                "vLeft": velocities[2][0],
-                "vRight": velocities[2][1],
-                "vector": velocities[2][2]
-            }
-        ]
         return output

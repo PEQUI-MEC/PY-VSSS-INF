@@ -771,9 +771,12 @@ class Afrodite(QMainWindow):
         self.setRobotSpeedGoalkeeperCurrent(speedGoalKeeper)
 
     def updateRobotSpeeds(self):
-        self.hades.eventUpdateSpeeds(self.spinBoxRobotSpeedAttack.value() / 100.0,
-                                     self.spinBoxRobotSpeedDefense.value() / 100.0,
-                                     self.spinBoxRobotSpeedGoalkeeper.value() / 100.0)
+        speeds = [
+            self.spinBoxRobotSpeedAttack.value() / 100.0,
+            self.spinBoxRobotSpeedDefense.value() / 100.0,
+            self.spinBoxRobotSpeedGoalkeeper.value() / 100.0
+        ]
+        self.hades.eventUpdateSpeeds(speeds)
 
     # ID
     def getPushButtonRobotIDEdit(self):
