@@ -189,7 +189,7 @@ class Afrodite(QMainWindow):
         self.actionExit.triggered.connect(self.actionExitTriggered)
         self.actionLoadConfigs.triggered.connect(self.actionLoadConfigsTriggered)
         self.actionSaveConfigs.triggered.connect(self.actionSaveConfigsTriggered)
-        self.loadConfigs(file="quicksave")
+        #self.loadConfigs(file="quicksave")
 
         '''        
         # MenuBar - Help
@@ -353,62 +353,73 @@ class Afrodite(QMainWindow):
 
     def loadConfigs(self, file="save"):
         self.hades.SetFileSave(file)
-        self.horizontalSliderCaptureDevicePropertiesBrightness.setValue(self.hades.eventLoadConfigs("brightness"))
-        self.horizontalSliderCaptureDevicePropertiesSaturation.setValue(self.hades.eventLoadConfigs("saturation"))
-        self.horizontalSliderCaptureDevicePropertiesGain.setValue(self.hades.eventLoadConfigs("gain"))
-        self.horizontalSliderCaptureDevicePropertiesContrast.setValue(self.hades.eventLoadConfigs("contrast"))
-        self.horizontalSliderCaptureDevicePropertiesSharpness.setValue(self.hades.eventLoadConfigs("sharpness"))
-        self.horizontalSliderCaptureDevicePropertiesWhiteBalance.setValue(self.hades.eventLoadConfigs("balance"))
-        self.checkBoxCaptureDevicePropertiesWhiteBalanceAuto.setChecked(self.hades.eventLoadConfigs("balanceauto"))
-        self.horizontalSliderCaptureDevicePropertiesZoom.setValue(self.hades.eventLoadConfigs("zoom"))
-        self.horizontalSliderCaptureDevicePropertiesExposure.setValue(self.hades.eventLoadConfigs("exposure"))
-        self.horizontalSliderCaptureDevicePropertiesExposureAuto.setValue(self.hades.eventLoadConfigs("exposureauto"))
-        self.checkBoxCaptureDevicePropertiesExposureAutoPriority.\
-            setChecked(self.hades.eventLoadConfigs("exposureautopriority"))
-        self.horizontalSliderCaptureDevicePropertiesTilt.setValue(self.hades.eventLoadConfigs("tilt"))
-        self.horizontalSliderCaptureDevicePropertiesPan.setValue(self.hades.eventLoadConfigs("pan"))
-        self.horizontalSliderCaptureDevicePropertiesFocus.setValue(self.hades.eventLoadConfigs("focus"))
-        self.checkBoxCaptureDevicePropertiesFocusAuto.setChecked(self.hades.eventLoadConfigs("focusauto"))
 
-        self.comboBoxStrategyRobotFunctionsRobot1.setCurrentText(str(self.hades.eventLoadConfigs("robot1")))
-        self.comboBoxStrategyRobotFunctionsRobot2.setCurrentText(str(self.hades.eventLoadConfigs("robot2")))
-        self.comboBoxStrategyRobotFunctionsRobot3.setCurrentText(str(self.hades.eventLoadConfigs("robot3")))
+        if self.hades.eventLoadConfigs():
+            '''
+            self.horizontalSliderCaptureDevicePropertiesBrightness.setValue(self.hades.eventLoadConfigs("brightness"))
+            self.horizontalSliderCaptureDevicePropertiesSaturation.setValue(self.hades.eventLoadConfigs("saturation"))
+            self.horizontalSliderCaptureDevicePropertiesGain.setValue(self.hades.eventLoadConfigs("gain"))
+            self.horizontalSliderCaptureDevicePropertiesContrast.setValue(self.hades.eventLoadConfigs("contrast"))
+            self.horizontalSliderCaptureDevicePropertiesSharpness.setValue(self.hades.eventLoadConfigs("sharpness"))
+            self.horizontalSliderCaptureDevicePropertiesWhiteBalance.setValue(self.hades.eventLoadConfigs("balance"))
+            self.checkBoxCaptureDevicePropertiesWhiteBalanceAuto.setChecked(self.hades.eventLoadConfigs("balanceauto"))
+            self.horizontalSliderCaptureDevicePropertiesZoom.setValue(self.hades.eventLoadConfigs("zoom"))
+            self.horizontalSliderCaptureDevicePropertiesExposure.setValue(self.hades.eventLoadConfigs("exposure"))
+            self.horizontalSliderCaptureDevicePropertiesExposureAuto.setValue(self.hades.eventLoadConfigs("exposureauto"))
+            self.checkBoxCaptureDevicePropertiesExposureAutoPriority.\
+                setChecked(self.hades.eventLoadConfigs("exposureautopriority"))
+            self.horizontalSliderCaptureDevicePropertiesTilt.setValue(self.hades.eventLoadConfigs("tilt"))
+            self.horizontalSliderCaptureDevicePropertiesPan.setValue(self.hades.eventLoadConfigs("pan"))
+            self.horizontalSliderCaptureDevicePropertiesFocus.setValue(self.hades.eventLoadConfigs("focus"))
+            self.checkBoxCaptureDevicePropertiesFocusAuto.setChecked(self.hades.eventLoadConfigs("focusauto"))
+            '''
 
-        tempHSVCalib = [(self.hades.eventLoadConfigs("mainHmin"),self.hades.eventLoadConfigs("mainHmax")),
-                        (self.hades.eventLoadConfigs("mainSmin"), self.hades.eventLoadConfigs("mainSmax")),
-                        (self.hades.eventLoadConfigs("mainVmin"), self.hades.eventLoadConfigs("mainVmax")),
-                        self.hades.eventLoadConfigs("mainErode"), self.hades.eventLoadConfigs("mainBlur"),
-                        self.hades.eventLoadConfigs("mainDilate"), self.hades.eventLoadConfigs("mainAmin")]
+            self.comboBoxStrategyRobotFunctionsRobot1.setCurrentText(str(self.hades.eventLoadConfigs("robot1")))
+            self.comboBoxStrategyRobotFunctionsRobot2.setCurrentText(str(self.hades.eventLoadConfigs("robot2")))
+            self.comboBoxStrategyRobotFunctionsRobot3.setCurrentText(str(self.hades.eventLoadConfigs("robot3")))
 
-        self.setHSVValues(0, tempHSVCalib)
+            tempHSVCalib = [(self.hades.eventLoadConfigs("mainHmin"),self.hades.eventLoadConfigs("mainHmax")),
+                            (self.hades.eventLoadConfigs("mainSmin"), self.hades.eventLoadConfigs("mainSmax")),
+                            (self.hades.eventLoadConfigs("mainVmin"), self.hades.eventLoadConfigs("mainVmax")),
+                            self.hades.eventLoadConfigs("mainErode"), self.hades.eventLoadConfigs("mainBlur"),
+                            self.hades.eventLoadConfigs("mainDilate"), self.hades.eventLoadConfigs("mainAmin")]
 
-        tempHSVCalib = [(self.hades.eventLoadConfigs("greenHmin"),self.hades.eventLoadConfigs("greenHmax")),
-                        (self.hades.eventLoadConfigs("greenSmin"), self.hades.eventLoadConfigs("greenSmax")),
-                        (self.hades.eventLoadConfigs("greenVmin"), self.hades.eventLoadConfigs("greenVmax")),
-                        self.hades.eventLoadConfigs("greenErode"), self.hades.eventLoadConfigs("greenBlur"),
-                        self.hades.eventLoadConfigs("greenDilate"), self.hades.eventLoadConfigs("greenAmin")]
+            self.setHSVValues(0, tempHSVCalib)
 
-        self.setHSVValues(1, tempHSVCalib)
+            tempHSVCalib = [(self.hades.eventLoadConfigs("greenHmin"),self.hades.eventLoadConfigs("greenHmax")),
+                            (self.hades.eventLoadConfigs("greenSmin"), self.hades.eventLoadConfigs("greenSmax")),
+                            (self.hades.eventLoadConfigs("greenVmin"), self.hades.eventLoadConfigs("greenVmax")),
+                            self.hades.eventLoadConfigs("greenErode"), self.hades.eventLoadConfigs("greenBlur"),
+                            self.hades.eventLoadConfigs("greenDilate"), self.hades.eventLoadConfigs("greenAmin")]
 
-        tempHSVCalib = [(self.hades.eventLoadConfigs("ballHmin"),self.hades.eventLoadConfigs("ballHmax")),
-                        (self.hades.eventLoadConfigs("ballSmin"), self.hades.eventLoadConfigs("ballSmax")),
-                        (self.hades.eventLoadConfigs("ballVmin"), self.hades.eventLoadConfigs("ballVmax")),
-                        self.hades.eventLoadConfigs("ballErode"), self.hades.eventLoadConfigs("ballBlur"),
-                        self.hades.eventLoadConfigs("ballDilate"), self.hades.eventLoadConfigs("ballAmin")]
+            self.setHSVValues(1, tempHSVCalib)
 
-        self.setHSVValues(2, tempHSVCalib)
+            tempHSVCalib = [(self.hades.eventLoadConfigs("ballHmin"),self.hades.eventLoadConfigs("ballHmax")),
+                            (self.hades.eventLoadConfigs("ballSmin"), self.hades.eventLoadConfigs("ballSmax")),
+                            (self.hades.eventLoadConfigs("ballVmin"), self.hades.eventLoadConfigs("ballVmax")),
+                            self.hades.eventLoadConfigs("ballErode"), self.hades.eventLoadConfigs("ballBlur"),
+                            self.hades.eventLoadConfigs("ballDilate"), self.hades.eventLoadConfigs("ballAmin")]
 
-        tempHSVCalib = [(self.hades.eventLoadConfigs("oppHmin"),self.hades.eventLoadConfigs("oppHmax")),
-                        (self.hades.eventLoadConfigs("oppSmin"), self.hades.eventLoadConfigs("oppSmax")),
-                        (self.hades.eventLoadConfigs("oppVmin"), self.hades.eventLoadConfigs("oppVmax")),
-                        self.hades.eventLoadConfigs("oppErode"), self.hades.eventLoadConfigs("oppBlur"),
-                        self.hades.eventLoadConfigs("oppDilate"), self.hades.eventLoadConfigs("oppAmin")]
+            self.setHSVValues(2, tempHSVCalib)
 
-        self.setHSVValues(3, tempHSVCalib)
+            tempHSVCalib = [(self.hades.eventLoadConfigs("oppHmin"),self.hades.eventLoadConfigs("oppHmax")),
+                            (self.hades.eventLoadConfigs("oppSmin"), self.hades.eventLoadConfigs("oppSmax")),
+                            (self.hades.eventLoadConfigs("oppVmin"), self.hades.eventLoadConfigs("oppVmax")),
+                            self.hades.eventLoadConfigs("oppErode"), self.hades.eventLoadConfigs("oppBlur"),
+                            self.hades.eventLoadConfigs("oppDilate"), self.hades.eventLoadConfigs("oppAmin")]
 
-        self.warpMatriz = self.hades.eventLoadConfigs("warpMatriz")
-        self.warpGoalMatrix = self.hades.eventLoadConfigs("warpGoalMatrix")
-        self.tempOffset = [(self.hades.eventLoadConfigs("offsetLeft")), (self.hades.eventLoadConfigs("offsetRight"))]
+            self.setHSVValues(3, tempHSVCalib)
+
+            self.warpMatriz = self.hades.eventLoadConfigs("warpMatriz")
+            self.warpGoalMatrix = self.hades.eventLoadConfigs("warpGoalMatrix")
+            self.tempOffset = [(self.hades.eventLoadConfigs("offsetLeft")), (self.hades.eventLoadConfigs("offsetRight"))]
+
+            self.spinBoxRobotRadius.setValue(self.hades.eventLoadConfigs("robotRadius"))
+
+            return True
+        else:
+            return False
+
 
     def actionSaveConfigsTriggered(self):
         self.saveConfigs()
@@ -416,6 +427,7 @@ class Afrodite(QMainWindow):
     def saveConfigs(self, file="save"):
         self.hades.SetFileSave(file)
         value = {
+            '''
             "brightness": self.horizontalSliderCaptureDevicePropertiesBrightness.value(),
             "saturation": self.horizontalSliderCaptureDevicePropertiesSaturation.value(),
             "gain": self.horizontalSliderCaptureDevicePropertiesGain.value(),
@@ -431,7 +443,7 @@ class Afrodite(QMainWindow):
             "pan": self.horizontalSliderCaptureDevicePropertiesPan.value(),
             "focus": self.horizontalSliderCaptureDevicePropertiesFocus.value(),
             "focusauto": self.checkBoxCaptureDevicePropertiesFocusAuto.isChecked(),
-
+            '''
             "robot1": self.comboBoxStrategyRobotFunctionsRobot1.currentText(),
             "robot2": self.comboBoxStrategyRobotFunctionsRobot2.currentText(),
             "robot3": self.comboBoxStrategyRobotFunctionsRobot3.currentText(),
@@ -483,7 +495,8 @@ class Afrodite(QMainWindow):
             "warpMatriz": self.warpMatriz,
             "warpGoalMatrix": self.warpGoalMatrix,
             "offsetLeft": self.horizontalSliderCaptureWarpOffsetLeft.value(),
-            "offsetRight": self.horizontalSliderCaptureWarpOffsetRight.value()
+            "offsetRight": self.horizontalSliderCaptureWarpOffsetRight.value(),
+            "robotRadius": self.spinBoxRobotRadius.value()
         }
 
         self.hades.eventSaveConfigs(value)
@@ -517,22 +530,20 @@ class Afrodite(QMainWindow):
         self.checkBoxPlayDisableDrawing.setEnabled(enable)
 
         if enable:
+            if self.loadConfigs(file="quicksave"):
+                self.hades.eventWarp(self.warpMatriz)
+                self.hades.eventWarpGoalMatriz(self.warpGoalMatrix)
+                self.setOffset(self.tempOffset)
 
-            #self.hades.eventWarp(self.warpMatriz)
-            #self.hades.eventWarpGoalMatriz(self.warpGoalMatrix)
-            #self.setOffset(self.tempOffset)
+                for i in range(0, 4, 1):
+                    self.hades.eventCalibration(i, self.getHSVValues(i))
 
-            for i in range(0, 4, 1):
-                self.hades.eventCalibration(i, self.getHSVValues(i))
-
-            self.hades.eventCalibration(-1)
+                self.hades.eventCalibration(-1)
 
             self.labelCameraState.setText("<font color='green'>Online</font>")
             if "Online" in self.labelCommunicationState.text():
                 self.pushButtonPlayStart.setEnabled(True)
                 self.groupBoxStrategyFormation.setEnabled(True)
-
-
         else:
             self.labelCameraState.setText("Error")
 
@@ -666,14 +677,12 @@ class Afrodite(QMainWindow):
             py = event.pos().y()
 
             if self.warpCount < 4:
-                print(self.warpCount)
                 self.callHadesWarpEvent(px,py)
                 if self.warpCount == 4:
                     self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
                     self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
             elif not self.pushButtonCaptureWarpAdjust.isEnabled():
                 if self.warpCount < 8:
-                    print(self.warpCount)
                     self.callHadesAdjustGoalEvent(px, py)
 
     def setOffset(self, Offset):
