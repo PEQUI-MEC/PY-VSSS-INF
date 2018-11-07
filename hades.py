@@ -17,6 +17,7 @@ class Hades(QThread):
     sigDisplay = pyqtSignal(numpy.ndarray)
     sigPositions = pyqtSignal(list)
     sigMessages = pyqtSignal(list)
+    sigRemoveDraw = pyqtSignal(str)
 
     def __init__(self):
         QThread.__init__(self)
@@ -49,6 +50,7 @@ class Hades(QThread):
         self.pidTesting = False
         self.pidRobot = -1
         self.pidTarget = None
+        self.pidSpeed = 0.4
 
         self.drawStrategyConstants = False
 
@@ -184,7 +186,8 @@ class Hades(QThread):
 
             objectsToDraw["robot" + str(i + 1)] = {
                 "shape": "robot",
-                "position": (positions[0][i]["position"][0], self.height - positions[0][i]["position"][1]),
+                "position": (int(positions[0][i]["position"][0] - Endless.robotSize / 2),
+                             int(self.height - positions[0][i]["position"][1] - Endless.robotSize / 2)),
                 "color": (255, 255, 0),
                 "label": str(i + 1),
                 "orientation": positions[0][i]["orientation"]
@@ -196,7 +199,8 @@ class Hades(QThread):
 
             objectsToDraw["advRobot" + str(i + 1)] = {
                 "shape": "robot",
-                "position": (positions[1][i]["position"][0], self.height - positions[1][i]["position"][1]),
+                "position": (int(positions[1][i]["position"][0] - Endless.robotSize / 2),
+                             int(self.height - positions[1][i]["position"][1] - Endless.robotSize / 2)),
                 "color": (0, 0, 255),
                 "label": str(i + 1),
             }
@@ -240,10 +244,29 @@ class Hades(QThread):
                 "color": (0, 255, 0)
             }
 
+        if self.pidRobot != -1:
+            objectsToDraw["pidRobot"] = {
+                "shape": "rect",
+                "position": (int(positions[0][self.pidRobot]["position"][0] - Endless.robotSize / 2 - 5),
+                             int(self.height - positions[0][self.pidRobot]["position"][1] - Endless.robotSize / 2 - 5)),
+                "limit": Endless.robotSize + 10,
+                "color": (255, 255, 255),
+                "label": "Selecionado",
+            }
+
+        if self.pidTarget:
+            objectsToDraw["pidTarget"] = {
+                "shape": "circle",
+                "position": (self.pidTarget[0], self.height - self.pidTarget[1]),
+                "color": (255, 255, 255),
+                "label": "Alvo",
+                "radius": 6
+            }
+
         self.sigDraw.emit(objectsToDraw)
 
     def getPIDTarget(self, positions):
-        if not self.pidTarget:
+        if not self.pidTarget or self.pidRobot == -1:
             return None
 
         commands = []
@@ -266,7 +289,7 @@ class Hades(QThread):
                                     "position": self.pidTarget,
                                     "orientation": Endless.pastGoal
                                 },
-                                "velocity": 0.5
+                                "velocity": self.pidSpeed
                             }
                         }
                     )
@@ -439,7 +462,7 @@ class Hades(QThread):
     # Warp
     def eventWarp(self, warpMatriz):
         self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
-
+        
     # WarpGoal
     def eventWarpGoalMatriz(self, warpMatriz):
         return self.apolo.setWarpGoalMatriz(warpMatriz)
@@ -476,10 +499,12 @@ class Hades(QThread):
     # Control
     def eventUpdateSpeeds(self, speeds):
         self.zeus.updateSpeeds(speeds)
-        #self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
+        # self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
 
     # PID TEST
     def enablePIDTest(self, state):
+        self.pidTarget = None
+        self.pidRobot = -1
         self.pidTesting = state
 
     def setRobotPID(self, robotID):
@@ -487,9 +512,19 @@ class Hades(QThread):
         if robotID == -1:
             self.pidTarget = None
 
+            self.sigRemoveDraw.emit("pidTarget")
+            self.sigRemoveDraw.emit("pidRobot")
+
     def setPointPID(self, point):
         if self.pidRobot != -1:
             self.pidTarget = (point[0], Endless.height - point[1])
+
+    def setPIDSpeed(self, speed):
+        try:
+            speed = float(speed)
+            self.pidSpeed = speed
+        except ValueError:
+            print("Invalid speed value")
 
     # Communication
     def eventStartXbee(self, port):
@@ -502,3 +537,29 @@ class Hades(QThread):
 
     def eventSetSkippedFrames(self, framesToSkip):
         self.framesToSkip = framesToSkip
+
+    @staticmethod
+    def ordenaWarp(points):
+        WIDTH = 640
+        HEIGHT = 480
+        largura = WIDTH/2
+        altura = HEIGHT/2
+        pt1 = pt2 = pt3 = pt4 = None
+
+        for i in range(0, 4, 1):
+            if points[i][0] - largura < 0:
+                if points[i][1] - altura < 0:
+                    # Quadrante 1
+                    pt1 = points[i]
+                else:
+                    # Quadrante 4
+                    pt4 = points[i]
+            else:
+                if points[i][1] - altura < 0:
+                    # Quadrante 2
+                    pt2 = points[i]
+                else:
+                    # Quadrante 3
+                    pt3 = points[i]
+
+        return pt1, pt2, pt3, pt4

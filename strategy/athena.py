@@ -228,7 +228,7 @@ class Athena:
             command = {
                 "robotLetter": warrior.robotID,
                 "tactics": warrior.tactics,
-                "futureBall": self.ball["oracle"].predict(2)
+                "futureBall": self.__ballInterceptLocation(warrior)  # self.ball["oracle"].predict(1)
             }
 
             if warrior.command["type"] == "goTo":
@@ -683,23 +683,24 @@ class Athena:
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados
                 warrior.command["type"] = "goTo"
-                warrior.command["target"] = self.ball["position"]
+                warrior.command["target"] = self.__ballInterceptLocation(warrior)
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
+
+                # escolhe o lado que vai pressionar a bola, dependendo de qual parede ela tá mais perto
+                if ballY > Endless.midField[1]:
+                    warrior.command["targetOrientation"] = math.pi / 2
+                else:
+                    warrior.command["targetOrientation"] = -math.pi / 2
 
             elif warrior.tactics == Athena.tBlock:
                 warrior.command["targetVelocity"] = warrior.defaultVel
                 # !TODO pegar Y composto com a velocidade da bola
-
                 targetX = Endless.goalieLine
+                targetY = self.ball["oracle"].getY(targetX)
+                geometry.saturate(targetY, Endless.goalTop, Endless.goalBottom)
 
-                # se posiciona na projeção da bola
-                if ballY > Endless.goalTop:
-                    target = (targetX, Endless.goalTop)
-                elif ballY < Endless.goalBottom:
-                    target = (targetX, Endless.goalBottom)
-                else:
-                    target = (targetX, ballY)
+                target = (targetX, ballY)
 
                 if distance.euclidean(warrior.position, target) > Endless.robotSize:
                     # se está longe do alvo, vai até ele
@@ -821,12 +822,32 @@ class Athena:
             Calcula as "distâncias" entre um robô e a bola/nosso gol
             Leva em consideração a angulação entre o objeto e o alvo
         """
-        # !TODO levar em consideração a angulação
         return distance.euclidean(item.position, self.ball["position"])
 
     def __distanceToGoal(self, item):
         # !TODO levar em consideração a angulação
         return distance.euclidean(item.position, Endless.ourGoal)
+
+    def __timeToArrive(self, fromPos, toPos, vel):
+        dist = distance.euclidean(fromPos, toPos)
+        return dist / (vel * Endless.pixelMeterRatio)
+
+    def __ballInterceptLocation(self, robot):
+        # tempo de chegada em linha reta, na maior velocidade possível
+        tta = self.__timeToArrive(robot.position, self.ball["position"], robot.defaultVel)
+        # onde a bola vai estar nesse meio tempo
+        projection = self.ball["oracle"].predict(tta)
+
+        # verifica se é impossível alcançar o alvo
+        if self.ball["oracle"].velocity > robot.defaultVel:
+            return projection
+
+        # enquanto o tempo de chegada for maior do que o tempo para a bola chegar na posição
+        while tta > self.__timeToArrive(robot.position, projection, robot.defaultVel):
+            tta = self.__timeToArrive(robot.position, projection, robot.defaultVel)
+            projection = self.ball["oracle"].predict(tta)
+
+        return projection
 
     # GETTERS AND SETTERS
 
