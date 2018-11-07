@@ -322,7 +322,9 @@ class Afrodite(QMainWindow):
     """
 
     def updateObjectsToDraw(self, newObjects):
-        self.objectsToDraw = newObjects
+        for key, newObjectDraw in newObjects.items():
+                self.objectsToDraw[key]  = newObjectDraw
+
 
     def drawImageVideoView(self):
         """Itera sobre o self.objectsToDraw e desenha cada objeto
