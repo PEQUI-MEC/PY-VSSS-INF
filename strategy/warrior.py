@@ -18,6 +18,8 @@ class Warrior:
 
         self.tactics = "wait"
 
+        self.spiral = 1
+
         # ângulo do robô com a bola
         self.robotBall = 0
         # angulo entre as retas robo->bola e bola->gol
