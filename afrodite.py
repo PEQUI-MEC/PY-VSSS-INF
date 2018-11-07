@@ -315,7 +315,7 @@ class Afrodite(QMainWindow):
             "color": (r, g, b),
             "label": # string - rótulo do objeto (opcional)
             "radius": # number - se shape = circle
-            "limit": (x1, y1) # se shape = rect
+            "limit": lado # se shape = rect
             "orientation": # number - se shape = robot (opcional)
             "target": (x2, y2) # se shape = robot (opcional)
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
@@ -326,7 +326,8 @@ class Afrodite(QMainWindow):
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
                     cv2.rectangle(self.image, objectToDraw["position"],
-                                  (objectToDraw["position"][0] + 10, objectToDraw["position"][1] + 10),
+                                  (objectToDraw["position"][0] + Endless.robotSize,
+                                   objectToDraw["position"][1] + Endless.robotSize),
                                   objectToDraw["color"], 2)
 
                     if "label" in objectToDraw:
@@ -347,7 +348,9 @@ class Afrodite(QMainWindow):
                                     cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
 
                 elif objectToDraw["shape"] == "rect":
-                    cv2.rectangle(self.image, objectToDraw["position"], objectToDraw["limit"],
+                    cv2.rectangle(self.image, objectToDraw["position"],
+                                  (objectToDraw["position"][0] + objectToDraw["limit"],
+                                   objectToDraw["position"][1] + objectToDraw["limit"]),
                                   objectToDraw["color"], 2)
 
     # MENU BAR

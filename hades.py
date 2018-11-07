@@ -207,10 +207,29 @@ class Hades(QThread):
             "radius": 4
         }
 
+        if self.pidRobot != -1:
+            objectsToDraw["pidRobot"] = {
+                "shape": "rect",
+                "position": (positions[0][self.pidRobot]["position"][0] - 5,
+                             self.height - positions[0][self.pidRobot]["position"][1] - 5),
+                "limit": Endless.robotSize + 10,
+                "color": (255, 255, 255),
+                "label": "Selecionado",
+            }
+
+        if self.pidTarget:
+            objectsToDraw["pidTarget"] = {
+                "shape": "circle",
+                "position": (self.pidTarget[0], self.height - self.pidTarget[1]),
+                "color": (255, 255, 255),
+                "label": "Alvo",
+                "radius": 6
+            }
+
         self.sigDraw.emit(objectsToDraw)
 
     def getPIDTarget(self, positions):
-        if not self.pidTarget:
+        if not self.pidTarget or self.pidRobot == -1:
             return None
 
         commands = []
@@ -436,6 +455,8 @@ class Hades(QThread):
 
     # PID TEST
     def enablePIDTest(self, state):
+        self.pidTarget = None
+        self.pidRobot = -1
         self.pidTesting = state
 
     def setRobotPID(self, robotID):
