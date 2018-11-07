@@ -343,10 +343,13 @@ class Apolo:
 
         return linkedSecondaryTags
 
-    def preProcess(self, frame, id):
+    def posProcess(self, frame, id):
         # Blur
-        if self.threshList[id][4] > 0:
-            frame = cv2.blur(frame, (self.threshList[id][4], self.threshList[id][4]))
+        blurWindow = self.threshList[id][4]
+
+        if blurWindow % 2 == 0:
+            blurWindow += 1
+        frame = cv2.GaussianBlur(frame, (blurWindow, blurWindow), 0)
 
         # Erode
         if self.threshList[id][3] > 0:
@@ -413,7 +416,7 @@ class Apolo:
         # Nesse ponto, temos a orientação da tag Verde, porém, a orientação do robo fica à 135 graus anti-horario
         # Por isso, devemos subtrair 135º radianos
 
-        orientation = ((orientation - 2.35619) % 6.28319)
+        orientation = ((orientation + 0.785398) % 2*np.pi)
 
         # Nesse ponto, temos a orientação entre 0 - 2pi, porém, o controle precisa dela no intervalo de -pi a pi
         if orientation > np.pi:
@@ -554,7 +557,7 @@ class Apolo:
 
         # Aplica todos os thresholds (pode adicionar threads)
         for i in range(0, 4, 1):
-            self.thresholdedImages[i] = self.applyThreshold(self.preProcess(frameHSV, i), i)
+            self.thresholdedImages[i] = self.warpGoalFrame(self.posProcess(self.applyThreshold(frameHSV, i), i))
 
         # Procura os robos
         tempRobotPosition = self.findRobots(self.thresholdedImages[MAIN])

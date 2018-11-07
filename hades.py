@@ -319,7 +319,10 @@ class Hades(QThread):
             self.plutus.set(key, value[key])
         print("Save configs")
 
-    def eventLoadConfigs(self, key):
+    def eventLoadConfigs(self, key=None):
+        if key is None:
+            return self.plutus.get()
+
         value = self.plutus.get(key)
         if value is not None:
             return value
@@ -371,7 +374,7 @@ class Hades(QThread):
     def eventStartVision(self, cameraId):
         try:
             self.apolo = Apolo(int(cameraId))
-            #self.apolo = Apolo(0)
+            # self.apolo = Apolo(0)
             return True
         except:
             return False
@@ -422,9 +425,12 @@ class Hades(QThread):
     def eventSelectRoles(self, roles):
         self.athena.setRoles(roles)
 
+    def updateStrategyConstants(self, goalieLine, goalieOffset, areaLine):
+        self.athena.updateStrategyConstants(goalieLine, goalieOffset, areaLine)
+
     # Control
-    def eventUpdateSpeeds(self, attackSpeed, defenseSpeed, goalkeeperSpeed):
-        self.zeus.updateSpeeds(attackSpeed, defenseSpeed, goalkeeperSpeed)
+    def eventUpdateSpeeds(self, speeds):
+        self.zeus.updateSpeeds(speeds)
 
     # PID TEST
     def enablePIDTest(self, state):

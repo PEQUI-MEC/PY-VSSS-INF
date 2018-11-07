@@ -2,6 +2,7 @@ from math import atan2, cos, sin
 from scipy.spatial import distance
 from .navigation import UnivectorField
 from helpers.endless import Endless
+import numpy
 
 
 class Eunomia:
@@ -64,22 +65,14 @@ class Eunomia:
         return self.warrior
 
     def stop(self):
-        """Command Stop
-
-        - {
-            "command": stop,
-            "data": {}
-        }
-        """
-
         if self.warrior.before == 0:
-            self.warrior.vLeft = 0
-            self.warrior.vRight = 0
+            self.warrior.vLeft = 0.0
+            self.warrior.vRight = 0.0
 
         else:
             # TODO Fazer controle de desesceleração
-            self.warrior.vLeft = 0
-            self.warrior.vRight = 0
+            self.warrior.vLeft = 0.0
+            self.warrior.vRight = 0.0
 
     def spin(self):
         """Command Spin
@@ -135,8 +128,8 @@ class Eunomia:
         }
         """
 
-        # Se o targetOrientation passado não for um ponto
-        if type(self.warrior.targetOrientation) is not tuple:
+        # Se o targetOrientation passado não for um ponto+
+        if not isinstance(self.warrior.targetOrientation, numpy.ndarray):
             theta = atan2(sin(self.warrior.targetOrientation), -cos(self.warrior.targetOrientation))
             target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
             del self.warrior.targetOrientation
@@ -152,7 +145,8 @@ class Eunomia:
             spiral = 0.06
         elif self.warrior.position[1] < Endless.areaBottom:
             spiral = 0.06
-        elif distance.euclidean(self.warrior.position[0], self.warrior.target[0]) > 200:
+
+        elif distance.euclidean(self.warrior.position[0], self.warrior.target[0]) > 250.0:
             spiral = 1.0
 
         if time is None:
