@@ -1,4 +1,6 @@
 class Endless:
+    width = 0
+    height = 0
     pixelMeterRatio = 0
     robotSize = 0
     spinSize = 0

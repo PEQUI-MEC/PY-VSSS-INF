@@ -44,3 +44,10 @@ class Oracle:
 
         return nextPos
 
+    def getY(self, x):
+        if self.history[-1][0][0] - self.history[0][0][0] == 0:
+            return self.history[-1][0][1]
+
+        m = (self.history[-1][0][1] - self.history[0][0][1]) / (self.history[-1][0][0] - self.history[0][0][0])
+        pred_y = self.history[-1][0][1] - m * (self.history[-1][0][0] - x)
+        return pred_y
