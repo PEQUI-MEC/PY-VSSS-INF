@@ -65,6 +65,7 @@ class Afrodite(QMainWindow):
         self.warpGoalMatrix = [[0,0],[WIDTH,0],[WIDTH,HEIGHT],[0,HEIGHT]]
         self.tempOffset = [0,0]
         self.graphicsViewVideoViewVideo.mousePressEvent = self.getPosWarp
+        self.quadrant = -1
 
         self.checkBoxInvertImage.clicked.connect(self.toggleInvertImage)
         self.spinBoxCaptureWarpOffsetLeft.valueChanged.connect(self.warpOffsetChanged)
@@ -223,34 +224,35 @@ class Afrodite(QMainWindow):
         if QKeyEvent.key() == QtCore.Qt.Key_Space and self.pushButtonPlayStart.isEnabled():
             self.clickedPlay()
         if not self.pushButtonCaptureWarpWarp.isEnabled():
-            if QKeyEvent.key() == QtCore.Qt.Key_Left:
-                print ("<")
+            if QKeyEvent.key() == QtCore.Qt.Key_A:
+                #print ("<")
                 self.warpMatriz[self.quadrant][0] -= 1
-            if QKeyEvent.key() == QtCore.Qt.Key_Right:
-                print (">")
+            if QKeyEvent.key() == QtCore.Qt.Key_D:
+                #print (">")
                 self.warpMatriz[self.quadrant][0] += 1
-            if QKeyEvent.key() == QtCore.Qt.Key_Up:
-                print ("^")
+            if QKeyEvent.key() == QtCore.Qt.Key_W:
+                #print ("^")
                 self.warpMatriz[self.quadrant][1] -= 1
-            if QKeyEvent.key() == QtCore.Qt.Key_Down:            
-                print ("v")
+            if QKeyEvent.key() == QtCore.Qt.Key_S:            
+                #print ("v")
                 self.warpMatriz[self.quadrant][1] += 1
-            if QKeyEvent.key() == QtCore.Qt.Key_Enter:
+            if QKeyEvent.key() == QtCore.Qt.Key_Enter or QKeyEvent.key() == QtCore.Qt.Key_Return:
+                print("Entrou aqui")
                 self.hades.eventWarp(self.warpMatriz)
                 self.exitWarp()
                 self.warpCount = 0
-            for i in range(0, 4):
-                key = "line" + str(i+1) 
-                if key in self.objectsToDraw.keys():
-                    del self.objectsToDraw[key]     
+                for i in range(0, 4):
+                    key = "line" + str(i+1) 
+                    if key in self.objectsToDraw.keys():
+                        del self.objectsToDraw[key]     
             
-            if self.warpCount == 9:
+            if self.warpCount == 10:
                 for i in range(0, 4):
                     self.objectsToDraw["line" + str(i+1)] = {
                         "shape": "line",
                         "points": (self.warpMatriz[i%4], self.warpMatriz[(i+1)%4]),
                         "color": (0, 255, 0),
-                        "lineThickness": 2,
+                        "lineThickness": 1,
                         "label": "Warp" + str(i+1),
                     }
                 self.drawImageVideoView()    
@@ -683,7 +685,8 @@ class Afrodite(QMainWindow):
     def exitWarp(self):
         self.pushButtonCaptureWarpWarp.setEnabled(True)
         self.pushButtonCaptureWarpAdjust.setEnabled(True)
-        self.warpCount = 9
+        self.hades.eventWarp(self.warpMatriz)
+
 
     def getPushButtonCaptureWarpReset(self):
         self.pushButtonCaptureWarpWarp.setEnabled(True)
@@ -708,7 +711,7 @@ class Afrodite(QMainWindow):
 
     def getPushButtonCaptureWarpAdjust(self):
         self.pushButtonCaptureWarpAdjust.setEnabled(False)
-        self.pushButtonCaptureWarpWarp.setEnabled(False)
+        self.pushButtonCaptureWarpWarp.setEnabled(True)
         self.warpCount = 4
 
     def exitAdjust(self):
@@ -731,13 +734,11 @@ class Afrodite(QMainWindow):
     '''
 
     def getPosWarp(self, event):
+        px = event.pos().x()
+        py = event.pos().y()
         if not self.pushButtonCaptureWarpWarp.isEnabled():
-            px = event.pos().x()
-            py = event.pos().y()
-            
             if self.warpCount < 4:
-                self.callHadesWarpEvent(px,py)
-        
+                self.callHadesWarpEvent(px,py)        
             if self.warpCount == 9:
                 self.warpMatriz = self.hades.ordenaWarp(self.warpMatriz)
                 for i in range(0, 4):
@@ -748,22 +749,22 @@ class Afrodite(QMainWindow):
                         "lineThickness": 1,
                         "label": "Warp" + str(i+1),
                     }
+                self.warpCount = 10
                 self.drawImageVideoView()
                 self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
                 self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
-
+            elif self.warpCount == 10:
+                if  px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
+                    self.quadrant = 0
+                elif px > WIDTH/2 and py < HEIGHT/2: #QUADRANT 2
+                    self.quadrant = 1
+                elif px > WIDTH/2 and py > HEIGHT/2: #QUADRANT 3
+                    self.quadrant = 2
+                elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 4
+                    self.quadrant = 3
+                print(self.quadrant)
         elif not self.pushButtonCaptureWarpAdjust.isEnabled():
-             self.callHadesAdjustGoalEvent(px, py)
-        elif self.warpCount == 9:
-            if  px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
-                self.quadrant = 0
-            elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 2
-                self.quadrant = 1
-            elif px > WIDTH/2 and py < HEIGHT/2: #QUADRANT 3
-                self.quadrant = 2
-            elif px > WIDTH/2 and py > HEIGHT/2: #QUADRANT 4
-                self.quadrant = 3
-
+            self.callHadesAdjustGoalEvent(px, py)
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])

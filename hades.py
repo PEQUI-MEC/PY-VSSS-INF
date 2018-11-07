@@ -33,7 +33,6 @@ class Hades(QThread):
         self.height = 480  # TODO pegar isso da afrodite e passar pro apolo
         self.width = 640
 
-        self.allWarpPoints = False
         self.skippedFrames = 0
         self.framesToSkip = 5  # valor padrão
 
@@ -277,18 +276,13 @@ class Hades(QThread):
 
     # Warp
     def eventWarp(self, warpMatriz):
-        #self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
-        self.allWarpPoints = True
-        self.warpPoints = []
-        print(self.ordenaWarp(warpMatriz))
-        self.warpPoints = self.ordenaWarp(warpMatriz)
-
+        self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
+        
     # WarpGoal
     def eventWarpGoalMatriz(self, warpMatriz):
         return self.apolo.setWarpGoalMatriz(warpMatriz)
 
     def eventWarpReset(self):
-        self.allWarpPoints = False
         self.apolo.resetWarp()
 
     # Offset
