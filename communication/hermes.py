@@ -74,6 +74,8 @@ class Hermes:
                     print("[Hermes]: Message sending timed out")
                 except KeyError:
                     print("[Hermes]: We don't know the address for robot '" + velocities[i]["robotLetter"] + "'")
+                except SerialException:
+                    print("[Hermes]: Access to xBee denied")
 
         return messages
 

@@ -8,14 +8,18 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
+from scipy.spatial import distance
 import numpy as np
 import serial
 import glob
 import interface.icons_rc
 import serial.tools.list_ports as list_ports
 import hades
+from helpers.endless import Endless
 
 # Constantes
+# TODO não deve ser constante
+ROBOTS = 3
 WIDTH = 640
 HEIGHT = 480
 
@@ -33,6 +37,7 @@ class Afrodite(QMainWindow):
         self.hades.sigDisplay.connect(self.updateFrameVideoView)
         self.hades.sigPositions.connect(self.updateLabelPlayPositions)
         self.hades.sigMessages.connect(self.updateMessages)
+        self.hades.sigRemoveDraw.connect(self.removeObjectToDraw)
         self.hades.start()
 
         dirname = os.path.dirname(__file__)
@@ -164,8 +169,10 @@ class Afrodite(QMainWindow):
         self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
         self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
 
-        # pid test
+        # PID TEST
         self.pushButtonComunicationRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
+        self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
+        self.lineEditPIDRobotVel.textChanged.connect(self.hades.setPIDSpeed)
 
         # COMMUNICATION
 
@@ -333,8 +340,11 @@ class Afrodite(QMainWindow):
 
     def updateObjectsToDraw(self, newObjects):
         for key, newObjectDraw in newObjects.items():
-                self.objectsToDraw[key]  = newObjectDraw
+                self.objectsToDraw[key] = newObjectDraw
 
+    def removeObjectToDraw(self, key):
+        if key in self.objectsToDraw:
+            del self.objectsToDraw[key]
 
     def drawImageVideoView(self):
         """Itera sobre o self.objectsToDraw e desenha cada objeto
@@ -345,7 +355,7 @@ class Afrodite(QMainWindow):
             "color": (r, g, b),
             "label": # string - rótulo do objeto (opcional)
             "radius": # number - se shape = circle
-            "limit": (x1, y1) # se shape = rect
+            "limit": lado # se shape = rect
             "orientation": # number - se shape = robot (opcional)
             "target": (x2, y2) # se shape = robot (opcional)
             "targetOrientation": (x3, y3) # se shape = robot (opcional)
@@ -356,7 +366,8 @@ class Afrodite(QMainWindow):
             for key, objectToDraw in self.objectsToDraw.items():
                 if objectToDraw["shape"] == "robot":
                     cv2.rectangle(self.image, objectToDraw["position"],
-                                  (objectToDraw["position"][0] + 10, objectToDraw["position"][1] + 10),
+                                  (objectToDraw["position"][0] + Endless.robotSize,
+                                   objectToDraw["position"][1] + Endless.robotSize),
                                   objectToDraw["color"], 2)
 
                     if "label" in objectToDraw:
@@ -377,7 +388,9 @@ class Afrodite(QMainWindow):
                                     cv2.FONT_HERSHEY_PLAIN, 1, objectToDraw["color"], 2)
 
                 elif objectToDraw["shape"] == "rect":
-                    cv2.rectangle(self.image, objectToDraw["position"], objectToDraw["limit"],
+                    cv2.rectangle(self.image, objectToDraw["position"],
+                                  (objectToDraw["position"][0] + objectToDraw["limit"],
+                                   objectToDraw["position"][1] + objectToDraw["limit"]),
                                   objectToDraw["color"], 2)
                 elif objectToDraw["shape"] == "line":
                     cv2.line(self.image, (objectToDraw["points"][0][0], objectToDraw["points"][0][1]), (objectToDraw["points"][1][0], objectToDraw["points"][1][1]), objectToDraw["color"], objectToDraw["lineThickness"])
@@ -703,7 +716,6 @@ class Afrodite(QMainWindow):
         self.pushButtonCaptureWarpAdjust.setEnabled(True)
         self.hades.eventWarp(self.warpMatriz)
 
-
     def getPushButtonCaptureWarpReset(self):
         self.pushButtonCaptureWarpWarp.setEnabled(True)
 
@@ -756,30 +768,41 @@ class Afrodite(QMainWindow):
             if self.warpCount < 4:
                 self.callHadesWarpEvent(px,py)        
             if self.warpCount == 9:
-                self.warpMatriz = self.hades.ordenaWarp(self.warpMatriz)
                 for i in range(0, 4):
-                    self.objectsToDraw["line" + str(i+1)] = {
+                    self.warpMatriz = self.hades.ordenaWarp(self.warpMatriz)
+                    self.objectsToDraw["line" + str(i + 1)] = {
                         "shape": "line",
-                        "points": (self.warpMatriz[i%4], self.warpMatriz[(i+1)%4]),
+                        "points": (self.warpMatriz[i % 4], self.warpMatriz[(i + 1) % 4]),
                         "color": (0, 255, 0),
                         "lineThickness": 1,
-                        "label": "Warp" + str(i+1),
+                        "label": "Warp" + str(i + 1),
                     }
-                self.warpCount = 10
                 self.drawImageVideoView()
                 self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
                 self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
+                self.warpCount = 10
+
             elif self.warpCount == 10:
-                if  px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
+                if px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
+                    print(self.quadrant)
                     self.quadrant = 0
                 elif px > WIDTH/2 and py < HEIGHT/2: #QUADRANT 2
+                    print(self.quadrant)
                     self.quadrant = 1
                 elif px > WIDTH/2 and py > HEIGHT/2: #QUADRANT 3
+                    print(self.quadrant)
                     self.quadrant = 2
                 elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 4
+                    print(self.quadrant)
                     self.quadrant = 3
+                    
         elif not self.pushButtonCaptureWarpAdjust.isEnabled():
             self.callHadesAdjustGoalEvent(px, py)
+        elif self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
+            if event.buttons() == QtCore.Qt.LeftButton:
+                self.selectRobotPID(px, py)
+            elif event.buttons() == QtCore.Qt.RightButton:
+                self.selectPointPID(px, py)
 
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
@@ -1144,11 +1167,24 @@ class Afrodite(QMainWindow):
     def getPushButtonControlRobotFunctionsPIDTest(self):
         if self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#efefef':
             self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#ff0000')
-            self.hades.enablePIDTest()
+            self.hades.enablePIDTest(True)
 
         elif self.pushButtonComunicationRobotFunctionsPIDTest.palette().button().color().name() == '#ff0000':
             self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
-            self.hades.disablePIDTest()
+            self.hades.enablePIDTest(False)
+
+    def selectRobotPID(self, pointX, pointY):
+        for i in range(ROBOTS):  # QUANTIDADE DE ROBOS
+            objectToDraw = self.objectsToDraw["robot" + str(i + 1)]
+            euclideanDistance = distance.euclidean((pointX, pointY), objectToDraw["position"])
+            if euclideanDistance < Endless.robotSize:
+                self.hades.setRobotPID(i)
+                return
+
+        self.hades.setRobotPID(-1)
+
+    def selectPointPID(self, pointX, pointY):
+        self.hades.setPointPID((pointX, pointY))
 
     def sendWheelVelocities(self):
         # TODO robotId = getControlSerialRobots()

@@ -1,6 +1,7 @@
 from math import atan2, cos, sin
 from scipy.spatial import distance
 from .navigation import UnivectorField
+from helpers.endless import Endless
 import numpy
 
 
@@ -8,28 +9,26 @@ class Eunomia:
     def __init__(self):
         self.uvf = UnivectorField()
         self.warrior = None
-        self.endless = None
         self.radius = None
         self.kr = None
         self.k0 = None
         self.dMin = None
         self.lDelta = None
 
-    def setup(self, endless):
+    def setup(self):
         # radius = 0.2*width/1.70
         # Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
         # self.uvf.updateConstants(radius=6.0, kr=0.9, k0=0.12, dMin=20.0, lDelta=4.5)
-        self.endless = endless
         self.radius = 50.0
         self.kr = 5.9  # 0.9
         self.k0 = 0.12
         self.dMin = 20.0
         self.lDelta = 4.5
 
-        # print("Corner ", self.endless.corner)
-        # print("OurConer ", self.endless.ourCorner)
-        # print("Golie ", self.endless.goalieLine)
-        # print("area ", self.endless.areaLine)
+        # print("Corner ", Endless.corner)
+        # print("OurConer ", Endless.ourCorner)
+        # print("Golie ", Endless.goalieLine)
+        # print("area ", Endless.areaLine)
 
     def run(self, warrior):
         """Main method of action controller
@@ -142,11 +141,9 @@ class Eunomia:
         #   time = warrior.before
 
         spiral = 0.1
-        # if self.warrior.position[1] >= self.endless.areaTop:
-        if self.warrior.position[1] >= 400.0:
+        if self.warrior.position[1] >= Endless.areaTop:
             spiral = 0.06
-        # elif self.warrior.position[1] < self.endless.areaBottom:
-        elif self.warrior.position[1] < 80.0:
+        elif self.warrior.position[1] < Endless.areaBottom:
             spiral = 0.06
 
         elif distance.euclidean(self.warrior.position[0], self.warrior.target[0]) > 250.0:

@@ -1,7 +1,8 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import time
 import numpy
-
+from scipy.spatial import distance
+from helpers.endless import Endless
 from helpers.plutus import Plutus
 
 from vision import Apolo
@@ -16,6 +17,7 @@ class Hades(QThread):
     sigDisplay = pyqtSignal(numpy.ndarray)
     sigPositions = pyqtSignal(list)
     sigMessages = pyqtSignal(list)
+    sigRemoveDraw = pyqtSignal(str)
 
     def __init__(self):
         QThread.__init__(self)
@@ -39,6 +41,16 @@ class Hades(QThread):
         self.cascadeTime = 0
         self.cascadeLoops = 0
         self.cascadeLastTime = 0
+
+        # formations
+        self.formationToExecute = -1
+        self.formations = []
+        self.formating = False
+
+        self.pidTesting = False
+        self.pidRobot = -1
+        self.pidTarget = None
+        self.pidSpeed = 0.4
 
         print("Hades summoned")
 
@@ -66,15 +78,24 @@ class Hades(QThread):
         while True:
             # visão
             positions = self.apoloRules()
-            # if positions is not None:
-            #     print(positions[0][0]["robotLetter"])
 
             if self.play:
                 commands = self.athenaRules(positions)
                 velocities = self.zeusRules(commands)
                 self.hermesRules(velocities)
 
+            elif self.pidTesting:
+                commands = self.getPIDTarget(positions)
+                velocities = self.zeusRules(commands)
+                self.hermesRules(velocities)
+
+            elif self.formating:
+                commands = self.executeFormation(positions)
+                velocities = self.zeusRules(commands)
+                self.hermesRules(velocities)
+
             time.sleep(0.0001)
+
     # MAIN METHODS
 
     def apoloRules(self):
@@ -163,7 +184,8 @@ class Hades(QThread):
 
             objectsToDraw["robot" + str(i + 1)] = {
                 "shape": "robot",
-                "position": (positions[0][i]["position"][0], self.height - positions[0][i]["position"][1]),
+                "position": (int(positions[0][i]["position"][0] - Endless.robotSize / 2),
+                             int(self.height - positions[0][i]["position"][1] - Endless.robotSize / 2)),
                 "color": (255, 255, 0),
                 "label": str(i + 1),
                 "orientation": positions[0][i]["orientation"]
@@ -175,7 +197,8 @@ class Hades(QThread):
 
             objectsToDraw["advRobot" + str(i + 1)] = {
                 "shape": "robot",
-                "position": (positions[1][i]["position"][0], self.height - positions[1][i]["position"][1]),
+                "position": (int(positions[1][i]["position"][0] - Endless.robotSize / 2),
+                             int(self.height - positions[1][i]["position"][1] - Endless.robotSize / 2)),
                 "color": (0, 0, 255),
                 "label": str(i + 1),
             }
@@ -188,7 +211,112 @@ class Hades(QThread):
             "radius": 4
         }
 
+        if self.pidRobot != -1:
+            objectsToDraw["pidRobot"] = {
+                "shape": "rect",
+                "position": (int(positions[0][self.pidRobot]["position"][0] - Endless.robotSize / 2 - 5),
+                             int(self.height - positions[0][self.pidRobot]["position"][1] - Endless.robotSize / 2 - 5)),
+                "limit": Endless.robotSize + 10,
+                "color": (255, 255, 255),
+                "label": "Selecionado",
+            }
+
+        if self.pidTarget:
+            objectsToDraw["pidTarget"] = {
+                "shape": "circle",
+                "position": (self.pidTarget[0], self.height - self.pidTarget[1]),
+                "color": (255, 255, 255),
+                "label": "Alvo",
+                "radius": 6
+            }
+
         self.sigDraw.emit(objectsToDraw)
+
+    def getPIDTarget(self, positions):
+        if not self.pidTarget or self.pidRobot == -1:
+            return None
+
+        commands = []
+
+        for i in range(len(positions)):
+            if i == self.pidRobot:
+                if distance.euclidean(positions[0][i]["position"], self.pidTarget) < Endless.robotSize:
+                    self.pidTarget = None
+                else:
+                    commands.append(
+                        {
+                            "command": "goTo",
+                            "robotLetter": positions[0][i]["robotLetter"],
+                            "data": {
+                                "pose": {
+                                    "position": positions[0][i]["position"],
+                                    "orientation": positions[0][i]["orientation"]
+                                },
+                                "target": {
+                                    "position": self.pidTarget,
+                                    "orientation": Endless.pastGoal
+                                },
+                                "velocity": self.pidSpeed
+                            }
+                        }
+                    )
+                    continue
+
+            commands.append(
+                {
+                    "command": "stop",
+                    "robotLetter": positions[0][i]["robotLetter"],
+                    "data": {
+                        "before": 0
+                    }
+                }
+            )
+
+        return commands
+
+    def executeFormation(self, positions):
+        if self.formationToExecute == -1:
+            return None
+
+        commands = []
+
+        for i in range(positions[0]):
+            if distance.euclidean(positions[0][i]["position"],
+                                  self.formations[self.formationToExecute]["positions"][i]) < Endless.robotSize:
+                commands.append(
+                    {
+                        "command": "lookAt",
+                        "robotLetter": positions[0][i]["robotLetter"],
+                        "data": {
+                            "pose": {
+                                "position": positions[0][i]["position"],
+                                "orientation": positions[0][i]["orientation"]
+                            },
+                            "target": self.formations[self.formationToExecute]["orientations"][i],
+                            "velocity": 0.4
+                        }
+                    }
+                )
+            else:
+                commands.append(
+                    {
+                        "command": "goTo",
+                        "robotLetter": positions[0][i]["robotLetter"],
+                        "data": {
+                            "pose": {
+                                "position": positions[0][i]["position"],
+                                "orientation": positions[0][i]["orientation"]
+                            },
+                            "target": {
+                                "position": self.formations[self.formationToExecute]["positions"][i],
+                                "orientation": self.formations[self.formationToExecute]["orientations"][i]
+                            },
+                            "velocity": 0.4
+                        }
+                    }
+                )
+
+        return commands
 
     # EVENTOS
     # Hades
@@ -224,6 +352,29 @@ class Hades(QThread):
             return value
         else:
             return 0
+
+    def saveFormation(self, positions, orientations):
+        newFormation = {
+            "positions": positions,
+            "orientations": orientations
+        }
+        self.formations.append(newFormation)
+        self.plutus.set("formations", self.formations)
+
+    def loadFormations(self):
+        self.formations = self.plutus.get("formations")
+        return self.formations
+
+    def loadFormation(self, formationIndex):
+        if self.play:
+            return
+
+        self.formationToExecute = formationIndex
+        self.formating = True
+
+    def stopFormation(self):
+        self.formationToExecute = -1
+        self.formating = False
     
     # Camera e Visão
     def eventInvertImage(self, state):
@@ -304,13 +455,32 @@ class Hades(QThread):
     # Control
     def eventUpdateSpeeds(self, speeds):
         self.zeus.updateSpeeds(speeds)
-        #self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
+        # self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
 
-    def enablePIDTest(self):
-        print("PID test enabled")
+    # PID TEST
+    def enablePIDTest(self, state):
+        self.pidTarget = None
+        self.pidRobot = -1
+        self.pidTesting = state
 
-    def disablePIDTest(self):
-        print("PID test disabled")
+    def setRobotPID(self, robotID):
+        self.pidRobot = robotID
+        if robotID == -1:
+            self.pidTarget = None
+
+            self.sigRemoveDraw.emit("pidTarget")
+            self.sigRemoveDraw.emit("pidRobot")
+
+    def setPointPID(self, point):
+        if self.pidRobot != -1:
+            self.pidTarget = (point[0], Endless.height - point[1])
+
+    def setPIDSpeed(self, speed):
+        try:
+            speed = float(speed)
+            self.pidSpeed = speed
+        except ValueError:
+            print("Invalid speed value")
 
     # Communication
     def eventStartXbee(self, port):
@@ -330,6 +500,7 @@ class Hades(QThread):
         HEIGHT = 480
         largura = WIDTH/2
         altura = HEIGHT/2
+        pt1 = pt2 = pt3 = pt4 = None
 
         for i in range(0, 4, 1):
             if points[i][0] - largura < 0:
@@ -348,6 +519,3 @@ class Hades(QThread):
                     pt3 = points[i]
 
         return pt1, pt2, pt3, pt4
-
-
-    
