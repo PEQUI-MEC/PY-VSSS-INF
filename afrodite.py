@@ -340,6 +340,9 @@ class Afrodite(QMainWindow):
                 elif objectToDraw["shape"] == "rect":
                     cv2.rectangle(self.image, objectToDraw["position"], objectToDraw["limit"],
                                   objectToDraw["color"], 2)
+                elif objectToDraw["shape"] == "line":
+                    cv2.line(self.image, (objectToDraw["points"][0][0], objectToDraw["points"][0][1]), (objectToDraw["points"][1][0], objectToDraw["points"][1][1]), objectToDraw["color"], objectToDraw["lineThickness"])
+
 
     # MENU BAR
     # MenuBarArquivo

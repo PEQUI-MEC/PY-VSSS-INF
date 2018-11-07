@@ -33,6 +33,7 @@ class Hades(QThread):
         self.height = 480  # TODO pegar isso da afrodite e passar pro apolo
         self.width = 640
 
+        self.allWarpPoints = False
         self.skippedFrames = 0
         self.framesToSkip = 5  # valor padrão
 
@@ -187,6 +188,17 @@ class Hades(QThread):
             "radius": 4
         }
 
+        if self.allWarpPoints and len(self.warpPoints) == 4:
+            for i in range(0, 4):
+                print (self.warpPoints)
+                objectsToDraw["line" + str(i+1)] = {
+                    "shape": "line",
+                    "points": (self.warpPoints[i%4], self.warpPoints[(i+1)%4]),
+                    "color": (0, 255, 0),
+                    "lineThickness": 2,
+                    "label": "Warp" + str(i+1),
+                }            
+
         self.sigDraw.emit(objectsToDraw)
 
     # EVENTOS
@@ -273,13 +285,18 @@ class Hades(QThread):
 
     # Warp
     def eventWarp(self, warpMatriz):
-        self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
+        #self.apolo.setWarpPoints(warpMatriz[0], warpMatriz[1], warpMatriz[2], warpMatriz[3])
+        self.allWarpPoints = True
+        self.warpPoints = []
+        print(self.ordenaWarp(warpMatriz))
+        self.warpPoints = self.ordenaWarp(warpMatriz)
 
     # WarpGoal
     def eventWarpGoalMatriz(self, warpMatriz):
         return self.apolo.setWarpGoalMatriz(warpMatriz)
 
     def eventWarpReset(self):
+        self.allWarpPoints = False
         self.apolo.resetWarp()
 
     # Offset
@@ -315,3 +332,31 @@ class Hades(QThread):
 
     def eventSetSkippedFrames(self, framesToSkip):
         self.framesToSkip = framesToSkip
+
+    @staticmethod
+    def ordenaWarp(points):
+        WIDTH = 640
+        HEIGHT = 480
+        largura = WIDTH/2
+        altura = HEIGHT/2
+
+        for i in range(0, 4, 1):
+            if points[i][0] - largura < 0:
+                if points[i][1] - altura < 0:
+                    # Quadrante 1
+                    pt1 = points[i]
+                else:
+                    # Quadrante 4
+                    pt4 = points[i]
+            else:
+                if points[i][1] - altura < 0:
+                    # Quadrante 2
+                    pt2 = points[i]
+                else:
+                    # Quadrante 3
+                    pt3 = points[i]
+
+        return pt1, pt2, pt3, pt4
+
+
+    

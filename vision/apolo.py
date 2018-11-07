@@ -544,6 +544,10 @@ class Apolo:
             print("Nao há câmeras ou o dispositivo está ocupado")
             return None
 
+#        cv2.line(image, (self.shape[0][0], self.shape[0][1]), (self.shape[1][0], self.shape[1][1]), (0,255,0), lineThickness)
+#        cv2.line(image, (self.shape[0][0], self.shape[0][1]), (self.shape[1][0], self.shape[1][1]), (0,255,0), lineThickness)
+
+
         frame = cv2.warpPerspective(frame,self.perspective,(640,480))
 
         #WarpGoal
