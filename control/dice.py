@@ -5,6 +5,13 @@ import time
 
 
 class Dice:
+    """
+    Attributes:
+        warrior:
+        deltaTime:
+        lastTime:
+        transitionTime:
+    """
     def __init__(self):
         self.warrior = None
         self.deltaTime = time.time()
@@ -88,27 +95,46 @@ class Dice:
 
         return [left, right, self.warrior.transAngle]
 
-    # !TODO atualizar position control baseado nas alterações feitas no vector control
     def positionControl(self):
+        if self.warrior.velAcc < 0.5:
+            self.warrior.velAcc = 0.5
+
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
 
-        targetTheta = atan2((self.warrior.target[1] - self.warrior.position[1])*1.3 / 480,
-                            -(self.warrior.target[0] - self.warrior.position[0])*1.5 / 640)
+        targetTheta = atan2((self.warrior.target[1] - self.warrior.position[1]) * 1.3 / 480,
+                            -(self.warrior.target[0] - self.warrior.position[0]) * 1.5 / 640)
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
-        if atan2(sin(targetTheta - currentTheta + pi/2), cos(targetTheta - currentTheta + pi/2)) < 0:
-            self.warrior.backward = True
-            self.warrior.front = 1
+        self.lastTime = time.time()
+        self.deltaTime -= time.time() - self.lastTime
+
+        if self.transitionTime > 0:
+            self.transitionTime -= self.deltaTime
+
         else:
-            self.warrior.backward = False
-            self.warrior.front = -1
+            if atan2(sin(targetTheta - currentTheta + pi / 2.0), -cos(targetTheta - currentTheta + pi / 2.0)) < 0.0:
+                if not self.warrior.backward:
+                    self.transitionTime = 1
+                self.warrior.backward = True
+                self.warrior.front = 1
+
+            else:
+                if self.warrior.backward:
+                    self.transitionTime = 1
+                self.warrior.backward = False
+                self.warrior.front = -1
 
         if self.warrior.backward:
             currentTheta = currentTheta + pi
-            currentTheta = atan2(sin(currentTheta), cos(currentTheta))
+            currentTheta = atan2(sin(currentTheta), -cos(currentTheta))
 
         thetaError = atan2(sin(targetTheta - currentTheta), cos(targetTheta - currentTheta))
+
+        if self.warrior.velAcc < 1.0:
+            self.warrior.velAcc = self.warrior.velAcc + 0.25
+        else:
+            self.warrior.velAcc = 1.0
 
         left = self.warrior.front + sin(thetaError)
         right = self.warrior.front - sin(thetaError)
@@ -116,8 +142,12 @@ class Dice:
         left = geometry.saturate(left)
         right = geometry.saturate(right)
 
-        left = self.warrior.vMax * left
-        right = self.warrior.vMax * right
+        accDistance = 1 - geometry.gaussian(numpy.linalg.norm(numpy.asarray(self.warrior.position)
+                                                              - numpy.asarray(self.warrior.target)), 15)
+        accError = geometry.gaussian(thetaError, 15)
+
+        left = self.warrior.vMax * left * accDistance * accError * self.warrior.velAcc
+        right = self.warrior.vMax * right * accDistance * accError * self.warrior.velAcc
 
         return [left, right, targetTheta]
 
@@ -139,4 +169,4 @@ class Dice:
         return [self.warrior.vLeft * self.warrior.vMax, self.warrior.vRight * self.warrior.vMax, targetTheta]
 
     def speedControl(self):
-        return [self.warrior.vLeft, self.warrior.vRight, 0]
+        return [self.warrior.vLeft, self.warrior.vRight, 0.0]
