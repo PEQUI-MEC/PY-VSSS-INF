@@ -231,23 +231,23 @@ class Afrodite(QMainWindow):
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Space and self.pushButtonPlayStart.isEnabled():
             self.clickedPlay()
-        if not self.pushButtonCaptureWarpWarp.isEnabled():
-            if QKeyEvent.key() == QtCore.Qt.Key_A:
+        if not self.pushButtonCaptureWarpWarp.isEnabled(): #Verifica se o botão de Warp está desativado (Indica que o Warp está sendo realizado)
+            if QKeyEvent.key() == QtCore.Qt.Key_A: # Se a tecla A for apertada
                 #print ("<")
                 self.warpMatriz[self.quadrant][0] -= 1
-            if QKeyEvent.key() == QtCore.Qt.Key_D:
+            if QKeyEvent.key() == QtCore.Qt.Key_D: # Se a tecla D for apertada
                 #print (">")
                 self.warpMatriz[self.quadrant][0] += 1
-            if QKeyEvent.key() == QtCore.Qt.Key_W:
+            if QKeyEvent.key() == QtCore.Qt.Key_W: # Se a tecla W for apertada
                 #print ("^")
                 self.warpMatriz[self.quadrant][1] -= 1
-            if QKeyEvent.key() == QtCore.Qt.Key_S:            
+            if QKeyEvent.key() == QtCore.Qt.Key_S: # Se a tecla S for apertada           
                 #print ("v")
                 self.warpMatriz[self.quadrant][1] += 1
-            if QKeyEvent.key() == QtCore.Qt.Key_Enter or QKeyEvent.key() == QtCore.Qt.Key_Return:
-                self.hades.eventWarp(self.warpMatriz)
-                self.exitWarp()
-                self.warpCount = 0
+            if QKeyEvent.key() == QtCore.Qt.Key_Enter or QKeyEvent.key() == QtCore.Qt.Key_Return: # Se alguma das teclas 'Enter' for pressionada
+                #self.hades.eventWarp(self.warpMatriz) #Realmente realiza o Warp
+                self.exitWarp() #
+                self.warpCount = 0 # Reseta o warp
                 for i in range(0, 4):
                     key = "line" + str(i+1) 
                     if key in self.objectsToDraw.keys():
@@ -725,7 +725,7 @@ class Afrodite(QMainWindow):
         self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
 
         self.warpCount = 0
-        for i in range(0, 4):
+        for i in range(0, 4): # 'For' para deletar todas as linhas que eram desenhadas na imagem
             key = "line" + str(i+1) 
             if key in self.objectsToDraw.keys():
                 del self.objectsToDraw[key]
