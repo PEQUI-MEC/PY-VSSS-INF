@@ -257,10 +257,10 @@ class Afrodite(QMainWindow):
                 for i in range(0, 4):
                     self.objectsToDraw["line" + str(i+1)] = {
                         "shape": "line",
-                        "points": (self.warpMatriz[i%4], self.warpMatriz[(i+1)%4]),
+                        "position": (self.warpMatriz[i%4][0], self.warpMatriz[i%4][1]),
+                        "target": (self.warpMatriz[(i+1)%4][0], self.warpMatriz[(i+1)%4][1]),
                         "color": (0, 255, 0),
                         "lineThickness": 1,
-                        "label": "Warp" + str(i+1),
                     }
                 self.drawImageVideoView()    
 
@@ -390,11 +390,11 @@ class Afrodite(QMainWindow):
                                   (objectToDraw["position"][0] + objectToDraw["limit"],
                                    objectToDraw["position"][1] + objectToDraw["limit"]),
                                   objectToDraw["color"], 2)
-                elif objectToDraw["shape"] == "line":
-                    cv2.line(self.image, (objectToDraw["points"][0][0], objectToDraw["points"][0][1]), (objectToDraw["points"][1][0], objectToDraw["points"][1][1]), objectToDraw["color"], objectToDraw["lineThickness"])
+                #elif objectToDraw["shape"] == "line":
+                #    cv2.line(self.image, (objectToDraw["points"][0][0], objectToDraw["points"][0][1]), (objectToDraw["points"][1][0], objectToDraw["points"][1][1]), objectToDraw["color"], objectToDraw["lineThickness"])
 
                 elif objectToDraw["shape"] == "line":
-                    cv2.line(self.image, objectToDraw["position"], objectToDraw["target"], objectToDraw["color"], 2)
+                    cv2.line(self.image, objectToDraw["position"], objectToDraw["target"], objectToDraw["color"], 1)
 
     # MENU BAR
     # MenuBarArquivo
@@ -769,15 +769,14 @@ class Afrodite(QMainWindow):
                 self.callHadesWarpEvent(px,py)        
             if self.warpCount == 9:
                 for i in range(0, 4):
-                    self.warpMatriz = self.hades.ordenaWarp(self.warpMatriz)
-                    self.objectsToDraw["line" + str(i + 1)] = {
+                    self.objectsToDraw["line" + str(i+1)] = {
                         "shape": "line",
-                        "points": (self.warpMatriz[i % 4], self.warpMatriz[(i + 1) % 4]),
+                        "position": (self.warpMatriz[i%4][0], self.warpMatriz[i%4][1]),
+                        "target": (self.warpMatriz[(i+1)%4][0], self.warpMatriz[(i+1)%4][1]),
                         "color": (0, 255, 0),
                         "lineThickness": 1,
-                        "label": "Warp" + str(i + 1),
                     }
-                self.drawImageVideoView()
+                self.drawImageVideoView()    
                 self.horizontalSliderCaptureWarpOffsetLeft.setValue(0)
                 self.horizontalSliderCaptureWarpOffsetRight.setValue(0)
                 self.warpCount = 10
