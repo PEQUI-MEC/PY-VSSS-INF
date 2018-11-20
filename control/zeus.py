@@ -1,3 +1,4 @@
+# coding=utf-8
 from control.eunomia import Eunomia
 from control.dice import Dice
 from control.warrior import Warrior
@@ -5,46 +6,58 @@ import numpy
 
 
 class Zeus:
-    """Class of robot Control
+    """Classe Control
+
+    Essa classe está responsável pelos cáculos necessários afim de se encontrar a devida velocidade dos robôs dado
+    um comando enviado pela estratégia. Essa etapa do programa precede o envio de mensagens aos robôs.
 
     Attributes:
-        warriors: Warrior() list with the information of the robots.
-        nWarriors: Robots in play.
-        robotsSpeed: interface speed list.
-        actions: Instance of class Eunomia() that calculates what is needed to find de robots velocities.
-        translate: Instance of class Dice() that calculates the robots velocities.
+        warriors: Lista de Warrior() com as informações dos robôs.
+        nWarriors: Quantidade de robôs em jogo.
+        robotsSpeed: Velocidades dos robôs que são setadas na interface
+        actions: Instãncia da classe Eunomia() que calcula o necessário para encontrar as velocidades dos robos.
+        translate: Instância da classe Dice() que calcula as velocidades dos robôs.
     """
 
     def __init__(self):
-        self.warriors = []
-        self.nWarriors = 0
-        self.robotsSpeed = []
-
+        self.warriors = None
+        self.nWarriors = None
+        self.robotsSpeed = None
         self.actions = Eunomia()
         self.translate = Dice()
+
         print("Zeus summoned")
 
     def updateSpeeds(self, robots):
-        print("[Zeus] New speeds:")
+        """Atualização de velocidades
 
-        for robot in robots:
-            self.robotsSpeed.append(robot)
-
-    def setup(self, nWarriors):
-        """Zeus first movements
-
-        This method must be called before using Zeus properly.
-        Here is instantiated the Eunomia() and Dice() as well as the amount nWarriors of Warriors to be used.
+        Esse método recebe uma lista de velocidades que são setadas na interface.
+        O mesmo é chamado toda vez que há uma mudança na interface.
 
         Args:
-            nWarriors: Num of warriors in game
-
-        Returns:
-
+            robots: Lista de velocidades em double
         """
+
+        print("[Zeus] New speeds:")
+        for i in range(0, len(robots)):
+            self.robotsSpeed[i] = robots[i]
+            print(self.robotsSpeed[i])
+
+    def setup(self, nWarriors):
+        """Primeiros passos de Zeus
+
+        Esse método deve ser chamado antes de se usar Zeus apropriadamente.
+        Aqui é instânciado Eunomia() e Dice() bem como são setados a quantidade nWarriors de warriors.
+
+        Args:
+            nWarriors: Número de warriors em jogo.
+        """
+
         self.actions.setup()
         self.nWarriors = nWarriors
 
+        self.warriors = []
+        self.robotsSpeed = []
         for i in range(0, nWarriors):
             self.warriors.append(Warrior())
             self.robotsSpeed.append(0.0)
@@ -53,10 +66,15 @@ class Zeus:
         return self
 
     def reset(self):
+        """
+
+        Returns:
+
+        """
         self.translate.reset()
 
     def getVelocities(self, strategia):
-        """Zeus main method
+        """Método principal de Zeus
 
         Recebe dados retornados pela estratégia e gera uma lista de Warrior() em getWarriors.
         Essa lista é encaminhada para o controlRoutine onde serão feitos as chamadas de action.run
@@ -65,7 +83,7 @@ class Zeus:
         uma lista de dicionários com esses valores.
 
         Args:
-            strategia (list): Lista de dicionários com as informações geradas pelo Strategy
+            strategia: Lista de dicionários com as informações geradas pelo Strategy
 
         Returns:
             list: Informações a serem passadas para Comunicação(Hermes)
@@ -77,49 +95,59 @@ class Zeus:
         return velocities
 
     def getWarriors(self, strategia):
-        """Transforms a list of dictionaries into a Warrior() list.
+        """Transforma uma lista de dicionário em uma lista de Warrior().
 
-        Seta os atributos do object Warrior() baseado nas informações passadas pela estratégia. Ações que podem ser escolhidas:
-        - {
-            "command": "goTo",
-            "data": {
-                "obstacles": [(x, y)] # opcional - se passado, desviar de tais obstaclos
-                "pose": { "position": (x, y), "orientation": θ radianos },
-                "target": {
-                    "position": (x, y),
-                    "orientation": θ radianos | (x, y)  # opcional - pode ser uma orientação final ou uma posição de lookAt
+        Seta os atributos do object Warrior() baseado nas informações passadas pela estratégia.
+        Ações que podem ser escolhidas estão listadas abaixo:
+            - {
+                "command": "goTo",
+                "data": {
+                    "obstacles": [(x, y)] # opcional - se passado, desviar de tais obstaclos
+                    "pose": { "position": (x, y), "orientation": θ radianos },
+                    "target": {
+                        "position": (x, y),
+                        "orientation": θ rad|(x, y)  # opcional: pode ser uma orientação final ou uma posição de lookAt
+                        },
+                    "velocity": X m/s
+                        # opcional: se passado, sem before, é a velocidade constante/com before é velocidade padrão
+                    "before": X s
+                        # se passado sem o velocity, usa a velocidade máxima do robô como teto
+                }
+            }
+
+            - {
+                "command": "spin",
+                "data": { "velocity": X m/s, "direction": "clockwise" | "counter" }
+            }
+
+            - {
+                "command": "lookAt",
+                "data": {
+                    "pose": {
+                        "position": (x, y),  # opcional: é passado se o target for um ponto
+                        "orientation": θ rad
                     },
-                "velocity": X m/s,  # opcional - se passado, sem before, é a velocidade constante / com before é velocidade padrão
-                "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
+                    "target": θ rad | (x, y)
+                }
             }
-        }
-        - {
-            "command": "spin",
-            "data": { "velocity": X m/s, "direction": "clockwise" | "counter" }
-        }
-        - {
-            "command": "lookAt",
-            "data": {
-                "pose": {
-                    "position": (x, y),  # opcional - é passado se o target for um ponto
-                    "orientation": θ radianos
-                },
-                "target": θ radianos | (x, y)
+
+            - {
+                "command": stop,
+                "data": {before: 0}
             }
-        }
-        - {
-            "command": stop,
-            "data": {before: 0}
-        }
 
         Args:
-            strategia (list): List of dictionaries with information generated by Strategy0
+            strategia: Lista de dicionário com informações geradas pelo módulo de estratégia.
 
         Returns:
-            list: Object Warrior() list
+            list: Lista de Warrior().
 
         Raises:
             ValueError:
+                Se tamanho da lista informado pela estratégia não for equivalente ao número de robos;
+                Se os elementos da lista 'estretegia' não for dicionários;
+                Se nos dicionários não conterem as key's "command" e "data";
+                Se os comandos em "command" forem diferentes de: goTo, spin, lookAt ou stop.
 
         """
 
@@ -205,14 +233,14 @@ class Zeus:
         return warriors
 
     def controlRoutine(self):
-        """Action and Translate call
+        """Chamadas de action e translate
 
-        Flow of calculations to generate the PWM's that will be passed to the communication.
-        Actions performs the calculations based on the commands set by the Strategy.
-        Translate takes the data generated by Actions and calculates the final speed of each wheel.
+        Fluxo de cálculos para a geração de PWM's que serão passados para comunicação.
+        Actions faz os cálculos baseados nas informações passadas para estratégia.
+        Translate pega os dados gerados pelo Actions e calcula a velocidade final de cada roda.
 
         Returns:
-            list: Velocities list of each wheel of the robots returned by Translate.
+            list: Lista com velocidades de cada roda dos robos.
 
         """
 
@@ -224,15 +252,16 @@ class Zeus:
         return velocities
 
     def generateOutput(self, velocities, strategia):
-        """Generation of output data
+        """Gera os dados de saida
 
-        This method generates list of dictionaries with the speeds of each robot.
+        Esse método gera uma lista de dicionários com as velocidades de cada robo.
 
         Args:
-            velocities (list): List with the speeds of each wheels of each robot.
+            velocities: Lista com as velocidades de cada roda de cada robo.
+            strategia: Informações da estratégia. Usado para inserir os Id's dos respectivos robos.
 
         Returns:
-            list: List of dictionary ready to be sent to the Communication(Hermes).
+            list: Lista de dicionário pronto para ser enviado para Communication(Hermes).
 
         """
         output = []
