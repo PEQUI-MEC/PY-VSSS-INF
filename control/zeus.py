@@ -196,7 +196,6 @@ class Zeus:
 
                 if "obstacles" in info:
                     warriors[x].obstacles = numpy.asarray(info["obstacles"], dtype=float)
-                    warriors[x].obstaclesSpeed = numpy.asarray(info["obstaclesSpeed"], dtype=float)
 
             elif strategia[x]["command"] == "spin":
                 warriors[x].action.append(info["direction"])

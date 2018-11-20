@@ -29,7 +29,6 @@ class Athena:
     def __init__(self):
         self.warriors = []
         self.theirWarriors = []
-        self.theirWarriorsLastPos = []
 
         self.atk = None
         self.mid = None
@@ -140,14 +139,6 @@ class Athena:
             self.warriors[i].setup(positions[0][i]["robotLetter"],
                                    positions[0][i]["position"],
                                    positions[0][i]["orientation"])
-            self.warriors[i].velEstimated = \
-                distance.euclidean(self.warriors[i].position, self.warriors[i].lastPosition) / self.deltaTime
-            self.warriors[i].velEstimated /= Endless.pixelMeterRatio
-            # print(self.warriors[i].defaultVel)
-
-        self.theirWarriorsLastPos = []
-        for i in range(0, len(self.theirWarriors)):
-            self.theirWarriorsLastPos.append(self.theirWarriors[i].position)
 
         self.theirWarriors = []
         for i in range(0, len(positions[1])):
@@ -156,15 +147,6 @@ class Athena:
 
             self.theirWarriors.append(Warrior())
             self.theirWarriors[i].setup('z', positions[1][i]["position"])
-
-        for i in range(0, len(self.theirWarriors)):
-            dist = []
-            for x in range(0, len(self.theirWarriorsLastPos)):
-                dist.append(distance.euclidean(self.theirWarriors[i].position, self.theirWarriorsLastPos[x]))
-
-            if len(dist) > 0:
-                self.theirWarriors[i].velEstimated = min(dist) / self.deltaTime
-                self.theirWarriors[i].velEstimated /= Endless.pixelMeterRatio
 
         self.ball["position"] = positions[2]["position"]
         # oracle é acessado sem verificação pois deve quebrar o programa se a Athena não tiver sido configurada
@@ -254,16 +236,11 @@ class Athena:
 
                 if "avoidObstacles" in warrior.command:
                     command["data"]["obstacles"] = []
-                    command["data"]["obstaclesSpeed"] = []
                     for obstacle in self.warriors:
                         if obstacle != warrior:
                             command["data"]["obstacles"].append(obstacle.position)
-                            # print("Warriors: ", obstacle.velEstimated)
-                            command["data"]["obstaclesSpeed"].append([obstacle.velEstimated, obstacle.velEstimated])
                     for obstacle in self.theirWarriors:
                         command["data"]["obstacles"].append(obstacle.position)
-                        # print("Enemies: ", obstacle.velEstimated)
-                        command["data"]["obstaclesSpeed"].append([obstacle.velEstimated, obstacle.velEstimated])
 
                     if warrior.position[0] > self.ball["position"][0] in warrior.command:
                         command["data"]["obstacles"].append(self.ball["position"])
