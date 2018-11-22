@@ -10,42 +10,46 @@ class TestZeus(unittest.TestCase):
 
     info = [
         {
-            'command': 'goTo',
-            'data': {
-                'pose': {
-                    'position': (644, 1199), 'orientation': 0.5
+            "robotLetter": "A",
+            "command": "goTo",
+            "data": {
+                "pose": {
+                    "position": (644, 1199), "orientation": 0.5
                 },
-                'target': {
-                    'position': (300, 300), 'orientation': (282, 150.0)
+                "target": {
+                    "position": (300, 300), "orientation": (282, 150.0)
                 },
-                'velocity': 1.0,
-                'obstacles': [
+                "velocity": 1.0,
+                "obstacles": [
                     (644, 1199), (611, 1243), (602, 1121), (644, 1199), (611, 1243), (602, 1121)
                 ]
             }
         },
 
         {
-            'command': 'stop',
-            'data': {'before': 0}
+            "robotLetter": "B",
+            "command": "stop",
+            "data": {"before": 0}
          },
 
         {
-            'command': 'goTo',
-            'data': {
-                'pose': {
-                    'position': (602, 1121), 'orientation': 0.5
+            "robotLetter": "C",
+            "command": "goTo",
+            "data": {
+                "pose": {
+                    "position": (602, 1121), "orientation": 0.5
                 },
-                'target': {
-                    'position': (300, 300), 'orientation': (32, 0)
+                "target": {
+                    "position": (300, 300), "orientation": (32, 0)
                 },
-                'velocity': 1.0
+                "velocity": 1.0
             }
         }
     ]
 
     info2 = [
         {
+            "robotLetter": "A",
             "command": "lookAt",
             "data": {
                 "pose": {
@@ -55,11 +59,13 @@ class TestZeus(unittest.TestCase):
             }
         },
         {
+            "robotLetter": "B",
             "command": "spin",
             "data": {"velocity": 1.0, "direction": "clockwise"}
 
         },
         {
+            "robotLetter": "C",
             "command": "goTo",
             "data": {
                 "obstacles": [(0, 200), (10, 100)],
@@ -103,5 +109,5 @@ class TestZeus(unittest.TestCase):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
