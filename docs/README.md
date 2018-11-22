@@ -12,7 +12,7 @@ We are open to answer any questions and suggestions through our email contato@pe
 
 ## Dependencies
 
-Our code run on all Python3-supported OSs (we recomend Python 3.4). To start using our software you must install all requirements described on our requirements.txt file. You can easily do that by running
+Our code run on all Python3-supported OS's (we recomend Python 3.4). To start using our software you must install all requirements described on our requirements.txt file. You can easily do that by running
 >pip install -r requirements.txt
 
 We use MuJoCo as our simulation engine. As MuJoCo is not a free software, in order to run our simulator you must grab your license [here](https://www.roboti.us/license.html).
