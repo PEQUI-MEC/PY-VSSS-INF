@@ -23,6 +23,16 @@ class HermesTest(unittest.TestCase):
     def testInit(self):
         self.assertTrue("/dev/ttyUSB0", 115200)
 
+    def testFly(self):
+        self.assertEqual([[1,"0.7","0.7"],[2,"0.4","0.4"],[3,"0.4","0.4"]],
+                         [[1, "0.7;0.7"],[2, "0.7;0.7"],[3, "0.3;0.3"]])
+        self.assertEqual([[1,"0.7","0.7"]],
+                         [[1, "0.7;0.7"]])
+        self.assertEqual([[2,"0.4","0.4"],[3,"0.4","0.4"]],
+                         [[2, "0.7;0.7"],[3, "0.3;0.3"]])
+        
+
+
     #multicast
     '''
     def test_sendMessages(self):

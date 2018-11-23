@@ -64,19 +64,9 @@ class Hermes:
         messages = []
         for i in range(len(velocities)):
             message = "{:.2f}".format(velocities[i]["vRight"]) + ";" + "{:.2f}".format(velocities[i]["vLeft"])
-
-            if self.xbee is not None:
-                try:
-                    self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
-                    messages.append((i, message))
-                    # print(velocities[i]["robotLetter"] + ": " + message)
-                except SerialTimeoutException:
-                    print("[Hermes]: Message sending timed out")
-                except KeyError:
-                    print("[Hermes]: We don't know the address for robot '" + velocities[i]["robotLetter"] + "'")
-                except SerialException:
-                    print("[Hermes]: Access to xBee denied")
-
+            self.sendMessage(i, message)
+            messages.append((i, message))
+            
         return messages
 
     def killBee(self):
@@ -93,21 +83,16 @@ class Hermes:
         self.serial.close()
 
     def sendMessage(self, robotId, message):
-        if self.xbee is not None:
-            messageInfo = []
-            try:
-                # print(robotId)
-                self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
-            except SerialTimeoutException:
-                print("Message sending timed out")
-            except SerialException:
-                print("Could not send message")
-
-            if robotId in self.robots:
-                messageInfo.append((robotId, message))
-            else:
-                print("We don't have this robot configured")
-            return messageInfo
+           if self.xbee is not None:
+                try:
+                    self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
+                except SerialTimeoutException:
+                    print("[Hermes]: Message sending timed out")
+                except KeyError:
+                    print("[Hermes]: We don't know the address for robot '" + velocities[i]["robotLetter"] + "'")
+                except SerialException:
+                    print("[Hermes]: Access to xBee denied")
+            return message
 
     @staticmethod
     def isSerial(port):
