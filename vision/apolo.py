@@ -13,76 +13,6 @@ BALL = 2
 ADV = 3
 
 
-class Positions:
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.oldX = 0
-        self.oldY = 0
-
-        self.changed = False
-
-    def setChanged(self, booleanVal):
-        self.changed = booleanVal
-
-    def isChanged(self):
-        return self.changed
-
-    def setX(self, val):
-        self.oldX = self.x
-        self.x = val
-
-    def setY(self, val):
-        self.oldY = self.y
-        self.y = val
-
-    def setCoordinates(self, coordinate):
-        if len(coordinate) != 2:
-            print("COORDENADA INVALIDA")
-            return
-
-        self.setX(coordinate[0])
-        self.setY(coordinate[1])
-
-    def getX(self):
-        return self.x
-
-    def getY(self):
-        return self.y
-
-    def getCoordinates(self):
-        return [self.getX(), self.getY()]
-
-
-class SecondaryTags:
-    def __init__(self, robot):
-        self.positionList = list()
-
-        for i in range(0, robot+1, 1):
-            self.positionList.append(Positions())
-
-
-class Robots:
-    def __init__(self, robot):
-        self.position = Positions()
-        self.orientation = 0
-        self.oldOrientation = 0
-        self.secondaryTag = None
-        self.letter = None
-
-    def setOrientation(self, val):
-        self.oldOrientation = self.orientation
-        self.orientation = val
-
-    def getOrientation(self):
-        return self.orientation
-
-    def setSecondaryTags(self, robot):
-        self.secondaryTag = SecondaryTags(robot)
-
-    def setLetter(self, letter):
-        self.letter = letter
-
 class Apolo:
     """
     O threshold quando for setado deve estar no formato ((Hmin,HMax),(Smin,SMax),(Vmin,VMax))
@@ -98,39 +28,29 @@ class Apolo:
         self.thresholdedImages = [None] * 4
         self.robotRadius = 0
 
-        self.allyRobots = list()
-        self.advRobots = list()
-        self.ball = Positions()
-
-        # Cria os robos aliados
-        for i in range(0, 3, 1):
-            self.allyRobots.append(Robots())
-            self.allyRobots[i].setSecondaryTags(i)
-
-        # Cria os robos inimigos
-        for i in range(0, 3, 1):
-            self.advRobots.append(Robots())
-
-        self.allyRobots[0].setLetter("A")
-        self.allyRobots[1].setLetter("B")
-        self.allyRobots[2].setLetter("C")
-
+        self.robotPositions = [(0, 0, 0, True), (0, 0, 0, True), (0, 0, 0, True)]
+        self.ballPosition = [0, 0]
+        self.advRobotPositions = [(0, 0), (0, 0), (0, 0)]
+    
+        # Por default seta esses valores, deve ser modificado quando der o quickSave
         self.setHSVThresh(((28, 30), (0, 255), (0, 255), 0, 0, 0, 30), MAIN)
         self.setHSVThresh(((120, 250), (0, 250), (0, 250), 0, 0, 0, 30), BALL)
         self.setHSVThresh(((120, 250), (0, 250), (0, 250), 0, 0, 0, 30), ADV)
         self.setHSVThresh(((69, 70), (0, 255), (0, 255), 0, 0, 0, 30), GREEN)
 
-        '''    
-        # Por default seta esses valores, deve ser modificado quando der o quickSave
-        
-
         self.resetWarp()
 
         self.imageId = -1
         self.invertImage = False
+        self.robotLetter = ['A', 'B', 'C']
         self.warpMatrizGoal = [(0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT)]
 
-        '''
+        self.positions = self.returnData(
+            self.robotPositions,
+            self.advRobotPositions,
+            self.ballPosition,
+            self.robotLetter
+        )
 
         print("Apolo summoned")
 
@@ -245,10 +165,7 @@ class Apolo:
         frameHSV = cv2.cvtColor(rawFrame, cv2.COLOR_BGR2HSV)
         return frameHSV
 
-    def setImage(self, id):
-        self.imageId = id
-
-    def setHSVThresh(self, hsvThresh, tag):
+    def setHSVThresh(self, hsvThresh, imageId):
         """
         Args:
             hsvThresh: deve ser do tipo (hmin,hmax),(smin,smax),(vmin,vmax)
@@ -258,9 +175,10 @@ class Apolo:
                 2 - Ball
                 3 - Adv
         """
-        #Removido o imageId, agora para settar qual imagem ira pra interface é necessario deixar explicito (utlizando a
-        #função setImage)
-        self.threshList[tag] = hsvThresh
+        self.imageId = imageId
+
+        if self.imageId >= 0:
+            self.threshList[imageId] = hsvThresh
 
     def applyThreshold(self, src, keyword):
         thresh = self.threshList[keyword]
