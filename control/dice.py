@@ -1,24 +1,57 @@
 from math import atan2, pi, sin, cos
 from helpers import geometry
+from helpers.endless import Endless
 import numpy
 import time
 
 
 class Dice:
-    """
+    """ Classe de ações
+
+    Essa classe é responsável por fazer os pré-cálculos necessários para encontrar as velocidades das rodas.
+
     Attributes:
-        warrior:
+        warrior: objeto Warrior()
         deltaTime:
         lastTime:
         transitionTime:
     """
+
+    acc = 0.5
+
     def __init__(self):
         self.warrior = None
+        self.deltaTime = None
+        self.lastTime = None
+        self.transitionTime = None
+
+    def setup(self):
+        """Primeiros passos de Dice
+
+        Esse método deve ser chamado antes de usar Dice apropriadamente.
+        Aqui é inicializado as variáveis deltaTime e lastTime com o tempo atual do clock.
+        """
+
         self.deltaTime = time.time()
         self.lastTime = time.time()
         self.transitionTime = 0
 
+        return self
+
     def run(self, warrior):
+        """ Metódo principal de Dice()
+
+        Esse método recebe uma instância de Warrior() e encaminha os dados para seu respectivo método
+        de acordo com o cmdType.
+
+        Args:
+            warrior: Instância de Warrior()
+
+        Returns:
+            list: lista com velocidade da roda esquerda, velocidade da roda direita e orientação alvo respectivamente
+
+        """
+
         self.warrior = warrior
 
         if warrior.cmdType == "VECTOR":
@@ -33,11 +66,24 @@ class Dice:
             raise ValueError("Invalid cmdType")
 
     def reset(self):
+        """Método para resetar uma varivável de tempo de transição
+
+        Esse método reseta a variável de tempo de transição utilizado no backwards em vectorControl e positionControl
+        """
+
         self.transitionTime = 0
 
     def vectorControl(self):
-        if self.warrior.velAcc < 0.5:
-            self.warrior.velAcc = 0.5
+        """Controle por vetor
+
+        No controle por vetor
+
+        Returns:
+            list: lista com velocidade da roda esquerda, velocidade da roda direita e orientação alvo respectivamente
+
+        """
+        if self.warrior.velAcc < Dice.acc:
+            self.warrior.velAcc = Dice.acc
 
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
@@ -45,8 +91,8 @@ class Dice:
         theta = atan2(sin(self.warrior.transAngle), -cos(self.warrior.transAngle))
         target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
 
-        targetTheta = atan2((target[1] - self.warrior.position[1]) * 1.3 / 480.0,
-                            -(target[0] - self.warrior.position[0]) * 1.5 / 640.0)
+        targetTheta = atan2((target[1] - self.warrior.position[1]) * 1.3 / Endless.height,
+                            -(target[0] - self.warrior.position[0]) * 1.5 / Endless.width)
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
         self.lastTime = time.time()
@@ -96,14 +142,24 @@ class Dice:
         return [left, right, self.warrior.transAngle]
 
     def positionControl(self):
-        if self.warrior.velAcc < 0.5:
-            self.warrior.velAcc = 0.5
+        """Controle de posição
+
+        No controle de posição temos um cálculo direto para encontrar as velocidades das rodas para sair da posição
+        atual do robo e ir até uma posição target desejada. Sem controle de curvas ou preocupação com obstáculos.
+
+        Returns:
+            list: lista com velocidade da roda esquerda, velocidade da roda direita e orientação alvo respectivamente
+
+        """
+
+        if self.warrior.velAcc < Dice.acc:
+            self.warrior.velAcc = Dice.acc
 
         if self.warrior.target[0] == -1 and self.warrior.target[1] == -1:
             return [0.0, 0.0, 0.0]
 
-        targetTheta = atan2((self.warrior.target[1] - self.warrior.position[1]) * 1.3 / 480,
-                            -(self.warrior.target[0] - self.warrior.position[0]) * 1.5 / 640)
+        targetTheta = atan2((self.warrior.target[1] - self.warrior.position[1]) * 1.3 / Endless.height,
+                            -(self.warrior.target[0] - self.warrior.position[0]) * 1.5 / Endless.width)
         currentTheta = atan2(sin(self.warrior.orientation), cos(self.warrior.orientation))
 
         self.lastTime = time.time()
@@ -152,21 +208,56 @@ class Dice:
         return [left, right, targetTheta]
 
     def orientationControl(self):
-        targetTheta = self.warrior.targetOrientation
-        theta = self.warrior.orientation
+        """Controle de orientação
 
-        # É necessário girar se estiver com a 'traseira' de frente pro alvo? (Se sim, não usar o if abaixo)
-        if geometry.roundAngle(targetTheta - self.warrior.orientation + pi/2) < 0:
-            theta = geometry.roundAngle(self.warrior.orientation + pi)
+        No controle de aceleração temos a orientação atual do robô e uma orientação final desejada,
+        onde então será calculado as velocidades necessárias para um giro onde ao final do giro o robô esteja com
+        a orientação desejada.
 
-        thetaError = geometry.roundAngle(targetTheta - theta)
+        Returns:
+            list: lista com velocidade da roda esquerda, velocidade da roda direita e orientação alvo respectivamente
 
-        if abs(thetaError) < 2*pi/180:
+        """
+
+        # Se a frente do robô estiver na direção contrária ao alvo, robô nao gira
+        # As duas partes do robôs são consideradas como frente mediante situação
+        if geometry.roundAngle(self.warrior.targetOrientation - self.warrior.orientation + pi/2.0) < 0.0:
+            self.warrior.orientation = geometry.roundAngle(self.warrior.orientation + pi)
+
+        thetaError = geometry.roundAngle(self.warrior.targetOrientation - self.warrior.orientation)
+
+        if abs(thetaError) < 2 * pi / 180.0:
             return [0.0, 0.0, 0.0]
 
         self.warrior.vLeft = geometry.saturate(self.warrior.vMax * thetaError)
         self.warrior.vRight = geometry.saturate(-self.warrior.vMax * thetaError)
-        return [self.warrior.vLeft * self.warrior.vMax, self.warrior.vRight * self.warrior.vMax, targetTheta]
+        # TODO test self.warrior.vLeft*self.warrior.vMax
+
+        return [self.warrior.vLeft * self.warrior.vMax,
+                self.warrior.vRight * self.warrior.vMax,
+                self.warrior.targetOrientation]
 
     def speedControl(self):
+        """Controle de velocidade
+
+        No controle de velocidade não há cálculo de tragetória, apenas é enviado as velocidades diretamente.
+
+        Returns:
+            list: lista com velocidade da roda esquerda, velocidade da roda direita e orientação alvo respectivamente
+
+        """
+
+        # TODO Precisa fazer controle de deseceleração?
+
+        if self.warrior.velAcc < Dice.acc:
+            self.warrior.velAcc = Dice.acc
+
+        if self.warrior.velAcc < 1.0:
+            self.warrior.velAcc = self.warrior.velAcc + 0.25
+        else:
+            self.warrior.velAcc = 1.0
+
+        self.warrior.vLeft *= self.warrior.velAcc
+        self.warrior.vRight *= self.warrior.velAcc
+
         return [self.warrior.vLeft, self.warrior.vRight, 0.0]

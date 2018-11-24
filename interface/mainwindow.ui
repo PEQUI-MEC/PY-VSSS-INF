@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1390</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuBarArquivo">
@@ -7771,11 +7771,6 @@ Message</string>
         </item>
         <item>
          <property name="text">
-          <string>F</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>A</string>
          </property>
         </item>
@@ -7787,6 +7782,21 @@ Message</string>
         <item>
          <property name="text">
           <string>C</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>E</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>F</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>G</string>
          </property>
         </item>
        </widget>

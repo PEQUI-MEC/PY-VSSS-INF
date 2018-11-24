@@ -1,5 +1,6 @@
 from control.eunomia import Eunomia
 from control.warrior import Warrior
+from helpers.endless import Endless
 
 from math import pi
 import unittest
@@ -8,8 +9,8 @@ import numpy
 
 class TestActions(unittest.TestCase):
 
-    actions = Eunomia()
-    actions.setup()
+    actions = Eunomia().setup()
+    Endless.setup(640, 480)
     warrior = None
 
     def testRun(self):

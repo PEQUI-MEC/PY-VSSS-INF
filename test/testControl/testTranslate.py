@@ -1,5 +1,6 @@
 from control.dice import Dice
 from control.warrior import Warrior
+from helpers.endless import Endless
 
 from math import pi
 import unittest
@@ -7,7 +8,8 @@ import unittest
 
 class TestTranslate(unittest.TestCase):
     warrior = Warrior()
-    translate = Dice()
+    translate = Dice().setup()
+    Endless.setup(640, 480)
 
     def testRun(self):
         self.warrior.cmdType = "SPEED"

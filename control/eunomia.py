@@ -35,6 +35,8 @@ class Eunomia:
         self.dMin = 20.0
         self.lDelta = 4.5
 
+        return self
+
     def run(self, warrior):
         """Método principal do controle de Ações
 

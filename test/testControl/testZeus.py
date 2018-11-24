@@ -1,4 +1,5 @@
 from control.zeus import Zeus
+from helpers.endless import Endless
 
 from math import pi
 import unittest
@@ -7,6 +8,7 @@ import unittest
 class TestZeus(unittest.TestCase):
     zeus = Zeus()
     zeus = zeus.setup(3)
+    Endless.setup(640, 480)
 
     info = [
         {

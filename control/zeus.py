@@ -4,6 +4,8 @@ from control.dice import Dice
 from control.warrior import Warrior
 import numpy
 
+# TODO é possível fazer os cálculos em paralelo para cada robô?
+
 
 class Zeus:
     """Classe Control
@@ -23,10 +25,35 @@ class Zeus:
         self.warriors = None
         self.nWarriors = None
         self.robotsSpeed = None
-        self.actions = Eunomia()
-        self.translate = Dice()
+        self.actions = None
+        self.translate = None
 
         print("Zeus summoned")
+
+    def setup(self, nWarriors):
+        """Primeiros passos de Zeus
+
+        Esse método deve ser chamado antes de se usar Zeus apropriadamente.
+        Aqui é instânciado Eunomia() e Dice() bem como são setados a quantidade nWarriors de warriors.
+
+        Args:
+            nWarriors: Número de warriors em jogo.
+        """
+
+        self.actions = Eunomia().setup()
+        self.translate = Dice().setup()
+
+        self.nWarriors = nWarriors
+
+        self.warriors = []
+        self.robotsSpeed = []
+        for i in range(0, nWarriors):
+            self.warriors.append(Warrior())
+            self.robotsSpeed.append(0.0)
+
+        print("Zeus is set up")
+
+        return self
 
     def updateSpeeds(self, robots):
         """Atualização de velocidades
@@ -43,34 +70,13 @@ class Zeus:
             self.robotsSpeed[i] = robots[i]
             print(self.robotsSpeed[i])
 
-    def setup(self, nWarriors):
-        """Primeiros passos de Zeus
-
-        Esse método deve ser chamado antes de se usar Zeus apropriadamente.
-        Aqui é instânciado Eunomia() e Dice() bem como são setados a quantidade nWarriors de warriors.
-
-        Args:
-            nWarriors: Número de warriors em jogo.
-        """
-
-        self.actions.setup()
-        self.nWarriors = nWarriors
-
-        self.warriors = []
-        self.robotsSpeed = []
-        for i in range(0, nWarriors):
-            self.warriors.append(Warrior())
-            self.robotsSpeed.append(0.0)
-
-        print("Zeus is set up")
-        return self
-
     def reset(self):
+        """Método para resetar uma varivável de tempo de transição
+
+        Esse método reseta a variável de tempo de transição utilizado em Dice() no controle de transição
+        do backwards em vectorControl e positionControl
         """
 
-        Returns:
-
-        """
         self.translate.reset()
 
     def getVelocities(self, strategia):
