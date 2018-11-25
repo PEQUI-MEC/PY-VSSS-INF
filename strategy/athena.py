@@ -45,6 +45,8 @@ class Athena:
         # angulo da bola com o gol
         self.ballGoal = 0
 
+        self.defaultVelocities = [0.8, 0.8, 0.8]
+
         self.globalState = "push"
         self.transitionsEnabled = True
         self.roles = ["gk", "mid", "atk"]
@@ -56,6 +58,9 @@ class Athena:
 
     def setup(self, numRobots, width, height, defaultVel):
         Endless.setup(width, height)
+
+        self.defaultVelocities = [defaultVel] * numRobots
+
         for i in range(0, numRobots):
             self.warriors.append(Warrior(defaultVel))
 
@@ -248,6 +253,8 @@ class Athena:
 
                 if "targetVelocity" in warrior.command:
                     command["data"]["velocity"] = warrior.command["targetVelocity"]
+                else:
+                    command["data"]["velocity"] = warrior.defaultVel
 
                 if "before" in warrior.command:
                     command["data"]["before"] = warrior.command["before"]
@@ -278,6 +285,8 @@ class Athena:
 
                 if "targetVelocity" in warrior.command:
                     command["data"]["velocity"] = warrior.command["targetVelocity"]
+                else:
+                    command["data"]["velocity"] = warrior.defaultVel
 
                 if "targetOrientation" in warrior.command:
                     command["data"]["target"] = warrior.command["targetOrientation"]
@@ -392,6 +401,10 @@ class Athena:
                 else:
                     self.atk = availableWarriors[i]
                     self.atk.role = "Attack"
+
+        self.atk.defaultVel = self.defaultVelocities[0]
+        self.mid.defaultVel = self.defaultVelocities[1]
+        self.gk.defaultVel = self.defaultVelocities[2]
 
         ballX = self.ball["position"][0]
         # analisa o estado global do jogo
@@ -665,15 +678,12 @@ class Athena:
                 # vai pra cima com tudo, sem desviar de obstáculos
                 warrior.command["type"] = "goTo"
                 warrior.command["target"] = Endless.goal
-                warrior.command["targetOrientation"] = Endless.pastGoal
                 warrior.command["targetVelocity"] = warrior.maxVel
 
             elif warrior.tactics == Athena.tPush:
                 # vai pra cima cuidadosamente
                 warrior.command["type"] = "goTo"
-                warrior.command["targetOrientation"] = Endless.pastGoal
                 warrior.command["avoidObstacles"] = "por favor"
-                warrior.command["targetVelocity"] = warrior.defaultVel
 
                 if distance.euclidean(warrior.position, self.ball["position"]) < Endless.robotSize:
                     warrior.command["target"] = Endless.goal
@@ -683,8 +693,6 @@ class Athena:
             elif warrior.tactics == Athena.tCatch:
                 # se é pra pegar a bola, o alvo é ela com orientação pro gol
                 warrior.command["type"] = "goTo"
-                warrior.command["targetOrientation"] = Endless.pastGoal
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "por favor"
 
                 if ballX < warrior.position[0] - Endless.robotSize:
@@ -702,7 +710,6 @@ class Athena:
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados
                 warrior.command["type"] = "goTo"
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
 
                 # escolhe o lado que vai pressionar a bola, dependendo de qual parede ela tá mais perto
@@ -724,7 +731,6 @@ class Athena:
                     warrior.command["target"] = self.ball["position"]
 
             elif warrior.tactics == Athena.tBlock:
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 # !TODO pegar Y composto com a velocidade da bola
                 targetX = Endless.goalieLine
 
@@ -753,7 +759,6 @@ class Athena:
                     warrior.command["targetOrientation"] = (Endless.goalieLine, 0)
 
             elif warrior.tactics == Athena.tBlockOpening:
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 targetX = Endless.areaLine
                 targetY = ballY
 
@@ -800,7 +805,6 @@ class Athena:
                 if distance.euclidean(warrior.position, target) > Endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
-                    warrior.command["targetVelocity"] = warrior.defaultVel
                     warrior.command["avoidObstacles"] = "mas é claro, chefia"
                     if target == self.ball["position"]:
                         warrior.command["targetOrientation"] = (self.ball["position"][0] + 10,
@@ -841,7 +845,6 @@ class Athena:
 
             elif warrior.tactics == Athena.tUnlock:
                 warrior.command["type"] = "goTo"
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["target"] = (warrior.position[0] + self.unlockDirection * 100 *
                                              math.cos(warrior.orientation),
                                              warrior.position[1] + self.unlockDirection * 100 *
@@ -903,21 +906,14 @@ class Athena:
         self.roles = roles
         return True
 
-    def setVelocities(self, atkSpeed, midSpeed, gkSpeed):
+    def setVelocities(self, speeds):
         """
         Sets robots' velocities
-        :param atkSpeed: velocity of the Attacker
-        :param midSpeed: velocity of the Defensor
-        :param gkSpeed: velocity of the Goalkeeper
+        :param speeds: velocities vector [atkSpeed, midSpeed, gkSpeed]
         """
+        self.defaultVelocities = speeds
+
         print("\n[Athena] New velocities:")
-        for warrior in self.warriors:
-            if warrior.role == "atk":
-                warrior.setDefaultVel(atkSpeed)
-                print("\tAttacker: " + atkSpeed)
-            elif warrior.role == "mid":
-                warrior.setDefaultVel(midSpeed)
-                print("\tDefensor (Mid): " + midSpeed)
-            elif warrior.role == "gk":
-                warrior.setDefaultVel(gkSpeed)
-                print("\tGoalkeeper: " + gkSpeed)
+        print("\tAttacker: " + str(speeds[0]))
+        print("\tDefensor (Mid): " + str(speeds[1]))
+        print("\tGoalkeeper: " + str(speeds[2]))

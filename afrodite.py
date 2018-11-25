@@ -148,8 +148,23 @@ class Afrodite(QMainWindow):
         self.checkBoxStrategyTransitionsEnableTransistions.clicked.connect(self.toggleTransitions)
 
         # roles
-        self.pushButtonStrategyRobotFunctionsEdit.clicked.connect(self.clickEditRoles)
-        self.pushButtonStrategyRobotFunctionsDone.clicked.connect(self.clickDoneRoles)
+        self.comboBoxStrategyRobotFunctionsRobot1.currentIndexChanged.connect(self.changedRole1)
+        self.comboBoxStrategyRobotFunctionsRobot2.currentIndexChanged.connect(self.changedRole2)
+        self.comboBoxStrategyRobotFunctionsRobot3.currentIndexChanged.connect(self.changedRole3)
+
+        # speeds
+        self.horizontalSliderRobotSpeed1.valueChanged.connect(self.changedSpeeds)
+        self.horizontalSliderRobotSpeed2.valueChanged.connect(self.changedSpeeds)
+        self.horizontalSliderRobotSpeed3.valueChanged.connect(self.changedSpeeds)
+        self.spinBoxRobotSpeed1.valueChanged.connect(self.changedSpeeds)
+        self.spinBoxRobotSpeed2.valueChanged.connect(self.changedSpeeds)
+        self.spinBoxRobotSpeed3.valueChanged.connect(self.changedSpeeds)
+
+        # id
+        self.updateRobotIds()
+        self.comboBoxStrategyRobotIDsRobot1.currentIndexChanged.connect(self.changedId1)
+        self.comboBoxStrategyRobotIDsRobot2.currentIndexChanged.connect(self.changedId2)
+        self.comboBoxStrategyRobotIDsRobot3.currentIndexChanged.connect(self.changedId3)
 
         self.checkBoxStrategyTestParametersDrawConstants.clicked.connect(self.toggleDrawConstants)
         self.horizontalSliderStrategyTestParametersGoalieOffset.valueChanged.connect(self.updateStrategyConstants)
@@ -166,10 +181,6 @@ class Afrodite(QMainWindow):
 
         # CONTROL
 
-        # speeds
-        self.pushButtonRobotSpeedEdit.clicked.connect(self.getPushButtonRobotSpeedEdit)
-        self.pushButtonRobotSpeedDone.clicked.connect(self.getPushButtonRobotSpeedDone)
-
         # PID TEST
         self.pushButtonComunicationRobotFunctionsPIDTest.clicked.connect(self.getPushButtonControlRobotFunctionsPIDTest)
         self.pushButtonComunicationRobotFunctionsPIDTest.setStyleSheet('background-color:#efefef')
@@ -183,14 +194,6 @@ class Afrodite(QMainWindow):
         self.updateComboBoxControlSerialDevice()
         self.getComboBoxControlSerialDevice()
         self.pushButtonControlSerialSetSkippedFrames.clicked.connect(self.clickedSetSkippedFrames)
-        '''
-        # RobotStatus
-        self.pushButtonControlRobotStatusRobotUpdate.clicked.connect(self.getPushButtonControlRobotStatusRobotUpdate)
-        '''
-
-        # id
-        self.pushButtonRobotIDEdit.clicked.connect(self.getPushButtonRobotIDEdit)
-        self.pushButtonRobotIDDone.clicked.connect(self.getPushButtonRobotIDDone)
 
         # MENUBAR
 
@@ -198,13 +201,8 @@ class Afrodite(QMainWindow):
         self.actionExit.triggered.connect(self.actionExitTriggered)
         self.actionLoadConfigs.triggered.connect(self.actionLoadConfigsTriggered)
         self.actionSaveConfigs.triggered.connect(self.actionSaveConfigsTriggered)
-        #self.loadConfigs(file="quicksave")
 
-        '''        
-        # MenuBar - Help
-        self.actionRulesVSSS.triggered.connect(self.actionRulesVSSSTriggered)
-        self.actionAbout.triggered.connect(self.actionAboutTriggered)
-        '''
+        self.loadConfigs(file="quicksave")
 
         print("Afrodite summoned")
 
@@ -468,18 +466,19 @@ class Afrodite(QMainWindow):
 
             self.spinBoxRobotRadius.setValue(self.hades.eventLoadConfigs("robotRadius"))
 
-            self.spinBoxRobotSpeedAttack.setValue(self.hades.eventLoadConfigs("attackSpeed"))
-            self.spinBoxRobotSpeedDefense.setValue(self.hades.eventLoadConfigs("midSpeed"))
-            self.spinBoxRobotSpeedGoalkeeper.setValue(self.hades.eventLoadConfigs("goalKeeperSpeed"))
+            self.spinBoxRobotSpeed1.setValue(self.hades.eventLoadConfigs("attackSpeed"))
+            self.spinBoxRobotSpeed2.setValue(self.hades.eventLoadConfigs("midSpeed"))
+            self.spinBoxRobotSpeed3.setValue(self.hades.eventLoadConfigs("goalKeeperSpeed"))
 
-            self.updateRobotSpeeds()
-            #eventoUpdate
+            self.comboBoxStrategyRobotIDsRobot1.setCurrentText(self.hades.eventLoadConfigs("id1"))
+            self.comboBoxStrategyRobotIDsRobot2.setCurrentText(self.hades.eventLoadConfigs("id2"))
+            self.comboBoxStrategyRobotIDsRobot3.setCurrentText(self.hades.eventLoadConfigs("id3"))
 
+            self.changedSpeeds()
 
             return True
         else:
             return False
-
 
     def actionSaveConfigsTriggered(self):
         self.saveConfigs()
@@ -558,9 +557,13 @@ class Afrodite(QMainWindow):
             "offsetRight": self.horizontalSliderCaptureWarpOffsetRight.value(),
             "robotRadius": self.spinBoxRobotRadius.value(),
 
-            "attackSpeed": self.spinBoxRobotSpeedAttack.value(),
-            "midSpeed": self.spinBoxRobotSpeedDefense.value(),
-            "goalKeeperSpeed": self.spinBoxRobotSpeedGoalkeeper.value()
+            "attackSpeed": self.spinBoxRobotSpeed1.value(),
+            "midSpeed": self.spinBoxRobotSpeed2.value(),
+            "goalKeeperSpeed": self.spinBoxRobotSpeed3.value(),
+
+            "id1": self.comboBoxStrategyRobotIDsRobot1.currentText(),
+            "id2": self.comboBoxStrategyRobotIDsRobot2.currentText(),
+            "id3": self.comboBoxStrategyRobotIDsRobot3.currentText()
         }
 
         self.hades.eventSaveConfigs(value)
@@ -840,96 +843,143 @@ class Afrodite(QMainWindow):
 
     # ROBOT TAB
     # role
-    def clickEditRoles(self):
-        self.pushButtonStrategyRobotFunctionsEdit.setEnabled(False)
-        self.pushButtonStrategyRobotFunctionsDone.setEnabled(True)
-        self.comboBoxStrategyRobotFunctionsRobot1.setEnabled(True)
-        self.comboBoxStrategyRobotFunctionsRobot2.setEnabled(True)
-        self.comboBoxStrategyRobotFunctionsRobot3.setEnabled(True)
+    def changedRole1(self):
+        self.changedRoles(0)
 
-    def clickDoneRoles(self):
-        self.pushButtonStrategyRobotFunctionsEdit.setEnabled(True)
-        self.pushButtonStrategyRobotFunctionsDone.setEnabled(False)
-        self.comboBoxStrategyRobotFunctionsRobot1.setEnabled(False)
-        self.comboBoxStrategyRobotFunctionsRobot2.setEnabled(False)
-        self.comboBoxStrategyRobotFunctionsRobot3.setEnabled(False)
+    def changedRole2(self):
+        self.changedRoles(1)
 
-        self.hades.eventSelectRoles([self.comboBoxStrategyRobotFunctionsRobot1.currentText(),
-                                     self.comboBoxStrategyRobotFunctionsRobot2.currentText(),
-                                     self.comboBoxStrategyRobotFunctionsRobot3.currentText()])
+    def changedRole3(self):
+        self.changedRoles(2)
+
+    def changedRoles(self, robotIndex):
+        # evita selecionar o mesmo papel para dois robôs
+        boxes = [
+            self.comboBoxStrategyRobotFunctionsRobot1,
+            self.comboBoxStrategyRobotFunctionsRobot2,
+            self.comboBoxStrategyRobotFunctionsRobot3
+        ]
+        rolesBox = [
+            self.comboBoxStrategyRobotFunctionsRobot1.currentText(),
+            self.comboBoxStrategyRobotFunctionsRobot2.currentText(),
+            self.comboBoxStrategyRobotFunctionsRobot3.currentText()
+        ]
+        roles = ["Attack", "Defense", "Goalkeeper"]
+
+        roles.remove(rolesBox[robotIndex])
+
+        repeatingBox = -1
+        if rolesBox[(robotIndex + 1) % 3] not in roles:
+            roles.remove(rolesBox[(robotIndex + 2) % 3])
+            repeatingBox = (robotIndex + 1) % 3
+
+        elif rolesBox[(robotIndex + 2) % 3] not in roles:
+            roles.remove(rolesBox[(robotIndex + 1) % 3])
+            repeatingBox = (robotIndex + 2) % 3
+
+        if repeatingBox != -1:
+            # troca as velocidades
+            self.swapSpeeds(robotIndex, repeatingBox)
+            rolesBox[repeatingBox] = roles[0]
+            boxes[repeatingBox].setCurrentText(roles[0])
+
+        self.hades.eventSelectRoles(rolesBox)
 
     # speeds
-    def getPushButtonRobotSpeedEdit(self):
-        self.pushButtonRobotSpeedEdit.setEnabled(False)
-        self.pushButtonRobotSpeedDone.setEnabled(True)
-        self.spinBoxRobotSpeedAttack.setEnabled(True)
-        self.horizontalSliderRobotSpeedAttack.setEnabled(True)
-        self.spinBoxRobotSpeedDefense.setEnabled(True)
-        self.horizontalSliderRobotSpeedDefense.setEnabled(True)
-        self.spinBoxRobotSpeedGoalkeeper.setEnabled(True)
-        self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(True)
+    def swapSpeeds(self, box1, box2):
+        sliders = [
+            self.horizontalSliderRobotSpeed1,
+            self.horizontalSliderRobotSpeed2,
+            self.horizontalSliderRobotSpeed3
+        ]
+        spinBoxes = [
+            self.spinBoxRobotSpeed1,
+            self.spinBoxRobotSpeed2,
+            self.spinBoxRobotSpeed3
+        ]
+        temp1 = spinBoxes[box1].value()
+        temp2 = spinBoxes[box2].value()
+        spinBoxes[box1].setValue(temp2)
+        spinBoxes[box2].setValue(temp1)
+        sliders[box1].setValue(temp2)
+        sliders[box2].setValue(temp1)
 
-    def getPushButtonRobotSpeedDone(self):
-        self.pushButtonRobotSpeedEdit.setEnabled(True)
-        self.pushButtonRobotSpeedDone.setEnabled(False)
-        self.spinBoxRobotSpeedAttack.setEnabled(False)
-        self.horizontalSliderRobotSpeedAttack.setEnabled(False)
-        self.spinBoxRobotSpeedDefense.setEnabled(False)
-        self.horizontalSliderRobotSpeedDefense.setEnabled(False)
-        self.spinBoxRobotSpeedGoalkeeper.setEnabled(False)
-        self.horizontalSliderRobotSpeedGoalkeeper.setEnabled(False)
+        self.changedSpeeds()
 
-        self.updateRobotSpeeds()
-
-    def setRobotSpeedAttackCurrent(self, speed):
-        self.progressBarRobotSpeedAttack.setValue(speed)
-
-    def setRobotSpeedDefenseCurrent(self, speed):
-        self.progressBarRobotSpeedDefense.setValue(speed)
-
-    def setRobotSpeedGoalkeeperCurrent(self, speed):
-        self.progressBarRobotSpeedGoalkeeper.setValue(speed)
-
-    def setRobotSpeeds(self, speedAtack, speedDefense, speedGoalKeeper):
-        self.setRobotSpeedAttackCurrent(speedAtack)
-        self.setRobotSpeedDefenseCurrent(speedDefense)
-        self.setRobotSpeedGoalkeeperCurrent(speedGoalKeeper)
-
-    def updateRobotSpeeds(self):
+    def changedSpeeds(self):
         speeds = [
-            self.spinBoxRobotSpeedAttack.value() / 100.0,
-            self.spinBoxRobotSpeedDefense.value() / 100.0,
-            self.spinBoxRobotSpeedGoalkeeper.value() / 100.0
+            self.spinBoxRobotSpeed1.value() / 100.0,
+            self.spinBoxRobotSpeed2.value() / 100.0,
+            self.spinBoxRobotSpeed3.value() / 100.0
         ]
 
         self.hades.eventUpdateSpeeds(speeds)
 
+    def setRobotSpeedCurrent(self, speed, robotLetter):
+        # TODO verificar a linha do robô com a letra e setar o progressbar
+        pass
+
     # ID
-    def getPushButtonRobotIDEdit(self):
-        self.pushButtonRobotIDEdit.setEnabled(False)
-        self.pushButtonRobotIDDone.setEnabled(True)
-        self.lineEditRobotIDRobot1.setEnabled(True)
-        self.lineEditRobotIDRobot2.setEnabled(True)
-        self.lineEditRobotIDRobot3.setEnabled(True)
+    def updateRobotIds(self):
+        self.comboBoxStrategyRobotIDsRobot1.clear()
+        self.comboBoxStrategyRobotIDsRobot2.clear()
+        self.comboBoxStrategyRobotIDsRobot3.clear()
 
-    def getPushButtonRobotIDDone(self):
-        self.pushButtonRobotIDEdit.setEnabled(True)
-        self.pushButtonRobotIDDone.setEnabled(False)
-        self.lineEditRobotIDRobot1.setEnabled(False)
-        self.lineEditRobotIDRobot2.setEnabled(False)
-        self.lineEditRobotIDRobot3.setEnabled(False)
+        ids = list(Endless.robotAddresses.keys())
 
-        robotLetter = [
-            self.lineEditRobotIDRobot1.text().upper(),
-            self.lineEditRobotIDRobot2.text().upper(),
-            self.lineEditRobotIDRobot3.text().upper()
+        for address in ids:
+            self.comboBoxStrategyRobotIDsRobot1.addItem(address)
+
+        for address in ids:
+            self.comboBoxStrategyRobotIDsRobot2.addItem(address)
+
+        self.comboBoxStrategyRobotIDsRobot2.setCurrentText(ids[1])
+
+        for address in ids:
+            self.comboBoxStrategyRobotIDsRobot3.addItem(address)
+
+        self.comboBoxStrategyRobotIDsRobot3.setCurrentText(ids[2])
+
+    def changedId1(self):
+        self.changedIds(0)
+
+    def changedId2(self):
+        self.changedIds(1)
+
+    def changedId3(self):
+        self.changedIds(2)
+
+    def changedIds(self, robotIndex):
+        # evita selecionar o mesmo ID para dois robôs
+        idsBox = [
+            self.comboBoxStrategyRobotIDsRobot1.currentText(),
+            self.comboBoxStrategyRobotIDsRobot2.currentText(),
+            self.comboBoxStrategyRobotIDsRobot3.currentText()
         ]
+        ids = list(Endless.robotAddresses.keys())
 
-        changedLetters = self.hades.changeRobotLetters(robotLetter)
-        if changedLetters is not None:
-            self.lineEditRobotIDRobot1.setText(changedLetters[0])
-            self.lineEditRobotIDRobot2.setText(changedLetters[1])
-            self.lineEditRobotIDRobot3.setText(changedLetters[2])
+        ids.remove(idsBox[robotIndex])
+
+        repeatingBox = -1
+        if idsBox[(robotIndex + 1) % 3] not in ids:
+            ids.remove(idsBox[(robotIndex + 2) % 3])
+            repeatingBox = (robotIndex + 1) % 3
+
+        elif idsBox[(robotIndex + 2) % 3] not in ids:
+            ids.remove(idsBox[(robotIndex + 1) % 3])
+            repeatingBox = (robotIndex + 2) % 3
+
+        if repeatingBox != -1:
+            idsBox[repeatingBox] = ids[0]
+            # hardcodado porque o nome da box precisa ser hardcodado
+            if repeatingBox == 0:
+                self.comboBoxStrategyRobotIDsRobot1.setCurrentText(ids[0])
+            if repeatingBox == 1:
+                self.comboBoxStrategyRobotIDsRobot2.setCurrentText(ids[0])
+            if repeatingBox == 2:
+                self.comboBoxStrategyRobotIDsRobot3.setCurrentText(ids[0])
+
+        self.hades.changeRobotLetters(idsBox)
 
     # VISION TAB
 
@@ -950,7 +1000,6 @@ class Afrodite(QMainWindow):
     # RobotRadius
     def robotRadiusChanged(self):
         self.hades.setRobotRadiusEvent(self.spinBoxRobotRadius.value())
-
 
     # GetHSVValues
     def getHSVValues(self, colorId):

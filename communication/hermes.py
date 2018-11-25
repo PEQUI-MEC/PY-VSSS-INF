@@ -1,6 +1,7 @@
 import sys
 from xbee import XBee
 from serial import Serial, SerialException, SerialTimeoutException, serialutil
+from helpers.endless import Endless
 
 
 class Hermes:
@@ -8,11 +9,7 @@ class Hermes:
     def __init__(self):
         self.xbee = None
         self.serial = None
-        self.robots = {
-            "A": "\x56\x0D",
-            "B": "\x5B\x0D",
-            "C": "\x45\x0D"
-        }
+
         print("Hermes summoned")
 
     def setup(self, port, baud=115200):
@@ -67,7 +64,7 @@ class Hermes:
 
             if self.xbee is not None:
                 try:
-                    self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
+                    self.xbee.send("tx", frame='A', command='MY', dest_addr=Endless.robotAddresses[velocities[i]["robotLetter"]], data=message)
                     messages.append((i, message))
                     # print(velocities[i]["robotLetter"] + ": " + message)
                 except SerialTimeoutException:
@@ -97,13 +94,13 @@ class Hermes:
             messageInfo = []
             try:
                 # print(robotId)
-                self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[robotId], data=message)
+                self.xbee.send("tx", frame='A', command='MY', dest_addr=Endless.robotAddresses[robotId], data=message)
             except SerialTimeoutException:
                 print("Message sending timed out")
             except SerialException:
                 print("Could not send message")
 
-            if robotId in self.robots:
+            if robotId in Endless.robotAddresses:
                 messageInfo.append((robotId, message))
             else:
                 print("We don't have this robot configured")
