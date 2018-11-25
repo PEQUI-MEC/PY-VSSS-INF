@@ -54,8 +54,7 @@ class Athena:
 
         print("Athena summoned")
 
-    def setup(self, numRobots, width, height, defaultVel):
-        Endless.setup(width, height)
+    def setup(self, numRobots, defaultVel):
         for i in range(0, numRobots):
             self.warriors.append(Warrior(defaultVel))
 
