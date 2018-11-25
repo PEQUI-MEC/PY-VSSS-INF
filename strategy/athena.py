@@ -49,9 +49,9 @@ class Athena:
 
         self.globalState = "push"
         self.transitionsEnabled = True
-        self.roles = ["gk", "mid", "atk"]
+        self.roles = ["Goalkeeper", "Defense", "Attack"]
         self.unlockDirection = 1
-        self.deltaTime = time.time()
+        self.deltaTime = 1
         self.lastTime = time.time()
 
         print("Athena summoned")
@@ -76,7 +76,7 @@ class Athena:
         self.transitionTimer = 0
         return self.transitionTimer
 
-    def getTargets(self, positions):
+    def getTargets(self, positions, testCall=False):
         """
             Recebe um objeto do tipo
             [
@@ -117,7 +117,7 @@ class Athena:
 
             LEMBRE-SE QUE O Y CRESCE PRA CIMA
         """
-        self.deltaTime = time.time() - self.lastTime
+        self.deltaTime = 1 if testCall else time.time() - self.lastTime
         self.lastTime = time.time()
         self.parsePositions(positions)
         self.analyzeAndSetRoles()
@@ -182,10 +182,12 @@ class Athena:
         """Retorna um vetor de comandos para os robôs
             Formato dos comandos:
             - {
-                "command": "stop"
+                "command": "stop",
+                "robotLetter": "X"  # letra/id de identificação do robô
             }
             - {
                 "command": "goTo",
+                "robotLetter": "X",  # letra/id de identificação do robô
                 "data": {
                     "pose": {
                         "position": (x, y),
@@ -196,9 +198,7 @@ class Athena:
                         "orientation": θ radianos | (x, y),  # opcional - pode ser uma orientação final ou
                                                                           uma posição de lookAt
                     }
-                    "velocity": X m/s,  # opcional - se passado, sem before, é a velocidade constante /
-                                                                 com before é velocidade padrão
-                    "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
+                    "velocity": X m/s,  # velocidade máxima que o controle pode utilizar
                     "obstacles": [
                         (x, y),
                         (x, y),
@@ -208,25 +208,23 @@ class Athena:
             }
             - {
                 "command": "spin",
+                "robotLetter": "X",  # letra/id de identificação do robô
                 "data": {
-                    "velocity": X m/s,
+                    "velocity": X m/s,  # velocidade máxima que o controle pode usar
                     "direction": "clockwise" | "counter"
                 }
             }
             - {
                 "command": "lookAt",
+                "robotLetter": "X",  # letra/id de identificação do robô
                 "data": {
                     "pose": {
                         "position": (x, y),  # opcional - é passado se o target for um ponto
                         "orientation": θ radianos
                     },
                     "target": θ radianos | (x, y)
-                    "velocity": X m/s
+                    "velocity": X m/s  # velocidade máxima que o controle pode usar
                 }
-            }
-            - {
-                "command": stop,
-                "data": {before: 0}
             }
         """
         response = []
@@ -376,7 +374,7 @@ class Athena:
                 if self.atk is None:
                     self.atk = sorted(availableWarriors, key=self.distanceToBall)[0]
 
-                self.atk.role = "atk"  # usado ao selecionar ação pra tática
+                self.atk.role = "Attack"  # usado ao selecionar ação pra tática
 
                 availableWarriors.remove(self.atk)
 
@@ -393,12 +391,12 @@ class Athena:
 
         else:
             for i in range(len(self.roles)):
-                if self.roles[i] == "gk":
+                if self.roles[i] == "Goalkeeper":
                     self.gk = availableWarriors[i]
-                    self.gk.role = "gk"
-                elif self.roles[i] == "mid":
+                    self.gk.role = "Goalkeeper"
+                elif self.roles[i] == "Defense":
                     self.mid = availableWarriors[i]
-                    self.mid.role = "mid"
+                    self.mid.role = "Defense"
                 else:
                     self.atk = availableWarriors[i]
                     self.atk.role = "Attack"
@@ -903,13 +901,10 @@ class Athena:
         :param roles: The robot's roles. Can be "Attack", "Defense" or "Goalkeeper"
         :return: True if the roles are correct, False otherwise
         """
-        print("\n[Athena] New roles:")
         for i in range(len(roles)):
             if roles[i] != "Goalkeeper" and roles[i] != "Defense" and roles[i] != "Attack":
                 print("Invalid role: " + roles[i])
                 return False
-
-            print("\t" + str(i + 1) + ": " + roles[i])
 
         self.roles = roles
         return self.roles
@@ -920,10 +915,5 @@ class Athena:
         :param speeds: velocities vector [atkSpeed, midSpeed, gkSpeed]
         """
         self.defaultVelocities = speeds
-
-        print("\n[Athena] New velocities:")
-        print("\tAttacker: " + str(speeds[0]))
-        print("\tDefensor (Mid): " + str(speeds[1]))
-        print("\tGoalkeeper: " + str(speeds[2]))
 
         return self.defaultVelocities
