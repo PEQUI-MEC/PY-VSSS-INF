@@ -70,10 +70,11 @@ class Athena:
         }
 
         print("Athena is set up.")
-        return self
+        return True
 
     def reset(self):
         self.transitionTimer = 0
+        return self.transitionTimer
 
     def getTargets(self, positions):
         """
@@ -118,15 +119,15 @@ class Athena:
         """
         self.deltaTime = time.time() - self.lastTime
         self.lastTime = time.time()
-        self.__parsePositions(positions)
-        self.__analyzeAndSetRoles()
-        self.__selectTactics()
-        self.__selectActions()
+        self.parsePositions(positions)
+        self.analyzeAndSetRoles()
+        self.selectTactics()
+        self.selectActions()
 
-        commands = self.__generateResponse(self.warriors)
+        commands = self.generateResponse(self.warriors)
         return commands
 
-    def __parsePositions(self, positions):
+    def parsePositions(self, positions):
         if type(positions) is not list or type(positions[0]) is not list or type(positions[1]) is not list \
                 or type(positions[2]) is not dict:
             raise ValueError("Invalid positions object received.")
@@ -177,7 +178,7 @@ class Athena:
 
         return positions
 
-    def __generateResponse(self, warriors):
+    def generateResponse(self, warriors):
         """Retorna um vetor de comandos para os robôs
             Formato dos comandos:
             - {
@@ -233,7 +234,7 @@ class Athena:
             command = {
                 "robotLetter": warrior.robotID,
                 "tactics": warrior.tactics,
-                "futureBall": self.__ballInterceptLocation(warrior)  # self.ball["oracle"].predict(1)
+                "futureBall": self.ballInterceptLocation(warrior)  # self.ball["oracle"].predict(1)
             }
 
             if warrior.command["type"] == "goTo":
@@ -316,7 +317,7 @@ class Athena:
 
         return response
 
-    def __analyzeAndSetRoles(self):
+    def analyzeAndSetRoles(self):
         """
             Verifica a distância dos alidados para os pontos de interesse (nosso gol, bola, gol adversário)
             Verifica o posicionamento dos robôs e da bola e classifica entre situação de ataque, defesa, etc
@@ -368,12 +369,12 @@ class Athena:
 
                 for warrior in availableWarriors:
                     if warrior.hasKickAngle:
-                        dist = self.__distanceToBall(warrior)
-                        if dist < Endless.width / 4 and (self.atk is None or dist < self.__distanceToBall(self.atk)):
+                        dist = self.distanceToBall(warrior)
+                        if dist < Endless.width / 4 and (self.atk is None or dist < self.distanceToBall(self.atk)):
                             self.atk = warrior
 
                 if self.atk is None:
-                    self.atk = sorted(availableWarriors, key=self.__distanceToBall)[0]
+                    self.atk = sorted(availableWarriors, key=self.distanceToBall)[0]
 
                 self.atk.role = "atk"  # usado ao selecionar ação pra tática
 
@@ -381,7 +382,7 @@ class Athena:
 
                 # escolhe os melhores pra cada posição crítica
                 # o defensor vai ser escolhido de acordo com a situação do jogo
-                self.gk = sorted(availableWarriors, key=self.__distanceToGoal)[0]
+                self.gk = sorted(availableWarriors, key=self.distanceToGoal)[0]
                 self.gk.role = "gk"  # usado ao selecionar ação pra tática
                 availableWarriors.remove(self.gk)
                 self.mid = availableWarriors[0]
@@ -428,7 +429,9 @@ class Athena:
 
         # estado Holy Shit não existe mais, é considerado o ourCorner
 
-    def __selectTactics(self):
+        return [self.warriors[0].role, self.warriors[1].role, self.warriors[2].role]
+
+    def selectTactics(self):
         """
             Analisa o estado de cada Warrior em mais baixo nível e seleciona uma tática
             Táticas possíveis:
@@ -610,7 +613,7 @@ class Athena:
 
         # verifica se algum robô está travado
         for warrior in self.warriors:
-            # se ele não _deve_ estar parado
+            # se ele não *deve* estar parado
             if not warrior.positionLocked:
                 # se ele não se moveu de um ciclo pra cá
                 if warrior.actionTimer <= 0 and \
@@ -655,7 +658,9 @@ class Athena:
         else:
             self.gk.tactics = tGk
 
-    def __selectActions(self):
+        return [self.warriors[0].tactics, self.warriors[1].tactics, self.warriors[2].tactics]
+
+    def selectActions(self):
         """
             Seleciona ações de baixo nível baseado na tática
             Campos do warrior.command:
@@ -851,27 +856,27 @@ class Athena:
                                              warrior.position[1] + self.unlockDirection * 100 *
                                              math.sin(warrior.orientation))
 
-        return self.warriors
+        return [self.warriors[0].command["type"], self.warriors[1].command["type"], self.warriors[2].command["type"]]
 
-    def __distanceToBall(self, item):
+    def distanceToBall(self, item):
         """
             Calcula as "distâncias" entre um robô e a bola/nosso gol
         """
         return distance.euclidean(item.position, self.ball["position"])
 
     @staticmethod
-    def __distanceToGoal(item):
+    def distanceToGoal(item):
         # método da estratégia, nenhum módulo adicional precisa dele
         return distance.euclidean(item.position, Endless.ourGoal)
 
     @staticmethod
-    def __timeToArrive(fromPos, toPos, vel):
+    def timeToArrive(fromPos, toPos, vel):
         dist = distance.euclidean(fromPos, toPos)
         return dist / (vel * Endless.pixelMeterRatio)
 
-    def __ballInterceptLocation(self, robot):
+    def ballInterceptLocation(self, robot):
         # tempo de chegada em linha reta, na maior velocidade possível
-        tta = self.__timeToArrive(robot.position, self.ball["position"], robot.defaultVel)
+        tta = self.timeToArrive(robot.position, self.ball["position"], robot.defaultVel)
         # onde a bola vai estar nesse meio tempo
         projection = self.ball["oracle"].predict(tta)
 
@@ -880,8 +885,8 @@ class Athena:
             return projection
 
         # enquanto o tempo de chegada for maior do que o tempo para a bola chegar na posição
-        while tta > self.__timeToArrive(robot.position, projection, robot.defaultVel):
-            tta = self.__timeToArrive(robot.position, projection, robot.defaultVel)
+        while tta > self.timeToArrive(robot.position, projection, robot.defaultVel):
+            tta = self.timeToArrive(robot.position, projection, robot.defaultVel)
             projection = self.ball["oracle"].predict(tta)
 
         return projection
@@ -890,6 +895,7 @@ class Athena:
 
     def setTransitionsState(self, state):
         self.transitionsEnabled = state
+        return self.transitionsEnabled
 
     def setRoles(self, roles):
         """
@@ -906,7 +912,7 @@ class Athena:
             print("\t" + str(i + 1) + ": " + roles[i])
 
         self.roles = roles
-        return True
+        return self.roles
 
     def setVelocities(self, speeds):
         """
@@ -919,3 +925,5 @@ class Athena:
         print("\tAttacker: " + str(speeds[0]))
         print("\tDefensor (Mid): " + str(speeds[1]))
         print("\tGoalkeeper: " + str(speeds[2]))
+
+        return self.defaultVelocities

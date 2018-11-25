@@ -8,7 +8,7 @@ class TestBasicInterface(unittest.TestCase):
         def callback():
             pass
 
-        athena = Athena(callback)
+        athena = Athena()
 
         self.assertTrue(athena.setup(3, 100, 100, 0.8))
 
