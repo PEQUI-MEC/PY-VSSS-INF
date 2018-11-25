@@ -736,7 +736,8 @@ class Athena:
 
                 projection = self.ball["oracle"].getY(targetX)
                 trustabillity = geometry.saturate(ballY / Endless.midField[0], 1, 0)
-                targetY = geometry.saturate(projection * trustabillity + ballY * (1 - trustabillity), Endless.goalBottom, Endless.goalTop)
+                targetY = geometry.saturate(projection * trustabillity + ballY * (1 - trustabillity),
+                                            Endless.goalBottom, Endless.goalTop)
 
                 target = (targetX, targetY)
 
@@ -855,15 +856,16 @@ class Athena:
     def __distanceToBall(self, item):
         """
             Calcula as "distâncias" entre um robô e a bola/nosso gol
-            Leva em consideração a angulação entre o objeto e o alvo
         """
         return distance.euclidean(item.position, self.ball["position"])
 
-    def __distanceToGoal(self, item):
-        # !TODO levar em consideração a angulação
+    @staticmethod
+    def __distanceToGoal(item):
+        # método da estratégia, nenhum módulo adicional precisa dele
         return distance.euclidean(item.position, Endless.ourGoal)
 
-    def __timeToArrive(self, fromPos, toPos, vel):
+    @staticmethod
+    def __timeToArrive(fromPos, toPos, vel):
         dist = distance.euclidean(fromPos, toPos)
         return dist / (vel * Endless.pixelMeterRatio)
 
