@@ -66,7 +66,7 @@ class Athena:
 
         self.ball = {
             "position": (0, 0),
-            "oracle": Oracle(100, Endless.pixelMeterRatio)
+            "oracle": Oracle(100)
         }
 
         print("Athena is set up.")
