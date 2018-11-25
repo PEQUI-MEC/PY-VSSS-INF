@@ -1,6 +1,5 @@
 import unittest
 from strategy.oracle import Oracle
-import time
 
 
 class TestOracle(unittest.TestCase):

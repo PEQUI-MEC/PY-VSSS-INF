@@ -1,7 +1,6 @@
 import time
 import math
 from scipy.spatial import distance
-from helpers import Endless
 
 
 class Oracle:
