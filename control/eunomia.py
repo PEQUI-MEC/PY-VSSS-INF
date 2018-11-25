@@ -17,30 +17,26 @@ class Eunomia:
         radius: Constante raio da espiral hiperbólica
         kr: Constante de suavização da espiral hiperbólica
         k0: Constante multiplicativa do vetor de deslocamento do cálculo da posição virtual
-        dMin: Distância mínima entre o robô e um obstáculo
-        lDelta: Constante Gaussiana
+        dmin: Distância mínima entre o robô e um obstáculo
+        delta: Constante Gaussiana
     """
+
+    maxDistance = 250.0
 
     def __init__(self):
         self.uvf = None
         self.warrior = None
         self.radius = None
-        self.kr = None
-        self.k0 = None
-        self.dMin = None
-        self.lDelta = None
 
     def setup(self):
         """Primeiros passos de Eunomia
         Esse método deve ser chamado antes de usar Eunomia apropriadamente. Aqui é inicializado todas as constantes
         usadas no univector field.
         """
-        self.uvf = UnivectorField()
+
         self.radius = 50.0
-        self.kr = 5.9  # 0.9
-        self.k0 = 0.12
-        self.dMin = 20.0
-        self.lDelta = 4.5
+        self.uvf = UnivectorField()
+        self.uvf.updateConstants(radius=self.radius, kr=5.9, k0=0.12, dmin=20.0, delta=4.5)
 
         return self
 
@@ -142,23 +138,24 @@ class Eunomia:
             theta = atan2(sin(self.warrior.targetOrientation), -cos(self.warrior.targetOrientation))
             target = [self.warrior.position[0] + cos(theta), self.warrior.position[1] + sin(theta)]
             del self.warrior.targetOrientation
-            self.warrior.targetOrientation = target
+            self.warrior.targetOrientation = numpy.asarray(target, dtype=float)
 
         # TODO otimizar variação da espiral
         if self.warrior.position[1] >= Endless.areaTop:
             spiral = 0.06
         elif self.warrior.position[1] < Endless.areaBottom:
             spiral = 0.06
-        elif numpy.linalg.norm(self.warrior.position[0] - self.warrior.target[0]) > 250.0:
+        elif numpy.linalg.norm(self.warrior.position[0] - self.warrior.target[0]) > self.maxDistance:
             spiral = 1.0
         else:
             spiral = 0.1
 
         self.warrior.vRight = self.warrior.vMax
         self.warrior.vLeft = self.warrior.vMax
-        self.uvf.updateConstants(self.radius*spiral, self.kr, self.k0, self.dMin, self.lDelta)
-        self.warrior.transAngle = self.uvf.univector(robotPos=self.warrior.position,
-                                                     robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
-                                                     target=self.warrior.target,
-                                                     obstacles=self.warrior.obstacles,
-                                                     orientation=self.warrior.targetOrientation)
+        self.uvf.updateConstants(self.radius*spiral)
+        self.warrior.transAngle = \
+            self.uvf.univector(robotPos=self.warrior.position,
+                               robotSpeed=numpy.asarray([self.warrior.vLeft, self.warrior.vRight], dtype=float),
+                               target=self.warrior.target,
+                               obstacles=None,
+                               orientation=self.warrior.targetOrientation)

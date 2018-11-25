@@ -54,21 +54,6 @@ class Zeus:
 
         return self
 
-    def updateSpeeds(self, robots):
-        """Atualização de velocidades
-
-        Esse método recebe uma lista de velocidades que são setadas na interface.
-        O mesmo é chamado toda vez que há uma mudança na interface.
-
-        Args:
-            robots: Lista de velocidades em double
-        """
-
-        print("[Zeus] New speeds:")
-        for i in range(0, len(robots)):
-            self.robotsSpeed[i] = robots[i]
-            print(self.robotsSpeed[i])
-
     def reset(self):
         """Método para resetar uma varivável de tempo de transição
 
@@ -192,7 +177,7 @@ class Zeus:
                 if "velocity" in info:
                     warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
-                    warriors[x].vMax = self.robotsSpeed[x]
+                    raise ValueError("Missing data.")
 
                 if "obstacles" in info:
                     warriors[x].obstacles = numpy.asarray(info["obstacles"], dtype=float)
@@ -203,7 +188,7 @@ class Zeus:
                 if "velocity" in info:
                     warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
-                    warriors[x].vMax = self.robotsSpeed[x]
+                    raise ValueError("Missing data.")
 
             elif strategia[x]["command"] == "lookAt":
                 warriors[x].orientation = float(info["pose"]["orientation"])
@@ -211,7 +196,7 @@ class Zeus:
                 if "velocity" in info:
                     warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
-                    warriors[x].vMax = self.robotsSpeed[x]
+                    raise ValueError("Missing data.")
 
                 if type(info["target"]) is not tuple:
                     warriors[x].targetOrientation = float(info["target"])
