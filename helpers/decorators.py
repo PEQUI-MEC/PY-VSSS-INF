@@ -12,6 +12,6 @@ def timeToFinish(method):
         result = method(*args, **kwargs)
         tEnd = time.time()
 
-        print(method.__name__ + ": " + str(tEnd-tStart) + " sec")
+        print(method.__name__ + ": " + "%.5f" % (tEnd-tStart) + " sec")
         return result
     return timed

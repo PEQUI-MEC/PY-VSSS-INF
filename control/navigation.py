@@ -1,5 +1,6 @@
 from math import pi, atan2, sin, cos, sqrt
 from helpers import geometry
+from helpers.decorators import timeToFinish
 import numpy
 
 # TODO Documentar tudo
@@ -85,6 +86,7 @@ class Move2Goal:
 
         self.buildAxis(self.target, self.orientation)
 
+    # @timeToFinish
     def buildAxis(self, orientation, target):
         if type(self.orientation) is int:
             self.x = numpy.asarray([1.0, 0.0], dtype=float)
@@ -154,6 +156,7 @@ class AvoidObstacle:
         self.obstaclePos = numpy.asarray(obstaclePos, dtype=float)
         self.obstacleSpeed = numpy.asarray(obstacleSpeed, dtype=float)
 
+    # @timeToFinish
     def getVirtualPos(self):
         s = numpy.linalg.norm(self.k0 * (self.obstacleSpeed - self.robotSpeed))
         distanceBetween = numpy.linalg.norm(self.obstaclePos - self.robotPos)
@@ -164,6 +167,7 @@ class AvoidObstacle:
 
         return virtualPos
 
+    # @timeToFinish
     def avoid(self, robotPos, vPos=None, theta=True):
         if vPos is None:
             virtualPos = self.getVirtualPos()

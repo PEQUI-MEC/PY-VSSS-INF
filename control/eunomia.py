@@ -1,20 +1,26 @@
+# coding=utf-8
 from math import atan2, cos, sin
 from .navigation import UnivectorField
 from helpers.endless import Endless
+from helpers.decorators import timeToFinish
 import numpy
 
 
 class Eunomia:
+    """Módulo de ações
+
+    Essa classe é responsável por fazer os pré-cálculos necessários para encontrar as velocidades das rodas.
+
+    Attributes:
+        uvf: Instância da classe UnivectorField()
+        warrior: Objeto Warrior()
+        radius: Constante raio da espiral hiperbólica
+        kr: Constante de suavização da espiral hiperbólica
+        k0: Constante multiplicativa do vetor de deslocamento do cálculo da posição virtual
+        dMin: Distância mínima entre o robô e um obstáculo
+        lDelta: Constante Gaussiana
     """
-        Attributes:
-            uvf:
-            warrior:
-            radius:
-            kr:
-            k0:
-            dMin:
-            lDelta:
-    """
+
     def __init__(self):
         self.uvf = None
         self.warrior = None
@@ -25,8 +31,9 @@ class Eunomia:
         self.lDelta = None
 
     def setup(self):
-        """
-        Espiral radius, moveToGoal kr, avoidObstacles k0, distance dmin, gaussian delta
+        """Primeiros passos de Eunomia
+        Esse método deve ser chamado antes de usar Eunomia apropriadamente. Aqui é inicializado todas as constantes
+        usadas no univector field.
         """
         self.uvf = UnivectorField()
         self.radius = 50.0
@@ -37,6 +44,7 @@ class Eunomia:
 
         return self
 
+    # @timeToFinish
     def run(self, warrior):
         """Método principal do controle de Ações
 
@@ -72,16 +80,21 @@ class Eunomia:
         return self.warrior
 
     def stop(self):
-        if self.warrior.before == 0:
-            self.warrior.vLeft = 0.0
-            self.warrior.vRight = 0.0
+        """Comando stop
 
-        else:
-            # TODO Fazer controle de desesceleração
-            self.warrior.vLeft = 0.0
-            self.warrior.vRight = 0.0
+        Esse método é utilizado quando deseja-se que o robô pare de se locomover. Seu cmdtype é 'SPEED'.
+        """
+        # TODO Fazer controle de desesceleração?
+        self.warrior.vLeft = 0.0
+        self.warrior.vRight = 0.0
 
     def spin(self):
+        """Comando spin
+
+        Esse método é utilizado quando deseja-se que o robô gire para alguma direção (horário ou anti-horário). Seu
+        cmdtype é 'SPEED'.
+        """
+
         if self.warrior.action[1] == "clockwise":
             self.warrior.vLeft = self.warrior.vMax
             self.warrior.vRight = -self.warrior.vMax
@@ -90,6 +103,15 @@ class Eunomia:
             self.warrior.vRight = self.warrior.vMax
 
     def lookAt(self):
+        """Comando lookAt
+
+        Esse método é utilizado quando deseja-se que o robô fique com uma das suas frentes voltada para uma orientação
+        desejada. Se a segunda opção de ação for 'target' será calculado em qual direção o ponto passado está. Seu
+        cmdtype é 'ORIENTATION'.
+
+        Raises:
+            ValueError: Se a segunda opção de ação não for 'target' nem 'orientation'.
+        """
         if self.warrior.action[1] is "target":
             x = self.warrior.target[0] - self.warrior.position[0]
             y = self.warrior.target[1] - self.warrior.position[1]
@@ -99,6 +121,22 @@ class Eunomia:
             raise ValueError("Invalid data.")
 
     def goTo(self):
+        """Comando goTo
+
+        Esse método é utilizado quando deseja-se ir para algum ponto, ou andar em direção à aguma orientação desejada. O
+        método recebe a posição e orientação atual do robô bem como uma posição alvo. Para que o robô chegue no alvo com
+        uma orientação final desejada (targetOrientation) é passado um ponto ou um valor de orientação. Se para
+        orientação final for passado um valor de orientação é então calculado um ponto situado na direção desejada para
+        que no univectorField o campo seja gerado levando esse ponto como referencial. O método também permite que possa
+        ser passado pontos de obstáculos que deverão ser desviados.
+
+        Atualmente, o raio da espiral hiberbólica do univectorField varia de acordo com a distância do robô para com o
+        alvo, e de acordo com a distância do robô com as bordas do campo, com o objetivo de suavizar as curvas e evitar
+        com que os robôs fiquem presos nas paredes do campo.
+        """
+
+        # TODO testar colocar obstáculos nas bordas do campo para evitar que o robô bata de cara nelas.
+
         # Se o targetOrientation passado não for um ponto
         if not isinstance(self.warrior.targetOrientation, numpy.ndarray):
             theta = atan2(sin(self.warrior.targetOrientation), -cos(self.warrior.targetOrientation))
@@ -106,11 +144,7 @@ class Eunomia:
             del self.warrior.targetOrientation
             self.warrior.targetOrientation = target
 
-        #  Verificar se existe um 'before' na chamada desse método
-        time = None
-        # if warrior.before is not None:
-        #   time = warrior.before
-
+        # TODO otimizar variação da espiral
         if self.warrior.position[1] >= Endless.areaTop:
             spiral = 0.06
         elif self.warrior.position[1] < Endless.areaBottom:
@@ -120,16 +154,11 @@ class Eunomia:
         else:
             spiral = 0.1
 
-        if time is None:
-            self.warrior.vRight = self.warrior.vMax
-            self.warrior.vLeft = self.warrior.vMax
-            self.uvf.updateConstants(self.radius*spiral, self.kr, self.k0, self.dMin, self.lDelta)
-            self.warrior.transAngle = self.uvf.univector(robotPos=self.warrior.position,
-                                                         robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
-                                                         target=self.warrior.target,
-                                                         obstacles=self.warrior.obstacles,
-                                                         ostaclesSpeed=self.warrior.obstaclesSpeed,
-                                                         orientation=self.warrior.targetOrientation)
-        else:
-            # TODO Fazer verificação se é possível realizar o trajeto com o tempo requisitado
-            pass
+        self.warrior.vRight = self.warrior.vMax
+        self.warrior.vLeft = self.warrior.vMax
+        self.uvf.updateConstants(self.radius*spiral, self.kr, self.k0, self.dMin, self.lDelta)
+        self.warrior.transAngle = self.uvf.univector(robotPos=self.warrior.position,
+                                                     robotSpeed=[self.warrior.vLeft, self.warrior.vRight],
+                                                     target=self.warrior.target,
+                                                     obstacles=self.warrior.obstacles,
+                                                     orientation=self.warrior.targetOrientation)

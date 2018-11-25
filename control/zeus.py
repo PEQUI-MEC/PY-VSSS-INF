@@ -2,9 +2,8 @@
 from control.eunomia import Eunomia
 from control.dice import Dice
 from control.warrior import Warrior
+from helpers.decorators import timeToFinish
 import numpy
-
-# TODO é possível fazer os cálculos em paralelo para cada robô?
 
 
 class Zeus:
@@ -79,6 +78,7 @@ class Zeus:
 
         self.translate.reset()
 
+    # @timeToFinish
     def getVelocities(self, strategia):
         """Método principal de Zeus
 
@@ -115,9 +115,7 @@ class Zeus:
                         "orientation": θ rad|(x, y)  # opcional: pode ser uma orientação final ou uma posição de lookAt
                         },
                     "velocity": X m/s
-                        # opcional: se passado, sem before, é a velocidade constante/com before é velocidade padrão
-                    "before": X s
-                        # se passado sem o velocity, usa a velocidade máxima do robô como teto
+                        # opcional
                 }
             }
 
@@ -139,7 +137,6 @@ class Zeus:
 
             - {
                 "command": stop,
-                "data": {before: 0}
             }
 
         Args:
@@ -167,7 +164,7 @@ class Zeus:
                 raise ValueError("Invalid data object received.")
 
             if ("command" in strategia[i]) is False or \
-                    ("data" in strategia[i]) is False:
+                    (("data" in strategia[i]) is False and strategia[i]["command"] != "stop"):
                 raise ValueError("Invalid data object received.")
 
             warriors.append(Warrior())
@@ -196,9 +193,6 @@ class Zeus:
                     warriors[x].vMax = numpy.asarray(info["velocity"], dtype=float)
                 else:
                     warriors[x].vMax = self.robotsSpeed[x]
-
-                if "before" in info:
-                    warriors[x].before = float(info["before"])
 
                 if "obstacles" in info:
                     warriors[x].obstacles = numpy.asarray(info["obstacles"], dtype=float)
@@ -229,7 +223,6 @@ class Zeus:
 
             elif strategia[x]["command"] == "stop":
                 warriors[x].vMax = 0.0
-                warriors[x].before = float(info["before"])
 
             warriors[x].backward = self.warriors[x].backward
             warriors[x].front = self.warriors[x].front

@@ -1,17 +1,19 @@
+# coding=utf-8
 from math import atan2, pi, sin, cos
 from helpers import geometry
 from helpers.endless import Endless
+from helpers.decorators import timeToFinish
 import numpy
 import time
 
 
 class Dice:
-    """ Classe de ações
+    """Módulo de tradução
 
-    Essa classe é responsável por fazer os pré-cálculos necessários para encontrar as velocidades das rodas.
+    Essa classe é responsável por encontrar as velocidades de cada roda dos robôs.
 
     Attributes:
-        warrior: objeto Warrior()
+        warrior: Objeto Warrior()
         deltaTime:
         lastTime:
         transitionTime:
@@ -38,6 +40,7 @@ class Dice:
 
         return self
 
+    # @timeToFinish
     def run(self, warrior):
         """ Metódo principal de Dice()
 
@@ -75,13 +78,14 @@ class Dice:
 
     def vectorControl(self):
         """Controle por vetor
-
-        No controle por vetor
+        No controle por vetor temos uma orientação alvo que é calculada no navigation.py, ao chegar nesse método
+        é gerado um ponto na direção da orientação alvo, então é feito o mesmo processo do controle de posição.
 
         Returns:
             list: lista com velocidade da roda esquerda, velocidade da roda direita e orientação alvo respectivamente
 
         """
+
         if self.warrior.velAcc < Dice.acc:
             self.warrior.velAcc = Dice.acc
 
