@@ -29,8 +29,7 @@ class Hermes:
     def fly(self, velocities):
         """Main class method
             
-            Receive velocities and manipulate, invoking create,
-            send and clear methods.
+            Receive velocities and manipulate, invoking send method
 
             #velocities should be received like:
             [
@@ -51,7 +50,7 @@ class Hermes:
                     robot_id
                     left_wheel_velocity
                     right_wheel_velocity
-                ],
+                ]
             ]
 
             Args:
@@ -83,16 +82,28 @@ class Hermes:
         self.serial.close()
 
     def sendMessage(self, robotId, message):
-           if self.xbee is not None:
-                try:
-                    self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
-                except SerialTimeoutException:
-                    print("[Hermes]: Message sending timed out")
-                except KeyError:
-                    print("[Hermes]: We don't know the address for robot '" + velocities[i]["robotLetter"] + "'")
-                except SerialException:
-                    print("[Hermes]: Access to xBee denied")
-            return message
+        """
+        Send a message
+        
+            Args:
+                robotId: Robot id
+                message: Message to be sent
+            Returns:
+                String containing message sent
+
+        """
+        if self.xbee is not None:
+            try:
+                self.xbee.send("tx", frame='A', command='MY', dest_addr=self.robots[velocities[i]["robotLetter"]], data=message)
+                return message
+            except SerialTimeoutException:
+                print("[Hermes]: Message sending timed out")
+            except KeyError:
+                print("[Hermes]: We don't know the address for robot '" + velocities[i]["robotLetter"] + "'")
+            except SerialException:
+                print("[Hermes]: Access to xBee denied")
+
+        return None
 
     @staticmethod
     def isSerial(port):
