@@ -785,14 +785,7 @@ class Afrodite(QMainWindow):
                 self.editingWarp = True
 
             elif self.editingWarp:
-                if px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
-                    self.quadrant = 0
-                elif px > WIDTH/2 and py < HEIGHT/2: #QUADRANT 2
-                    self.quadrant = 1
-                elif px > WIDTH/2 and py > HEIGHT/2: #QUADRANT 3
-                    self.quadrant = 2
-                elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 4
-                    self.quadrant = 3
+                self.quadrant = self.whichQuadrant(px, py)
                     
         elif not self.pushButtonCaptureWarpAdjust.isEnabled():
             self.callHadesAdjustGoalEvent(px, py)
@@ -805,6 +798,18 @@ class Afrodite(QMainWindow):
     def setOffset(self, Offset):
         self.horizontalSliderCaptureWarpOffsetLeft.setValue(Offset[0])
         self.horizontalSliderCaptureWarpOffsetRight.setValue(Offset[1])
+
+    def whichQuadrant(self, px, py):
+        quadrant = None
+        if px < WIDTH/2 and py < HEIGHT/2: #QUADRANT 1
+            quadrant = 0
+        elif px > WIDTH/2 and py < HEIGHT/2: #QUADRANT 2
+            quadrant = 1
+        elif px > WIDTH/2 and py > HEIGHT/2: #QUADRANT 3
+            quadrant = 2
+        elif px < WIDTH/2 and py > HEIGHT/2: #QUADRANT 4
+            quadrant = 3
+        return quadrant
 
     '''
     def getPosAdjust(self, event):
@@ -822,8 +827,10 @@ class Afrodite(QMainWindow):
         self.warpCount+=1
 
     def callHadesAdjustGoalEvent(self, px, py):
-        self.warpGoalMatrix[self.warpCount%4][0] = px
-        self.warpGoalMatrix[self.warpCount%4][1] = py
+        adjustQuadrant = self.whichQuadrant(px, py)
+
+        self.warpGoalMatrix[adjustQuadrant][0] = px
+        self.warpGoalMatrix[adjustQuadrant][1] = py
 
         self.warpCount+=1
 
