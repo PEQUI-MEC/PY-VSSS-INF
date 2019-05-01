@@ -4,6 +4,7 @@ import math
 import time
 import numpy as np
 
+from helpers.endless import Endless
 from strategy import Athena
 from control import Zeus
 from simulator.viewer import Viewer
@@ -48,8 +49,9 @@ class Aether:
             Zeus(),
             Zeus()
         ]
-        self.athena[0].setup(3, self.field_width, self.field_height, 0.8)
-        self.athena[1].setup(3, self.field_width, self.field_height, 0.8)
+        Endless.setup(self.field_width, self.field_height)
+        self.athena[0].setup(3, 0.8)
+        self.athena[1].setup(3, 0.8)
         self.zeus[0].setup(3)
         self.zeus[1].setup(3)
 
@@ -72,7 +74,7 @@ class Aether:
 
     def loopTeam(self, team):
         while True:
-            time.sleep(0.001)
+            time.sleep(0.0000000001)
 
             if self.pause or \
                     (not self.enabled[3 * team] and not self.enabled[3 * team + 1] and not self.enabled[3 * team + 2]):
