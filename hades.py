@@ -32,7 +32,9 @@ class Hades(QThread):
         self.play = False
         self.isCalibrating = False
 
-        self.height = 480  # TODO pegar isso da afrodite e passar pro apolo
+        # TODO fazer com que todos os módulos utilizem esses valores
+        # esses valores devem ser pegos da interface, futuramente
+        self.height = 480
         self.width = 640
 
         self.skippedFrames = 0
@@ -60,20 +62,14 @@ class Hades(QThread):
         self.wait()
 
     def setup(self):
-        # set up apolo
+        # set up endless
+        Endless.setup(self.width, self.height)
 
         # set up athena
-        # TODO passar as dimensões corretamente
-        self.athena.setup(3, self.width, self.height, 0.6)
+        self.athena.setup(3, 0.6)
 
         # set up zeus
-        # TODO passar as dimensões corretamente
         self.zeus.setup(3)
-
-        # setting up hermes
-        # self.hermes = Hermes(self.srcXbee)
-        # invocar fly do hermes como finalização
-        # persephane deusa do submundo
 
     # LOOP PRINCIPAL
     def run(self):
@@ -96,7 +92,7 @@ class Hades(QThread):
                 velocities = self.zeusRules(commands)
                 self.hermesRules(velocities)
 
-            time.sleep(0.0001)
+            time.sleep(0.0000000001)
 
     # MAIN METHODS
 
