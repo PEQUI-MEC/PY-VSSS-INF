@@ -45,31 +45,38 @@ class Athena:
         # angulo da bola com o gol
         self.ballGoal = 0
 
+        self.defaultVelocities = [0.8, 0.8, 0.8]
+
         self.globalState = "push"
         self.transitionsEnabled = True
-        self.roles = ["gk", "mid", "atk"]
+        self.roles = ["Goalkeeper", "Defense", "Attack"]
         self.unlockDirection = 1
-        self.deltaTime = time.time()
+        self.deltaTime = 1
         self.lastTime = time.time()
 
         print("Athena summoned")
 
-    def setup(self, numRobots, defaultVel):
+    def setup(self, numRobots, width, height, defaultVel):
+        Endless.setup(width, height)
+
+        self.defaultVelocities = [defaultVel] * numRobots
+
         for i in range(0, numRobots):
             self.warriors.append(Warrior(defaultVel))
 
         self.ball = {
             "position": (0, 0),
-            "oracle": Oracle(100, Endless.pixelMeterRatio)
+            "oracle": Oracle(100)
         }
 
         print("Athena is set up.")
-        return self
+        return True
 
     def reset(self):
         self.transitionTimer = 0
+        return self.transitionTimer
 
-    def getTargets(self, positions):
+    def getTargets(self, positions, testCall=False):
         """
             Recebe um objeto do tipo
             [
@@ -110,17 +117,17 @@ class Athena:
 
             LEMBRE-SE QUE O Y CRESCE PRA CIMA
         """
-        self.deltaTime = time.time() - self.lastTime
+        self.deltaTime = 1 if testCall else time.time() - self.lastTime
         self.lastTime = time.time()
-        self.__parsePositions(positions)
-        self.__analyzeAndSetRoles()
-        self.__selectTactics()
-        self.__selectActions()
+        self.parsePositions(positions)
+        self.analyzeAndSetRoles()
+        self.selectTactics()
+        self.selectActions()
 
-        commands = self.__generateResponse(self.warriors)
+        commands = self.generateResponse(self.warriors)
         return commands
 
-    def __parsePositions(self, positions):
+    def parsePositions(self, positions):
         if type(positions) is not list or type(positions[0]) is not list or type(positions[1]) is not list \
                 or type(positions[2]) is not dict:
             raise ValueError("Invalid positions object received.")
@@ -171,14 +178,16 @@ class Athena:
 
         return positions
 
-    def __generateResponse(self, warriors):
+    def generateResponse(self, warriors):
         """Retorna um vetor de comandos para os robôs
             Formato dos comandos:
             - {
-                "command": "stop"
+                "command": "stop",
+                "robotLetter": "X"  # letra/id de identificação do robô
             }
             - {
                 "command": "goTo",
+                "robotLetter": "X",  # letra/id de identificação do robô
                 "data": {
                     "pose": {
                         "position": (x, y),
@@ -189,9 +198,7 @@ class Athena:
                         "orientation": θ radianos | (x, y),  # opcional - pode ser uma orientação final ou
                                                                           uma posição de lookAt
                     }
-                    "velocity": X m/s,  # opcional - se passado, sem before, é a velocidade constante /
-                                                                 com before é velocidade padrão
-                    "before": X s  # se passado sem o velocity, usa a velocidade máxima do robô como teto
+                    "velocity": X m/s,  # velocidade máxima que o controle pode utilizar
                     "obstacles": [
                         (x, y),
                         (x, y),
@@ -201,25 +208,23 @@ class Athena:
             }
             - {
                 "command": "spin",
+                "robotLetter": "X",  # letra/id de identificação do robô
                 "data": {
-                    "velocity": X m/s,
+                    "velocity": X m/s,  # velocidade máxima que o controle pode usar
                     "direction": "clockwise" | "counter"
                 }
             }
             - {
                 "command": "lookAt",
+                "robotLetter": "X",  # letra/id de identificação do robô
                 "data": {
                     "pose": {
                         "position": (x, y),  # opcional - é passado se o target for um ponto
                         "orientation": θ radianos
                     },
                     "target": θ radianos | (x, y)
-                    "velocity": X m/s
+                    "velocity": X m/s  # velocidade máxima que o controle pode usar
                 }
-            }
-            - {
-                "command": stop,
-                "data": {before: 0}
             }
         """
         response = []
@@ -227,7 +232,7 @@ class Athena:
             command = {
                 "robotLetter": warrior.robotID,
                 "tactics": warrior.tactics,
-                "futureBall": self.__ballInterceptLocation(warrior)  # self.ball["oracle"].predict(1)
+                "futureBall": self.ballInterceptLocation(warrior)  # self.ball["oracle"].predict(1)
             }
 
             if warrior.command["type"] == "goTo":
@@ -247,6 +252,8 @@ class Athena:
 
                 if "targetVelocity" in warrior.command:
                     command["data"]["velocity"] = warrior.command["targetVelocity"]
+                else:
+                    command["data"]["velocity"] = warrior.defaultVel
 
                 if "before" in warrior.command:
                     command["data"]["before"] = warrior.command["before"]
@@ -277,6 +284,8 @@ class Athena:
 
                 if "targetVelocity" in warrior.command:
                     command["data"]["velocity"] = warrior.command["targetVelocity"]
+                else:
+                    command["data"]["velocity"] = warrior.defaultVel
 
                 if "targetOrientation" in warrior.command:
                     command["data"]["target"] = warrior.command["targetOrientation"]
@@ -306,7 +315,7 @@ class Athena:
 
         return response
 
-    def __analyzeAndSetRoles(self):
+    def analyzeAndSetRoles(self):
         """
             Verifica a distância dos alidados para os pontos de interesse (nosso gol, bola, gol adversário)
             Verifica o posicionamento dos robôs e da bola e classifica entre situação de ataque, defesa, etc
@@ -358,20 +367,20 @@ class Athena:
 
                 for warrior in availableWarriors:
                     if warrior.hasKickAngle:
-                        dist = self.__distanceToBall(warrior)
-                        if dist < Endless.width / 4 and (self.atk is None or dist < self.__distanceToBall(self.atk)):
+                        dist = self.distanceToBall(warrior)
+                        if dist < Endless.width / 4 and (self.atk is None or dist < self.distanceToBall(self.atk)):
                             self.atk = warrior
 
                 if self.atk is None:
-                    self.atk = sorted(availableWarriors, key=self.__distanceToBall)[0]
+                    self.atk = sorted(availableWarriors, key=self.distanceToBall)[0]
 
-                self.atk.role = "atk"  # usado ao selecionar ação pra tática
+                self.atk.role = "Attack"  # usado ao selecionar ação pra tática
 
                 availableWarriors.remove(self.atk)
 
                 # escolhe os melhores pra cada posição crítica
                 # o defensor vai ser escolhido de acordo com a situação do jogo
-                self.gk = sorted(availableWarriors, key=self.__distanceToGoal)[0]
+                self.gk = sorted(availableWarriors, key=self.distanceToGoal)[0]
                 self.gk.role = "gk"  # usado ao selecionar ação pra tática
                 availableWarriors.remove(self.gk)
                 self.mid = availableWarriors[0]
@@ -382,15 +391,19 @@ class Athena:
 
         else:
             for i in range(len(self.roles)):
-                if self.roles[i] == "gk":
+                if self.roles[i] == "Goalkeeper":
                     self.gk = availableWarriors[i]
-                    self.gk.role = "gk"
-                elif self.roles[i] == "mid":
+                    self.gk.role = "Goalkeeper"
+                elif self.roles[i] == "Defense":
                     self.mid = availableWarriors[i]
-                    self.mid.role = "mid"
+                    self.mid.role = "Defense"
                 else:
                     self.atk = availableWarriors[i]
                     self.atk.role = "Attack"
+
+        self.atk.defaultVel = self.defaultVelocities[0]
+        self.mid.defaultVel = self.defaultVelocities[1]
+        self.gk.defaultVel = self.defaultVelocities[2]
 
         ballX = self.ball["position"][0]
         # analisa o estado global do jogo
@@ -414,7 +427,9 @@ class Athena:
 
         # estado Holy Shit não existe mais, é considerado o ourCorner
 
-    def __selectTactics(self):
+        return [self.warriors[0].role, self.warriors[1].role, self.warriors[2].role]
+
+    def selectTactics(self):
         """
             Analisa o estado de cada Warrior em mais baixo nível e seleciona uma tática
             Táticas possíveis:
@@ -596,7 +611,7 @@ class Athena:
 
         # verifica se algum robô está travado
         for warrior in self.warriors:
-            # se ele não _deve_ estar parado
+            # se ele não *deve* estar parado
             if not warrior.positionLocked:
                 # se ele não se moveu de um ciclo pra cá
                 if warrior.actionTimer <= 0 and \
@@ -641,7 +656,9 @@ class Athena:
         else:
             self.gk.tactics = tGk
 
-    def __selectActions(self):
+        return [self.warriors[0].tactics, self.warriors[1].tactics, self.warriors[2].tactics]
+
+    def selectActions(self):
         """
             Seleciona ações de baixo nível baseado na tática
             Campos do warrior.command:
@@ -664,15 +681,12 @@ class Athena:
                 # vai pra cima com tudo, sem desviar de obstáculos
                 warrior.command["type"] = "goTo"
                 warrior.command["target"] = Endless.goal
-                warrior.command["targetOrientation"] = Endless.pastGoal
                 warrior.command["targetVelocity"] = warrior.maxVel
 
             elif warrior.tactics == Athena.tPush:
                 # vai pra cima cuidadosamente
                 warrior.command["type"] = "goTo"
-                warrior.command["targetOrientation"] = Endless.pastGoal
                 warrior.command["avoidObstacles"] = "por favor"
-                warrior.command["targetVelocity"] = warrior.defaultVel
 
                 if distance.euclidean(warrior.position, self.ball["position"]) < Endless.robotSize:
                     warrior.command["target"] = Endless.goal
@@ -682,8 +696,6 @@ class Athena:
             elif warrior.tactics == Athena.tCatch:
                 # se é pra pegar a bola, o alvo é ela com orientação pro gol
                 warrior.command["type"] = "goTo"
-                warrior.command["targetOrientation"] = Endless.pastGoal
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "por favor"
 
                 if ballX < warrior.position[0] - Endless.robotSize:
@@ -701,7 +713,6 @@ class Athena:
             elif warrior.tactics == Athena.tCatchSideways:
                 # faz o melhor pra desviar a bola do rumo do nosso gol com alvo nela com orientação pros lados
                 warrior.command["type"] = "goTo"
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["avoidObstacles"] = "vai que é tua meu amigo"
 
                 # escolhe o lado que vai pressionar a bola, dependendo de qual parede ela tá mais perto
@@ -723,13 +734,13 @@ class Athena:
                     warrior.command["target"] = self.ball["position"]
 
             elif warrior.tactics == Athena.tBlock:
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 # !TODO pegar Y composto com a velocidade da bola
                 targetX = Endless.goalieLine
 
                 projection = self.ball["oracle"].getY(targetX)
                 trustabillity = geometry.saturate(ballY / Endless.midField[0], 1, 0)
-                targetY = geometry.saturate(projection * trustabillity + ballY * (1 - trustabillity), Endless.goalBottom, Endless.goalTop)
+                targetY = geometry.saturate(projection * trustabillity + ballY * (1 - trustabillity),
+                                            Endless.goalBottom, Endless.goalTop)
 
                 target = (targetX, targetY)
 
@@ -752,7 +763,6 @@ class Athena:
                     warrior.command["targetOrientation"] = (Endless.goalieLine, 0)
 
             elif warrior.tactics == Athena.tBlockOpening:
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 targetX = Endless.areaLine
                 targetY = ballY
 
@@ -799,7 +809,6 @@ class Athena:
                 if distance.euclidean(warrior.position, target) > Endless.robotSize:
                     warrior.command["type"] = "goTo"
                     warrior.command["target"] = target
-                    warrior.command["targetVelocity"] = warrior.defaultVel
                     warrior.command["avoidObstacles"] = "mas é claro, chefia"
                     if target == self.ball["position"]:
                         warrior.command["targetOrientation"] = (self.ball["position"][0] + 10,
@@ -840,32 +849,32 @@ class Athena:
 
             elif warrior.tactics == Athena.tUnlock:
                 warrior.command["type"] = "goTo"
-                warrior.command["targetVelocity"] = warrior.defaultVel
                 warrior.command["target"] = (warrior.position[0] + self.unlockDirection * 100 *
                                              math.cos(warrior.orientation),
                                              warrior.position[1] + self.unlockDirection * 100 *
                                              math.sin(warrior.orientation))
 
-        return self.warriors
+        return [self.warriors[0].command["type"], self.warriors[1].command["type"], self.warriors[2].command["type"]]
 
-    def __distanceToBall(self, item):
+    def distanceToBall(self, item):
         """
             Calcula as "distâncias" entre um robô e a bola/nosso gol
-            Leva em consideração a angulação entre o objeto e o alvo
         """
         return distance.euclidean(item.position, self.ball["position"])
 
-    def __distanceToGoal(self, item):
-        # !TODO levar em consideração a angulação
+    @staticmethod
+    def distanceToGoal(item):
+        # método da estratégia, nenhum módulo adicional precisa dele
         return distance.euclidean(item.position, Endless.ourGoal)
 
-    def __timeToArrive(self, fromPos, toPos, vel):
+    @staticmethod
+    def timeToArrive(fromPos, toPos, vel):
         dist = distance.euclidean(fromPos, toPos)
         return dist / (vel * Endless.pixelMeterRatio)
 
-    def __ballInterceptLocation(self, robot):
+    def ballInterceptLocation(self, robot):
         # tempo de chegada em linha reta, na maior velocidade possível
-        tta = self.__timeToArrive(robot.position, self.ball["position"], robot.defaultVel)
+        tta = self.timeToArrive(robot.position, self.ball["position"], robot.defaultVel)
         # onde a bola vai estar nesse meio tempo
         projection = self.ball["oracle"].predict(tta)
 
@@ -874,8 +883,8 @@ class Athena:
             return projection
 
         # enquanto o tempo de chegada for maior do que o tempo para a bola chegar na posição
-        while tta > self.__timeToArrive(robot.position, projection, robot.defaultVel):
-            tta = self.__timeToArrive(robot.position, projection, robot.defaultVel)
+        while tta > self.timeToArrive(robot.position, projection, robot.defaultVel):
+            tta = self.timeToArrive(robot.position, projection, robot.defaultVel)
             projection = self.ball["oracle"].predict(tta)
 
         return projection
@@ -884,6 +893,7 @@ class Athena:
 
     def setTransitionsState(self, state):
         self.transitionsEnabled = state
+        return self.transitionsEnabled
 
     def setRoles(self, roles):
         """
@@ -891,32 +901,19 @@ class Athena:
         :param roles: The robot's roles. Can be "Attack", "Defense" or "Goalkeeper"
         :return: True if the roles are correct, False otherwise
         """
-        print("\n[Athena] New roles:")
         for i in range(len(roles)):
             if roles[i] != "Goalkeeper" and roles[i] != "Defense" and roles[i] != "Attack":
                 print("Invalid role: " + roles[i])
                 return False
 
-            print("\t" + str(i + 1) + ": " + roles[i])
-
         self.roles = roles
-        return True
+        return self.roles
 
-    def setVelocities(self, atkSpeed, midSpeed, gkSpeed):
+    def setVelocities(self, speeds):
         """
         Sets robots' velocities
-        :param atkSpeed: velocity of the Attacker
-        :param midSpeed: velocity of the Defensor
-        :param gkSpeed: velocity of the Goalkeeper
+        :param speeds: velocities vector [atkSpeed, midSpeed, gkSpeed]
         """
-        print("\n[Athena] New velocities:")
-        for warrior in self.warriors:
-            if warrior.role == "atk":
-                warrior.setDefaultVel(atkSpeed)
-                print("\tAttacker: " + atkSpeed)
-            elif warrior.role == "mid":
-                warrior.setDefaultVel(midSpeed)
-                print("\tDefensor (Mid): " + midSpeed)
-            elif warrior.role == "gk":
-                warrior.setDefaultVel(gkSpeed)
-                print("\tGoalkeeper: " + gkSpeed)
+        self.defaultVelocities = speeds
+
+        return self.defaultVelocities

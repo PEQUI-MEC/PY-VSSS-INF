@@ -24,6 +24,12 @@ class Endless:
     areaBorderOffset = 0
     goalieOffset = 0
     areaOffset = 0
+    robotAddresses = {
+        "A": "\x56\x0D",
+        "B": "\x5B\x0D",
+        "C": "\x45\x0D",
+        "D": "\x46\x0D"
+    }
 
     @staticmethod
     def setup(width, height):

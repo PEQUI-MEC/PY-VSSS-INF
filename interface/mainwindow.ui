@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1390</width>
-    <height>717</height>
+    <width>1294</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -50,7 +50,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1390</width>
+     <width>1294</width>
      <height>26</height>
     </rect>
    </property>
@@ -199,7 +199,7 @@
        <x>10</x>
        <y>0</y>
        <width>605</width>
-       <height>511</height>
+       <height>500</height>
       </rect>
      </property>
      <property name="minimumSize">
@@ -1511,13 +1511,14 @@ Message</string>
        </widget>
       </widget>
      </widget>
-     <widget class="QWidget" name="tabCapture">
+     <widget class="QWidget" name="tabDevices">
       <attribute name="icon">
-       <iconset resource="icons.qrc">
-        <normaloff>:/Icons/Imgs/devil_love.png</normaloff>:/Icons/Imgs/devil_love.png</iconset>
+       <iconset>
+        <normalon>:/Icons/Imgs/devil_laught.png</normalon>
+       </iconset>
       </attribute>
       <attribute name="title">
-       <string>Capture</string>
+       <string>Devices</string>
       </attribute>
       <widget class="QGroupBox" name="groupBoxCaptureDeviceInformation">
        <property name="enabled">
@@ -1532,7 +1533,7 @@ Message</string>
         </rect>
        </property>
        <property name="title">
-        <string>Device Information</string>
+        <string>Capture Device</string>
        </property>
        <widget class="QLabel" name="labelCaptureDeviceInformationDeviceFIxed">
         <property name="geometry">
@@ -1632,15 +1633,618 @@ Message</string>
         </property>
        </widget>
       </widget>
+      <widget class="QGroupBox" name="groupComunicationSerialDevice">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>100</y>
+         <width>581</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Communication Device</string>
+       </property>
+       <widget class="QLabel" name="labelControlSerialDevice">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>50</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Device</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxControlSerialDevice">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>30</y>
+          <width>321</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>400</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonControlSerialDeviceRefresh">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>30</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Refresh</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonControlSerialDeviceStart">
+        <property name="geometry">
+         <rect>
+          <x>399</x>
+          <y>30</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBoxRobotSpeed">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>180</y>
+         <width>581</width>
+         <height>201</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Robots</string>
+       </property>
+       <widget class="QComboBox" name="comboBoxStrategyRobotFunctionsRobot1">
+        <property name="geometry">
+         <rect>
+          <x>169</x>
+          <y>60</y>
+          <width>151</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Attack</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Defense</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Goalkeeper</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QComboBox" name="comboBoxStrategyRobotFunctionsRobot2">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>90</y>
+          <width>151</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <item>
+         <property name="text">
+          <string>Defense</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Attack</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Goalkeeper</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QComboBox" name="comboBoxStrategyRobotFunctionsRobot3">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>120</y>
+          <width>151</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <item>
+         <property name="text">
+          <string>Goalkeeper</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Attack</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Defense</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxRobotSpeed1">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>60</y>
+          <width>50</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>140</number>
+        </property>
+        <property name="value">
+         <number>80</number>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderRobotSpeed1">
+        <property name="geometry">
+         <rect>
+          <x>420</x>
+          <y>60</y>
+          <width>141</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>140</number>
+        </property>
+        <property name="value">
+         <number>80</number>
+        </property>
+        <property name="tracking">
+         <bool>true</bool>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxRobotSpeed2">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>90</y>
+          <width>50</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>140</number>
+        </property>
+        <property name="value">
+         <number>80</number>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderRobotSpeed2">
+        <property name="geometry">
+         <rect>
+          <x>420</x>
+          <y>90</y>
+          <width>141</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>140</number>
+        </property>
+        <property name="value">
+         <number>80</number>
+        </property>
+        <property name="tracking">
+         <bool>true</bool>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxRobotSpeed3">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>120</y>
+          <width>50</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>140</number>
+        </property>
+        <property name="value">
+         <number>80</number>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSliderRobotSpeed3">
+        <property name="geometry">
+         <rect>
+          <x>420</x>
+          <y>120</y>
+          <width>141</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>140</number>
+        </property>
+        <property name="value">
+         <number>80</number>
+        </property>
+        <property name="tracking">
+         <bool>true</bool>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>111</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>ID</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>30</y>
+          <width>151</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Role</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_3">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>30</y>
+          <width>201</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Role Speed</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxStrategyRobotIDsRobot1">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>111</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxStrategyRobotIDsRobot2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>90</y>
+          <width>111</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxStrategyRobotIDsRobot3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>120</y>
+          <width>111</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1000</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tabCapture">
+      <attribute name="icon">
+       <iconset resource="icons.qrc">
+        <normaloff>:/Icons/Imgs/devil_love.png</normaloff>:/Icons/Imgs/devil_love.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Capture</string>
+      </attribute>
       <widget class="QGroupBox" name="groupBoxCaptureDeviceProperties">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>100</y>
-         <width>601</width>
+         <x>10</x>
+         <y>20</y>
+         <width>581</width>
          <height>271</height>
         </rect>
        </property>
@@ -1740,7 +2344,7 @@ Message</string>
        <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesSharpness">
         <property name="geometry">
          <rect>
-          <x>460</x>
+          <x>440</x>
           <y>91</y>
           <width>131</width>
           <height>25</height>
@@ -1832,7 +2436,7 @@ Message</string>
        <widget class="QLabel" name="labelCaptureDevicePropertiesContrast">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>60</y>
           <width>61</width>
           <height>25</height>
@@ -1857,7 +2461,7 @@ Message</string>
        <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesContrast">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>370</x>
           <y>60</y>
           <width>61</width>
           <height>25</height>
@@ -2012,7 +2616,7 @@ Message</string>
        <widget class="QLabel" name="labelCaptureDevicePropertiesSharpness">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>90</y>
           <width>61</width>
           <height>25</height>
@@ -2037,7 +2641,7 @@ Message</string>
        <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesSharpness">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>370</x>
           <y>90</y>
           <width>61</width>
           <height>25</height>
@@ -2220,7 +2824,7 @@ Message</string>
        <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesContrast">
         <property name="geometry">
          <rect>
-          <x>460</x>
+          <x>440</x>
           <y>61</y>
           <width>131</width>
           <height>25</height>
@@ -2254,7 +2858,7 @@ Message</string>
        <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesBacklight">
         <property name="geometry">
          <rect>
-          <x>460</x>
+          <x>440</x>
           <y>120</y>
           <width>131</width>
           <height>25</height>
@@ -2350,7 +2954,7 @@ Message</string>
        <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesBacklight">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>370</x>
           <y>120</y>
           <width>61</width>
           <height>25</height>
@@ -2418,7 +3022,7 @@ Message</string>
        <widget class="QLabel" name="labelCaptureDevicePropertiesBacklight">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>120</y>
           <width>71</width>
           <height>25</height>
@@ -2443,7 +3047,7 @@ Message</string>
        <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesPan">
         <property name="geometry">
          <rect>
-          <x>460</x>
+          <x>440</x>
           <y>150</y>
           <width>131</width>
           <height>25</height>
@@ -2480,7 +3084,7 @@ Message</string>
        <widget class="QLabel" name="labelCaptureDevicePropertiesPan">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>150</y>
           <width>51</width>
           <height>25</height>
@@ -2505,7 +3109,7 @@ Message</string>
        <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesPan">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>370</x>
           <y>150</y>
           <width>61</width>
           <height>25</height>
@@ -2641,7 +3245,7 @@ Message</string>
        <widget class="QCheckBox" name="checkBoxCaptureDevicePropertiesFocusAuto">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>240</y>
           <width>111</width>
           <height>20</height>
@@ -2663,7 +3267,7 @@ Message</string>
        <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesExposureAuto">
         <property name="geometry">
          <rect>
-          <x>460</x>
+          <x>440</x>
           <y>180</y>
           <width>131</width>
           <height>25</height>
@@ -2700,7 +3304,7 @@ Message</string>
        <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesExposureAuto">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>380</x>
           <y>180</y>
           <width>61</width>
           <height>25</height>
@@ -2731,7 +3335,7 @@ Message</string>
        <widget class="QLabel" name="labelCaptureDevicePropertiesExposureAuto">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>180</y>
           <width>71</width>
           <height>25</height>
@@ -2756,7 +3360,7 @@ Message</string>
        <widget class="QLabel" name="labelCaptureDevicePropertiesZoom">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>30</y>
           <width>51</width>
           <height>25</height>
@@ -2781,7 +3385,7 @@ Message</string>
        <widget class="QSlider" name="horizontalSliderCaptureDevicePropertiesZoom">
         <property name="geometry">
          <rect>
-          <x>460</x>
+          <x>440</x>
           <y>30</y>
           <width>131</width>
           <height>25</height>
@@ -2815,7 +3419,7 @@ Message</string>
        <widget class="QSpinBox" name="spinBoxCaptureDevicePropertiesZoom">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>370</x>
           <y>30</y>
           <width>61</width>
           <height>25</height>
@@ -2846,7 +3450,7 @@ Message</string>
        <widget class="QCheckBox" name="checkBoxCaptureDevicePropertiesExposureAutoPriority">
         <property name="geometry">
          <rect>
-          <x>450</x>
+          <x>430</x>
           <y>210</y>
           <width>141</width>
           <height>20</height>
@@ -2949,7 +3553,7 @@ Message</string>
        <widget class="QCheckBox" name="checkBoxCaptureDevicePropertiesWhiteBalanceAuto">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>210</y>
           <width>111</width>
           <height>20</height>
@@ -3455,7 +4059,7 @@ Message</string>
                 <number>255</number>
                </property>
                <property name="value">
-                <number>0</number>
+                <number>255</number>
                </property>
               </widget>
              </item>
@@ -3536,7 +4140,7 @@ Message</string>
                 <number>255</number>
                </property>
                <property name="value">
-                <number>0</number>
+                <number>255</number>
                </property>
               </widget>
              </item>
@@ -3617,7 +4221,7 @@ Message</string>
                 <number>255</number>
                </property>
                <property name="value">
-                <number>0</number>
+                <number>255</number>
                </property>
               </widget>
              </item>
@@ -3698,7 +4302,7 @@ Message</string>
                 <number>255</number>
                </property>
                <property name="value">
-                <number>0</number>
+                <number>255</number>
                </property>
               </widget>
              </item>
@@ -3779,7 +4383,7 @@ Message</string>
                 <number>255</number>
                </property>
                <property name="value">
-                <number>0</number>
+                <number>255</number>
                </property>
               </widget>
              </item>
@@ -6743,7 +7347,7 @@ Message</string>
         <rect>
          <x>20</x>
          <y>400</y>
-         <width>251</width>
+         <width>311</width>
          <height>61</height>
         </rect>
        </property>
@@ -6753,9 +7357,9 @@ Message</string>
        <widget class="QSlider" name="horizontalSliderRobotRadius">
         <property name="geometry">
          <rect>
-          <x>70</x>
+          <x>80</x>
           <y>30</y>
-          <width>160</width>
+          <width>221</width>
           <height>22</height>
          </rect>
         </property>
@@ -6771,7 +7375,7 @@ Message</string>
          <rect>
           <x>10</x>
           <y>30</y>
-          <width>42</width>
+          <width>61</width>
           <height>22</height>
          </rect>
         </property>
@@ -6793,9 +7397,9 @@ Message</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>310</y>
+         <y>20</y>
          <width>581</width>
-         <height>151</height>
+         <height>171</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -6805,13 +7409,13 @@ Message</string>
         </size>
        </property>
        <property name="title">
-        <string>Parameters</string>
+        <string>Strategy Settings</string>
        </property>
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>50</y>
+          <y>60</y>
           <width>551</width>
           <height>101</height>
          </rect>
@@ -7057,7 +7661,7 @@ Message</string>
         <property name="geometry">
          <rect>
           <x>400</x>
-          <y>20</y>
+          <y>30</y>
           <width>161</width>
           <height>20</height>
          </rect>
@@ -7069,278 +7673,11 @@ Message</string>
          <string>Draw Constants</string>
         </property>
        </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupBoxStrategyRobotFunctions">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>581</width>
-         <height>121</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Robot Functions</string>
-       </property>
-       <widget class="QLabel" name="labelStrategyRobotFunctionsRobot1">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>60</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot 1</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBoxStrategyRobotFunctionsRobot1">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>30</y>
-          <width>100</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="editable">
-         <bool>false</bool>
-        </property>
-        <property name="duplicatesEnabled">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string>Attack</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Defense</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Goalkeeper</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QPushButton" name="pushButtonStrategyRobotFunctionsDone">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>30</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Done</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelStrategyRobotFunctionsRobot2">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>60</y>
-          <width>60</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot 2</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBoxStrategyRobotFunctionsRobot2">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>60</y>
-          <width>100</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <item>
-         <property name="text">
-          <string>Defense</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Attack</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Goalkeeper</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QLabel" name="labelStrategyRobotFunctionsRobot3">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>90</y>
-          <width>60</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Robot 3</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBoxStrategyRobotFunctionsRobot3">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>90</y>
-          <width>100</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <item>
-         <property name="text">
-          <string>Goalkeeper</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Attack</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Defense</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QPushButton" name="pushButtonStrategyRobotFunctionsEdit">
-        <property name="geometry">
-         <rect>
-          <x>220</x>
-          <y>30</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Edit</string>
-        </property>
-       </widget>
        <widget class="QCheckBox" name="checkBoxStrategyTransitionsEnableTransistions">
         <property name="geometry">
          <rect>
-          <x>220</x>
-          <y>70</y>
+          <x>10</x>
+          <y>30</y>
           <width>161</width>
           <height>24</height>
          </rect>
@@ -7350,384 +7687,6 @@ Message</string>
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBoxRobotSpeed">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>150</y>
-         <width>581</width>
-         <height>151</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Speed</string>
-       </property>
-       <widget class="QPushButton" name="pushButtonRobotSpeedEdit">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>30</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Edit</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonRobotSpeedDone">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>30</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Done</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget_3">
-        <property name="geometry">
-         <rect>
-          <x>9</x>
-          <y>50</y>
-          <width>561</width>
-          <height>93</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <layout class="QGridLayout" name="gridLayoutRobotSpeedAtack">
-           <item row="0" column="0" colspan="2">
-            <widget class="QLabel" name="labelRobotSpeedAttack">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Attack</string>
-             </property>
-             <property name="textFormat">
-              <enum>Qt::AutoText</enum>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QSpinBox" name="spinBoxRobotSpeedAttack">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>50</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="readOnly">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <number>0</number>
-             </property>
-             <property name="maximum">
-              <number>140</number>
-             </property>
-             <property name="value">
-              <number>0</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSlider" name="horizontalSliderRobotSpeedAttack">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="minimum">
-              <number>0</number>
-             </property>
-             <property name="maximum">
-              <number>140</number>
-             </property>
-             <property name="value">
-              <number>0</number>
-             </property>
-             <property name="tracking">
-              <bool>true</bool>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="invertedAppearance">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QGridLayout" name="gridLayoutRobotSpeedDefense">
-           <item row="0" column="0" colspan="2">
-            <widget class="QLabel" name="labelRobotSpeedDefense">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Mid</string>
-             </property>
-             <property name="textFormat">
-              <enum>Qt::AutoText</enum>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSlider" name="horizontalSliderRobotSpeedDefense">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="minimum">
-              <number>0</number>
-             </property>
-             <property name="maximum">
-              <number>140</number>
-             </property>
-             <property name="value">
-              <number>0</number>
-             </property>
-             <property name="tracking">
-              <bool>true</bool>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="invertedAppearance">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QSpinBox" name="spinBoxRobotSpeedDefense">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>50</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="readOnly">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <number>0</number>
-             </property>
-             <property name="maximum">
-              <number>140</number>
-             </property>
-             <property name="value">
-              <number>0</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QGridLayout" name="gridLayoutRobotSpeedGoalkeeper">
-           <item row="0" column="0" colspan="2">
-            <widget class="QLabel" name="labelRobotSpeedGoalkeeper">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Goalkeeper</string>
-             </property>
-             <property name="textFormat">
-              <enum>Qt::AutoText</enum>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QSpinBox" name="spinBoxRobotSpeedGoalkeeper">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>50</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="readOnly">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <number>0</number>
-             </property>
-             <property name="maximum">
-              <number>140</number>
-             </property>
-             <property name="value">
-              <number>0</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSlider" name="horizontalSliderRobotSpeedGoalkeeper">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="minimum">
-              <number>0</number>
-             </property>
-             <property name="maximum">
-              <number>140</number>
-             </property>
-             <property name="value">
-              <number>0</number>
-             </property>
-             <property name="tracking">
-              <bool>true</bool>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="invertedAppearance">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="tabComunication">
-      <attribute name="icon">
-       <iconset resource="icons.qrc">
-        <normaloff>:/Icons/Imgs/devil_smile.png</normaloff>:/Icons/Imgs/devil_smile.png</iconset>
-      </attribute>
-      <attribute name="title">
-       <string>Comunication</string>
-      </attribute>
       <widget class="QGroupBox" name="groupComunicationSerial">
        <property name="enabled">
         <bool>false</bool>
@@ -7735,8 +7694,8 @@ Message</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>130</y>
-         <width>571</width>
+         <y>200</y>
+         <width>581</width>
          <height>101</height>
         </rect>
        </property>
@@ -7793,7 +7752,7 @@ Message</string>
        <widget class="QPushButton" name="pushButtonControlSerialSend">
         <property name="geometry">
          <rect>
-          <x>490</x>
+          <x>500</x>
           <y>30</y>
           <width>70</width>
           <height>25</height>
@@ -7820,7 +7779,7 @@ Message</string>
          <rect>
           <x>140</x>
           <y>30</y>
-          <width>341</width>
+          <width>351</width>
           <height>25</height>
          </rect>
         </property>
@@ -7840,7 +7799,7 @@ Message</string>
        <widget class="QPushButton" name="pushButtonComunicationRobotFunctionsPIDTest">
         <property name="geometry">
          <rect>
-          <x>430</x>
+          <x>440</x>
           <y>60</y>
           <width>131</width>
           <height>31</height>
@@ -7903,7 +7862,7 @@ Message</string>
        <widget class="QLineEdit" name="lineEditPIDRobotVel">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>330</x>
           <y>60</y>
           <width>101</width>
           <height>31</height>
@@ -7917,347 +7876,6 @@ Message</string>
         </property>
         <property name="text">
          <string>0.4</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupBoxRobotID">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>240</y>
-         <width>571</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>ID</string>
-       </property>
-       <widget class="QPushButton" name="pushButtonRobotIDEdit">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Edit</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonRobotIDDone">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>30</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Done</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>60</y>
-          <width>551</width>
-          <height>96</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayourRobotID">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayoutRobotIDRobot1">
-           <item>
-            <widget class="QLabel" name="labelRobotIDRobot1">
-             <property name="minimumSize">
-              <size>
-               <width>10</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Robot 1</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEditRobotIDRobot1">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>10</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>A</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayoutRobotIDRobot2">
-           <item>
-            <widget class="QLabel" name="labelRobotIDRobot2">
-             <property name="minimumSize">
-              <size>
-               <width>10</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Robot 2</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEditRobotIDRobot2">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>10</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>B</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayoutRobotIDRobot3">
-           <item>
-            <widget class="QLabel" name="labelRobotIDRobot3">
-             <property name="minimumSize">
-              <size>
-               <width>10</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Robot 3</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEditRobotIDRobot3">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>10</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>C</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupComunicationSerialDevice">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>571</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Device Information</string>
-       </property>
-       <widget class="QLabel" name="labelControlSerialDevice">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>50</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Device</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBoxControlSerialDevice">
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>30</y>
-          <width>331</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>400</width>
-          <height>25</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonControlSerialDeviceRefresh">
-        <property name="geometry">
-         <rect>
-          <x>490</x>
-          <y>30</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Refresh</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButtonControlSerialDeviceStart">
-        <property name="geometry">
-         <rect>
-          <x>410</x>
-          <y>30</y>
-          <width>70</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>70</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Start</string>
         </property>
        </widget>
       </widget>
@@ -8344,290 +7962,34 @@ Message</string>
  </resources>
  <connections>
   <connection>
-   <sender>spinBoxCaptureWarpOffsetLeft</sender>
+   <sender>spinBoxVisionHSVCalibrationGreenBlur</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureWarpOffsetLeft</receiver>
+   <receiver>horizontalSliderVisionHSVCalibrationGreenBlur</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>922</x>
-     <y>220</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1062</x>
-     <y>221</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderCaptureWarpOffsetRight</sender>
+   <sender>horizontalSliderVisionHSVCalibrationGreenHmax</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureWarpOffsetRight</receiver>
+   <receiver>spinBoxVisionHSVCalibrationGreenHmax</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1352</x>
-     <y>221</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1212</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureWarpOffsetLeft</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureWarpOffsetLeft</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1062</x>
-     <y>221</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>922</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureWarpOffsetRight</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureWarpOffsetRight</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1212</x>
-     <y>220</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1352</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationMainHmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMainHmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>890</x>
-     <y>362</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1017</x>
-     <y>362</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMainHmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationMainHmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1017</x>
-     <y>362</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>890</x>
-     <y>362</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationMainSmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMainSmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>890</x>
-     <y>394</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1017</x>
-     <y>394</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMainSmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationMainSmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1017</x>
-     <y>394</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>890</x>
-     <y>394</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationMainVmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMainVmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>890</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1017</x>
-     <y>426</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMainVmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationMainVmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1017</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>890</x>
-     <y>426</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationMainErode</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMainErode</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>890</x>
-     <y>458</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1017</x>
-     <y>458</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMainErode</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationMainErode</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1017</x>
-     <y>458</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>890</x>
-     <y>458</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationMainBlur</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMainBlur</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>890</x>
-     <y>490</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1017</x>
-     <y>490</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMainBlur</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationMainBlur</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1017</x>
-     <y>490</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>890</x>
-     <y>490</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationMainAmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMainAmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1163</x>
-     <y>496</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1240</x>
-     <y>490</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMainAmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationMainAmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1240</x>
-     <y>490</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1163</x>
-     <y>496</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationMainDilate</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMainDilate</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1163</x>
-     <y>464</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1240</x>
-     <y>458</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMainDilate</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationMainDilate</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1240</x>
-     <y>458</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1163</x>
-     <y>464</y>
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8644,6 +8006,70 @@ Message</string>
     <hint type="destinationlabel">
      <x>1163</x>
      <y>432</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationBallHmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationBallHmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderStrategyTestParametersAreaLine</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxStrategyTestParametersAreaLine</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1341</x>
+     <y>576</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>919</x>
+     <y>576</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationBallDilate</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationBallDilate</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationBallVmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationBallVmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
@@ -8676,38 +8102,6 @@ Message</string>
     <hint type="destinationlabel">
      <x>1240</x>
      <y>394</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationMainSmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationMainSmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1240</x>
-     <y>394</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1163</x>
-     <y>400</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationMainHmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationMainHmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1163</x>
-     <y>368</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1240</x>
-     <y>362</y>
     </hint>
    </hints>
   </connection>
@@ -8776,178 +8170,18 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderStrategyTestParametersAreaLine</sender>
+   <sender>horizontalSliderVisionHSVCalibrationMainBlur</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxStrategyTestParametersAreaLine</receiver>
+   <receiver>spinBoxVisionHSVCalibrationMainBlur</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1341</x>
-     <y>576</y>
+     <x>1017</x>
+     <y>490</y>
     </hint>
     <hint type="destinationlabel">
-     <x>919</x>
-     <y>576</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationBallAmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationBallAmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationBallAmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationBallAmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationBallDilate</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationBallDilate</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationBallDilate</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationBallDilate</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationBallVmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationBallVmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationBallVmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationBallVmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationBallSmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationBallSmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationBallSmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationBallSmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationBallHmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationBallHmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationBallHmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationBallHmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
+     <x>890</x>
+     <y>490</y>
     </hint>
    </hints>
   </connection>
@@ -8971,22 +8205,6 @@ Message</string>
    <sender>horizontalSliderVisionHSVCalibrationBallBlur</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxVisionHSVCalibrationBallBlur</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationBallErode</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationBallErode</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9032,6 +8250,182 @@ Message</string>
    </hints>
   </connection>
   <connection>
+   <sender>spinBoxVisionHSVCalibrationMainAmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationMainAmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1163</x>
+     <y>496</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1240</x>
+     <y>490</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationMainDilate</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationMainDilate</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1163</x>
+     <y>464</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1240</x>
+     <y>458</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationMainHmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationMainHmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1163</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1240</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationBallAmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationBallAmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationBallSmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationBallSmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationMainSmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationMainSmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1240</x>
+     <y>394</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1163</x>
+     <y>400</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationBallDilate</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationBallDilate</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationBallSmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationBallSmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationBallAmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationBallAmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationMainDilate</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationMainDilate</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1240</x>
+     <y>458</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1163</x>
+     <y>464</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationBallErode</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationBallErode</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>horizontalSliderVisionHSVCalibrationBallVmin</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxVisionHSVCalibrationBallVmin</receiver>
@@ -9044,6 +8438,22 @@ Message</string>
     <hint type="destinationlabel">
      <x>901</x>
      <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationMainAmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationMainAmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1240</x>
+     <y>490</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1163</x>
+     <y>496</y>
     </hint>
    </hints>
   </connection>
@@ -9064,9 +8474,9 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderVisionHSVCalibrationBallSmin</sender>
+   <sender>horizontalSliderVisionHSVCalibrationBallVmax</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationBallSmin</receiver>
+   <receiver>spinBoxVisionHSVCalibrationBallVmax</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9080,233 +8490,9 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxVisionHSVCalibrationBallHmin</sender>
+   <sender>horizontalSliderVisionHSVCalibrationBallHmax</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationBallHmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>890</x>
-     <y>362</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationBallHmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationBallHmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>890</x>
-     <y>362</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentAmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentAmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationOpponentAmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationOpponentAmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentDilate</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentDilate</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationOpponentDilate</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationOpponentDilate</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentVmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentVmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationOpponentVmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationOpponentVmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentSmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentSmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationOpponentSmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationOpponentSmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentHmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentHmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationOpponentHmax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationOpponentHmax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentBlur</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentBlur</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationOpponentBlur</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationOpponentBlur</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentErode</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentErode</receiver>
+   <receiver>spinBoxVisionHSVCalibrationBallHmax</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9323,54 +8509,6 @@ Message</string>
    <sender>horizontalSliderVisionHSVCalibrationOpponentErode</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxVisionHSVCalibrationOpponentErode</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentVmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentVmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationOpponentVmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationOpponentVmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationOpponentSmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationOpponentSmin</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9432,54 +8570,6 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxVisionHSVCalibrationGreenAmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationGreenAmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationGreenAmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationGreenAmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationGreenDilate</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationGreenDilate</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>horizontalSliderVisionHSVCalibrationGreenDilate</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxVisionHSVCalibrationGreenDilate</receiver>
@@ -9496,9 +8586,169 @@ Message</string>
    </hints>
   </connection>
   <connection>
+   <sender>horizontalSliderVisionHSVCalibrationBallSmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationBallSmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationOpponentBlur</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationOpponentBlur</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationOpponentSmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentSmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationOpponentVmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationOpponentVmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>spinBoxVisionHSVCalibrationGreenVmax</sender>
    <signal>valueChanged(int)</signal>
    <receiver>horizontalSliderVisionHSVCalibrationGreenVmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationOpponentDilate</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentDilate</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationBallHmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationBallHmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>890</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationOpponentVmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentVmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationOpponentSmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentSmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationGreenAmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationGreenAmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationGreenDilate</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationGreenDilate</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9560,6 +8810,38 @@ Message</string>
    </hints>
   </connection>
   <connection>
+   <sender>spinBoxVisionHSVCalibrationBallHmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationBallHmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationGreenAmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationGreenAmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>spinBoxVisionHSVCalibrationGreenHmax</sender>
    <signal>valueChanged(int)</signal>
    <receiver>horizontalSliderVisionHSVCalibrationGreenHmax</receiver>
@@ -9576,9 +8858,9 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderVisionHSVCalibrationGreenHmax</sender>
+   <sender>horizontalSliderVisionHSVCalibrationOpponentHmax</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationGreenHmax</receiver>
+   <receiver>spinBoxVisionHSVCalibrationOpponentHmax</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9592,9 +8874,9 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxVisionHSVCalibrationGreenBlur</sender>
+   <sender>horizontalSliderVisionHSVCalibrationOpponentAmin</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationGreenBlur</receiver>
+   <receiver>spinBoxVisionHSVCalibrationOpponentAmin</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9608,9 +8890,409 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderVisionHSVCalibrationGreenBlur</sender>
+   <sender>spinBoxVisionHSVCalibrationOpponentAmin</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationGreenBlur</receiver>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentAmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationOpponentVmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentVmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationOpponentVmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationOpponentVmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationOpponentSmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationOpponentSmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationOpponentHmax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentHmax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationOpponentBlur</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentBlur</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationOpponentDilate</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationOpponentDilate</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationOpponentErode</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationOpponentErode</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureWarpOffsetRight</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureWarpOffsetRight</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1352</x>
+     <y>221</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1212</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureWarpOffsetLeft</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureWarpOffsetLeft</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1062</x>
+     <y>221</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>922</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationMainHmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationMainHmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1017</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationMainVmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationMainVmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1017</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>890</x>
+     <y>426</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationMainHmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationMainHmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1017</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>890</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureWarpOffsetRight</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureWarpOffsetRight</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1212</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1352</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureWarpOffsetLeft</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureWarpOffsetLeft</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>922</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1062</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationMainSmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationMainSmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>394</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1017</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationMainSmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationMainSmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1017</x>
+     <y>394</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>890</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationMainErode</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationMainErode</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>458</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1017</x>
+     <y>458</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationMainErode</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationMainErode</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1017</x>
+     <y>458</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>890</x>
+     <y>458</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationMainBlur</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationMainBlur</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>490</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1017</x>
+     <y>490</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationMainVmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationMainVmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1017</x>
+     <y>426</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesSharpness</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesSharpness</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1352</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1202</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesFocus</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesFocus</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>983</x>
+     <y>465</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>925</x>
+     <y>462</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationGreenHmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationGreenHmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>878</x>
+     <y>363</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesPan</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesPan</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1352</x>
+     <y>380</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1212</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationGreenVmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationGreenVmin</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -9640,98 +9322,50 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderVisionHSVCalibrationGreenErode</sender>
+   <sender>spinBoxCaptureDevicePropertiesBrightness</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationGreenErode</receiver>
+   <receiver>horizontalSliderCaptureDevicePropertiesBrightness</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
+     <x>942</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
+     <x>1062</x>
+     <y>306</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxVisionHSVCalibrationGreenVmin</sender>
+   <sender>horizontalSliderCaptureDevicePropertiesGain</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationGreenVmin</receiver>
+   <receiver>spinBoxCaptureDevicePropertiesGain</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
+     <x>1062</x>
+     <y>366</y>
     </hint>
     <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
+     <x>942</x>
+     <y>350</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderVisionHSVCalibrationGreenVmin</sender>
+   <sender>horizontalSliderCaptureDevicePropertiesExposure</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationGreenVmin</receiver>
+   <receiver>spinBoxCaptureDevicePropertiesExposure</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
+     <x>1062</x>
+     <y>425</y>
     </hint>
     <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationGreenSmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationGreenSmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderVisionHSVCalibrationGreenSmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVisionHSVCalibrationGreenSmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxVisionHSVCalibrationGreenHmin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderVisionHSVCalibrationGreenHmin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>878</x>
-     <y>363</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>901</x>
-     <y>365</y>
+     <x>942</x>
+     <y>425</y>
     </hint>
    </hints>
   </connection>
@@ -9752,18 +9386,66 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxCaptureDevicePropertiesWhiteBalance</sender>
+   <sender>horizontalSliderVisionHSVCalibrationGreenSmin</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesWhiteBalance</receiver>
+   <receiver>spinBoxVisionHSVCalibrationGreenSmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesSaturation</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesSaturation</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>942</x>
-     <y>455</y>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>1062</x>
-     <y>455</y>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesContrast</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesContrast</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1202</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1352</x>
+     <y>291</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesExposure</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesExposure</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>942</x>
+     <y>425</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1062</x>
+     <y>425</y>
     </hint>
    </hints>
   </connection>
@@ -9800,6 +9482,182 @@ Message</string>
    </hints>
   </connection>
   <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesSaturation</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesSaturation</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1062</x>
+     <y>336</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>942</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesTilt</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesTilt</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1062</x>
+     <y>395</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>942</x>
+     <y>395</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationGreenVmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationGreenVmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesTilt</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesTilt</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>942</x>
+     <y>395</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1062</x>
+     <y>395</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesExposureAuto</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesExposureAuto</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1352</x>
+     <y>410</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1202</x>
+     <y>410</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderRobotSpeed1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxRobotSpeed1</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>908</x>
+     <y>383</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>844</x>
+     <y>378</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderCaptureDevicePropertiesZoom</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxCaptureDevicePropertiesZoom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1362</x>
+     <y>275</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1166</x>
+     <y>259</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationGreenBlur</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationGreenBlur</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxVisionHSVCalibrationGreenSmin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderVisionHSVCalibrationGreenSmin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesWhiteBalance</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesWhiteBalance</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>942</x>
+     <y>455</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1062</x>
+     <y>455</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderVisionHSVCalibrationGreenErode</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxVisionHSVCalibrationGreenErode</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>901</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>spinBoxCaptureDevicePropertiesBacklight</sender>
    <signal>valueChanged(int)</signal>
    <receiver>horizontalSliderCaptureDevicePropertiesBacklight</receiver>
@@ -9832,54 +9690,6 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxCaptureDevicePropertiesBrightness</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesBrightness</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>942</x>
-     <y>290</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1062</x>
-     <y>306</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureDevicePropertiesSaturation</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesSaturation</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>942</x>
-     <y>320</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1062</x>
-     <y>336</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesSaturation</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesSaturation</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1062</x>
-     <y>336</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>942</x>
-     <y>320</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>spinBoxCaptureDevicePropertiesGain</sender>
    <signal>valueChanged(int)</signal>
    <receiver>horizontalSliderCaptureDevicePropertiesGain</receiver>
@@ -9892,54 +9702,6 @@ Message</string>
     <hint type="destinationlabel">
      <x>1062</x>
      <y>366</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesGain</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesGain</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1062</x>
-     <y>366</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>942</x>
-     <y>350</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureDevicePropertiesContrast</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesContrast</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1202</x>
-     <y>290</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1352</x>
-     <y>291</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesContrast</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesContrast</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1352</x>
-     <y>291</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1202</x>
-     <y>290</y>
     </hint>
    </hints>
   </connection>
@@ -9960,258 +9722,18 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesSharpness</sender>
+   <sender>horizontalSliderCaptureDevicePropertiesContrast</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesSharpness</receiver>
+   <receiver>spinBoxCaptureDevicePropertiesContrast</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1352</x>
-     <y>321</y>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
      <x>1202</x>
-     <y>320</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureDevicePropertiesExposure</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesExposure</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>942</x>
-     <y>425</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1062</x>
-     <y>425</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesExposure</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesExposure</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1062</x>
-     <y>425</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>942</x>
-     <y>425</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesTilt</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesTilt</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1062</x>
-     <y>395</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>942</x>
-     <y>395</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureDevicePropertiesTilt</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesTilt</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>942</x>
-     <y>395</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1062</x>
-     <y>395</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesZoom</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesZoom</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1362</x>
-     <y>275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1166</x>
-     <y>259</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesExposureAuto</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesExposureAuto</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1352</x>
-     <y>410</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1202</x>
-     <y>410</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesPan</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesPan</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1352</x>
-     <y>380</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1212</x>
-     <y>380</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderCaptureDevicePropertiesFocus</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxCaptureDevicePropertiesFocus</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>983</x>
-     <y>465</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>925</x>
-     <y>462</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderRobotSpeedAttack</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxRobotSpeedAttack</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>908</x>
-     <y>383</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>844</x>
-     <y>378</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxRobotSpeedAttack</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderRobotSpeedAttack</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>842</x>
-     <y>386</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>923</x>
-     <y>384</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxRobotSpeedDefense</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderRobotSpeedDefense</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1028</x>
-     <y>384</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1085</x>
-     <y>381</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderRobotSpeedDefense</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxRobotSpeedDefense</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1098</x>
-     <y>384</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1024</x>
-     <y>378</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxRobotSpeedGoalkeeper</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderRobotSpeedGoalkeeper</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1202</x>
-     <y>381</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1271</x>
-     <y>379</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderRobotSpeedGoalkeeper</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxRobotSpeedGoalkeeper</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1276</x>
-     <y>386</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1206</x>
-     <y>385</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxCaptureDevicePropertiesFocus</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesFocus</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>942</x>
-     <y>485</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1062</x>
-     <y>485</y>
+     <y>290</y>
     </hint>
    </hints>
   </connection>
@@ -10232,6 +9754,38 @@ Message</string>
    </hints>
   </connection>
   <connection>
+   <sender>horizontalSliderRobotSpeed2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxRobotSpeed2</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1098</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1024</x>
+     <y>378</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxRobotSpeed3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderRobotSpeed3</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1202</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1271</x>
+     <y>379</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>spinBoxCaptureDevicePropertiesPan</sender>
    <signal>valueChanged(int)</signal>
    <receiver>horizontalSliderCaptureDevicePropertiesPan</receiver>
@@ -10248,34 +9802,50 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxCaptureDevicePropertiesZoom</sender>
+   <sender>spinBoxCaptureDevicePropertiesFocus</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderCaptureDevicePropertiesZoom</receiver>
+   <receiver>horizontalSliderCaptureDevicePropertiesFocus</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1222</x>
-     <y>275</y>
+     <x>942</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1362</x>
-     <y>275</y>
+     <x>1062</x>
+     <y>485</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxRobotRadius</sender>
+   <sender>horizontalSliderRobotSpeed3</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderRobotRadius</receiver>
+   <receiver>spinBoxRobotSpeed3</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>843</x>
-     <y>572</y>
+     <x>1276</x>
+     <y>386</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1021</x>
-     <y>572</y>
+     <x>1206</x>
+     <y>385</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxRobotSpeed1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderRobotSpeed1</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>842</x>
+     <y>386</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>923</x>
+     <y>384</y>
     </hint>
    </hints>
   </connection>
@@ -10296,22 +9866,6 @@ Message</string>
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxStrategyTestParametersGoalieOffset</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>horizontalSliderStrategyTestParametersGoalieOffset</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>919</x>
-     <y>508</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1341</x>
-     <y>508</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>horizontalSliderStrategyTestParametersGoalieOffset</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spinBoxStrategyTestParametersGoalieOffset</receiver>
@@ -10324,6 +9878,70 @@ Message</string>
     <hint type="destinationlabel">
      <x>912</x>
      <y>484</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxRobotRadius</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderRobotRadius</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>843</x>
+     <y>572</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1021</x>
+     <y>572</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxRobotSpeed2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderRobotSpeed2</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1028</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1085</x>
+     <y>381</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxCaptureDevicePropertiesZoom</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderCaptureDevicePropertiesZoom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1222</x>
+     <y>275</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1362</x>
+     <y>275</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxStrategyTestParametersGoalieOffset</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSliderStrategyTestParametersGoalieOffset</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>919</x>
+     <y>508</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1341</x>
+     <y>508</y>
     </hint>
    </hints>
   </connection>

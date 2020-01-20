@@ -439,8 +439,7 @@ class Hades(QThread):
 
     def changeRobotLetters(self, robotLetters):
         if self.apolo is not None:
-            return self.apolo.changeLetters(robotLetters)
-        return ["A", "B", "C"]
+            self.apolo.changeLetters(robotLetters)
 
     def closeCamera(self):
         if self.apolo is not None:
@@ -493,8 +492,7 @@ class Hades(QThread):
 
     # Control
     def eventUpdateSpeeds(self, speeds):
-        self.zeus.updateSpeeds(speeds)
-        # self.athena.setVelocities(speeds[0], speeds[1], speeds[2])
+        self.athena.setVelocities(speeds)
 
     # PID TEST
     def enablePIDTest(self, state):

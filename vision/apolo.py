@@ -502,7 +502,6 @@ class Apolo:
     def changeLetters(self, robotLetter):
         if robotLetter is not None:
             self.robotLetter = robotLetter
-        return self.robotLetter
 
     # Funçao principal da visao
     def run(self):
